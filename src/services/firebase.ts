@@ -271,7 +271,7 @@ export async function syncBatchScoresToFirebase(scores: StudentScoreRecord[]): P
 // ============================================================================
 const CUSTOM_EXAMS_REF_PATH = 'admin_custom_exams';
 const LOCAL_CUSTOM_EXAMS_KEY = 'ontap_admin_custom_exams';
-const LOCAL_DELETED_EXAMS_KEY = 'ontap_deleted_custom_exam_ids';
+const LOCAL_DELETED_EXAMS_KEY = 'ontap_deleted_custom_exam_ids_v2';
 
 /**
  * Loại bỏ toàn bộ thuộc tính có giá trị undefined trước khi lưu lên Firebase Realtime Database
@@ -300,20 +300,31 @@ function markExamIdDeleted(examId: string): void {
   } catch {}
 }
 
+function unmarkExamIdDeleted(examId: string): void {
+  try {
+    const setIds = getDeletedExamIds();
+    if (setIds.has(examId)) {
+      setIds.delete(examId);
+      localStorage.setItem(LOCAL_DELETED_EXAMS_KEY, JSON.stringify(Array.from(setIds)));
+    }
+  } catch {}
+}
+
 /**
- * Đọc đề thi từ LocalStorage dự phòng
+ * Đọc đề thi từ LocalStorage dự phòng (đã lọc bỏ các đề đã xóa)
  */
 export function getLocalCustomExams(): CustomExam[] {
+  const deletedIds = getDeletedExamIds();
   try {
     const raw = localStorage.getItem(LOCAL_CUSTOM_EXAMS_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        return parsed;
+      if (Array.isArray(parsed)) {
+        return parsed.filter((e) => e && !deletedIds.has(e.id));
       }
     }
   } catch {}
-  return DEFAULT_CUSTOM_EXAMS;
+  return DEFAULT_CUSTOM_EXAMS.filter((e) => !deletedIds.has(e.id));
 }
 
 /**
@@ -381,8 +392,72 @@ export function subscribeToCustomExams(
         const remoteMap = new Map<string, CustomExam>();
         Object.keys(data).forEach((key) => {
           const norm = normalizeRemoteExam(data[key], key);
+          if (deletedIds.has(key) || deletedIds.has(norm.id)) {
+            return;
+          }
           remoteMap.set(norm.id, norm);
         });
+
+        // Đảm bảo các đề mặc định hoặc đề từng làm trong lịch sử (ontap_quiz_history) chưa bị xóa ở v2 luôn được giữ đầy đủ
+        const existingTitles = new Set(
+          Array.from(remoteMap.values()).map((e) => (e.title || '').trim().toLowerCase())
+        );
+        for (const defEx of DEFAULT_CUSTOM_EXAMS) {
+          const normTitle = (defEx.title || '').trim().toLowerCase();
+          if (
+            !deletedIds.has(defEx.id) &&
+            !remoteMap.has(defEx.id) &&
+            !existingTitles.has(normTitle)
+          ) {
+            remoteMap.set(defEx.id, defEx);
+            existingTitles.add(normTitle);
+            const singleRef = ref(db, `${CUSTOM_EXAMS_REF_PATH}/${defEx.id}`);
+            set(singleRef, sanitizeForFirebase(defEx)).catch(() => {});
+          }
+        }
+
+        try {
+          const rawHistory = localStorage.getItem('ontap_quiz_history');
+          if (rawHistory) {
+            const histArr = JSON.parse(rawHistory);
+            if (Array.isArray(histArr)) {
+              for (const sess of histArr) {
+                const lid = sess?.lessonId || '';
+                if (
+                  lid &&
+                  (lid.startsWith('exam-') || sess?.id?.startsWith('sess-custom-')) &&
+                  !deletedIds.has(lid) &&
+                  !remoteMap.has(lid) &&
+                  Array.isArray(sess?.questions) &&
+                  sess.questions.length > 0
+                ) {
+                  const gNum = ([3, 4, 5, 6, 7, 8, 9].includes(sess.gradeNumber)
+                    ? sess.gradeNumber
+                    : 8) as 3 | 4 | 5 | 6 | 7 | 8 | 9;
+                  const recoveredExam: CustomExam = {
+                    id: lid,
+                    title: sess.lessonTitle || `Đề ôn tập Khối ${gNum}`,
+                    description: `Khôi phục từ lịch sử làm bài (${sess.questions.length} câu hỏi).`,
+                    subject: gNum <= 5 ? 'Tin học Tiểu học' : 'Tin học THCS',
+                    grade: `Khối ${gNum}`,
+                    gradeNumber: gNum,
+                    category: sess.mode === 'exam' ? 'exam' : 'practice',
+                    durationMinutes: sess.questions.length <= 20 ? 30 : 45,
+                    questions: sess.questions,
+                    createdAt: sess.startTime || Date.now(),
+                    updatedAt: sess.endTime || Date.now(),
+                    authorEmail: ADMIN_EMAIL,
+                    authorName: 'GV: Ms. Trúc Tin Học',
+                    isPublished: true,
+                  };
+                  remoteMap.set(lid, recoveredExam);
+                  const singleRef = ref(db, `${CUSTOM_EXAMS_REF_PATH}/${lid}`);
+                  set(singleRef, sanitizeForFirebase(recoveredExam)).catch(() => {});
+                }
+              }
+            }
+          }
+        } catch {}
 
         // Kiểm tra xem ở máy hiện tại (VD: localhost) có đề thi nào mới tạo hoặc mới cập nhật hơn trên Firebase không
         for (const localEx of localExams) {
@@ -425,6 +500,7 @@ export function subscribeToCustomExams(
 export async function saveCustomExamToFirebase(exam: CustomExam): Promise<boolean> {
   try {
     const cleanExam = sanitizeForFirebase(exam);
+    unmarkExamIdDeleted(cleanExam.id);
 
     // Lưu ngay vào local
     const current = getLocalCustomExams();
@@ -465,7 +541,35 @@ export async function saveCustomExamToFirebase(exam: CustomExam): Promise<boolea
 }
 
 /**
- * Xóa 1 đề thi khỏi Firebase và LocalStorage
+ * Chuyển 1 đề thi vào Thùng rác lưu trữ (Soft Delete) trên Firebase và LocalStorage
+ */
+export async function moveCustomExamToTrash(exam: CustomExam): Promise<CustomExam> {
+  const trashedExam: CustomExam = {
+    ...exam,
+    isTrashed: true,
+    trashedAt: Date.now(),
+    updatedAt: Date.now(),
+  };
+  await saveCustomExamToFirebase(trashedExam);
+  return trashedExam;
+}
+
+/**
+ * Phục hồi 1 đề thi từ Thùng rác lưu trữ về danh sách đề đang hoạt động
+ */
+export async function restoreCustomExamFromTrash(exam: CustomExam): Promise<CustomExam> {
+  const restoredExam: CustomExam = {
+    ...exam,
+    isTrashed: false,
+    trashedAt: undefined,
+    updatedAt: Date.now(),
+  };
+  await saveCustomExamToFirebase(restoredExam);
+  return restoredExam;
+}
+
+/**
+ * Xóa vĩnh viễn 1 đề thi khỏi Firebase và LocalStorage
  */
 export async function deleteCustomExamFromFirebase(examId: string): Promise<boolean> {
   try {
@@ -475,9 +579,22 @@ export async function deleteCustomExamFromFirebase(examId: string): Promise<bool
     const updated = current.filter((e) => e.id !== examId);
     saveLocalCustomExams(updated);
 
-    // Xóa trên Firebase
+    // Xóa trên Firebase theo examId
     const examRef = ref(db, `${CUSTOM_EXAMS_REF_PATH}/${examId}`);
     await remove(examRef);
+
+    // Kiểm tra thêm nếu trên Firebase lưu dưới key khác nhưng có field id === examId
+    const allRef = ref(db, CUSTOM_EXAMS_REF_PATH);
+    const snap = await get(allRef);
+    if (snap.exists()) {
+      const val = snap.val();
+      for (const k of Object.keys(val)) {
+        if (k === examId || val[k]?.id === examId) {
+          await remove(ref(db, `${CUSTOM_EXAMS_REF_PATH}/${k}`));
+        }
+      }
+    }
+
     return true;
   } catch (error) {
     console.error('Lỗi xóa đề thi khỏi Firebase:', error);

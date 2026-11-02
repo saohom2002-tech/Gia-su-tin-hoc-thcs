@@ -197,5 +197,7 @@ export interface CustomExam {
   authorEmail: string; // 'saohom2002@gmail.com'
   authorName?: string;
   isPublished: boolean;
+  isTrashed?: boolean; // Đã chuyển vào thùng rác lưu trữ
+  trashedAt?: number; // Thời điểm chuyển vào thùng rác
 }
 

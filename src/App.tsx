@@ -48,6 +48,8 @@ import {
   syncInitialCustomExamsToFirebase,
   saveCustomExamToFirebase,
   deleteCustomExamFromFirebase,
+  moveCustomExamToTrash,
+  getLocalCustomExams,
   subscribeToCurriculumBank,
   getStoredAdminSession,
   saveAdminSession,
@@ -182,16 +184,7 @@ export default function App() {
     'list' | 'create' | 'edit_info' | 'edit_questions' | null
   >(null);
   const [topicQuestionCounts, setTopicQuestionCounts] = useState<Record<string, number>>({});
-  const [customExams, setCustomExams] = useState<CustomExam[]>(() => {
-    try {
-      const raw = localStorage.getItem('ontap_admin_custom_exams');
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      }
-    } catch {}
-    return DEFAULT_CUSTOM_EXAMS;
-  });
+  const [customExams, setCustomExams] = useState<CustomExam[]>(() => getLocalCustomExams());
 
   // Load history, student profile, custom API key, sound preference & mistakes from localStorage
   useEffect(() => {
@@ -288,7 +281,7 @@ export default function App() {
 
     // Lắng nghe đề thi và đề ôn tập thời gian thực từ Firebase Realtime Database
     const unsubscribeExams = subscribeToCustomExams((remoteExams) => {
-      if (remoteExams && remoteExams.length > 0) {
+      if (Array.isArray(remoteExams)) {
         setCustomExams(remoteExams);
       }
     });
@@ -513,8 +506,18 @@ export default function App() {
   };
 
   const handleDeleteCustomExam = async (examId: string) => {
-    setCustomExams((prev) => prev.filter((ex) => ex.id !== examId));
-    await deleteCustomExamFromFirebase(examId);
+    const target = customExams.find((ex) => ex.id === examId);
+    if (!target) return;
+    const trashedExam: CustomExam = {
+      ...target,
+      isTrashed: true,
+      trashedAt: Date.now(),
+      updatedAt: Date.now(),
+    };
+    setCustomExams((prev) =>
+      prev.map((ex) => (ex.id === examId ? trashedExam : ex))
+    );
+    await moveCustomExamToTrash(target);
   };
 
   const handleDuplicateCustomExam = async (exam: CustomExam) => {

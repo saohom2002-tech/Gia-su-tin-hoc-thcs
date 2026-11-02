@@ -39,62 +39,50 @@ async function main() {
   const newDb = getDatabase(newApp);
 
   const examsMap = new Map<string, any>();
+
+  // 1. Đọc dữ liệu hiện có trên Firebase mới trước để bảo lưu toàn bộ đề đã tạo
+  try {
+    const newExamsSnap = await get(ref(newDb, 'admin_custom_exams'));
+    if (newExamsSnap.exists()) {
+      const data = newExamsSnap.val();
+      console.log(`📋 Hiện có ${Object.keys(data).length} đề trên Firebase (gstinhoc):`);
+      for (const key of Object.keys(data)) {
+        const item = data[key];
+        const id = item?.id || key;
+        const qCount = Array.isArray(item?.questions)
+          ? item.questions.length
+          : item?.questions && typeof item.questions === 'object'
+          ? Object.keys(item.questions).length
+          : 0;
+        console.log(`  - [${item?.grade || 'Khối ' + item?.gradeNumber}] (${item?.category}) ${item?.title} (${qCount} câu) [id=${id}]`);
+        examsMap.set(id, sanitize({ ...item, id }));
+      }
+    }
+  } catch (e: any) {
+    console.warn('Lưu ý khi đọc admin_custom_exams trên Firebase mới:', e?.message);
+  }
+
+  // 2. Bổ sung / Khôi phục các đề chuẩn từ DEFAULT_CUSTOM_EXAMS nếu chưa có trên Firebase (so khớp theo id hoặc tên đề + phân loại)
+  const existingTitleCat = new Set(
+    Array.from(examsMap.values()).map(
+      (e) => `${(e.title || '').trim().toLowerCase()}__${e.category || 'exam'}`
+    )
+  );
   for (const ex of DEFAULT_CUSTOM_EXAMS) {
-    examsMap.set(ex.id, sanitize(ex));
+    const keyTitleCat = `${(ex.title || '').trim().toLowerCase()}__${ex.category || 'exam'}`;
+    if (!examsMap.has(ex.id) && !existingTitleCat.has(keyTitleCat)) {
+      examsMap.set(ex.id, sanitize(ex));
+      existingTitleCat.add(keyTitleCat);
+      console.log(`  + Khôi phục đề: [${ex.grade}] (${ex.category}) ${ex.title} (${ex.questions.length} câu)`);
+    } else if (examsMap.has(ex.id)) {
+      // Đảm bảo cập nhật timestamp mới nhất cho các đề vừa khôi phục để hiển thị lên đầu danh sách
+      examsMap.set(ex.id, sanitize(ex));
+    }
   }
 
   const scoresMap = new Map<string, any>();
   for (const sc of INITIAL_SCORE_RECORDS) {
     scoresMap.set(sc.id, sanitize(sc));
-  }
-
-  // 1. Đọc dữ liệu từ Firebase cũ (nếu có đề thi/điểm đã tạo trước đó)
-  try {
-    const oldExamsSnap = await get(ref(oldDb, 'admin_custom_exams'));
-    if (oldExamsSnap.exists()) {
-      const data = oldExamsSnap.val();
-      for (const key of Object.keys(data)) {
-        const item = data[key];
-        const id = item?.id || key;
-        examsMap.set(id, sanitize({ ...item, id }));
-      }
-      console.log(`Đã đọc ${Object.keys(data).length} đề thi từ Firebase cũ (tpn123-cb59c).`);
-    }
-  } catch (e: any) {
-    console.warn('Lưu ý khi đọc đề thi từ Firebase cũ:', e?.message);
-  }
-
-  try {
-    const oldScoresSnap = await get(ref(oldDb, 'ontap_scores'));
-    if (oldScoresSnap.exists()) {
-      const data = oldScoresSnap.val();
-      for (const key of Object.keys(data)) {
-        const item = data[key];
-        const id = item?.id || key;
-        scoresMap.set(id, sanitize({ ...item, id }));
-      }
-      console.log(`Đã đọc ${Object.keys(data).length} bản ghi điểm từ Firebase cũ (tpn123-cb59c).`);
-    }
-  } catch (e: any) {
-    console.warn('Lưu ý khi đọc điểm từ Firebase cũ:', e?.message);
-  }
-
-  // 2. Bảo lưu dữ liệu nếu đã có sẵn trên Firebase mới
-  try {
-    const newExamsSnap = await get(ref(newDb, 'admin_custom_exams'));
-    if (newExamsSnap.exists()) {
-      const data = newExamsSnap.val();
-      for (const key of Object.keys(data)) {
-        const item = data[key];
-        const id = item?.id || key;
-        const existing = examsMap.get(id);
-        if (!existing || (item?.updatedAt || 0) >= (existing?.updatedAt || 0)) {
-          examsMap.set(id, sanitize({ ...item, id }));
-        }
-      }
-    }
-  } catch (e: any) {
-    console.warn('Lưu ý khi đọc admin_custom_exams trên Firebase mới:', e?.message);
   }
 
   // 3. Ghi đề thi và bảng điểm lên Firebase mới (gstinhoc)

@@ -8,6 +8,8 @@ import {
   AdminSession,
   saveCustomExamToFirebase,
   deleteCustomExamFromFirebase,
+  moveCustomExamToTrash,
+  restoreCustomExamFromTrash,
   ADMIN_EMAIL,
 } from '../../services/firebase';
 import {
@@ -16,6 +18,7 @@ import {
 } from '../../services/googleSheets';
 import { QuestionEditorModal } from './QuestionEditorModal';
 import { BUILT_IN_QUESTIONS } from '../../data/questionBank';
+import { DEFAULT_CUSTOM_EXAMS } from '../../data/defaultCustomExams';
 import { generateFallbackQuestions, CURRICULUM_LESSONS } from '../../data/curriculum';
 import {
   parseQuestionsFromRawText,
@@ -94,12 +97,13 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
   const [activeView, setActiveView] = useState<'exam_list' | 'manage_questions'>('exam_list');
   const [selectedExamId, setSelectedExamId] = useState<string | null>(null);
   const [confirmDeleteExamId, setConfirmDeleteExamId] = useState<string | null>(null);
+  const [confirmPermanentDeleteExamId, setConfirmPermanentDeleteExamId] = useState<string | null>(null);
   const [confirmDeleteQuestionId, setConfirmDeleteQuestionId] = useState<string | null>(null);
 
   // Filters for exam list
   const [searchKeyword, setSearchKeyword] = useState('');
   const [gradeFilter, setGradeFilter] = useState<'all' | 3 | 4 | 5 | 6 | 7 | 8 | 9>('all');
-  const [categoryFilter, setCategoryFilter] = useState<'all' | 'exam' | 'practice'>('all');
+  const [categoryFilter, setCategoryFilter] = useState<'all' | 'exam' | 'practice' | 'trash'>('all');
 
   // Modal Create/Edit Exam Info
   const [isExamInfoModalOpen, setIsExamInfoModalOpen] = useState(false);
@@ -166,11 +170,28 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
     return customExams.find((e) => e.id === selectedExamId) || null;
   }, [selectedExamId, customExams]);
 
+  // Tách danh sách đề đang hoạt động và đề trong Thùng rác lưu trữ
+  const activeExams = useMemo(() => customExams.filter((e) => !e.isTrashed), [customExams]);
+  const trashedExams = useMemo(
+    () =>
+      customExams
+        .filter((e) => Boolean(e.isTrashed))
+        .sort((a, b) => (b.trashedAt || b.updatedAt || 0) - (a.trashedAt || a.updatedAt || 0)),
+    [customExams]
+  );
+
   // Filtered exams
   const filteredExams = useMemo(() => {
-    return customExams.filter((exam) => {
+    const sourceList = categoryFilter === 'trash' ? trashedExams : activeExams;
+    return sourceList.filter((exam) => {
       if (gradeFilter !== 'all' && exam.gradeNumber !== gradeFilter) return false;
-      if (categoryFilter !== 'all' && exam.category !== categoryFilter) return false;
+      if (
+        categoryFilter !== 'all' &&
+        categoryFilter !== 'trash' &&
+        exam.category !== categoryFilter
+      ) {
+        return false;
+      }
       if (searchKeyword.trim()) {
         const lower = searchKeyword.toLowerCase();
         return (
@@ -181,7 +202,7 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
       }
       return true;
     });
-  }, [customExams, gradeFilter, categoryFilter, searchKeyword]);
+  }, [activeExams, trashedExams, gradeFilter, categoryFilter, searchKeyword]);
 
   // Tự động điều hướng đến đề hoặc hành động được chọn từ trang chủ
   React.useEffect(() => {
@@ -601,17 +622,74 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
     flashMessage(`Đã nhân bản đề thi "${clonedExam.title}"!`);
   };
 
-  // Xóa đề thi
+  // Chuyển đề thi vào Thùng rác lưu trữ (Soft Delete để Admin có thể phục hồi bất cứ lúc nào)
   const handleDeleteExam = async (examId: string, examTitle: string) => {
     sound.playClick();
-    setCustomExams((prev) => prev.filter((e) => e.id !== examId));
+    const target = customExams.find((e) => e.id === examId);
+    if (!target) return;
+    const trashedExam: CustomExam = {
+      ...target,
+      isTrashed: true,
+      trashedAt: Date.now(),
+      updatedAt: Date.now(),
+    };
+    setCustomExams((prev) => prev.map((e) => (e.id === examId ? trashedExam : e)));
     setConfirmDeleteExamId(null);
     if (selectedExamId === examId) {
       setSelectedExamId(null);
       setActiveView('exam_list');
     }
+    await moveCustomExamToTrash(target);
+    flashMessage(
+      `🗑️ Đã chuyển đề "${examTitle}" vào Thùng rác lưu trữ! Bạn có thể vào mục "Thùng rác lưu trữ" để phục hồi bất cứ lúc nào.`
+    );
+  };
+
+  // Phục hồi 1 đề thi từ Thùng rác lưu trữ về danh sách đề hoạt động
+  const handleRestoreExam = async (exam: CustomExam) => {
+    sound.playSuccess();
+    const restoredExam: CustomExam = {
+      ...exam,
+      isTrashed: false,
+      trashedAt: undefined,
+      updatedAt: Date.now(),
+    };
+    setCustomExams((prev) => prev.map((e) => (e.id === exam.id ? restoredExam : e)));
+    setConfirmPermanentDeleteExamId(null);
+    await restoreCustomExamFromTrash(exam);
+    flashMessage(`♻️ Đã phục hồi đề "${exam.title}" về danh sách đề hoạt động!`);
+  };
+
+  // Phục hồi tất cả các đề trong Thùng rác lưu trữ
+  const handleRestoreAllTrashedExams = async () => {
+    sound.playSuccess();
+    const toRestore = customExams.filter((e) => Boolean(e.isTrashed));
+    if (toRestore.length === 0) return;
+    setCustomExams((prev) =>
+      prev.map((e) =>
+        e.isTrashed
+          ? { ...e, isTrashed: false, trashedAt: undefined, updatedAt: Date.now() }
+          : e
+      )
+    );
+    for (const ex of toRestore) {
+      await restoreCustomExamFromTrash(ex);
+    }
+    setCategoryFilter('all');
+    flashMessage(`♻️ Đã phục hồi toàn bộ ${toRestore.length} đề từ Thùng rác lưu trữ!`);
+  };
+
+  // Xóa vĩnh viễn 1 đề thi khỏi Thùng rác lưu trữ
+  const handlePermanentDeleteExam = async (examId: string, examTitle: string) => {
+    sound.playClick();
+    setCustomExams((prev) => prev.filter((e) => e.id !== examId));
+    setConfirmPermanentDeleteExamId(null);
+    if (selectedExamId === examId) {
+      setSelectedExamId(null);
+      setActiveView('exam_list');
+    }
     await deleteCustomExamFromFirebase(examId);
-    flashMessage(`Đã xóa đề thi "${examTitle}".`);
+    flashMessage(`Đã xóa vĩnh viễn đề "${examTitle}" khỏi Thùng rác lưu trữ.`);
   };
 
   // ==========================================================================
@@ -901,15 +979,37 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
             <button
               onClick={async () => {
                 sound.playClick();
-                for (const ex of customExams) {
+                setGradeFilter('all');
+                setCategoryFilter('all');
+                setSearchKeyword('');
+
+                // Khôi phục các đề chuẩn bị thiếu (nếu chưa có trong danh sách)
+                const mergedExams = [...customExams];
+                const existingIds = new Set(mergedExams.map((e) => e.id));
+                const existingTitles = new Set(
+                  mergedExams.map((e) => (e.title || '').trim().toLowerCase())
+                );
+                for (const defEx of DEFAULT_CUSTOM_EXAMS) {
+                  const normTitle = (defEx.title || '').trim().toLowerCase();
+                  if (!existingIds.has(defEx.id) && !existingTitles.has(normTitle)) {
+                    mergedExams.unshift(defEx);
+                    existingIds.add(defEx.id);
+                    existingTitles.add(normTitle);
+                  }
+                }
+                if (mergedExams.length !== customExams.length) {
+                  setCustomExams(mergedExams);
+                }
+
+                for (const ex of mergedExams) {
                   await saveCustomExamToFirebase(ex);
                 }
                 flashMessage(
-                  `☁️ Đã đồng bộ thành công toàn bộ ${customExams.length} đề thi lên đám mây Firebase (gstinhoc)!`
+                  `☁️ Đã đồng bộ & khôi phục đầy đủ toàn bộ ${mergedExams.length} đề thi & đề ôn tập trên Firebase (gstinhoc)!`
                 );
               }}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 text-xs font-bold text-emerald-200 transition-colors cursor-pointer"
-              title="Đồng bộ toàn bộ đề thi ở máy này lên đám mây Firebase (gstinhoc)"
+              title="Đồng bộ và hiển thị đầy đủ toàn bộ đề thi & đề ôn tập trên đám mây Firebase (gstinhoc)"
             >
               <RefreshCw className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Đồng bộ Firebase</span>
@@ -1148,6 +1248,11 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
                     onClick={() => {
                       sound.playClick();
                       setGradeFilter('all');
+                      if (categoryFilter === 'trash') {
+                        // Giữ nguyên chế độ xem thùng rác nếu đang ở trong thùng rác
+                      } else {
+                        setCategoryFilter('all');
+                      }
                     }}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                       gradeFilter === 'all'
@@ -1155,16 +1260,20 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
                         : 'text-slate-600 hover:text-slate-900'
                     }`}
                   >
-                    Tất cả khối ({customExams.length})
+                    Tất cả khối ({(categoryFilter === 'trash' ? trashedExams : activeExams).length})
                   </button>
                   {([3, 4, 5, 6, 7, 8, 9] as const).map((g) => {
-                    const countInGrade = customExams.filter((e) => e.gradeNumber === g).length;
+                    const baseList = categoryFilter === 'trash' ? trashedExams : activeExams;
+                    const countInGrade = baseList.filter((e) => Number(e.gradeNumber) === g).length;
                     return (
                       <button
                         key={g}
                         onClick={() => {
                           sound.playClick();
                           setGradeFilter(g);
+                          if (categoryFilter !== 'trash') {
+                            setCategoryFilter('all');
+                          }
                         }}
                         className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                           gradeFilter === g
@@ -1178,8 +1287,8 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
                   })}
                 </div>
 
-                {/* Category tabs */}
-                <div className="inline-flex p-1 bg-slate-200/70 rounded-2xl">
+                {/* Category tabs + Thùng rác lưu trữ */}
+                <div className="inline-flex flex-wrap items-center gap-1 p-1 bg-slate-200/70 rounded-2xl">
                   <button
                     onClick={() => {
                       sound.playClick();
@@ -1191,7 +1300,13 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
                         : 'text-slate-600 hover:text-slate-900'
                     }`}
                   >
-                    Tất cả loại
+                    Tất cả loại (
+                    {
+                      activeExams.filter(
+                        (e) => gradeFilter === 'all' || Number(e.gradeNumber) === gradeFilter
+                      ).length
+                    }
+                    )
                   </button>
                   <button
                     onClick={() => {
@@ -1204,7 +1319,15 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
                         : 'text-slate-600 hover:text-slate-900'
                     }`}
                   >
-                    Đề thi ({customExams.filter((e) => e.category === 'exam').length})
+                    Đề thi (
+                    {
+                      activeExams.filter(
+                        (e) =>
+                          (gradeFilter === 'all' || Number(e.gradeNumber) === gradeFilter) &&
+                          e.category === 'exam'
+                      ).length
+                    }
+                    )
                   </button>
                   <button
                     onClick={() => {
@@ -1217,40 +1340,136 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
                         : 'text-slate-600 hover:text-slate-900'
                     }`}
                   >
-                    Đề ôn tập ({customExams.filter((e) => e.category === 'practice').length})
+                    Đề ôn tập (
+                    {
+                      activeExams.filter(
+                        (e) =>
+                          (gradeFilter === 'all' || Number(e.gradeNumber) === gradeFilter) &&
+                          e.category === 'practice'
+                      ).length
+                    }
+                    )
+                  </button>
+                  <button
+                    onClick={() => {
+                      sound.playClick();
+                      setCategoryFilter('trash');
+                      setGradeFilter('all');
+                    }}
+                    className={`px-3 py-1 text-xs font-bold rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${
+                      categoryFilter === 'trash'
+                        ? 'bg-rose-600 text-white font-extrabold shadow-xs'
+                        : trashedExams.length > 0
+                        ? 'bg-rose-100 text-rose-700 hover:bg-rose-200 font-extrabold'
+                        : 'text-slate-600 hover:text-rose-700'
+                    }`}
+                    title="Thùng rác lưu trữ các đề đã xóa (Chỉ Admin nhìn thấy, học sinh trên web không nhìn thấy)"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>Thùng rác lưu trữ ({trashedExams.length})</span>
                   </button>
                 </div>
               </div>
+
+              {/* Banner thông báo khi đang xem Thùng rác lưu trữ */}
+              {categoryFilter === 'trash' && (
+                <div className="p-4 rounded-2xl bg-gradient-to-r from-rose-50 via-orange-50 to-amber-50 border-2 border-rose-200 flex flex-wrap items-center justify-between gap-3 animate-in fade-in">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center shadow-sm shrink-0">
+                      <Trash2 className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h4 className="text-sm font-black text-rose-950">
+                          🗑️ Thùng Rác Lưu Trữ Đề Đã Xóa ({trashedExams.length} đề)
+                        </h4>
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300">
+                          🔒 Ẩn hoàn toàn với học sinh trên Web
+                        </span>
+                      </div>
+                      <p className="text-xs text-rose-800 mt-0.5">
+                        Các đề bạn bấm biểu tượng thùng rác màu đỏ sẽ được lưu trữ an toàn tại đây. Bạn có thể bấm <strong>"Phục hồi đề này"</strong> để đưa đề trở lại danh sách bất cứ lúc nào!
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    {trashedExams.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={handleRestoreAllTrashedExams}
+                        className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold flex items-center gap-1.5 shadow-sm cursor-pointer transition-transform active:scale-95"
+                      >
+                        <RefreshCw className="w-3.5 h-3.5" />
+                        <span>Phục hồi tất cả ({trashedExams.length} đề)</span>
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        sound.playClick();
+                        setCategoryFilter('all');
+                      }}
+                      className="px-3 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-xs font-bold cursor-pointer"
+                    >
+                      ← Quay lại danh sách đề
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {/* Exam Cards Grid */}
               {filteredExams.length === 0 ? (
                 <div className="p-12 text-center bg-white rounded-3xl border-2 border-dashed border-slate-200 space-y-3">
                   <div className="w-16 h-16 rounded-3xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto text-2xl">
-                    📑
+                    {categoryFilter === 'trash' ? '🗑️' : '📑'}
                   </div>
-                  <h4 className="text-base font-bold text-slate-800">Chưa có đề thi nào trong mục này</h4>
+                  <h4 className="text-base font-bold text-slate-800">
+                    {categoryFilter === 'trash'
+                      ? 'Thùng rác lưu trữ đang trống'
+                      : 'Chưa có đề thi nào trong mục này'}
+                  </h4>
                   <p className="text-xs text-slate-500 max-w-md mx-auto">
-                    Bạn có thể bấm nút <strong>"Tạo đề mới"</strong> để bắt đầu soạn đề kiểm tra hoặc đề ôn tập cho học sinh!
+                    {categoryFilter === 'trash' ? (
+                      'Hiện không có đề thi hay đề ôn tập nào nằm trong thùng rác lưu trữ. Khi bạn bấm nút xóa (thùng rác màu đỏ), đề sẽ được chuyển vào đây để bạn có thể khôi phục khi cần.'
+                    ) : (
+                      <>
+                        Bạn có thể bấm nút <strong>"Tạo đề mới"</strong> để bắt đầu soạn đề kiểm tra hoặc đề ôn tập cho học sinh!
+                      </>
+                    )}
                   </p>
-                  <button
-                    onClick={handleOpenCreateExam}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold shadow-md hover:bg-indigo-700 cursor-pointer"
-                  >
-                    <Plus className="w-4 h-4" />
-                    Tạo đề đầu tiên
-                  </button>
+                  {categoryFilter === 'trash' ? (
+                    <button
+                      onClick={() => setCategoryFilter('all')}
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold shadow-md hover:bg-indigo-700 cursor-pointer"
+                    >
+                      Quay lại danh sách đề đang hoạt động
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleOpenCreateExam}
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold shadow-md hover:bg-indigo-700 cursor-pointer"
+                    >
+                      <Plus className="w-4 h-4" />
+                      Tạo đề đầu tiên
+                    </button>
+                  )}
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {filteredExams.map((exam) => (
                     <div
                       key={exam.id}
-                      className="bg-white rounded-2xl border border-slate-200/90 hover:border-indigo-300 p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group"
+                      className={`bg-white rounded-2xl border p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group ${
+                        exam.isTrashed
+                          ? 'border-rose-200 bg-rose-50/20 hover:border-rose-300'
+                          : 'border-slate-200/90 hover:border-indigo-300'
+                      }`}
                     >
                       <div className="space-y-3">
                         {/* Badges Row */}
                         <div className="flex flex-wrap items-center justify-between gap-2">
-                          <div className="flex items-center gap-1.5">
+                          <div className="flex items-center gap-1.5 flex-wrap">
                             <span className="px-2.5 py-0.5 rounded-full text-[11px] font-black bg-indigo-100 text-indigo-800 border border-indigo-200">
                               {exam.grade || `Khối ${exam.gradeNumber}`}
                             </span>
@@ -1263,6 +1482,11 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
                             >
                               {exam.category === 'exam' ? 'Đề thi tính giờ' : 'Đề ôn tập'}
                             </span>
+                            {exam.isTrashed && (
+                              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-rose-100 text-rose-800 border border-rose-300">
+                                🗑️ Trong thùng rác
+                              </span>
+                            )}
                           </div>
 
                           <div className="flex items-center gap-2 text-xs font-bold text-slate-500">
@@ -1288,105 +1512,175 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
                               {exam.description}
                             </p>
                           )}
+                          {exam.isTrashed && exam.trashedAt && (
+                            <p className="text-[11px] font-bold text-rose-700 mt-1.5">
+                              🕒 Đã chuyển vào thùng rác lúc:{' '}
+                              {new Date(exam.trashedAt).toLocaleString('vi-VN')}
+                            </p>
+                          )}
                         </div>
                       </div>
 
                       {/* Card Action Buttons */}
-                      <div className="pt-4 mt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
-                        {/* Primary action: Manage questions */}
-                        <button
-                          onClick={() => {
-                            sound.playClick();
-                            setSelectedExamId(exam.id);
-                            setActiveView('manage_questions');
-                          }}
-                          className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm shadow-indigo-600/20 transition-transform active:scale-95 cursor-pointer"
-                        >
-                          <Edit3 className="w-3.5 h-3.5" />
-                          <span>Quản trị câu hỏi ({exam.questions?.length || 0})</span>
-                        </button>
-
-                        <div className="flex items-center gap-1">
-                          {/* Test quiz run */}
-                          <button
-                            onClick={() => {
-                              sound.playClick();
-                              onLaunchExam(exam, exam.category);
-                            }}
-                            className="p-2 rounded-xl text-emerald-700 hover:bg-emerald-50 border border-emerald-200 transition-colors cursor-pointer"
-                            title="Làm thử đề thi ngay"
-                          >
-                            <Play className="w-4 h-4 fill-emerald-600 text-emerald-600" />
-                          </button>
-
-                          {/* Print view */}
-                          <button
-                            onClick={() => {
-                              sound.playClick();
-                              onPrintExam(exam);
-                            }}
-                            className="p-2 rounded-xl text-slate-600 hover:bg-slate-100 border border-slate-200 transition-colors cursor-pointer"
-                            title="In đề thi / Xuất PDF"
-                          >
-                            <Printer className="w-4 h-4" />
-                          </button>
-
-                          {/* Export JSON */}
-                          <button
-                            onClick={() => handleExportExamJSON(exam)}
-                            className="p-2 rounded-xl text-slate-600 hover:bg-slate-100 border border-slate-200 transition-colors cursor-pointer"
-                            title="Xuất file JSON"
-                          >
-                            <Download className="w-4 h-4" />
-                          </button>
-
-                          {/* Duplicate exam */}
-                          <button
-                            onClick={() => handleDuplicateExam(exam)}
-                            className="p-2 rounded-xl text-slate-600 hover:bg-slate-100 border border-slate-200 transition-colors cursor-pointer"
-                            title="Nhân bản đề thi"
-                          >
-                            <Copy className="w-4 h-4" />
-                          </button>
-
-                          {/* Edit exam metadata */}
-                          <button
-                            onClick={() => handleOpenEditExam(exam)}
-                            className="p-2 rounded-xl text-slate-600 hover:bg-slate-100 border border-slate-200 transition-colors cursor-pointer"
-                            title="Sửa tên, khối, thời gian đề"
-                          >
-                            <Layers className="w-4 h-4" />
-                          </button>
-
-                          {/* Delete exam */}
-                          {confirmDeleteExamId === exam.id ? (
-                            <div className="flex items-center gap-1 bg-rose-50 px-1.5 py-1 rounded-xl border border-rose-200">
+                      <div className="pt-4 mt-4 border-t border-slate-100">
+                        {exam.isTrashed ? (
+                          confirmPermanentDeleteExamId === exam.id ? (
+                            <div className="flex items-center justify-between gap-2 bg-rose-100 px-3 py-2 rounded-xl border-2 border-rose-400 animate-in fade-in">
+                              <span className="text-xs font-extrabold text-rose-900">
+                                Xóa vĩnh viễn đề này (không thể khôi phục)?
+                              </span>
+                              <div className="flex items-center gap-1.5">
+                                <button
+                                  type="button"
+                                  onClick={() => handlePermanentDeleteExam(exam.id, exam.title)}
+                                  className="px-3 py-1.5 rounded-lg bg-rose-700 text-white text-xs font-extrabold hover:bg-rose-800 cursor-pointer shadow-xs"
+                                >
+                                  Xóa vĩnh viễn
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => setConfirmPermanentDeleteExamId(null)}
+                                  className="px-2.5 py-1.5 rounded-lg bg-white text-slate-700 text-xs font-bold border border-slate-300 hover:bg-slate-100 cursor-pointer"
+                                >
+                                  Hủy
+                                </button>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="flex flex-wrap items-center justify-between gap-2">
                               <button
-                                onClick={() => handleDeleteExam(exam.id, exam.title)}
-                                className="px-2 py-1 rounded-lg bg-rose-600 text-white text-[10px] font-bold hover:bg-rose-700 cursor-pointer"
+                                type="button"
+                                onClick={() => handleRestoreExam(exam)}
+                                className="flex-1 py-2 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold flex items-center justify-center gap-1.5 shadow-sm shadow-emerald-600/20 transition-transform active:scale-95 cursor-pointer"
                               >
-                                Xóa!
+                                <RefreshCw className="w-3.5 h-3.5" />
+                                <span>♻️ Phục hồi đề này</span>
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  sound.playClick();
+                                  setConfirmPermanentDeleteExamId(exam.id);
+                                }}
+                                className="py-2 px-3 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer"
+                                title="Xóa vĩnh viễn khỏi thùng rác"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                                <span>Xóa vĩnh viễn</span>
+                              </button>
+                            </div>
+                          )
+                        ) : confirmDeleteExamId === exam.id ? (
+                          <div className="flex items-center justify-between gap-2 bg-rose-50 px-3 py-2 rounded-xl border-2 border-rose-300 animate-in fade-in">
+                            <span className="text-xs font-extrabold text-rose-800">
+                              Chuyển đề này vào Thùng rác lưu trữ?
+                            </span>
+                            <div className="flex items-center gap-1.5">
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteExam(exam.id, exam.title)}
+                                className="px-3 py-1.5 rounded-lg bg-rose-600 text-white text-xs font-extrabold hover:bg-rose-700 cursor-pointer shadow-xs"
+                              >
+                                Chuyển vào thùng rác
                               </button>
                               <button
+                                type="button"
                                 onClick={() => setConfirmDeleteExamId(null)}
-                                className="px-1.5 py-1 rounded-lg bg-white text-slate-600 text-[10px] font-bold border border-slate-200 cursor-pointer"
+                                className="px-2.5 py-1.5 rounded-lg bg-white text-slate-700 text-xs font-bold border border-slate-300 hover:bg-slate-100 cursor-pointer"
                               >
                                 Hủy
                               </button>
                             </div>
-                          ) : (
+                          </div>
+                        ) : (
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            {/* Primary action: Manage questions */}
                             <button
+                              type="button"
                               onClick={() => {
                                 sound.playClick();
-                                setConfirmDeleteExamId(exam.id);
+                                setSelectedExamId(exam.id);
+                                setActiveView('manage_questions');
                               }}
-                              className="p-2 rounded-xl text-rose-600 hover:bg-rose-50 border border-rose-200 transition-colors cursor-pointer"
-                              title="Xóa đề thi"
+                              className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm shadow-indigo-600/20 transition-transform active:scale-95 cursor-pointer"
                             >
-                              <Trash2 className="w-4 h-4" />
+                              <Edit3 className="w-3.5 h-3.5" />
+                              <span>Quản trị câu hỏi ({exam.questions?.length || 0})</span>
                             </button>
-                          )}
-                        </div>
+
+                            <div className="flex items-center gap-1">
+                              {/* Test quiz run */}
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  sound.playClick();
+                                  onLaunchExam(exam, exam.category);
+                                }}
+                                className="p-2 rounded-xl text-emerald-700 hover:bg-emerald-50 border border-emerald-200 transition-colors cursor-pointer"
+                                title="Làm thử đề thi ngay"
+                              >
+                                <Play className="w-4 h-4 fill-emerald-600 text-emerald-600" />
+                              </button>
+
+                              {/* Print view */}
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  sound.playClick();
+                                  onPrintExam(exam);
+                                }}
+                                className="p-2 rounded-xl text-slate-600 hover:bg-slate-100 border border-slate-200 transition-colors cursor-pointer"
+                                title="In đề thi / Xuất PDF"
+                              >
+                                <Printer className="w-4 h-4" />
+                              </button>
+
+                              {/* Export JSON */}
+                              <button
+                                type="button"
+                                onClick={() => handleExportExamJSON(exam)}
+                                className="p-2 rounded-xl text-slate-600 hover:bg-slate-100 border border-slate-200 transition-colors cursor-pointer"
+                                title="Xuất file JSON"
+                              >
+                                <Download className="w-4 h-4" />
+                              </button>
+
+                              {/* Duplicate exam */}
+                              <button
+                                type="button"
+                                onClick={() => handleDuplicateExam(exam)}
+                                className="p-2 rounded-xl text-slate-600 hover:bg-slate-100 border border-slate-200 transition-colors cursor-pointer"
+                                title="Nhân bản đề thi"
+                              >
+                                <Copy className="w-4 h-4" />
+                              </button>
+
+                              {/* Edit exam metadata */}
+                              <button
+                                type="button"
+                                onClick={() => handleOpenEditExam(exam)}
+                                className="p-2 rounded-xl text-slate-600 hover:bg-slate-100 border border-slate-200 transition-colors cursor-pointer"
+                                title="Sửa tên, khối, thời gian đề"
+                              >
+                                <Layers className="w-4 h-4" />
+                              </button>
+
+                              {/* Move exam to trash */}
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  sound.playClick();
+                                  setConfirmDeleteExamId(exam.id);
+                                }}
+                                className="p-2 rounded-xl text-rose-600 hover:bg-rose-50 border border-rose-200 transition-colors cursor-pointer"
+                                title="Chuyển đề vào thùng rác lưu trữ"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}

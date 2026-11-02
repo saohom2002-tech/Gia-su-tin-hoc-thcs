@@ -43,7 +43,7 @@ export const AdminExamSection: React.FC<AdminExamSectionProps> = ({
   onDeleteExam,
   onDuplicateExam,
 }) => {
-  const [filterMode, setFilterMode] = useState<'all' | 'current_grade'>('all');
+  const [selectedGrade, setSelectedGrade] = useState<'all' | 3 | 4 | 5 | 6 | 7 | 8 | 9>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
@@ -84,11 +84,17 @@ export const AdminExamSection: React.FC<AdminExamSectionProps> = ({
     setQuickEditingExam(null);
   };
 
-  // Filter exams based on currentGradeFilter, search query, or all
+  // Danh sách các đề đang hoạt động (ẩn toàn bộ các đề nằm trong Thùng rác lưu trữ đối với học sinh trên web)
+  const activeExams = useMemo(
+    () => customExams.filter((e) => e.isPublished !== false && !e.isTrashed),
+    [customExams]
+  );
+
+  // Filter exams based on selectedGrade combo box and search query
   const displayedExams = useMemo(() => {
-    let list = customExams.filter((e) => e.isPublished !== false);
-    if (filterMode === 'current_grade') {
-      list = list.filter((e) => e.gradeNumber === currentGradeFilter);
+    let list = activeExams;
+    if (selectedGrade !== 'all') {
+      list = list.filter((e) => Number(e.gradeNumber) === Number(selectedGrade));
     }
     if (searchQuery.trim()) {
       const q = searchQuery.trim().toLowerCase();
@@ -100,7 +106,7 @@ export const AdminExamSection: React.FC<AdminExamSectionProps> = ({
       );
     }
     return list;
-  }, [customExams, currentGradeFilter, filterMode, searchQuery]);
+  }, [activeExams, selectedGrade, searchQuery]);
 
   return (
     <section className="rounded-3xl border-2 border-indigo-200/80 bg-gradient-to-br from-white via-indigo-50/40 to-blue-50/50 p-5 sm:p-7 shadow-lg shadow-indigo-100/50 space-y-5">
@@ -116,7 +122,7 @@ export const AdminExamSection: React.FC<AdminExamSectionProps> = ({
                 Quản Trị Đề Đã Tạo
               </span>
               <span className="text-xs text-indigo-700 font-bold">
-                Tổng số: {customExams.length} bộ đề • Đồng bộ Firebase Realtime
+                Tổng số: {activeExams.length} bộ đề • Đồng bộ Firebase Realtime
               </span>
             </div>
             <h2 className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight mt-0.5">
@@ -148,37 +154,34 @@ export const AdminExamSection: React.FC<AdminExamSectionProps> = ({
             )}
           </div>
 
-          {/* Switch tab: All vs Grade */}
-          <div className="inline-flex p-1 bg-white rounded-xl border border-indigo-100 shadow-2xs text-xs font-bold">
-            <button
-              type="button"
-              onClick={() => {
+          {/* Combo box (Select dropdown): Chọn khối lớp hiển thị đề */}
+          <div className="flex items-center gap-1.5 bg-white px-2.5 py-1 rounded-xl border-2 border-indigo-200 shadow-2xs">
+            <span className="text-xs font-extrabold text-indigo-700 whitespace-nowrap">
+              Chọn khối:
+            </span>
+            <select
+              aria-label="Chọn khối hiển thị đề"
+              value={selectedGrade}
+              onChange={(e) => {
                 sound.playClick();
-                setFilterMode('all');
+                const val = e.target.value;
+                setSelectedGrade(val === 'all' ? 'all' : (Number(val) as 3 | 4 | 5 | 6 | 7 | 8 | 9));
               }}
-              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
-                filterMode === 'all'
-                  ? 'bg-indigo-600 text-white shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
+              className="py-1 pr-2 text-xs font-extrabold text-slate-900 bg-transparent focus:outline-hidden cursor-pointer"
             >
-              Tất cả ({customExams.length})
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                sound.playClick();
-                setFilterMode('current_grade');
-              }}
-              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
-                filterMode === 'current_grade'
-                  ? 'bg-indigo-600 text-white shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              Khối {currentGradeFilter} (
-              {customExams.filter((e) => e.gradeNumber === currentGradeFilter).length})
-            </button>
+              <option value="all">
+                Tất cả các khối ({activeExams.length} đề)
+              </option>
+              {([3, 4, 5, 6, 7, 8, 9] as const).map((g) => {
+                const count = activeExams.filter((e) => Number(e.gradeNumber) === g).length;
+                const levelLabel = g <= 5 ? 'Tiểu học' : 'THCS';
+                return (
+                  <option key={g} value={g}>
+                    Khối {g} - {levelLabel} ({count} đề)
+                  </option>
+                );
+              })}
+            </select>
           </div>
 
           {/* Button: Thêm đề mới */}
@@ -217,16 +220,16 @@ export const AdminExamSection: React.FC<AdminExamSectionProps> = ({
           <p className="text-sm font-bold text-slate-700">
             {searchQuery
               ? `Không tìm thấy đề nào khớp với "${searchQuery}".`
-              : `Chưa có đề đã tạo nào cho Khối ${currentGradeFilter}.`}
+              : `Chưa có đề đã tạo nào cho Khối ${selectedGrade === 'all' ? currentGradeFilter : selectedGrade}.`}
           </p>
           <div className="flex items-center justify-center gap-2">
-            {filterMode === 'current_grade' && customExams.length > 0 && (
+            {selectedGrade !== 'all' && activeExams.length > 0 && (
               <button
                 type="button"
-                onClick={() => setFilterMode('all')}
+                onClick={() => setSelectedGrade('all')}
                 className="px-3.5 py-2 rounded-xl border border-indigo-200 bg-indigo-50 text-indigo-700 text-xs font-bold hover:bg-indigo-100 cursor-pointer"
               >
-                Xem tất cả {customExams.length} đề đã tạo
+                Xem tất cả {activeExams.length} đề đã tạo
               </button>
             )}
             <button
@@ -334,11 +337,11 @@ export const AdminExamSection: React.FC<AdminExamSectionProps> = ({
                     </button>
                   </div>
 
-                  {/* Row 2: Direct CRUD Management (Sửa câu hỏi • Sửa đề • Xóa đề) */}
+                  {/* Row 2: Direct CRUD Management (Sửa câu hỏi • Sửa đề • Chuyển vào thùng rác) */}
                   {isConfirmingDelete ? (
                     <div className="flex items-center justify-between gap-1.5 p-1.5 rounded-xl bg-rose-50 border border-rose-200 animate-in fade-in">
                       <span className="text-[11px] font-bold text-rose-800 pl-1">
-                        Xóa đề này?
+                        Chuyển vào thùng rác?
                       </span>
                       <div className="flex items-center gap-1">
                         <button
@@ -350,7 +353,7 @@ export const AdminExamSection: React.FC<AdminExamSectionProps> = ({
                           }}
                           className="px-2.5 py-1 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-[11px] font-bold cursor-pointer"
                         >
-                          Xác nhận xóa
+                          Vào thùng rác
                         </button>
                         <button
                           type="button"
@@ -396,7 +399,7 @@ export const AdminExamSection: React.FC<AdminExamSectionProps> = ({
                           setConfirmDeleteId(exam.id);
                         }}
                         className="p-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200/70 transition-colors cursor-pointer"
-                        title="Xóa đề đã tạo"
+                        title="Chuyển đề vào thùng rác lưu trữ"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
