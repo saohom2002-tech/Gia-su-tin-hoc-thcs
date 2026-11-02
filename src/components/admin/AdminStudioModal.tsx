@@ -833,18 +833,43 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
     if (!currentExam) return;
 
     setIsAIGenerating(true);
+    const rawLessonId = currentExam.id.startsWith('topic-bank-')
+      ? currentExam.id.replace(/^topic-bank-/, '')
+      : '';
+    const matchedLesson = CURRICULUM_LESSONS.find(
+      (l) =>
+        (rawLessonId && l.id === rawLessonId) ||
+        (currentExam.title &&
+          (currentExam.title.includes(l.title) || l.title.includes(currentExam.title)))
+    );
+    const cleanExamTitle = (currentExam.title || '').replace(/^\[.*?\]\s*/, '').trim();
+    const topicName =
+      aiTopic.trim() ||
+      matchedLesson?.title ||
+      cleanExamTitle ||
+      `Tin học ${currentExam.gradeNumber}`;
+    const targetLessonId = matchedLesson?.id || rawLessonId || '';
+    const lessonDesc = matchedLesson?.description || currentExam.description || '';
+    const savedKey = localStorage.getItem('ontap_gemini_api_key') || '';
+
     try {
-      const topicName = aiTopic.trim() || `Tin học ${currentExam.gradeNumber}`;
       const resp = await fetch('/api/generate-quiz', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(savedKey ? { 'x-gemini-api-key': savedKey } : {}),
+        },
         body: JSON.stringify({
           lesson: topicName,
           lessons: [topicName],
+          lessonId: targetLessonId,
+          lessonIds: targetLessonId ? [targetLessonId] : [topicName],
+          customContent: lessonDesc,
           count: aiCount,
           difficulty: aiDifficulty,
           gradeNumber: currentExam.gradeNumber,
           grade: currentExam.grade,
+          apiKey: savedKey,
           sourcePreference: 'ai',
         }),
       });
@@ -867,15 +892,16 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
         setCustomExams((prev) => prev.map((e) => (e.id === updatedExam.id ? updatedExam : e)));
         await saveCustomExamToFirebase(updatedExam);
         setIsAIPanelOpen(false);
-        flashMessage(`🤖 AI đã soạn và bổ sung thành công ${newQuestions.length} câu hỏi vào đề!`);
+        flashMessage(`🤖 AI đã soạn và bổ sung thành công ${newQuestions.length} câu hỏi vào đúng bài "${topicName}"!`);
       } else {
         throw new Error(data.message || 'Không tạo được câu hỏi từ AI');
       }
     } catch (err: any) {
       console.warn('Lỗi AI sinh đề, chuyển sang ngân hàng SGK:', err);
-      // Fallback lấy từ offline bank
+      // Fallback lấy chính xác từ bài học đang chọn trong ngân hàng SGK
+      const fallbackTarget = targetLessonId || topicName;
       const fallback = generateFallbackQuestions(
-        `Tin học ${currentExam.gradeNumber}`,
+        fallbackTarget,
         aiCount,
         aiDifficulty,
         currentExam.gradeNumber
@@ -894,7 +920,7 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
       setCustomExams((prev) => prev.map((e) => (e.id === updatedExam.id ? updatedExam : e)));
       await saveCustomExamToFirebase(updatedExam);
       setIsAIPanelOpen(false);
-      flashMessage(`Đã bổ sung ${newQuestions.length} câu hỏi chuẩn SGK vào đề thi!`);
+      flashMessage(`Đã bổ sung ${newQuestions.length} câu hỏi chuẩn SGK của bài "${topicName}" vào đề!`);
     } finally {
       setIsAIGenerating(false);
     }
@@ -1768,7 +1794,19 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
                   <button
                     onClick={() => {
                       sound.playClick();
-                      setAiTopic(currentExam?.title || '');
+                      const rawLessonId = currentExam?.id.startsWith('topic-bank-')
+                        ? currentExam.id.replace(/^topic-bank-/, '')
+                        : '';
+                      const matched = CURRICULUM_LESSONS.find(
+                        (l) =>
+                          (rawLessonId && l.id === rawLessonId) ||
+                          (currentExam?.title &&
+                            (currentExam.title.includes(l.title) || l.title.includes(currentExam.title)))
+                      );
+                      const cleanTitle = matched
+                        ? matched.title
+                        : (currentExam?.title || '').replace(/^\[.*?\]\s*/, '').trim();
+                      setAiTopic(cleanTitle);
                       setIsAIPanelOpen(!isAIPanelOpen);
                     }}
                     className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-xs font-bold shadow-xs hover:from-purple-700 hover:to-indigo-700 cursor-pointer"

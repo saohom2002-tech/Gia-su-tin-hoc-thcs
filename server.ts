@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { GoogleGenAI, Type } from '@google/genai';
-import { generateFallbackQuestions } from './src/data/curriculum';
+import { generateFallbackQuestions, CURRICULUM_LESSONS } from './src/data/curriculum';
 import { parseQuestionsFromRawText } from './src/utils/documentQuestionParser';
 
 dotenv.config();
@@ -147,6 +147,24 @@ app.post('/api/generate-quiz', async (req, res) => {
     targetKeys = targetLessonTitles;
   }
 
+  // Tự động bổ sung tóm tắt nội dung bài học từ CURRICULUM_LESSONS nếu chưa có
+  let enrichedContent = customContent;
+  if (!enrichedContent && (targetKeys.length > 0 || targetLessonTitles.length > 0)) {
+    const matched = CURRICULUM_LESSONS.filter(
+      (l) =>
+        targetKeys.includes(l.id) ||
+        targetLessonTitles.some(
+          (t) =>
+            t.toLowerCase().includes(l.title.toLowerCase()) ||
+            l.title.toLowerCase().includes(t.toLowerCase()) ||
+            t.toLowerCase().includes(l.id.toLowerCase())
+        )
+    );
+    if (matched.length > 0) {
+      enrichedContent = matched.map((l) => `[${l.grade} - ${l.title}]: ${l.description}`).join('\n');
+    }
+  }
+
   // If user explicitly chose offline mode, bypass AI directly
   if (sourcePreference === 'offline') {
     const fallback = generateFallbackQuestions(targetKeys, questionCount, difficulty, gradeNumber || grade);
@@ -196,7 +214,7 @@ Hãy gán đúng trường "difficulty" là 'de', 'trung_binh' hoặc 'kho' cho 
     const multiLessonPrompt =
       targetLessonTitles.length > 1
         ? `Học sinh đã chọn KẾT HỢP ${targetLessonTitles.length} BÀI HỌC / CHỦ ĐỀ sau để tạo đề thi tổng hợp:\n${targetLessonTitles.map((t, i) => `${i + 1}. ${t}`).join('\n')}\n=> YÊU CẦU: Hãy phân bổ đều số câu hỏi cho các bài học trên (mỗi bài có tỷ lệ câu hỏi tương đương nhau) để đề thi bao quát toàn diện kiến thức các bài đã chọn!`
-        : `Nội dung ôn tập trọng tâm: "${targetLessonTitles[0]}". Tất cả câu hỏi phải bám sát 100% nội dung bài học này.`;
+        : `Nội dung ôn tập trọng tâm: "${targetLessonTitles[0]}". Tất cả câu hỏi phải bám sát 100% nội dung và yêu cầu cần đạt của bài học này trong SGK Kết Nối Tri Thức. TUYỆT ĐỐI KHÔNG sinh câu hỏi của các bài học khác!`;
 
     const prompt = `Bạn là GV: Ms. Trúc Tin Học - giáo viên chuyên môn Tin học THCS xuất sắc tại Việt Nam, tác giả ứng dụng "GIA SƯ TIN HỌC THCS" (Khối 6, 7, 8, 9).
 Nhiệm vụ của bạn là soạn bộ ${questionCount} CÂU HỎI TRẮC NGHIỆM ÔN TẬP TIN HỌC CHO HỌC SINH (bám sát chương trình GDPT 2018 - SGK Tin học Kết Nối Tri Thức Với Cuộc Sống).
@@ -205,7 +223,7 @@ Thông tin bài học:
 - Cấp học: "${grade || `Khối ${gradeNumber || 8}`}"
 - Môn học: "${subject || 'Tin học THCS'}"
 - ${multiLessonPrompt}
-${customContent ? `- Tài liệu ghi chú / Tóm tắt bài học do học sinh cung cấp:\n"""\n${customContent}\n"""` : ''}
+${enrichedContent ? `- Tóm tắt nội dung trọng tâm bài học theo chuẩn SGK Kết Nối Tri Thức:\n"""\n${enrichedContent}\n"""` : ''}
 
 YÊU CẦU ĐẶC BIỆT BẮT BUỘC:
 1. BÁM SÁT 100% NỘI DUNG SÁCH GIÁO KHOA TIN HỌC KẾT NỐI TRI THỨC VỚI CUỘC SỐNG (BỘ GIÁO DỤC VÀ ĐÀO TẠO VIỆT NAM).
