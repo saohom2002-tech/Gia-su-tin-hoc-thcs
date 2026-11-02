@@ -123,6 +123,7 @@ app.post('/api/generate-quiz', async (req, res) => {
     gradeNumber = 8,
     apiKey = '',
     sourcePreference = 'ai',
+    existingQuestions = [],
   } = req.body;
 
   const questionCount = Math.max(1, Math.min(Number(count) || 10, 50));
@@ -216,6 +217,21 @@ Hãy gán đúng trường "difficulty" là 'de', 'trung_binh' hoặc 'kho' cho 
         ? `Học sinh đã chọn KẾT HỢP ${targetLessonTitles.length} BÀI HỌC / CHỦ ĐỀ sau để tạo đề thi tổng hợp:\n${targetLessonTitles.map((t, i) => `${i + 1}. ${t}`).join('\n')}\n=> YÊU CẦU: Hãy phân bổ đều số câu hỏi cho các bài học trên (mỗi bài có tỷ lệ câu hỏi tương đương nhau) để đề thi bao quát toàn diện kiến thức các bài đã chọn!`
         : `Nội dung ôn tập trọng tâm: "${targetLessonTitles[0]}". Tất cả câu hỏi phải bám sát 100% nội dung và yêu cầu cần đạt của bài học này trong SGK Kết Nối Tri Thức. TUYỆT ĐỐI KHÔNG sinh câu hỏi của các bài học khác!`;
 
+    const existingList = Array.isArray(existingQuestions) && existingQuestions.length > 0
+      ? (existingQuestions as any[])
+          .filter((q) => typeof q === 'string' && q.trim().length > 0)
+          .map((q) => q.trim())
+          .slice(0, 30)
+      : [];
+
+    const deduplicationConstraint = existingList.length > 0
+      ? `5. ĐẶC BIỆT BẮT BUỘC - BẢO ĐẢM KHÔNG TRÙNG LẶP VỚI CÂU HỎI ĐÃ CÓ:
+Dưới đây là danh sách các câu hỏi ĐÃ CÓ trong đề thi này:
+${existingList.map((q, i) => `   [Câu đã có ${i + 1}]: "${q}"`).join('\n')}
+=> TUYỆT ĐỐI KHÔNG ĐƯỢC SOẠN TRÙNG LẶP hoặc na ná/tương tự với bất kỳ câu hỏi nào trong danh sách trên!
+=> Hãy khai thác các khía cạnh kiến thức khác của bài học, tình huống thực tế khác, thao tác thực hành, hoặc câu hỏi phân hóa đào sâu hơn để làm phong phú đề thi!`
+      : `5. Các câu hỏi phải ĐA DẠNG, PHONG PHÚ, KHÔNG BỊ TRÙNG LẶP NỘI DUNG VỚI NHAU.`;
+
     const prompt = `Bạn là GV: Ms. Trúc Tin Học - giáo viên chuyên môn Tin học THCS xuất sắc tại Việt Nam, tác giả ứng dụng "GIA SƯ TIN HỌC THCS" (Khối 6, 7, 8, 9).
 Nhiệm vụ của bạn là soạn bộ ${questionCount} CÂU HỎI TRẮC NGHIỆM ÔN TẬP TIN HỌC CHO HỌC SINH (bám sát chương trình GDPT 2018 - SGK Tin học Kết Nối Tri Thức Với Cuộc Sống).
 
@@ -231,7 +247,7 @@ YÊU CẦU ĐẶC BIỆT BẮT BUỘC:
    - Ví dụ: Trong Tin học 8 Bài 1 "Lược sử công cụ tính toán", SGK Kết Nối Tri Thức CHỈ giới thiệu đúng các nhân vật: Blaise Pascal (máy Pascaline - tr.5), Gottfried Leibniz (phép nhân/chia - tr.6), Charles Babbage (máy tính đa năng, cha đẻ công nghệ máy tính - tr.6), Claude Shannon (rơ-le bit - tr.7), Howard Aiken (máy Harvard Mark I - tr.7), John Von Neumann (nguyên lý lưu trữ chương trình - tr.7). TUYỆT ĐỐI KHÔNG đưa Ada Lovelace, Margaret Hamilton, Grace Hopper hay các nhân vật/sự kiện ngoài sách giáo khoa chính vào câu hỏi hoặc bất kỳ phương án nhiễu nào!
 3. TẤT CẢ CÁC PHƯƠNG ÁN LỰA CHỌN (cả đáp án đúng lẫn 3 phương án sai/nhiễu) chỉ được sử dụng các thuật ngữ, khái niệm, nhân vật có trong chương trình SGK Tin học THCS Kết Nối Tri Thức, đảm bảo phù hợp tuyệt đối với lứa tuổi và kiến thức bài học của học sinh.
 4. Toàn bộ ${questionCount} câu hỏi PHẢI CHÍNH XÁC VÀ ĐÚNG 100% VỚI NỘI DUNG VÀ KIẾN THỨC CỦA CÁC CHỦ ĐỀ BÀI HỌC ĐÃ CHỌN.
-5. Các câu hỏi phải ĐA DẠNG, PHONG PHÚ, KHÔNG BỊ TRÙNG LẶP.
+${deduplicationConstraint}
 
 Yêu cầu về Cấp độ:
 ${difficultyInstruction}
@@ -297,11 +313,20 @@ Quy chuẩn chất lượng câu hỏi:
     }
 
     // Deduplicate questions by text to guarantee 100% uniqueness
+    const normalizeTextKey = (t: string) =>
+      (t || '').toLowerCase().replace(/[.,!?:;'"“”„»«()\[\]{}\\/\-_]/g, '').replace(/\s+/g, ' ').trim();
+
     const seen = new Set<string>();
+    // Pre-populate with existing questions if provided to guarantee no overlap with current exam
+    for (const eq of existingList) {
+      const k = normalizeTextKey(eq);
+      if (k) seen.add(k);
+    }
+
     const uniqueList: any[] = [];
 
     for (const q of questions) {
-      const norm = q.question?.trim().toLowerCase();
+      const norm = normalizeTextKey(q.question);
       if (norm && !seen.has(norm)) {
         seen.add(norm);
         uniqueList.push({
@@ -317,13 +342,13 @@ Quy chuẩn chất lượng câu hỏi:
       }
     }
 
-    // If AI returned fewer unique questions than requested, supplement from offline bank
+    // If AI returned fewer unique questions than requested, supplement from offline bank avoiding duplicates
     if (uniqueList.length < questionCount) {
       const needed = questionCount - uniqueList.length;
-      const extra = generateFallbackQuestions(targetKeys, needed * 2, difficulty, gradeNumber || grade);
+      const extra = generateFallbackQuestions(targetKeys, needed * 3, difficulty, gradeNumber || grade);
       for (const ex of extra) {
         if (uniqueList.length >= questionCount) break;
-        const norm = ex.question?.trim().toLowerCase();
+        const norm = normalizeTextKey(ex.question);
         if (norm && !seen.has(norm)) {
           seen.add(norm);
           uniqueList.push(ex);

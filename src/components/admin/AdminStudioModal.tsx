@@ -826,8 +826,16 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
   };
 
   // ==========================================================================
-  // AI SINH CÂU HỎI BỔ SUNG VÀO ĐỀ
+  // AI SINH CÂU HỎI BỔ SUNG VÀO ĐỀ (TỰ ĐỘNG LỌC BỎ TRÙNG LẶP)
   // ==========================================================================
+  const normalizeQuestionKey = (text: string) => {
+    return (text || '')
+      .toLowerCase()
+      .replace(/[.,!?:;'"“”„»«()\[\]{}\\/\-_]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  };
+
   const handleGenerateAIQuestionsIntoExam = async () => {
     sound.playClick();
     if (!currentExam) return;
@@ -852,6 +860,11 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
     const lessonDesc = matchedLesson?.description || currentExam.description || '';
     const savedKey = localStorage.getItem('ontap_gemini_api_key') || '';
 
+    // Lấy danh sách nội dung các câu hỏi hiện có trong đề để AI tránh sinh trùng lặp
+    const existingQuestionTexts = (currentExam.questions || [])
+      .map((q) => q.question?.trim())
+      .filter((t): t is string => Boolean(t));
+
     try {
       const resp = await fetch('/api/generate-quiz', {
         method: 'POST',
@@ -871,18 +884,38 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
           grade: currentExam.grade,
           apiKey: savedKey,
           sourcePreference: 'ai',
+          existingQuestions: existingQuestionTexts.slice(0, 30),
         }),
       });
 
       const data = await resp.json();
       if (data.success && Array.isArray(data.questions) && data.questions.length > 0) {
-        sound.playCorrect();
-        const newQuestions: Question[] = data.questions.map((q: any) => ({
-          ...q,
-          id: `q-ai-admin-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-          topic: q.topic || topicName,
-        }));
+        // Lọc bỏ mọi câu hỏi có nội dung trùng lặp với câu đã có trong đề
+        const existingKeys = new Set(
+          (currentExam.questions || []).map((q) => normalizeQuestionKey(q.question))
+        );
 
+        const newQuestions: Question[] = [];
+        for (const q of data.questions) {
+          const key = normalizeQuestionKey(q.question);
+          if (key && !existingKeys.has(key)) {
+            existingKeys.add(key);
+            newQuestions.push({
+              ...q,
+              id: `q-ai-admin-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+              topic: q.topic || topicName,
+            });
+          }
+        }
+
+        if (newQuestions.length === 0) {
+          sound.playWrong();
+          setIsAIPanelOpen(false);
+          flashMessage(`⚠️ Tất cả câu hỏi AI tạo đều đã có trong đề thi này! Không thêm câu hỏi trùng lặp.`);
+          return;
+        }
+
+        sound.playCorrect();
         const updatedExam: CustomExam = {
           ...currentExam,
           questions: [...currentExam.questions, ...newQuestions],
@@ -892,38 +925,102 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
         setCustomExams((prev) => prev.map((e) => (e.id === updatedExam.id ? updatedExam : e)));
         await saveCustomExamToFirebase(updatedExam);
         setIsAIPanelOpen(false);
-        flashMessage(`🤖 AI đã soạn và bổ sung thành công ${newQuestions.length} câu hỏi vào đúng bài "${topicName}"!`);
+        flashMessage(`🤖 AI đã soạn và bổ sung thành công ${newQuestions.length} câu hỏi mới (đã loại trùng) vào đúng bài "${topicName}"!`);
       } else {
         throw new Error(data.message || 'Không tạo được câu hỏi từ AI');
       }
     } catch (err: any) {
       console.warn('Lỗi AI sinh đề, chuyển sang ngân hàng SGK:', err);
-      // Fallback lấy chính xác từ bài học đang chọn trong ngân hàng SGK
+      // Fallback lấy từ ngân hàng SGK nhưng loại bỏ các câu đã có trong đề
       const fallbackTarget = targetLessonId || topicName;
       const fallback = generateFallbackQuestions(
         fallbackTarget,
-        aiCount,
+        Math.max(aiCount * 2, 20),
         aiDifficulty,
         currentExam.gradeNumber
       );
-      const newQuestions: Question[] = fallback.map((q) => ({
-        ...q,
-        id: `q-sgk-admin-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-      }));
 
+      const existingKeys = new Set(
+        (currentExam.questions || []).map((q) => normalizeQuestionKey(q.question))
+      );
+
+      const uniqueFallback: Question[] = [];
+      for (const q of fallback) {
+        const key = normalizeQuestionKey(q.question);
+        if (key && !existingKeys.has(key)) {
+          existingKeys.add(key);
+          uniqueFallback.push({
+            ...q,
+            id: `q-sgk-admin-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+          });
+          if (uniqueFallback.length >= aiCount) break;
+        }
+      }
+
+      if (uniqueFallback.length === 0) {
+        sound.playWrong();
+        setIsAIPanelOpen(false);
+        flashMessage(`ℹ️ Toàn bộ câu hỏi chuẩn SGK của bài "${topicName}" đã có trong đề thi! Không tạo thêm câu trùng lặp.`);
+        return;
+      }
+
+      sound.playCorrect();
       const updatedExam: CustomExam = {
         ...currentExam,
-        questions: [...currentExam.questions, ...newQuestions],
+        questions: [...currentExam.questions, ...uniqueFallback],
         updatedAt: Date.now(),
       };
 
       setCustomExams((prev) => prev.map((e) => (e.id === updatedExam.id ? updatedExam : e)));
       await saveCustomExamToFirebase(updatedExam);
       setIsAIPanelOpen(false);
-      flashMessage(`Đã bổ sung ${newQuestions.length} câu hỏi chuẩn SGK của bài "${topicName}" vào đề!`);
+      flashMessage(`Đã bổ sung ${uniqueFallback.length} câu hỏi chuẩn SGK (đã lọc trùng) của bài "${topicName}" vào đề!`);
     } finally {
       setIsAIGenerating(false);
     }
+  };
+
+  // Lọc bỏ toàn bộ câu hỏi trùng lặp trong đề thi hiện tại
+  const handleRemoveDuplicatesFromCurrentExam = async () => {
+    sound.playClick();
+    if (!currentExam) return;
+
+    const seen = new Set<string>();
+    const originalCount = currentExam.questions.length;
+    const deduplicatedQuestions: Question[] = [];
+
+    for (const q of currentExam.questions) {
+      const key = normalizeQuestionKey(q.question);
+      if (!key || !seen.has(key)) {
+        if (key) seen.add(key);
+        deduplicatedQuestions.push(q);
+      }
+    }
+
+    const removedCount = originalCount - deduplicatedQuestions.length;
+    if (removedCount === 0) {
+      flashMessage('✅ Đề thi này hoàn toàn không có câu hỏi nào bị trùng lặp!');
+      return;
+    }
+
+    if (
+      !window.confirm(
+        `Phát hiện ${removedCount} câu hỏi có nội dung bị trùng lặp trong đề thi.\nBạn có muốn tự động lọc bỏ các câu trùng lặp này không?`
+      )
+    ) {
+      return;
+    }
+
+    sound.playCorrect();
+    const updatedExam: CustomExam = {
+      ...currentExam,
+      questions: deduplicatedQuestions,
+      updatedAt: Date.now(),
+    };
+
+    setCustomExams((prev) => prev.map((e) => (e.id === updatedExam.id ? updatedExam : e)));
+    await saveCustomExamToFirebase(updatedExam);
+    flashMessage(`🧹 Đã lọc bỏ thành công ${removedCount} câu hỏi trùng lặp! Đề thi hiện còn ${deduplicatedQuestions.length} câu.`);
   };
 
   // ==========================================================================
@@ -1775,6 +1872,17 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
                   >
                     <Shuffle className="w-4 h-4 text-sky-600" />
                     <span>Trộn câu & đáp án</span>
+                  </button>
+
+                  {/* Deduplicate Questions button */}
+                  <button
+                    type="button"
+                    onClick={handleRemoveDuplicatesFromCurrentExam}
+                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-50 border border-amber-300 hover:bg-amber-100 text-amber-900 text-xs font-bold shadow-2xs transition-colors cursor-pointer"
+                    title="Quét và lọc bỏ các câu hỏi có nội dung trùng lặp trong đề thi này"
+                  >
+                    <Filter className="w-4 h-4 text-amber-600" />
+                    <span>Lọc câu trùng</span>
                   </button>
 
                   {/* Upload document button */}
