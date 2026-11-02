@@ -144,6 +144,11 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
   const [isAIGenerating, setIsAIGenerating] = useState(false);
   const [isAIPanelOpen, setIsAIPanelOpen] = useState(false);
   const [aiTopic, setAiTopic] = useState('');
+  const [adminApiKey, setAdminApiKey] = useState(() => {
+    return typeof window !== 'undefined' ? localStorage.getItem('ontap_gemini_api_key') || '' : '';
+  });
+  const [showAdminApiKeyInput, setShowAdminApiKeyInput] = useState(false);
+  const [tempApiKeyInput, setTempApiKeyInput] = useState('');
 
   // State cho mục Bổ sung Ngân hàng câu hỏi theo Chủ đề / Bài học SGK
   const [topicBankGrade, setTopicBankGrade] = useState<3 | 4 | 5 | 6 | 7 | 8 | 9>(8);
@@ -830,6 +835,7 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
   // ==========================================================================
   const normalizeQuestionKey = (text: string) => {
     return (text || '')
+      .replace(/^\s*\((?:mở rộng|biến thể)\s*\d*\)\s*/i, '') // Loại bỏ tiền tố (Mở rộng 1), (Biến thể 1)
       .toLowerCase()
       .replace(/[.,!?:;'"“”„»«()\[\]{}\\/\-_]/g, '')
       .replace(/\s+/g, ' ')
@@ -840,7 +846,6 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
     sound.playClick();
     if (!currentExam) return;
 
-    setIsAIGenerating(true);
     const rawLessonId = currentExam.id.startsWith('topic-bank-')
       ? currentExam.id.replace(/^topic-bank-/, '')
       : '';
@@ -858,7 +863,22 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
       `Tin học ${currentExam.gradeNumber}`;
     const targetLessonId = matchedLesson?.id || rawLessonId || '';
     const lessonDesc = matchedLesson?.description || currentExam.description || '';
-    const savedKey = localStorage.getItem('ontap_gemini_api_key') || '';
+    const savedKey =
+      adminApiKey.trim() ||
+      (typeof window !== 'undefined' ? localStorage.getItem('ontap_gemini_api_key')?.trim() : '') ||
+      '';
+
+    // BẮT BUỘC CÓ API KEY ĐỂ AI THỰC SỰ SINH CÂU HỎI MỚI
+    if (!savedKey) {
+      sound.playWrong();
+      setShowAdminApiKeyInput(true);
+      alert(
+        '⚠️ Chưa có Gemini API Key!\n\nĐể AI có thể tự động suy nghĩ và soạn các câu hỏi MỚI theo bài học (thay vì lặp lại các câu hỏi cũ trong sách), bạn cần cài đặt Gemini API Key của mình.\n\nVui lòng dán khóa API vào ô bên dưới trong bảng điều khiển và bấm "Lưu khóa"!'
+      );
+      return;
+    }
+
+    setIsAIGenerating(true);
 
     // Lấy danh sách nội dung các câu hỏi hiện có trong đề để AI tránh sinh trùng lặp
     const existingQuestionTexts = (currentExam.questions || [])
@@ -866,115 +886,148 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
       .filter((t): t is string => Boolean(t));
 
     try {
-      const resp = await fetch('/api/generate-quiz', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(savedKey ? { 'x-gemini-api-key': savedKey } : {}),
-        },
-        body: JSON.stringify({
-          lesson: topicName,
-          lessons: [topicName],
-          lessonId: targetLessonId,
-          lessonIds: targetLessonId ? [targetLessonId] : [topicName],
-          customContent: lessonDesc,
-          count: aiCount,
-          difficulty: aiDifficulty,
-          gradeNumber: currentExam.gradeNumber,
-          grade: currentExam.grade,
-          apiKey: savedKey,
-          sourcePreference: 'ai',
-          existingQuestions: existingQuestionTexts.slice(0, 30),
-        }),
-      });
+      let rawQuestions: any[] = [];
+      let lastErrorMessage = '';
 
-      const data = await resp.json();
-      if (data.success && Array.isArray(data.questions) && data.questions.length > 0) {
-        // Lọc bỏ mọi câu hỏi có nội dung trùng lặp với câu đã có trong đề
-        const existingKeys = new Set(
-          (currentExam.questions || []).map((q) => normalizeQuestionKey(q.question))
-        );
+      // Cách 1: Thử gọi qua Backend Server
+      try {
+        const resp = await fetch('/api/generate-quiz', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-gemini-api-key': savedKey,
+          },
+          body: JSON.stringify({
+            lesson: topicName,
+            lessons: [topicName],
+            lessonId: targetLessonId,
+            lessonIds: targetLessonId ? [targetLessonId] : [topicName],
+            customContent: lessonDesc,
+            count: aiCount,
+            difficulty: aiDifficulty,
+            gradeNumber: currentExam.gradeNumber,
+            grade: currentExam.grade,
+            apiKey: savedKey,
+            sourcePreference: 'ai',
+            existingQuestions: existingQuestionTexts.slice(0, 30),
+          }),
+        });
 
-        const newQuestions: Question[] = [];
-        for (const q of data.questions) {
-          const key = normalizeQuestionKey(q.question);
-          if (key && !existingKeys.has(key)) {
-            existingKeys.add(key);
-            newQuestions.push({
-              ...q,
-              id: `q-ai-admin-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-              topic: q.topic || topicName,
-            });
-          }
+        const data = await resp.json();
+        if (resp.ok && data.success && Array.isArray(data.questions) && data.questions.length > 0) {
+          rawQuestions = data.questions;
+        } else {
+          lastErrorMessage = data.message || '';
         }
-
-        if (newQuestions.length === 0) {
-          sound.playWrong();
-          setIsAIPanelOpen(false);
-          flashMessage(`⚠️ Tất cả câu hỏi AI tạo đều đã có trong đề thi này! Không thêm câu hỏi trùng lặp.`);
-          return;
-        }
-
-        sound.playCorrect();
-        const updatedExam: CustomExam = {
-          ...currentExam,
-          questions: [...currentExam.questions, ...newQuestions],
-          updatedAt: Date.now(),
-        };
-
-        setCustomExams((prev) => prev.map((e) => (e.id === updatedExam.id ? updatedExam : e)));
-        await saveCustomExamToFirebase(updatedExam);
-        setIsAIPanelOpen(false);
-        flashMessage(`🤖 AI đã soạn và bổ sung thành công ${newQuestions.length} câu hỏi mới (đã loại trùng) vào đúng bài "${topicName}"!`);
-      } else {
-        throw new Error(data.message || 'Không tạo được câu hỏi từ AI');
+      } catch (serverErr: any) {
+        lastErrorMessage = serverErr?.message || '';
       }
-    } catch (err: any) {
-      console.warn('Lỗi AI sinh đề, chuyển sang ngân hàng SGK:', err);
-      // Fallback lấy từ ngân hàng SGK nhưng loại bỏ các câu đã có trong đề
-      const fallbackTarget = targetLessonId || topicName;
-      const fallback = generateFallbackQuestions(
-        fallbackTarget,
-        Math.max(aiCount * 2, 20),
-        aiDifficulty,
-        currentExam.gradeNumber
-      );
 
+      // Cách 2: Nếu Backend server chưa phản hồi, kích hoạt trực tiếp Google Gemini AI từ Trình duyệt
+      if (rawQuestions.length === 0) {
+        try {
+          const { GoogleGenAI, Type } = await import('@google/genai');
+          const client = new GoogleGenAI({ apiKey: savedKey });
+          const existingList = existingQuestionTexts.slice(0, 30);
+          const deduplicationInstruction =
+            existingList.length > 0
+              ? `\nDANH SÁCH CÁC CÂU HỎI ĐÃ CÓ TRONG ĐỀ THI (TUYỆT ĐỐI BẮT BUỘC KHÔNG ĐƯỢC SOẠN TRÙNG HOẶC TƯƠNG TỰ CÁC CÂU NÀY):\n${existingList
+                  .map((q, i) => `${i + 1}. ${q}`)
+                  .join('\n')}\nHãy khai thác các khía cạnh kiến thức khác, các tình huống thực tế hoặc thao tác thực hành mới mẻ trong bài học!`
+              : '';
+
+          const prompt = `Bạn là GV: Ms. Trúc Tin Học - giáo viên chuyên môn Tin học THCS xuất sắc tại Việt Nam.
+Nhiệm vụ: Soạn bộ ${aiCount} câu hỏi trắc nghiệm Tin học Khối ${currentExam.gradeNumber} bám sát 100% Chương trình GDPT 2018 (SGK Kết Nối Tri Thức Với Cuộc Sống).
+Chủ đề bài học trọng tâm: "${topicName}".
+${lessonDesc ? `Tóm tắt nội dung trọng tâm bài học: ${lessonDesc}` : ''}
+${deduplicationInstruction}
+
+Yêu cầu chất lượng:
+1. Đúng 4 phương án A, B, C, D không lặp lại.
+2. correctAnswer là số nguyên 0, 1, 2 hoặc 3.
+3. Phần giải thích (explanation) chi tiết theo SGK Kết Nối Tri Thức.
+4. Mức độ (difficulty): '${aiDifficulty === 'tong_hop' ? 'trung_binh' : aiDifficulty}'.
+5. Các câu hỏi hoàn toàn MỚI, phong phú, không lặp lại nội dung.`;
+
+          const aiResp = await client.models.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: prompt,
+            config: {
+              responseMimeType: 'application/json',
+              responseSchema: {
+                type: Type.ARRAY,
+                items: {
+                  type: Type.OBJECT,
+                  properties: {
+                    question: { type: Type.STRING },
+                    options: { type: Type.ARRAY, items: { type: Type.STRING } },
+                    correctAnswer: { type: Type.INTEGER },
+                    explanation: { type: Type.STRING },
+                    difficulty: { type: Type.STRING },
+                    hint: { type: Type.STRING },
+                  },
+                  required: ['question', 'options', 'correctAnswer', 'explanation'],
+                },
+              },
+            },
+          });
+
+          const parsed = JSON.parse(aiResp.text || '[]');
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            rawQuestions = parsed;
+          }
+        } catch (directAiErr: any) {
+          lastErrorMessage = directAiErr?.message || lastErrorMessage;
+        }
+      }
+
+      if (rawQuestions.length === 0) {
+        throw new Error(
+          lastErrorMessage ||
+            'Không thể kết nối đến AI hoặc API Key không hợp lệ. Vui lòng kiểm tra lại Gemini API Key của bạn!'
+        );
+      }
+
+      // Lọc bỏ mọi câu hỏi có nội dung trùng lặp với câu đã có trong đề
       const existingKeys = new Set(
         (currentExam.questions || []).map((q) => normalizeQuestionKey(q.question))
       );
 
-      const uniqueFallback: Question[] = [];
-      for (const q of fallback) {
+      const newQuestions: Question[] = [];
+      for (const q of rawQuestions) {
         const key = normalizeQuestionKey(q.question);
         if (key && !existingKeys.has(key)) {
           existingKeys.add(key);
-          uniqueFallback.push({
+          newQuestions.push({
             ...q,
-            id: `q-sgk-admin-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+            id: `q-ai-admin-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+            topic: q.topic || topicName,
           });
-          if (uniqueFallback.length >= aiCount) break;
         }
       }
 
-      if (uniqueFallback.length === 0) {
+      if (newQuestions.length === 0) {
         sound.playWrong();
         setIsAIPanelOpen(false);
-        flashMessage(`ℹ️ Toàn bộ câu hỏi chuẩn SGK của bài "${topicName}" đã có trong đề thi! Không tạo thêm câu trùng lặp.`);
+        flashMessage(`⚠️ Tất cả câu hỏi AI tạo đều đã có trong đề thi này! Không thêm câu hỏi trùng lặp.`);
         return;
       }
 
       sound.playCorrect();
       const updatedExam: CustomExam = {
         ...currentExam,
-        questions: [...currentExam.questions, ...uniqueFallback],
+        questions: [...currentExam.questions, ...newQuestions],
         updatedAt: Date.now(),
       };
 
       setCustomExams((prev) => prev.map((e) => (e.id === updatedExam.id ? updatedExam : e)));
       await saveCustomExamToFirebase(updatedExam);
       setIsAIPanelOpen(false);
-      flashMessage(`Đã bổ sung ${uniqueFallback.length} câu hỏi chuẩn SGK (đã lọc trùng) của bài "${topicName}" vào đề!`);
+      flashMessage(`🤖 AI đã soạn và bổ sung thành công ${newQuestions.length} câu hỏi mới (đã loại trùng) vào đúng bài "${topicName}"!`);
+    } catch (err: any) {
+      sound.playWrong();
+      console.error('Lỗi AI soạn câu hỏi:', err);
+      alert(`⚠️ Không thể tạo câu hỏi từ AI:\n${err?.message || 'Lỗi không xác định'}\n\nVui lòng kiểm tra lại khóa Gemini API Key hoặc kết nối mạng!`);
     } finally {
       setIsAIGenerating(false);
     }
@@ -1952,6 +2005,73 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
                         <X className="w-4 h-4" />
                       </button>
                     </div>
+
+                    {/* API Key Status & Configuration */}
+                    {adminApiKey && !showAdminApiKeyInput ? (
+                      <div className="flex items-center justify-between px-3 py-1.5 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-[11px]">
+                        <div className="flex items-center gap-1.5 text-emerald-300 font-semibold">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                          <span>Gemini AI: Khóa API cá nhân đã kết nối sẵn sàng để tự sinh câu hỏi mới</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setTempApiKeyInput(adminApiKey);
+                            setShowAdminApiKeyInput(true);
+                          }}
+                          className="text-amber-300 hover:text-amber-200 underline cursor-pointer text-[10px] font-bold"
+                        >
+                          Thay đổi khóa
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="p-3 rounded-xl bg-amber-950/80 border border-amber-500/60 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[11px] font-black text-amber-200 flex items-center gap-1.5">
+                            🔑 Cài đặt Gemini API Key để AI tự động soạn câu hỏi mới:
+                          </span>
+                          {adminApiKey && (
+                            <button
+                              type="button"
+                              onClick={() => setShowAdminApiKeyInput(false)}
+                              className="text-[10px] text-slate-400 hover:text-white cursor-pointer"
+                            >
+                              ✕ Đóng
+                            </button>
+                          )}
+                        </div>
+                        <div className="flex gap-2">
+                          <input
+                            type="password"
+                            value={tempApiKeyInput !== '' ? tempApiKeyInput : adminApiKey}
+                            onChange={(e) => setTempApiKeyInput(e.target.value)}
+                            placeholder="Dán Gemini API Key của bạn vào đây (bắt đầu bằng AIzaSy...)"
+                            className="flex-1 px-3 py-1.5 text-xs rounded-lg bg-black/50 border border-amber-500/40 text-white placeholder-amber-200/50 focus:outline-hidden focus:ring-1 focus:ring-amber-400 font-mono"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const key = (tempApiKeyInput !== '' ? tempApiKeyInput : adminApiKey).trim();
+                              if (!key) {
+                                alert('Vui lòng nhập API Key!');
+                                return;
+                              }
+                              localStorage.setItem('ontap_gemini_api_key', key);
+                              setAdminApiKey(key);
+                              setShowAdminApiKeyInput(false);
+                              sound.playCorrect();
+                              flashMessage('✅ Đã lưu Gemini API Key thành công! AI đã sẵn sàng hoạt động.');
+                            }}
+                            className="px-3.5 py-1.5 bg-amber-400 hover:bg-amber-300 text-amber-950 text-xs font-black rounded-lg cursor-pointer transition-transform active:scale-95 shadow-sm"
+                          >
+                            Lưu khóa
+                          </button>
+                        </div>
+                        <p className="text-[10px] text-amber-300/90 leading-relaxed">
+                          💡 Cần có API Key thì AI mới có thể tự tư duy và sinh câu hỏi mới hoàn toàn. Nếu chưa có, bạn có thể lấy miễn phí trong 1 phút tại <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noreferrer" className="underline font-bold text-amber-200 hover:text-white">aistudio.google.com</a>.
+                        </p>
+                      </div>
+                    )}
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       <div className="sm:col-span-2">

@@ -1646,19 +1646,8 @@ export function generateFallbackQuestions(
     }
   }
 
-  // Safety net: Procedural variations if requested count exceeds entire pool
-  let seedIndex = 1;
-  while (selectedQuestions.length < count && pool.length > 0) {
-    const base = pool[seedIndex % pool.length];
-    const newQ: Question = {
-      ...base,
-      id: `gen-var-${selectedQuestions.length + 1}-${Date.now()}`,
-      question: `(Mở rộng ${seedIndex}) ${base.question}`,
-      difficulty: difficulty === 'tong_hop' ? base.difficulty : difficulty,
-    };
-    selectedQuestions.push(newQ);
-    seedIndex++;
-  }
+  // Tuyệt đối không tự sao chép câu hỏi và gán nhãn "(Mở rộng X)".
+  // Chỉ trả về các câu hỏi thực tế duy nhất trong kho.
 
   return selectedQuestions.slice(0, count).map((q) => {
     if (q.type && q.type !== 'multiple_choice') return q;

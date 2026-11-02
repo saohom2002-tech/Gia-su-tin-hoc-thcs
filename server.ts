@@ -182,6 +182,13 @@ app.post('/api/generate-quiz', async (req, res) => {
   const activeClient = getGenAIClient(apiKey || headerKey);
 
   if (!activeClient) {
+    if (sourcePreference === 'ai') {
+      return res.status(400).json({
+        success: false,
+        source: 'missing_api_key',
+        message: 'Chưa có Gemini API Key! Vui lòng cài đặt Gemini API Key để AI có thể tự động soạn câu hỏi mới.',
+      });
+    }
     console.warn('No Gemini API key available. Using offline curriculum bank for:', targetKeys);
     const fallback = generateFallbackQuestions(targetKeys, questionCount, difficulty, gradeNumber || grade);
     return res.json({
