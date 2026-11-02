@@ -42,6 +42,7 @@ export const AdminExamSection: React.FC<AdminExamSectionProps> = ({
   onUpdateExam,
   onDeleteExam,
   onDuplicateExam,
+  isAdmin = false,
 }) => {
   const [selectedGrade, setSelectedGrade] = useState<'all' | 3 | 4 | 5 | 6 | 7 | 8 | 9>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -118,15 +119,17 @@ export const AdminExamSection: React.FC<AdminExamSectionProps> = ({
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-400 text-amber-950 shadow-2xs">
-                Quản Trị Đề Đã Tạo
+              <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider shadow-2xs ${
+                isAdmin ? 'bg-amber-400 text-amber-950' : 'bg-indigo-100 text-indigo-900 border border-indigo-200'
+              }`}>
+                {isAdmin ? 'Quản Trị Đề Đã Tạo' : 'Kho Đề Thi & Ôn Tập'}
               </span>
               <span className="text-xs text-indigo-700 font-bold">
                 Tổng số: {activeExams.length} bộ đề • Đồng bộ Firebase Realtime
               </span>
             </div>
             <h2 className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight mt-0.5">
-              ⭐ Quản Trị Đề Đã Tạo (Thêm • Sửa • Xóa)
+              {isAdmin ? '⭐ Quản Trị Đề Đã Tạo (Thêm • Sửa • Xóa)' : '⭐ Danh Sách Đề Thi & Ôn Tập Chuẩn SGK'}
             </h2>
           </div>
         </div>
@@ -184,33 +187,37 @@ export const AdminExamSection: React.FC<AdminExamSectionProps> = ({
             </select>
           </div>
 
-          {/* Button: Thêm đề mới */}
-          <button
-            type="button"
-            onClick={() => {
-              sound.playClick();
-              onOpenAdminStudio({ action: 'create' });
-            }}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-bold shadow-md shadow-emerald-600/20 transition-transform active:scale-95 cursor-pointer shrink-0"
-            title="Thêm đề thi hoặc đề ôn tập mới (tự soạn, AI hoặc tải file Word/PDF)"
-          >
-            <Plus className="w-4 h-4 stroke-[3]" />
-            <span>Thêm đề mới</span>
-          </button>
+          {/* Button: Thêm đề mới (Chỉ Admin nhìn thấy) */}
+          {isAdmin && (
+            <button
+              type="button"
+              onClick={() => {
+                sound.playClick();
+                onOpenAdminStudio({ action: 'create' });
+              }}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-bold shadow-md shadow-emerald-600/20 transition-transform active:scale-95 cursor-pointer shrink-0"
+              title="Thêm đề thi hoặc đề ôn tập mới (tự soạn, AI hoặc tải file Word/PDF)"
+            >
+              <Plus className="w-4 h-4 stroke-[3]" />
+              <span>Thêm đề mới</span>
+            </button>
+          )}
 
-          {/* Button: Mở toàn bộ Studio */}
-          <button
-            type="button"
-            onClick={() => {
-              sound.playClick();
-              onOpenAdminStudio({ action: 'list' });
-            }}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-md shadow-indigo-600/25 transition-transform active:scale-95 cursor-pointer shrink-0"
-            title="Mở cửa sổ Studio Quản trị Đề & Câu hỏi toàn màn hình"
-          >
-            <ShieldCheck className="w-4 h-4 text-amber-300" />
-            <span>Mở Studio Quản Trị</span>
-          </button>
+          {/* Button: Mở toàn bộ Studio (Chỉ Admin nhìn thấy) */}
+          {isAdmin && (
+            <button
+              type="button"
+              onClick={() => {
+                sound.playClick();
+                onOpenAdminStudio({ action: 'list' });
+              }}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-md shadow-indigo-600/25 transition-transform active:scale-95 cursor-pointer shrink-0"
+              title="Mở cửa sổ Studio Quản trị Đề & Câu hỏi toàn màn hình"
+            >
+              <ShieldCheck className="w-4 h-4 text-amber-300" />
+              <span>Mở Studio Quản Trị</span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -232,14 +239,16 @@ export const AdminExamSection: React.FC<AdminExamSectionProps> = ({
                 Xem tất cả {activeExams.length} đề đã tạo
               </button>
             )}
-            <button
-              type="button"
-              onClick={() => onOpenAdminStudio({ action: 'create' })}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-sm cursor-pointer"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Thêm đề mới ngay</span>
-            </button>
+            {isAdmin && (
+              <button
+                type="button"
+                onClick={() => onOpenAdminStudio({ action: 'create' })}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-sm cursor-pointer"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Thêm đề mới ngay</span>
+              </button>
+            )}
           </div>
         </div>
       ) : (
@@ -269,28 +278,30 @@ export const AdminExamSection: React.FC<AdminExamSectionProps> = ({
                       </span>
                     </div>
 
-                    {/* Quick Edit Info & Duplicate buttons */}
-                    <div className="flex items-center gap-1">
-                      <button
-                        type="button"
-                        onClick={() => handleStartQuickEdit(exam)}
-                        className="p-1.5 rounded-lg text-slate-500 hover:text-indigo-700 hover:bg-indigo-50 border border-transparent hover:border-indigo-200 transition-colors cursor-pointer"
-                        title="Sửa nhanh tên đề, khối lớp, thời gian"
-                      >
-                        <Settings2 className="w-3.5 h-3.5" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          sound.playClick();
-                          onDuplicateExam(exam);
-                        }}
-                        className="p-1.5 rounded-lg text-slate-500 hover:text-indigo-700 hover:bg-indigo-50 border border-transparent hover:border-indigo-200 transition-colors cursor-pointer"
-                        title="Nhân bản đề thi này"
-                      >
-                        <Copy className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
+                    {/* Quick Edit Info & Duplicate buttons (Chỉ Admin nhìn thấy) */}
+                    {isAdmin && (
+                      <div className="flex items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={() => handleStartQuickEdit(exam)}
+                          className="p-1.5 rounded-lg text-slate-500 hover:text-indigo-700 hover:bg-indigo-50 border border-transparent hover:border-indigo-200 transition-colors cursor-pointer"
+                          title="Sửa nhanh tên đề, khối lớp, thời gian"
+                        >
+                          <Settings2 className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            sound.playClick();
+                            onDuplicateExam(exam);
+                          }}
+                          className="p-1.5 rounded-lg text-slate-500 hover:text-indigo-700 hover:bg-indigo-50 border border-transparent hover:border-indigo-200 transition-colors cursor-pointer"
+                          title="Nhân bản đề thi này"
+                        >
+                          <Copy className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    )}
                   </div>
 
                   {/* Title */}
@@ -337,73 +348,75 @@ export const AdminExamSection: React.FC<AdminExamSectionProps> = ({
                     </button>
                   </div>
 
-                  {/* Row 2: Direct CRUD Management (Sửa câu hỏi • Sửa đề • Chuyển vào thùng rác) */}
-                  {isConfirmingDelete ? (
-                    <div className="flex items-center justify-between gap-1.5 p-1.5 rounded-xl bg-rose-50 border border-rose-200 animate-in fade-in">
-                      <span className="text-[11px] font-bold text-rose-800 pl-1">
-                        Chuyển vào thùng rác?
-                      </span>
-                      <div className="flex items-center gap-1">
+                  {/* Row 2: Direct CRUD Management (Sửa câu hỏi • Sửa đề • Chuyển vào thùng rác) - CHỈ ADMIN NHÌN THẤY */}
+                  {isAdmin && (
+                    isConfirmingDelete ? (
+                      <div className="flex items-center justify-between gap-1.5 p-1.5 rounded-xl bg-rose-50 border border-rose-200 animate-in fade-in">
+                        <span className="text-[11px] font-bold text-rose-800 pl-1">
+                          Chuyển vào thùng rác?
+                        </span>
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              sound.playClick();
+                              onDeleteExam(exam.id);
+                              setConfirmDeleteId(null);
+                            }}
+                            className="px-2.5 py-1 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-[11px] font-bold cursor-pointer"
+                          >
+                            Vào thùng rác
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setConfirmDeleteId(null)}
+                            className="px-2 py-1 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 text-[11px] font-bold cursor-pointer"
+                          >
+                            Hủy
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-between gap-1.5 pt-0.5">
                         <button
                           type="button"
                           onClick={() => {
                             sound.playClick();
-                            onDeleteExam(exam.id);
-                            setConfirmDeleteId(null);
+                            onOpenAdminStudio({
+                              examId: exam.id,
+                              action: 'edit_questions',
+                            });
                           }}
-                          className="px-2.5 py-1 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-[11px] font-bold cursor-pointer"
+                          className="flex-1 py-1.5 px-2.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200/80 font-bold text-[11px] flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                          title="Thêm, sửa, xóa câu hỏi trong đề này"
                         >
-                          Vào thùng rác
+                          <Edit3 className="w-3.5 h-3.5" />
+                          <span>Sửa câu hỏi ({exam.questions?.length || 0})</span>
                         </button>
+
                         <button
                           type="button"
-                          onClick={() => setConfirmDeleteId(null)}
-                          className="px-2 py-1 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 text-[11px] font-bold cursor-pointer"
+                          onClick={() => handleStartQuickEdit(exam)}
+                          className="py-1.5 px-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] flex items-center gap-1 transition-colors cursor-pointer"
+                          title="Sửa tên đề, khối lớp, thời gian"
                         >
-                          Hủy
+                          <Settings2 className="w-3.5 h-3.5" />
+                          <span>Sửa đề</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            sound.playClick();
+                            setConfirmDeleteId(exam.id);
+                          }}
+                          className="p-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200/70 transition-colors cursor-pointer"
+                          title="Chuyển đề vào thùng rác lưu trữ"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-between gap-1.5 pt-0.5">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          sound.playClick();
-                          onOpenAdminStudio({
-                            examId: exam.id,
-                            action: 'edit_questions',
-                          });
-                        }}
-                        className="flex-1 py-1.5 px-2.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200/80 font-bold text-[11px] flex items-center justify-center gap-1 transition-colors cursor-pointer"
-                        title="Thêm, sửa, xóa câu hỏi trong đề này"
-                      >
-                        <Edit3 className="w-3.5 h-3.5" />
-                        <span>Sửa câu hỏi ({exam.questions?.length || 0})</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => handleStartQuickEdit(exam)}
-                        className="py-1.5 px-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] flex items-center gap-1 transition-colors cursor-pointer"
-                        title="Sửa tên đề, khối lớp, thời gian"
-                      >
-                        <Settings2 className="w-3.5 h-3.5" />
-                        <span>Sửa đề</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          sound.playClick();
-                          setConfirmDeleteId(exam.id);
-                        }}
-                        className="p-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200/70 transition-colors cursor-pointer"
-                        title="Chuyển đề vào thùng rác lưu trữ"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
+                    )
                   )}
                 </div>
               </div>

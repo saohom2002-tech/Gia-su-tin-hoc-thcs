@@ -56,6 +56,7 @@ interface LessonSelectorProps {
   setIsCustomMode: (val: boolean) => void;
   onManageTopicBank?: (lesson: LessonTopic) => void;
   topicQuestionCounts?: Record<string, number>;
+  isAdmin?: boolean;
 }
 
 const ICON_MAP: Record<string, React.ElementType> = {
@@ -151,6 +152,7 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
   setIsCustomMode,
   onManageTopicBank,
   topicQuestionCounts,
+  isAdmin = false,
 }) => {
   const [selectedSubjectFilter, setSelectedSubjectFilter] = useState<string>('Tất cả');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -647,7 +649,7 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
                     </div>
 
                     <div className="flex items-center gap-1.5">
-                      {onManageTopicBank && (
+                      {isAdmin && onManageTopicBank && (
                         <button
                           type="button"
                           onClick={(e) => {

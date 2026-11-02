@@ -435,36 +435,27 @@ export default function App() {
   // ==========================================================================
   // ADMIN STUDIO & QUẢN TRỊ ĐỀ ĐÃ TẠO HANDLERS
   // ==========================================================================
-  const ensureAdminSession = () => {
-    if (adminSession && isAuthorizedAdmin(adminSession.email)) {
-      return adminSession;
-    }
-    const autoSession: AdminSession = {
-      email: ADMIN_EMAIL,
-      displayName: 'Quản trị viên (GV: Ms. Trúc)',
-      authType: 'passcode',
-      loginTime: Date.now(),
-    };
-    saveAdminSession(autoSession);
-    setAdminSession(autoSession);
-    return autoSession;
-  };
-
   const handleOpenAdminStudio = (options?: {
     examId?: string;
     action?: 'list' | 'create' | 'edit_info' | 'edit_questions';
   }) => {
     sound.playClick();
-    ensureAdminSession();
-    setStudioInitialExamId(options?.examId || null);
-    setStudioInitialAction(options?.action || 'list');
-    setIsAdminStudioModalOpen(true);
+    if (adminSession && isAuthorizedAdmin(adminSession.email)) {
+      setStudioInitialExamId(options?.examId || null);
+      setStudioInitialAction(options?.action || 'list');
+      setIsAdminStudioModalOpen(true);
+    } else {
+      setIsAdminAuthModalOpen(true);
+    }
   };
 
-  // Mở trình Quản trị / Bổ sung câu hỏi trực tiếp cho 1 Chủ đề / Bài học SGK
+  // Mở trình Quản trị / Bổ sung câu hỏi trực tiếp cho 1 Chủ đề / Bài học SGK (Chỉ dành cho Admin)
   const handleManageTopicBank = async (lesson: LessonTopic) => {
     sound.playClick();
-    ensureAdminSession();
+    if (!adminSession || !isAuthorizedAdmin(adminSession.email)) {
+      setIsAdminAuthModalOpen(true);
+      return;
+    }
     const bankExamId = `topic-bank-${lesson.id}`;
     let targetExam = customExams.find((e) => e.id === bankExamId);
     const currentBuiltIn = BUILT_IN_QUESTIONS[lesson.id] || [];
@@ -553,7 +544,10 @@ export default function App() {
   };
 
   const handleSaveSessionAsCustomExam = async (session: QuizSession) => {
-    ensureAdminSession();
+    if (!adminSession || !isAuthorizedAdmin(adminSession.email)) {
+      setIsAdminAuthModalOpen(true);
+      return;
+    }
     const gNum = ([3, 4, 5, 6, 7, 8, 9].includes(session.gradeNumber || 8)
       ? session.gradeNumber
       : 8) as 3 | 4 | 5 | 6 | 7 | 8 | 9;
@@ -1792,6 +1786,7 @@ export default function App() {
                 setIsCustomMode={setIsCustomMode}
                 onManageTopicBank={handleManageTopicBank}
                 topicQuestionCounts={topicQuestionCounts}
+                isAdmin={Boolean(adminSession && isAuthorizedAdmin(adminSession.email))}
               />
             </div>
 
