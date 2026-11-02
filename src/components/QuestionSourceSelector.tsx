@@ -71,7 +71,8 @@ export const QuestionSourceSelector: React.FC<QuestionSourceSelectorProps> = ({
   };
 
   const handleVerify = async () => {
-    if (!keyInput.trim()) {
+    const cleanKey = keyInput.trim();
+    if (!cleanKey) {
       setVerifyStatus({
         success: false,
         message: 'Vui lòng nhập khóa API trước khi kiểm tra!',
@@ -84,31 +85,90 @@ export const QuestionSourceSelector: React.FC<QuestionSourceSelectorProps> = ({
     setVerifyStatus(null);
 
     try {
-      const res = await fetch('/api/check-api', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ apiKey: keyInput.trim() }),
-      });
-      const data = await res.json();
-      if (data && data.success) {
+      // 1. Thử xác thực qua Backend Server trước
+      let serverSuccess = false;
+      let serverErrorMsg = '';
+
+      try {
+        const res = await fetch('/api/check-api', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ apiKey: cleanKey }),
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.success) {
+            serverSuccess = true;
+          } else {
+            serverErrorMsg = data?.message || '';
+          }
+        } else {
+          try {
+            const errData = await res.json();
+            serverErrorMsg = errData?.message || '';
+          } catch {
+            serverErrorMsg = `Máy chủ trả về mã lỗi ${res.status}`;
+          }
+        }
+      } catch {
+        // Backend server offline hoặc sandbox chặn cổng localhost: tiếp tục bước 2
+      }
+
+      if (serverSuccess) {
         sound.playCorrect();
-        onSaveApiKey(keyInput.trim());
+        onSaveApiKey(cleanKey);
         setVerifyStatus({
           success: true,
-          message: 'Tuyệt vời! API Key hợp lệ và đang hoạt động tốt.',
+          message: 'Tuyệt vời! Gemini API Key hợp lệ và đang hoạt động tốt.',
         });
-      } else {
+        return;
+      }
+
+      // 2. Tự động kiểm tra trực tiếp với Google Gemini API từ Trình duyệt (Không phụ thuộc vào backend server)
+      try {
+        const directResp = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models?key=${cleanKey}`
+        );
+        const directData = await directResp.json();
+
+        if (directResp.ok && directData?.models) {
+          sound.playCorrect();
+          onSaveApiKey(cleanKey);
+          setVerifyStatus({
+            success: true,
+            message: 'Tuyệt vời! Đã xác thực thành công trực tiếp với Google AI. API Key hợp lệ và đã được lưu!',
+          });
+          return;
+        }
+
+        // Nếu Google trả về lỗi cụ thể (sai key, hết quota, v.v.)
+        const googleError = directData?.error?.message;
         sound.playWrong();
         setVerifyStatus({
           success: false,
-          message: data?.message || 'Không thể xác thực API Key. Vui lòng kiểm tra lại!',
+          message: googleError
+            ? `Google AI phản hồi: ${googleError}`
+            : (serverErrorMsg || 'API Key không hợp lệ hoặc đã hết hạn mức. Vui lòng kiểm tra lại trên Google AI Studio!'),
         });
+        return;
+      } catch (directErr: any) {
+        // Lỗi mạng hoặc CORS không kết nối được tới cả Google
+        if (serverErrorMsg) {
+          sound.playWrong();
+          setVerifyStatus({
+            success: false,
+            message: serverErrorMsg,
+          });
+          return;
+        }
+        throw directErr;
       }
     } catch {
       sound.playWrong();
       setVerifyStatus({
         success: false,
-        message: 'Lỗi kết nối tới máy chủ khi kiểm tra API.',
+        message: 'Không thể kết nối đến máy chủ hoặc Google AI. Vui lòng kiểm tra lại kết nối mạng Internet của bạn!',
       });
     } finally {
       setIsVerifying(false);
