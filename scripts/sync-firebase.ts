@@ -80,6 +80,30 @@ async function main() {
     }
   }
 
+  // 2b. Cập nhật các đề ngân hàng chủ đề (topic-bank-*) với bộ câu hỏi mới nhất từ BUILT_IN_QUESTIONS
+  for (const lesson of CURRICULUM_LESSONS) {
+    const bankId = `topic-bank-${lesson.id}`;
+    const builtIn = BUILT_IN_QUESTIONS[lesson.id] || [];
+    if (builtIn.length > 0 && examsMap.has(bankId)) {
+      const existing = examsMap.get(bankId);
+      const existingIds = new Set((existing.questions || []).map((q: any) => q.id));
+      const existingTexts = new Set(
+        (existing.questions || []).map((q: any) => (q.question || '').trim().toLowerCase())
+      );
+      const missing = builtIn.filter(
+        (q) => !existingIds.has(q.id) && !existingTexts.has(q.question.trim().toLowerCase())
+      );
+      if (missing.length > 0) {
+        existing.questions = [...(existing.questions || []), ...missing];
+        existing.updatedAt = Date.now();
+        examsMap.set(bankId, sanitize(existing));
+        console.log(
+          `  + Đã bổ sung ${missing.length} câu hỏi mới vào đề [${existing.title}] -> Tổng số: ${existing.questions.length} câu`
+        );
+      }
+    }
+  }
+
   const scoresMap = new Map<string, any>();
   for (const sc of INITIAL_SCORE_RECORDS) {
     scoresMap.set(sc.id, sanitize(sc));

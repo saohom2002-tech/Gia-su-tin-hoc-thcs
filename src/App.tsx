@@ -491,6 +491,22 @@ export default function App() {
       };
       setCustomExams((prev) => [targetExam!, ...prev]);
       await saveCustomExamToFirebase(targetExam);
+    } else if (currentBuiltIn.length > (targetExam.questions?.length || 0)) {
+      const existingIds = new Set(targetExam.questions.map((q) => q.id));
+      const existingTexts = new Set(targetExam.questions.map((q) => q.question.trim().toLowerCase()));
+      const missing = currentBuiltIn.filter(
+        (q) => !existingIds.has(q.id) && !existingTexts.has(q.question.trim().toLowerCase())
+      );
+      if (missing.length > 0) {
+        const updatedExam: CustomExam = {
+          ...targetExam,
+          questions: [...targetExam.questions, ...missing],
+          updatedAt: Date.now(),
+        };
+        targetExam = updatedExam;
+        setCustomExams((prev) => prev.map((e) => (e.id === updatedExam.id ? updatedExam : e)));
+        await saveCustomExamToFirebase(updatedExam);
+      }
     }
 
     setStudioInitialExamId(bankExamId);
