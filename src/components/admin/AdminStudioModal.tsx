@@ -627,26 +627,18 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
     flashMessage(`Đã nhân bản đề thi "${clonedExam.title}"!`);
   };
 
-  // Chuyển đề thi vào Thùng rác lưu trữ (Soft Delete để Admin có thể phục hồi bất cứ lúc nào)
+  // Xóa vĩnh viễn 1 đề thi khỏi danh sách và Firebase
   const handleDeleteExam = async (examId: string, examTitle: string) => {
     sound.playClick();
-    const target = customExams.find((e) => e.id === examId);
-    if (!target) return;
-    const trashedExam: CustomExam = {
-      ...target,
-      isTrashed: true,
-      trashedAt: Date.now(),
-      updatedAt: Date.now(),
-    };
-    setCustomExams((prev) => prev.map((e) => (e.id === examId ? trashedExam : e)));
+    setCustomExams((prev) => prev.filter((e) => e.id !== examId));
     setConfirmDeleteExamId(null);
     if (selectedExamId === examId) {
       setSelectedExamId(null);
       setActiveView('exam_list');
     }
-    await moveCustomExamToTrash(target);
+    await deleteCustomExamFromFirebase(examId);
     flashMessage(
-      `🗑️ Đã chuyển đề "${examTitle}" vào Thùng rác lưu trữ! Bạn có thể vào mục "Thùng rác lưu trữ" để phục hồi bất cứ lúc nào.`
+      `🗑️ Đã xóa vĩnh viễn đề "${examTitle}" khỏi hệ thống và Firebase!`
     );
   };
 
@@ -1159,29 +1151,13 @@ Yêu cầu chất lượng:
                 setCategoryFilter('all');
                 setSearchKeyword('');
 
-                // Khôi phục các đề chuẩn bị thiếu (nếu chưa có trong danh sách)
-                const mergedExams = [...customExams];
-                const existingIds = new Set(mergedExams.map((e) => e.id));
-                const existingTitles = new Set(
-                  mergedExams.map((e) => (e.title || '').trim().toLowerCase())
-                );
-                for (const defEx of DEFAULT_CUSTOM_EXAMS) {
-                  const normTitle = (defEx.title || '').trim().toLowerCase();
-                  if (!existingIds.has(defEx.id) && !existingTitles.has(normTitle)) {
-                    mergedExams.unshift(defEx);
-                    existingIds.add(defEx.id);
-                    existingTitles.add(normTitle);
-                  }
-                }
-                if (mergedExams.length !== customExams.length) {
-                  setCustomExams(mergedExams);
-                }
-
-                for (const ex of mergedExams) {
+                // Chỉ đồng bộ các đề đang hoạt động mà Admin lưu giữ (tuyệt đối không tự ý khôi phục đề đã xóa)
+                const activeExams = customExams.filter((e) => !e.isTrashed);
+                for (const ex of activeExams) {
                   await saveCustomExamToFirebase(ex);
                 }
                 flashMessage(
-                  `☁️ Đã đồng bộ & khôi phục đầy đủ toàn bộ ${mergedExams.length} đề thi & đề ôn tập trên Firebase (gstinhoc)!`
+                  `☁️ Đã đồng bộ an toàn toàn bộ ${activeExams.length} đề thi & đề ôn tập lên Firebase (gstinhoc)!`
                 );
               }}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 text-xs font-bold text-emerald-200 transition-colors cursor-pointer"
@@ -1767,7 +1743,7 @@ Yêu cầu chất lượng:
                         ) : confirmDeleteExamId === exam.id ? (
                           <div className="flex items-center justify-between gap-2 bg-rose-50 px-3 py-2 rounded-xl border-2 border-rose-300 animate-in fade-in">
                             <span className="text-xs font-extrabold text-rose-800">
-                              Chuyển đề này vào Thùng rác lưu trữ?
+                              Xác nhận xóa vĩnh viễn đề này?
                             </span>
                             <div className="flex items-center gap-1.5">
                               <button
@@ -1775,7 +1751,7 @@ Yêu cầu chất lượng:
                                 onClick={() => handleDeleteExam(exam.id, exam.title)}
                                 className="px-3 py-1.5 rounded-lg bg-rose-600 text-white text-xs font-extrabold hover:bg-rose-700 cursor-pointer shadow-xs"
                               >
-                                Chuyển vào thùng rác
+                                Xóa vĩnh viễn
                               </button>
                               <button
                                 type="button"

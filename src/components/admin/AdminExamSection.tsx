@@ -353,7 +353,7 @@ export const AdminExamSection: React.FC<AdminExamSectionProps> = ({
                     isConfirmingDelete ? (
                       <div className="flex items-center justify-between gap-1.5 p-1.5 rounded-xl bg-rose-50 border border-rose-200 animate-in fade-in">
                         <span className="text-[11px] font-bold text-rose-800 pl-1">
-                          Chuyển vào thùng rác?
+                          Xác nhận xóa vĩnh viễn?
                         </span>
                         <div className="flex items-center gap-1">
                           <button
@@ -365,7 +365,7 @@ export const AdminExamSection: React.FC<AdminExamSectionProps> = ({
                             }}
                             className="px-2.5 py-1 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-[11px] font-bold cursor-pointer"
                           >
-                            Vào thùng rác
+                            Xóa vĩnh viễn
                           </button>
                           <button
                             type="button"

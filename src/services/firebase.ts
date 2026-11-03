@@ -398,68 +398,11 @@ export function subscribeToCustomExams(
           remoteMap.set(norm.id, norm);
         });
 
-        // Đảm bảo các đề mặc định hoặc đề từng làm trong lịch sử (ontap_quiz_history) chưa bị xóa ở v2 luôn được giữ đầy đủ
-        const existingTitles = new Set(
-          Array.from(remoteMap.values()).map((e) => (e.title || '').trim().toLowerCase())
-        );
-        for (const defEx of DEFAULT_CUSTOM_EXAMS) {
-          const normTitle = (defEx.title || '').trim().toLowerCase();
-          if (
-            !deletedIds.has(defEx.id) &&
-            !remoteMap.has(defEx.id) &&
-            !existingTitles.has(normTitle)
-          ) {
-            remoteMap.set(defEx.id, defEx);
-            existingTitles.add(normTitle);
-            const singleRef = ref(db, `${CUSTOM_EXAMS_REF_PATH}/${defEx.id}`);
-            set(singleRef, sanitizeForFirebase(defEx)).catch(() => {});
-          }
-        }
+        // Đọc danh sách các đề đang hoạt động từ Firebase
+        // TUYỆT ĐỐI KHÔNG tự động nhồi lại DEFAULT_CUSTOM_EXAMS hay ontap_quiz_history
+        // để tôn trọng quyết định xóa đề của Admin.
 
-        try {
-          const rawHistory = localStorage.getItem('ontap_quiz_history');
-          if (rawHistory) {
-            const histArr = JSON.parse(rawHistory);
-            if (Array.isArray(histArr)) {
-              for (const sess of histArr) {
-                const lid = sess?.lessonId || '';
-                if (
-                  lid &&
-                  (lid.startsWith('exam-') || sess?.id?.startsWith('sess-custom-')) &&
-                  !deletedIds.has(lid) &&
-                  !remoteMap.has(lid) &&
-                  Array.isArray(sess?.questions) &&
-                  sess.questions.length > 0
-                ) {
-                  const gNum = ([3, 4, 5, 6, 7, 8, 9].includes(sess.gradeNumber)
-                    ? sess.gradeNumber
-                    : 8) as 3 | 4 | 5 | 6 | 7 | 8 | 9;
-                  const recoveredExam: CustomExam = {
-                    id: lid,
-                    title: sess.lessonTitle || `Đề ôn tập Khối ${gNum}`,
-                    description: `Khôi phục từ lịch sử làm bài (${sess.questions.length} câu hỏi).`,
-                    subject: gNum <= 5 ? 'Tin học Tiểu học' : 'Tin học THCS',
-                    grade: `Khối ${gNum}`,
-                    gradeNumber: gNum,
-                    category: sess.mode === 'exam' ? 'exam' : 'practice',
-                    durationMinutes: sess.questions.length <= 20 ? 30 : 45,
-                    questions: sess.questions,
-                    createdAt: sess.startTime || Date.now(),
-                    updatedAt: sess.endTime || Date.now(),
-                    authorEmail: ADMIN_EMAIL,
-                    authorName: 'GV: Ms. Trúc Tin Học',
-                    isPublished: true,
-                  };
-                  remoteMap.set(lid, recoveredExam);
-                  const singleRef = ref(db, `${CUSTOM_EXAMS_REF_PATH}/${lid}`);
-                  set(singleRef, sanitizeForFirebase(recoveredExam)).catch(() => {});
-                }
-              }
-            }
-          }
-        } catch {}
-
-        // Kiểm tra xem ở máy hiện tại (VD: localhost) có đề thi nào mới tạo hoặc mới cập nhật hơn trên Firebase không
+        // Kiểm tra xem ở máy hiện tại có đề thi nào mới tạo hoặc mới cập nhật hơn trên Firebase không
         for (const localEx of localExams) {
           if (deletedIds.has(localEx.id)) continue;
           const remoteEx = remoteMap.get(localEx.id);
@@ -582,6 +525,12 @@ export async function deleteCustomExamFromFirebase(examId: string): Promise<bool
     // Xóa trên Firebase theo examId
     const examRef = ref(db, `${CUSTOM_EXAMS_REF_PATH}/${examId}`);
     await remove(examRef);
+    try {
+      await remove(ref(db, `admin_trashed_exams/${examId}`));
+      await set(ref(db, `admin_deleted_exam_ids/${examId}`), {
+        deletedAt: Date.now(),
+      });
+    } catch {}
 
     // Kiểm tra thêm nếu trên Firebase lưu dưới key khác nhưng có field id === examId
     const allRef = ref(db, CUSTOM_EXAMS_REF_PATH);

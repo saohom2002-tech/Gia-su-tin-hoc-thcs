@@ -62,20 +62,36 @@ async function main() {
     console.warn('Lưu ý khi đọc admin_custom_exams trên Firebase mới:', e?.message);
   }
 
-  // 2. Bổ sung / Khôi phục các đề chuẩn từ DEFAULT_CUSTOM_EXAMS nếu chưa có trên Firebase (so khớp theo id hoặc tên đề + phân loại)
+  // 1b. Đọc danh sách các đề đã bị Admin xóa để tuyệt đối không khôi phục lại
+  const deletedIds = new Set<string>();
+  try {
+    const deletedSnap = await get(ref(newDb, 'admin_deleted_exam_ids'));
+    if (deletedSnap.exists()) {
+      Object.keys(deletedSnap.val()).forEach((id) => deletedIds.add(id));
+    }
+  } catch {}
+
+  // Lọc bỏ bất kỳ đề nào nằm trong danh sách đã xóa
+  for (const dId of deletedIds) {
+    if (examsMap.has(dId)) {
+      examsMap.delete(dId);
+    }
+  }
+
+  // 2. Bổ sung các đề chuẩn từ DEFAULT_CUSTOM_EXAMS nếu chưa có trên Firebase và chưa bị xóa
   const existingTitleCat = new Set(
     Array.from(examsMap.values()).map(
       (e) => `${(e.title || '').trim().toLowerCase()}__${e.category || 'exam'}`
     )
   );
   for (const ex of DEFAULT_CUSTOM_EXAMS) {
+    if (deletedIds.has(ex.id)) continue;
     const keyTitleCat = `${(ex.title || '').trim().toLowerCase()}__${ex.category || 'exam'}`;
     if (!examsMap.has(ex.id) && !existingTitleCat.has(keyTitleCat)) {
       examsMap.set(ex.id, sanitize(ex));
       existingTitleCat.add(keyTitleCat);
       console.log(`  + Khôi phục đề: [${ex.grade}] (${ex.category}) ${ex.title} (${ex.questions.length} câu)`);
     } else if (examsMap.has(ex.id)) {
-      // Đảm bảo cập nhật timestamp mới nhất cho các đề vừa khôi phục để hiển thị lên đầu danh sách
       examsMap.set(ex.id, sanitize(ex));
     }
   }

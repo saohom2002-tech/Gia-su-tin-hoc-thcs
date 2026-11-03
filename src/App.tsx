@@ -513,18 +513,9 @@ export default function App() {
   };
 
   const handleDeleteCustomExam = async (examId: string) => {
-    const target = customExams.find((ex) => ex.id === examId);
-    if (!target) return;
-    const trashedExam: CustomExam = {
-      ...target,
-      isTrashed: true,
-      trashedAt: Date.now(),
-      updatedAt: Date.now(),
-    };
-    setCustomExams((prev) =>
-      prev.map((ex) => (ex.id === examId ? trashedExam : ex))
-    );
-    await moveCustomExamToTrash(target);
+    sound.playClick();
+    setCustomExams((prev) => prev.filter((ex) => ex.id !== examId));
+    await deleteCustomExamFromFirebase(examId);
   };
 
   const handleDuplicateCustomExam = async (exam: CustomExam) => {
