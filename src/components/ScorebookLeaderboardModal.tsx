@@ -227,9 +227,23 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in overflow-y-auto">
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-5xl w-full max-h-[92vh] flex flex-col overflow-hidden animate-in zoom-in-95 my-auto">
+      <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-5xl w-full max-h-[92vh] flex flex-col overflow-hidden animate-in zoom-in-95 my-auto relative">
+        {/* Nút đóng cửa sổ (X) ở góc phải trên cùng */}
+        <button
+          type="button"
+          onClick={() => {
+            sound.playClick();
+            onClose();
+          }}
+          className="absolute top-4 right-4 sm:top-5 sm:right-6 w-9 h-9 rounded-full bg-white/90 hover:bg-slate-200 border border-slate-200 shadow-xs flex items-center justify-center text-slate-500 hover:text-slate-800 transition-all z-20 cursor-pointer"
+          title="Đóng cửa sổ"
+          aria-label="Đóng cửa sổ"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
         {/* Header */}
-        <div className="p-4 sm:p-6 border-b border-slate-100 flex flex-wrap items-center justify-between gap-4 bg-gradient-to-r from-amber-50 via-yellow-50/50 to-indigo-50/40">
+        <div className="p-4 sm:p-6 pr-14 sm:pr-16 border-b border-slate-100 flex flex-wrap items-center justify-between gap-4 bg-gradient-to-r from-amber-50 via-yellow-50/50 to-indigo-50/40">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-600 text-white flex items-center justify-center shadow-lg shadow-amber-500/20 shrink-0">
               <Trophy className="w-6 h-6" />
@@ -262,7 +276,7 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
                   sound.playClick();
                   setActiveTab('leaderboard');
                 }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all cursor-pointer ${
                   activeTab === 'leaderboard'
                     ? 'bg-amber-400 text-amber-950 shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
@@ -277,26 +291,16 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
                   sound.playClick();
                   setActiveTab('gradebook');
                 }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all cursor-pointer ${
                   activeTab === 'gradebook'
                     ? 'bg-indigo-600 text-white shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 <BookOpen className="w-4 h-4" />
-                <span>Sổ Điểm Lớp ({scores.length})</span>
+                <span>Sổ Điểm Lớp ({normalizedScores.length})</span>
               </button>
             </div>
-
-            <button
-              onClick={() => {
-                sound.playClick();
-                onClose();
-              }}
-              className="w-8 h-8 rounded-full hover:bg-slate-200/80 flex items-center justify-center text-slate-400 hover:text-slate-700 transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
           </div>
         </div>
 
