@@ -1127,6 +1127,18 @@ export default function App() {
       return combined;
     });
 
+    // Tự động suy luận Đợt thi khoa học dựa trên tiêu đề bài thi / bài ôn tập
+    const inferExamBatch = (title: string): string => {
+      const lower = title.toLowerCase();
+      if (lower.includes('cuối k') || lower.includes('cuối kỳ') || lower.includes('học kì 2') || lower.includes('học kì 1 chuẩn')) {
+        return 'Đợt 3: Đánh giá Năng lực Số Cuối kì 1';
+      }
+      if (lower.includes('thi đua') || lower.includes('tin học trẻ') || lower.includes('chuyên đề') || lower.includes('chủ đề')) {
+        return 'Đợt 2: Thi đua Tin học Trẻ & Chuyên đề SGK';
+      }
+      return DEFAULT_EXAM_BATCHES[0]; // Mặc định Đợt 1: Khảo sát Giữa kì 1
+    };
+
     // Auto-record to Sổ Điểm & Bảng Vàng
     const scoreRecord: StudentScoreRecord = {
       id: `score-${Date.now()}`,
@@ -1135,7 +1147,7 @@ export default function App() {
       schoolName: studentProfile?.schoolName || 'Trường THCS',
       gradeNumber: currentSession.gradeNumber || currentGradeFilter,
       grade: currentSession.grade || `Khối ${currentSession.gradeNumber || currentGradeFilter}`,
-      examBatch: DEFAULT_EXAM_BATCHES[0],
+      examBatch: inferExamBatch(currentSession.lessonTitle),
       lessonTitle: currentSession.lessonTitle,
       score,
       percentage,

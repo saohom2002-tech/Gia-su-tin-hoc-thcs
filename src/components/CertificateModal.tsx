@@ -585,12 +585,15 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                   }}
                   className="px-2.5 py-1.5 rounded-xl border border-slate-300 bg-white font-medium text-slate-800 text-xs max-w-[200px] truncate"
                 >
-                  <option value="all">Tất cả đợt thi</option>
-                  {availableBatches.map((b, idx) => (
-                    <option key={idx} value={b}>
-                      {b}
-                    </option>
-                  ))}
+                  <option value="all">Tất cả đợt thi ({certificates.length})</option>
+                  {availableBatches.map((b, idx) => {
+                    const count = certificates.filter((c) => c.examBatch === b).length;
+                    return (
+                      <option key={idx} value={b}>
+                        {b} ({count})
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
 
@@ -606,12 +609,18 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                   }}
                   className="px-2.5 py-1.5 rounded-xl border border-slate-300 bg-white font-medium text-slate-800 text-xs"
                 >
-                  <option value="all">Tất cả khối</option>
-                  {availableGrades.map((g) => (
-                    <option key={g} value={String(g)}>
-                      Khối {g}
-                    </option>
-                  ))}
+                  <option value="all">Tất cả khối ({certificates.length})</option>
+                  {availableGrades.map((g) => {
+                    const count = certificates.filter((c) => {
+                      const gradeNum = c.gradeNumber || (c.className.match(/^(\d+)/) ? parseInt(c.className.match(/^(\d+)/)![1], 10) : 0);
+                      return gradeNum === g;
+                    }).length;
+                    return (
+                      <option key={g} value={String(g)}>
+                        Khối {g} ({count})
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
 
@@ -626,12 +635,15 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                   }}
                   className="px-2.5 py-1.5 rounded-xl border border-slate-300 bg-white font-medium text-slate-800 text-xs max-w-[120px] truncate"
                 >
-                  <option value="all">Tất cả lớp</option>
-                  {availableClasses.map((cls, idx) => (
-                    <option key={idx} value={cls}>
-                      Lớp {cls}
-                    </option>
-                  ))}
+                  <option value="all">Tất cả lớp ({certificates.length})</option>
+                  {availableClasses.map((cls, idx) => {
+                    const count = certificates.filter((c) => c.className === cls).length;
+                    return (
+                      <option key={idx} value={cls}>
+                        Lớp {cls} ({count})
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
 

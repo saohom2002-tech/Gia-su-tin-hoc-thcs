@@ -302,12 +302,15 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
                 onChange={(e) => setSelectedBatch(e.target.value)}
                 className="px-2.5 py-1.5 rounded-xl border border-slate-300 bg-white font-medium text-slate-800 text-xs max-w-[240px] truncate"
               >
-                <option value="all">Tất cả các đợt thi</option>
-                {availableBatches.map((b, idx) => (
-                  <option key={idx} value={b}>
-                    {b}
-                  </option>
-                ))}
+                <option value="all">Tất cả các đợt thi ({scores.length})</option>
+                {availableBatches.map((b, idx) => {
+                  const count = scores.filter((s) => s.examBatch === b).length;
+                  return (
+                    <option key={idx} value={b}>
+                      {b} ({count})
+                    </option>
+                  );
+                })}
               </select>
             </div>
 
@@ -320,14 +323,15 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
                 onChange={(e) => setSelectedGrade(e.target.value)}
                 className="px-2 py-1.5 rounded-xl border border-slate-300 bg-white font-medium text-slate-800 text-xs"
               >
-                <option value="all">Tất cả khối</option>
-                <option value="3">Khối 3</option>
-                <option value="4">Khối 4</option>
-                <option value="5">Khối 5</option>
-                <option value="6">Khối 6</option>
-                <option value="7">Khối 7</option>
-                <option value="8">Khối 8</option>
-                <option value="9">Khối 9</option>
+                <option value="all">Tất cả khối ({scores.length})</option>
+                {[3, 4, 5, 6, 7, 8, 9].map((g) => {
+                  const count = scores.filter((s) => s.gradeNumber === g).length;
+                  return (
+                    <option key={g} value={String(g)}>
+                      Khối {g} ({count})
+                    </option>
+                  );
+                })}
               </select>
             </div>
 
@@ -339,12 +343,15 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
                 onChange={(e) => setSelectedClass(e.target.value)}
                 className="px-2 py-1.5 rounded-xl border border-slate-300 bg-white font-medium text-slate-800 text-xs max-w-[130px] truncate"
               >
-                <option value="all">Tất cả lớp</option>
-                {availableClasses.map((cls, idx) => (
-                  <option key={idx} value={cls}>
-                    Lớp {cls}
-                  </option>
-                ))}
+                <option value="all">Tất cả lớp ({scores.length})</option>
+                {availableClasses.map((cls, idx) => {
+                  const count = scores.filter((s) => s.className === cls).length;
+                  return (
+                    <option key={idx} value={cls}>
+                      Lớp {cls} ({count})
+                    </option>
+                  );
+                })}
               </select>
             </div>
 
