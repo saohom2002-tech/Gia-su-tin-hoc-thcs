@@ -37,16 +37,66 @@
 }
 
 @media print {
-  .no-print {
+  @page {
+    size: A4 landscape;
+    margin: 6mm;
+  }
+
+  .no-print,
+  .no-print * {
     display: none !important;
   }
+
   .print-break-inside-avoid {
     break-inside: avoid;
     page-break-inside: avoid;
   }
+
   body {
     background-color: #ffffff !important;
     color: #111827 !important;
   }
+
+  /* When printing certificates: hide the entire interactive web app inside #root */
+  body.printing-certificates #root {
+    display: none !important;
+  }
+
+  body.printing-certificates #certificate-print-portal {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+
+  .certificate-page-item {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    max-width: 284mm !important;
+    height: 196mm !important;
+    max-height: 196mm !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .certificate-page-item:last-child {
+    page-break-after: auto !important;
+    break-after: auto !important;
+  }
+}
+
+/* In screen display mode, hide print portal */
+#certificate-print-portal {
+  display: none;
 }
 

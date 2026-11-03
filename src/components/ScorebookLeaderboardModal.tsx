@@ -52,6 +52,7 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
   // Filter states
   const [selectedBatch, setSelectedBatch] = useState<string>('all');
   const [selectedGrade, setSelectedGrade] = useState<string>('all');
+  const [selectedClass, setSelectedClass] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   // Add manual score modal state
@@ -73,11 +74,23 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
     return Array.from(set);
   }, [scores]);
 
+  // Distinct classes available
+  const availableClasses = useMemo(() => {
+    const set = new Set<string>();
+    scores.forEach((s) => {
+      if (s.className && s.className.trim()) {
+        set.add(s.className.trim());
+      }
+    });
+    return Array.from(set).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+  }, [scores]);
+
   // Filtered scores
   const filteredScores = useMemo(() => {
     return scores.filter((s) => {
       if (selectedBatch !== 'all' && s.examBatch !== selectedBatch) return false;
       if (selectedGrade !== 'all' && String(s.gradeNumber) !== selectedGrade) return false;
+      if (selectedClass !== 'all' && s.className !== selectedClass) return false;
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         const matchesName = s.studentName.toLowerCase().includes(q);
@@ -87,7 +100,7 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
       }
       return true;
     });
-  }, [scores, selectedBatch, selectedGrade, searchQuery]);
+  }, [scores, selectedBatch, selectedGrade, selectedClass, searchQuery]);
 
   // Leaderboard ranking (sorted by score desc, then timeSpent asc)
   const rankedLeaderboard = useMemo(() => {
@@ -307,7 +320,7 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
                 onChange={(e) => setSelectedGrade(e.target.value)}
                 className="px-2 py-1.5 rounded-xl border border-slate-300 bg-white font-medium text-slate-800 text-xs"
               >
-                <option value="all">Tất cả</option>
+                <option value="all">Tất cả khối</option>
                 <option value="3">Khối 3</option>
                 <option value="4">Khối 4</option>
                 <option value="5">Khối 5</option>
@@ -315,6 +328,23 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
                 <option value="7">Khối 7</option>
                 <option value="8">Khối 8</option>
                 <option value="9">Khối 9</option>
+              </select>
+            </div>
+
+            {/* Filter by Class */}
+            <div className="flex items-center gap-1.5">
+              <span className="font-bold text-slate-700">Lớp:</span>
+              <select
+                value={selectedClass}
+                onChange={(e) => setSelectedClass(e.target.value)}
+                className="px-2 py-1.5 rounded-xl border border-slate-300 bg-white font-medium text-slate-800 text-xs max-w-[130px] truncate"
+              >
+                <option value="all">Tất cả lớp</option>
+                {availableClasses.map((cls, idx) => (
+                  <option key={idx} value={cls}>
+                    Lớp {cls}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -326,7 +356,7 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
                 placeholder="Tìm tên học sinh, lớp..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-8 pr-3 py-1.5 rounded-xl border border-slate-300 bg-white text-xs w-44 sm:w-56 focus:outline-indigo-500"
+                className="pl-8 pr-3 py-1.5 rounded-xl border border-slate-300 bg-white text-xs w-40 sm:w-52 focus:outline-indigo-500"
               />
             </div>
           </div>
@@ -338,13 +368,22 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
                 type="button"
                 onClick={handleExportAllCertificates}
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-md shadow-amber-500/20 transition-all cursor-pointer"
-                title="Xuất Giấy khen hàng loạt cho các em đạt điểm cao"
+                title="Xuất Giấy khen hàng loạt cho các em đạt điểm cao theo bộ lọc (Đợt, Khối, Lớp)"
               >
                 <Award className="w-3.5 h-3.5" />
-                <span>Xuất Giấy Khen Đợt Này</span>
+                <span>Xuất Giấy Khen ({rankedLeaderboard.filter((s) => s.score >= 7.5).length} em)</span>
               </button>
             ) : (
               <>
+                <button
+                  type="button"
+                  onClick={handleExportAllCertificates}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-md shadow-amber-500/20 transition-all cursor-pointer"
+                  title="Xuất Giấy khen hàng loạt cho các em đạt điểm cao theo bộ lọc hiện tại"
+                >
+                  <Award className="w-3.5 h-3.5" />
+                  <span>Xuất Giấy Khen ({rankedLeaderboard.filter((s) => s.score >= 7.5).length} em)</span>
+                </button>
                 <button
                   type="button"
                   onClick={() => setIsAddScoreOpen(true)}
