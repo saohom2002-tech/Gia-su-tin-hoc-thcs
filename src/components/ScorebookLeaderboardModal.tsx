@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { StudentScoreRecord, CertificateData } from '../types/quiz';
-import { DEFAULT_EXAM_BATCHES } from '../data/defaultScores';
+import { DEFAULT_EXAM_BATCHES, normalizeExamBatch } from '../data/defaultScores';
 import {
   Trophy,
   Award,
@@ -65,29 +65,39 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
   const [manualScore, setManualScore] = useState<string>('10');
   const [manualNotes, setManualNotes] = useState<string>('');
 
-  // Distinct exam batches available
-  const availableBatches = useMemo(() => {
-    const set = new Set<string>(DEFAULT_EXAM_BATCHES);
-    scores.forEach((s) => {
-      if (s.examBatch) set.add(s.examBatch);
-    });
-    return Array.from(set);
+  // Chuẩn hóa tên đợt thi của toàn bộ danh sách điểm
+  const normalizedScores = useMemo(() => {
+    return scores.map((s) => ({
+      ...s,
+      examBatch: normalizeExamBatch(s.examBatch),
+    }));
   }, [scores]);
+
+  // Distinct exam batches available (luôn đảm bảo có 5 đợt chuẩn của năm học)
+  const availableBatches = useMemo(() => {
+    const list = [...DEFAULT_EXAM_BATCHES];
+    normalizedScores.forEach((s) => {
+      if (s.examBatch && !list.includes(s.examBatch)) {
+        list.push(s.examBatch);
+      }
+    });
+    return list;
+  }, [normalizedScores]);
 
   // Distinct classes available
   const availableClasses = useMemo(() => {
     const set = new Set<string>();
-    scores.forEach((s) => {
+    normalizedScores.forEach((s) => {
       if (s.className && s.className.trim()) {
         set.add(s.className.trim());
       }
     });
     return Array.from(set).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
-  }, [scores]);
+  }, [normalizedScores]);
 
   // Filtered scores
   const filteredScores = useMemo(() => {
-    return scores.filter((s) => {
+    return normalizedScores.filter((s) => {
       if (selectedBatch !== 'all' && s.examBatch !== selectedBatch) return false;
       if (selectedGrade !== 'all' && String(s.gradeNumber) !== selectedGrade) return false;
       if (selectedClass !== 'all' && s.className !== selectedClass) return false;
@@ -100,7 +110,7 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
       }
       return true;
     });
-  }, [scores, selectedBatch, selectedGrade, selectedClass, searchQuery]);
+  }, [normalizedScores, selectedBatch, selectedGrade, selectedClass, searchQuery]);
 
   // Leaderboard ranking (sorted by score desc, then timeSpent asc)
   const rankedLeaderboard = useMemo(() => {
@@ -302,9 +312,9 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
                 onChange={(e) => setSelectedBatch(e.target.value)}
                 className="px-2.5 py-1.5 rounded-xl border border-slate-300 bg-white font-medium text-slate-800 text-xs max-w-[240px] truncate"
               >
-                <option value="all">Tất cả các đợt thi ({scores.length})</option>
+                <option value="all">Tất cả các đợt thi ({normalizedScores.length})</option>
                 {availableBatches.map((b, idx) => {
-                  const count = scores.filter((s) => s.examBatch === b).length;
+                  const count = normalizedScores.filter((s) => s.examBatch === b).length;
                   return (
                     <option key={idx} value={b}>
                       {b} ({count})
@@ -323,9 +333,9 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
                 onChange={(e) => setSelectedGrade(e.target.value)}
                 className="px-2 py-1.5 rounded-xl border border-slate-300 bg-white font-medium text-slate-800 text-xs"
               >
-                <option value="all">Tất cả khối ({scores.length})</option>
+                <option value="all">Tất cả khối ({normalizedScores.length})</option>
                 {[3, 4, 5, 6, 7, 8, 9].map((g) => {
-                  const count = scores.filter((s) => s.gradeNumber === g).length;
+                  const count = normalizedScores.filter((s) => s.gradeNumber === g).length;
                   return (
                     <option key={g} value={String(g)}>
                       Khối {g} ({count})
@@ -343,9 +353,9 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
                 onChange={(e) => setSelectedClass(e.target.value)}
                 className="px-2 py-1.5 rounded-xl border border-slate-300 bg-white font-medium text-slate-800 text-xs max-w-[130px] truncate"
               >
-                <option value="all">Tất cả lớp ({scores.length})</option>
+                <option value="all">Tất cả lớp ({normalizedScores.length})</option>
                 {availableClasses.map((cls, idx) => {
-                  const count = scores.filter((s) => s.className === cls).length;
+                  const count = normalizedScores.filter((s) => s.className === cls).length;
                   return (
                     <option key={idx} value={cls}>
                       Lớp {cls} ({count})

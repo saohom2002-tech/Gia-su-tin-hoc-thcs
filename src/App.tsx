@@ -37,7 +37,12 @@ import { EssayModal } from './components/EssayModal';
 import { MistakeNotebookModal } from './components/MistakeNotebookModal';
 import { ScorebookLeaderboardModal } from './components/ScorebookLeaderboardModal';
 import { CertificateModal } from './components/CertificateModal';
-import { INITIAL_SCORE_RECORDS, DEFAULT_EXAM_BATCHES } from './data/defaultScores';
+import {
+  INITIAL_SCORE_RECORDS,
+  DEFAULT_EXAM_BATCHES,
+  normalizeExamBatch,
+  inferExamBatchFromTitle,
+} from './data/defaultScores';
 import { DEFAULT_CUSTOM_EXAMS } from './data/defaultCustomExams';
 import {
   subscribeToScores,
@@ -166,7 +171,12 @@ export default function App() {
       const saved = localStorage.getItem('ontap_student_scorebook');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed.map((s: StudentScoreRecord) => ({
+            ...s,
+            examBatch: normalizeExamBatch(s.examBatch),
+          }));
+        }
       }
     } catch {}
     return INITIAL_SCORE_RECORDS;
@@ -269,9 +279,13 @@ export default function App() {
     // Lắng nghe điểm số thời gian thực từ Firebase Realtime Database
     const unsubscribeScores = subscribeToScores((remoteScores) => {
       if (remoteScores && remoteScores.length > 0) {
-        setScores(remoteScores);
+        const normalized = remoteScores.map((s) => ({
+          ...s,
+          examBatch: normalizeExamBatch(s.examBatch),
+        }));
+        setScores(normalized);
         try {
-          localStorage.setItem('ontap_student_scorebook', JSON.stringify(remoteScores));
+          localStorage.setItem('ontap_student_scorebook', JSON.stringify(normalized));
         } catch {}
       }
     });
@@ -1127,17 +1141,8 @@ export default function App() {
       return combined;
     });
 
-    // Tự động suy luận Đợt thi khoa học dựa trên tiêu đề bài thi / bài ôn tập
-    const inferExamBatch = (title: string): string => {
-      const lower = title.toLowerCase();
-      if (lower.includes('cuối k') || lower.includes('cuối kỳ') || lower.includes('học kì 2') || lower.includes('học kì 1 chuẩn')) {
-        return 'Đợt 3: Đánh giá Năng lực Số Cuối kì 1';
-      }
-      if (lower.includes('thi đua') || lower.includes('tin học trẻ') || lower.includes('chuyên đề') || lower.includes('chủ đề')) {
-        return 'Đợt 2: Thi đua Tin học Trẻ & Chuyên đề SGK';
-      }
-      return DEFAULT_EXAM_BATCHES[0]; // Mặc định Đợt 1: Khảo sát Giữa kì 1
-    };
+    // Tự động nhận diện Đợt thi theo đề bài học sinh làm chuẩn khoa học
+    const examBatch = inferExamBatchFromTitle(currentSession.lessonTitle);
 
     // Auto-record to Sổ Điểm & Bảng Vàng
     const scoreRecord: StudentScoreRecord = {
@@ -1147,7 +1152,7 @@ export default function App() {
       schoolName: studentProfile?.schoolName || 'Trường THCS',
       gradeNumber: currentSession.gradeNumber || currentGradeFilter,
       grade: currentSession.grade || `Khối ${currentSession.gradeNumber || currentGradeFilter}`,
-      examBatch: inferExamBatch(currentSession.lessonTitle),
+      examBatch,
       lessonTitle: currentSession.lessonTitle,
       score,
       percentage,

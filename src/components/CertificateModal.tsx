@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { CertificateData, StudentProfile } from '../types/quiz';
+import { DEFAULT_EXAM_BATCHES, normalizeExamBatch } from '../data/defaultScores';
 import {
   Award,
   Printer,
@@ -296,18 +297,28 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
   // Print Mode: 'single' (only current viewed certificate) or 'batch' (all filtered certificates)
   const [printMode, setPrintMode] = useState<'single' | 'batch'>('single');
 
-  // Extract available filter options
-  const availableBatches = useMemo(() => {
-    const set = new Set<string>();
-    certificates.forEach((c) => {
-      if (c.examBatch && c.examBatch.trim()) set.add(c.examBatch.trim());
-    });
-    return Array.from(set);
+  // Chuẩn hóa tên đợt thi cho toàn bộ danh sách chứng nhận
+  const normalizedCertificates = useMemo(() => {
+    return certificates.map((c) => ({
+      ...c,
+      examBatch: normalizeExamBatch(c.examBatch),
+    }));
   }, [certificates]);
+
+  // Extract available filter options (luôn hiển thị đủ 5 đợt chuẩn của năm học)
+  const availableBatches = useMemo(() => {
+    const list = [...DEFAULT_EXAM_BATCHES];
+    normalizedCertificates.forEach((c) => {
+      if (c.examBatch && !list.includes(c.examBatch)) {
+        list.push(c.examBatch);
+      }
+    });
+    return list;
+  }, [normalizedCertificates]);
 
   const availableGrades = useMemo(() => {
     const set = new Set<number>();
-    certificates.forEach((c) => {
+    normalizedCertificates.forEach((c) => {
       if (c.gradeNumber) {
         set.add(c.gradeNumber);
       } else {
@@ -316,19 +327,19 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
       }
     });
     return Array.from(set).sort((a, b) => a - b);
-  }, [certificates]);
+  }, [normalizedCertificates]);
 
   const availableClasses = useMemo(() => {
     const set = new Set<string>();
-    certificates.forEach((c) => {
+    normalizedCertificates.forEach((c) => {
       if (c.className && c.className.trim()) set.add(c.className.trim());
     });
     return Array.from(set).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
-  }, [certificates]);
+  }, [normalizedCertificates]);
 
   // Filtered certificates list
   const filteredCertificates = useMemo(() => {
-    return certificates.filter((c) => {
+    return normalizedCertificates.filter((c) => {
       if (filterBatch !== 'all' && c.examBatch !== filterBatch) return false;
       if (filterGrade !== 'all') {
         const g = c.gradeNumber || (c.className.match(/^(\d+)/) ? parseInt(c.className.match(/^(\d+)/)![1], 10) : 0);
@@ -344,7 +355,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
       }
       return true;
     });
-  }, [certificates, filterBatch, filterGrade, filterClass, filterSearch]);
+  }, [normalizedCertificates, filterBatch, filterGrade, filterClass, filterSearch]);
 
   // Ensure currentIndex stays within bounds when filter changes
   useEffect(() => {
@@ -585,9 +596,9 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                   }}
                   className="px-2.5 py-1.5 rounded-xl border border-slate-300 bg-white font-medium text-slate-800 text-xs max-w-[200px] truncate"
                 >
-                  <option value="all">Tất cả đợt thi ({certificates.length})</option>
+                  <option value="all">Tất cả đợt thi ({normalizedCertificates.length})</option>
                   {availableBatches.map((b, idx) => {
-                    const count = certificates.filter((c) => c.examBatch === b).length;
+                    const count = normalizedCertificates.filter((c) => c.examBatch === b).length;
                     return (
                       <option key={idx} value={b}>
                         {b} ({count})
@@ -609,9 +620,9 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                   }}
                   className="px-2.5 py-1.5 rounded-xl border border-slate-300 bg-white font-medium text-slate-800 text-xs"
                 >
-                  <option value="all">Tất cả khối ({certificates.length})</option>
+                  <option value="all">Tất cả khối ({normalizedCertificates.length})</option>
                   {availableGrades.map((g) => {
-                    const count = certificates.filter((c) => {
+                    const count = normalizedCertificates.filter((c) => {
                       const gradeNum = c.gradeNumber || (c.className.match(/^(\d+)/) ? parseInt(c.className.match(/^(\d+)/)![1], 10) : 0);
                       return gradeNum === g;
                     }).length;
@@ -635,9 +646,9 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                   }}
                   className="px-2.5 py-1.5 rounded-xl border border-slate-300 bg-white font-medium text-slate-800 text-xs max-w-[120px] truncate"
                 >
-                  <option value="all">Tất cả lớp ({certificates.length})</option>
+                  <option value="all">Tất cả lớp ({normalizedCertificates.length})</option>
                   {availableClasses.map((cls, idx) => {
-                    const count = certificates.filter((c) => c.className === cls).length;
+                    const count = normalizedCertificates.filter((c) => c.className === cls).length;
                     return (
                       <option key={idx} value={cls}>
                         Lớp {cls} ({count})
