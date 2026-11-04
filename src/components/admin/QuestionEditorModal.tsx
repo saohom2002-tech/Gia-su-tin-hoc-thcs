@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Question, QuestionType, DifficultyLevel } from '../../types/quiz';
 import {
   X,
@@ -58,6 +58,73 @@ export const QuestionEditorModal: React.FC<QuestionEditorModalProps> = ({
   // States for fill_blank
   const [blankAnswersStr, setBlankAnswersStr] = useState('');
   const [wordBankStr, setWordBankStr] = useState('');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Tự động chuyển chuỗi dấu chấm ..... hoặc gạch dưới ___ thành các ô trống [1], [2]
+  const autoConvertDotsToBlanks = (text: string): string => {
+    let counter = 1;
+    const existingNums = Array.from(text.matchAll(/\[(\d+)\]/g)).map((m) => parseInt(m[1], 10));
+    if (existingNums.length > 0) {
+      counter = Math.max(...existingNums) + 1;
+    }
+    return text.replace(
+      /(\.{3,}|_{2,}|\[\s*\.{2,}\s*\]|\(\s*\.{2,}\s*\)|\[\s*_{2,}\s*\]|\(\s*_{2,}\s*\))/g,
+      () => {
+        const res = `[${counter}]`;
+        counter++;
+        return res;
+      }
+    );
+  };
+
+  const handleInsertBlank = () => {
+    sound.playClick();
+    const existingNums = Array.from(questionText.matchAll(/\[(\d+)\]/g)).map((m) => parseInt(m[1], 10));
+    const nextNum = existingNums.length > 0 ? Math.max(...existingNums) + 1 : 1;
+    const blankTag = `[${nextNum}]`;
+
+    if (textareaRef.current) {
+      const el = textareaRef.current;
+      const start = el.selectionStart ?? questionText.length;
+      const end = el.selectionEnd ?? questionText.length;
+      const before = questionText.substring(0, start);
+      const after = questionText.substring(end);
+      const needsSpaceBefore = before.length > 0 && !before.endsWith(' ');
+      const needsSpaceAfter = after.length > 0 && !after.startsWith(' ');
+      const newText = `${before}${needsSpaceBefore ? ' ' : ''}${blankTag}${needsSpaceAfter ? ' ' : ''}${after}`;
+      setQuestionText(newText);
+      setTimeout(() => {
+        el.focus();
+        const newCursorPos = start + (needsSpaceBefore ? 1 : 0) + blankTag.length + (needsSpaceAfter ? 1 : 0);
+        el.setSelectionRange(newCursorPos, newCursorPos);
+      }, 50);
+    } else {
+      setQuestionText((prev) => `${prev} ${blankTag}`);
+    }
+  };
+
+  const handleAutoConvertDots = () => {
+    sound.playClick();
+    const converted = autoConvertDotsToBlanks(questionText);
+    setQuestionText(converted);
+  };
+
+  const parsedBlanksPreview = blankAnswersStr
+    .split(/[|,;]/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  const parsedWordsPreview = wordBankStr
+    .split(/[|,;]/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  const existingBlanksInText = Array.from(questionText.matchAll(/\[(\d+)\]/g)).map((m) => parseInt(m[1], 10));
+  const nextBlankNumber = existingBlanksInText.length > 0 ? Math.max(...existingBlanksInText) + 1 : 1;
+  const existingBlanksCount = existingBlanksInText.length;
+  const hasDotsOrUnderscores = /(\.{3,}|_{2,}|\[\s*\.{2,}\s*\]|\(\s*\.{2,}\s*\)|\[\s*_{2,}\s*\]|\(\s*_{2,}\s*\))/.test(
+    questionText
+  );
 
   // States for matching (Nối cột)
   const [matchingPairs, setMatchingPairs] = useState<{ left: string; right: string }[]>([
@@ -321,21 +388,38 @@ export const QuestionEditorModal: React.FC<QuestionEditorModalProps> = ({
       }
     } else if (qType === 'fill_blank') {
       const blanks = blankAnswersStr
-        .split('|')
+        .split(/[|,;]/)
         .map((s) => s.trim())
         .filter(Boolean);
       if (blanks.length === 0) {
-        setErrorMsg('Vui lòng nhập ít nhất 1 từ đáp án điền khuyết (ngăn cách bằng dấu | )!');
+        setErrorMsg('Vui lòng nhập ít nhất 1 từ hoặc số đáp án điền đúng (ngăn cách bằng dấu | hoặc dấu phẩy)!');
         return;
       }
       const words = wordBankStr
-        .split('|')
+        .split(/[|,;]/)
         .map((s) => s.trim())
         .filter(Boolean);
+
+      // Tự động chuẩn hóa câu hỏi: chuyển chuỗi dấu chấm ..... hoặc gạch dưới thành [1], [2]
+      let normalizedQText = autoConvertDotsToBlanks(baseQuestion.question);
+      // Nếu đề bài hoàn toàn không có [1], [2] nhưng đã nhập đáp án, tự động bổ sung [1], [2] ở cuối câu
+      if (!/\[\d+\]/.test(normalizedQText)) {
+        normalizedQText += blanks.map((_, i) => ` [${i + 1}]`).join('');
+      }
+      baseQuestion.question = normalizedQText;
 
       baseQuestion.blankAnswers = blanks;
       baseQuestion.wordBank = words.length > 0 ? words : blanks;
       baseQuestion.options = baseQuestion.wordBank;
+      if (
+        !explanation.trim() ||
+        explanation.trim().startsWith('Đáp án đúng là ') ||
+        explanation.trim().startsWith('Đáp án Đúng/Sai:')
+      ) {
+        baseQuestion.explanation = `Đáp án điền khuyết: ${blanks
+          .map((ans, i) => `[${i + 1}] ${ans}`)
+          .join('; ')}. Chuẩn kiến thức SGK Tin học Kết Nối Tri Thức.`;
+      }
     } else if (qType === 'matching') {
       const validPairs = matchingPairs.filter((p) => p.left.trim() && p.right.trim());
       if (validPairs.length < 2) {
@@ -501,20 +585,56 @@ export const QuestionEditorModal: React.FC<QuestionEditorModalProps> = ({
 
           {/* Question text */}
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">
-              Nội dung câu hỏi <span className="text-rose-500">*</span>
-            </label>
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
+              <label className="block text-xs font-bold text-slate-700">
+                Nội dung câu hỏi <span className="text-rose-500">*</span>
+              </label>
+
+              {qType === 'fill_blank' && (
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={handleInsertBlank}
+                    className="px-2.5 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
+                    title="Chèn ô trống [1], [2]... vào vị trí con trỏ trong câu hỏi"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Chèn ô trống [{nextBlankNumber}]</span>
+                  </button>
+
+                  {hasDotsOrUnderscores && (
+                    <button
+                      type="button"
+                      onClick={handleAutoConvertDots}
+                      className="px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs animate-pulse"
+                      title="Tự động đổi chuỗi dấu chấm ..... hoặc gạch dưới ___ thành [1], [2]"
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                      <span>Đổi '.....' thành [1], [2]</span>
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+
             <textarea
+              ref={textareaRef}
               rows={3}
               value={questionText}
               onChange={(e) => setQuestionText(e.target.value)}
               placeholder="Nhập nội dung câu hỏi rõ ràng, chính xác..."
-              className="w-full px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 leading-relaxed"
+              className="w-full px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 leading-relaxed font-medium"
             />
+
             {qType === 'fill_blank' && (
-              <p className="text-[11px] text-indigo-600 mt-1">
-                💡 Mẹo: Với dạng điền khuyết, hãy dùng dấu <strong>[1]</strong>, <strong>[2]</strong> làm chỗ trống trong câu hỏi.
-              </p>
+              <div className="mt-1 flex flex-wrap items-center justify-between gap-1 text-[11px]">
+                <span className="text-indigo-700">
+                  💡 Dùng dấu <strong>[1]</strong>, <strong>[2]</strong> làm chỗ trống trong câu hỏi (hoặc bấm nút <b>Chèn ô trống</b> ở trên).
+                </span>
+                <span className="font-semibold text-slate-500">
+                  Đã nhận diện: <strong>{existingBlanksCount} ô trống</strong> trong đề bài
+                </span>
+              </div>
             )}
           </div>
 
@@ -827,30 +947,167 @@ export const QuestionEditorModal: React.FC<QuestionEditorModalProps> = ({
 
           {/* Dạng Điền khuyết */}
           {qType === 'fill_blank' && (
-            <div className="space-y-3 pt-2 border-t border-slate-200">
+            <div className="space-y-4 pt-3 border-t border-slate-200">
+              {/* Card hướng dẫn sư phạm */}
+              <div className="bg-indigo-50/70 p-3.5 rounded-2xl border border-indigo-200/80 text-xs text-indigo-950 space-y-2">
+                <div className="font-bold flex items-center gap-1.5 text-indigo-900">
+                  <Sparkles className="w-4 h-4 text-indigo-600" />
+                  <span>Hướng dẫn soạn đề dạng Điền khuyết:</span>
+                </div>
+                <ul className="space-y-1 text-slate-700 leading-relaxed list-disc list-inside">
+                  <li>
+                    <strong>Vị trí chỗ trống trong câu hỏi:</strong> Đặt ký hiệu <strong>[1]</strong>,{' '}
+                    <strong>[2]</strong>... vào vị trí cần điền (hoặc gõ dấu chấm <code>.....</code>, hệ thống sẽ tự động nhận diện thành ô trống).
+                  </li>
+                  <li>
+                    <strong>Cách học sinh làm bài:</strong> Học sinh có thể <u>gõ trực tiếp từ bàn phím</u> vào ô trống HOẶC <u>bấm chọn từ các từ gợi ý</u> trong ngân hàng từ bên dưới.
+                  </li>
+                </ul>
+              </div>
+
+              {/* Ô nhập Đáp án điền đúng */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Đáp án điền đúng (ngăn cách các vị trí [1], [2] bằng dấu gạch đứng | )
-                </label>
+                <div className="flex flex-wrap items-center justify-between gap-1 mb-1">
+                  <label className="block text-xs font-bold text-slate-800">
+                    Đáp án điền đúng <span className="text-rose-500">*</span>{' '}
+                    <span className="font-normal text-slate-500">
+                      (ngăn cách các vị trí [1], [2] bằng dấu gạch đứng | hoặc dấu phẩy)
+                    </span>
+                  </label>
+                  {parsedBlanksPreview.length > 0 && (
+                    <span className="text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                      Đã nhập {parsedBlanksPreview.length} đáp án:{' '}
+                      {parsedBlanksPreview.map((ans, i) => `[${i + 1}] ${ans}`).join(' • ')}
+                    </span>
+                  )}
+                </div>
                 <input
                   type="text"
                   value={blankAnswersStr}
                   onChange={(e) => setBlankAnswersStr(e.target.value)}
-                  placeholder="VD: máy tính cá nhân | Internet | bảo mật"
-                  className="w-full px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
+                  placeholder="VD: 64 (hoặc nếu có 2 ô: 64 | 128)"
+                  className="w-full px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 font-semibold"
                 />
+                <p className="text-[11px] text-slate-500 mt-1">
+                  💡 Nếu câu hỏi có 1 chỗ trống, chỉ cần nhập 1 đáp án (VD: <code>64</code>). Nếu có 2 chỗ trống, nhập: <code>64 | 128</code>.
+                </p>
               </div>
+
+              {/* Ô nhập Ngân hàng từ khóa gợi ý */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Ngân hàng từ khóa gợi ý (các từ để học sinh chọn kéo thả, ngăn cách bằng dấu | )
-                </label>
+                <div className="flex flex-wrap items-center justify-between gap-1 mb-1">
+                  <label className="block text-xs font-bold text-slate-800">
+                    Ngân hàng từ khóa gợi ý{' '}
+                    <span className="font-normal text-slate-500">
+                      (Tùy chọn: các từ xuất hiện bên dưới câu hỏi để học sinh bấm chọn nhanh)
+                    </span>
+                  </label>
+                  {parsedWordsPreview.length > 0 && (
+                    <span className="text-[11px] font-bold text-indigo-800 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-200">
+                      {parsedWordsPreview.length} từ gợi ý
+                    </span>
+                  )}
+                </div>
                 <input
                   type="text"
                   value={wordBankStr}
                   onChange={(e) => setWordBankStr(e.target.value)}
-                  placeholder="VD: máy tính cá nhân | Internet | bảo mật | thiết bị ngoại vi | CPU"
-                  className="w-full px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
+                  placeholder="VD: 8 | 16 | 32 | 64 | 100"
+                  className="w-full px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 font-semibold"
                 />
+                <p className="text-[11px] text-slate-500 mt-1">
+                  💡 Nhập các từ gây nhiễu + đáp án đúng, ngăn cách bằng dấu <code>|</code>. Nếu để trống ô này, học sinh sẽ gõ trực tiếp câu trả lời từ bàn phím.
+                </p>
+              </div>
+
+              {/* LIVE PREVIEW BOX: Xem trước trực tiếp giao diện học sinh */}
+              <div className="p-3.5 rounded-2xl bg-amber-50/40 border-2 border-amber-300/80 space-y-2.5">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-xs font-extrabold text-amber-950 uppercase tracking-wider flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                    Xem trước trực tiếp câu hỏi học sinh làm bài:
+                  </span>
+                  <span
+                    className={`text-[11px] font-bold px-2 py-0.5 rounded-md ${
+                      existingBlanksCount > 0 && existingBlanksCount === parsedBlanksPreview.length
+                        ? 'bg-emerald-100 text-emerald-800'
+                        : 'bg-amber-100 text-amber-900'
+                    }`}
+                  >
+                    {existingBlanksCount === 0
+                      ? 'Tự động thêm ô trống [1] ở cuối'
+                      : existingBlanksCount === parsedBlanksPreview.length
+                      ? `✅ Khớp chuẩn ${existingBlanksCount} ô trống`
+                      : `⚠️ Có ${existingBlanksCount} ô trống & ${parsedBlanksPreview.length} đáp án`}
+                  </span>
+                </div>
+
+                {/* Nội dung câu hỏi xem trước */}
+                <div className="p-3 rounded-xl bg-white border border-amber-200/90 text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
+                  {(() => {
+                    let rawText = questionText.trim();
+                    if (!rawText) return <span className="text-slate-400 italic">Chưa nhập nội dung câu hỏi...</span>;
+                    const previewText = autoConvertDotsToBlanks(rawText);
+                    const splitRegex = /(\[\d+\])/g;
+                    const parts = previewText.split(splitRegex);
+                    let blankIdx = 0;
+
+                    return (
+                      <div className="space-x-1">
+                        {parts.map((p, i) => {
+                          if (/\[\d+\]/.test(p)) {
+                            const currentIdx = blankIdx;
+                            blankIdx++;
+                            const expectedAns = parsedBlanksPreview[currentIdx] || '';
+                            return (
+                              <span
+                                key={i}
+                                className="inline-flex items-center gap-1 px-2.5 py-0.5 my-0.5 rounded-lg text-xs font-bold bg-amber-100 text-amber-950 border border-amber-300 shadow-2xs"
+                              >
+                                <span className="text-[10px] px-1 py-0.2 rounded bg-amber-200 text-amber-900 font-mono">
+                                  {currentIdx + 1}
+                                </span>
+                                <span className="font-mono text-indigo-700">
+                                  {expectedAns ? `[Đáp án: ${expectedAns}]` : '...ô trống...'}
+                                </span>
+                              </span>
+                            );
+                          }
+                          return <span key={i}>{p}</span>;
+                        })}
+                        {!/\[\d+\]/.test(previewText) && parsedBlanksPreview.length > 0 && (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 my-0.5 rounded-lg text-xs font-bold bg-amber-100 text-amber-950 border border-amber-300 shadow-2xs">
+                            <span className="text-[10px] px-1 py-0.2 rounded bg-amber-200 text-amber-900 font-mono">
+                              1
+                            </span>
+                            <span className="font-mono text-indigo-700">
+                              [Đáp án: {parsedBlanksPreview[0]}]
+                            </span>
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })()}
+                </div>
+
+                {/* Chips từ gợi ý xem trước */}
+                {parsedWordsPreview.length > 0 && (
+                  <div className="space-y-1">
+                    <span className="text-[11px] font-bold text-slate-600">
+                      Các nút từ khóa gợi ý để học sinh bấm chọn:
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {parsedWordsPreview.map((w, idx) => (
+                        <span
+                          key={idx}
+                          className="px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-indigo-900 border border-indigo-200 shadow-2xs"
+                        >
+                          {w}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}
