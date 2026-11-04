@@ -373,57 +373,57 @@ function normalizeRemoteExam(rawExam: any, fallbackKey: string): CustomExam {
 
 /**
  * Lắng nghe thay đổi đề thi thời gian thực từ Firebase Realtime Database
- * Tự động hợp nhất và đẩy các đề thi mới ở LocalStorage (chưa kịp đồng bộ trước đó) lên Firebase
+ * Đồng bộ hai chiều danh sách đề thi đã xóa (admin_deleted_exam_ids) để học sinh
+ * và giáo viên luôn thấy danh sách đề hoàn toàn đồng nhất, không bao giờ bị phục hồi đề đã xóa.
  */
 export function subscribeToCustomExams(
   onSuccess: (exams: CustomExam[]) => void,
   onError?: (err: Error) => void
 ): () => void {
   const examsRef = ref(db, CUSTOM_EXAMS_REF_PATH);
+  const deletedRef = ref(db, 'admin_deleted_exam_ids');
 
-  const unsubscribe = onValue(
+  // Danh sách ID đề đã xóa được cập nhật thời gian thực từ Firebase
+  let remoteDeletedIds = new Set<string>();
+
+  const unsubscribeDeleted = onValue(deletedRef, (snap) => {
+    if (snap.exists()) {
+      const data = snap.val();
+      Object.keys(data).forEach((id) => {
+        remoteDeletedIds.add(id);
+        markExamIdDeleted(id);
+      });
+    }
+  });
+
+  const unsubscribeExams = onValue(
     examsRef,
     (snapshot) => {
-      const localExams = getLocalCustomExams();
-      const deletedIds = getDeletedExamIds();
+      const localDeleted = getDeletedExamIds();
+      const allDeleted = new Set([...remoteDeletedIds, ...localDeleted]);
 
       if (snapshot.exists()) {
         const data = snapshot.val();
         const remoteMap = new Map<string, CustomExam>();
+
         Object.keys(data).forEach((key) => {
           const norm = normalizeRemoteExam(data[key], key);
-          if (deletedIds.has(key) || deletedIds.has(norm.id)) {
+          // Tuyệt đối không hiển thị nếu đề đã bị xóa hoặc đã chuyển vào thùng rác
+          if (allDeleted.has(key) || allDeleted.has(norm.id) || norm.isTrashed) {
             return;
           }
           remoteMap.set(norm.id, norm);
         });
 
-        // Đọc danh sách các đề đang hoạt động từ Firebase
-        // TUYỆT ĐỐI KHÔNG tự động nhồi lại DEFAULT_CUSTOM_EXAMS hay ontap_quiz_history
-        // để tôn trọng quyết định xóa đề của Admin.
-
-        // Kiểm tra xem ở máy hiện tại có đề thi nào mới tạo hoặc mới cập nhật hơn trên Firebase không
-        for (const localEx of localExams) {
-          if (deletedIds.has(localEx.id)) continue;
-          const remoteEx = remoteMap.get(localEx.id);
-          if (!remoteEx || (localEx.updatedAt || 0) > (remoteEx.updatedAt || 0)) {
-            remoteMap.set(localEx.id, localEx);
-            // Tự động đẩy đề thi còn thiếu hoặc bản mới hơn ở Local lên Firebase để Vercel nhận được ngay
-            const singleRef = ref(db, `${CUSTOM_EXAMS_REF_PATH}/${localEx.id}`);
-            set(singleRef, sanitizeForFirebase(localEx)).catch((err) =>
-              console.warn('Lỗi tự động đồng bộ đề local lên Firebase:', err)
-            );
-          }
-        }
-
         const examList = Array.from(remoteMap.values());
         examList.sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+
+        // Lưu danh sách sạch vào LocalStorage để đồng bộ 100% với Firebase
         saveLocalCustomExams(examList);
         onSuccess(examList);
       } else {
-        // Nếu Firebase chưa có, lấy từ Local hoặc Đề mẫu và đẩy lên Firebase
-        onSuccess(localExams);
-        syncInitialCustomExamsToFirebase();
+        const local = getLocalCustomExams().filter((e) => !allDeleted.has(e.id));
+        onSuccess(local);
       }
     },
     (error) => {
@@ -434,7 +434,10 @@ export function subscribeToCustomExams(
     }
   );
 
-  return unsubscribe;
+  return () => {
+    unsubscribeDeleted();
+    unsubscribeExams();
+  };
 }
 
 /**
@@ -570,20 +573,11 @@ export async function syncInitialCustomExamsToFirebase(): Promise<boolean> {
       });
       await set(examsRef, payload);
       return true;
-    } else {
-      const remoteData = snapshot.val() || {};
-      let syncedAny = false;
-      for (const localEx of localExams) {
-        if (deletedIds.has(localEx.id)) continue;
-        const remoteEx = remoteData[localEx.id];
-        if (!remoteEx || (localEx.updatedAt || 0) > (remoteEx.updatedAt || 0)) {
-          const singleRef = ref(db, `${CUSTOM_EXAMS_REF_PATH}/${localEx.id}`);
-          await set(singleRef, sanitizeForFirebase(localEx));
-          syncedAny = true;
-        }
-      }
-      return syncedAny;
     }
+    // Khi Firebase đã có dữ liệu, Firebase là nguồn chân lý duy nhất (Single Source of Truth).
+    // Tuyệt đối KHÔNG tự động re-upload các đề cục bộ thiếu trên Firebase lên lại,
+    // để tránh việc các đề Admin đã xóa bị học sinh hoặc trình duyệt khác tự động phục hồi.
+    return false;
   } catch (error) {
     console.warn('Lỗi đồng bộ đề thi ban đầu lên Firebase:', error);
     return false;
