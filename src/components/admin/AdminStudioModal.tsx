@@ -795,14 +795,14 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
     await saveCustomExamToFirebase(updatedExam);
   };
 
-  // Trộn ngẫu nhiên câu hỏi và các đáp án trong đề thi hiện tại
-  const handleShuffleCurrentExam = async (shuffleQ: boolean, shuffleA: boolean) => {
+  // Trộn ngẫu nhiên thứ tự các câu hỏi trong đề thi hiện tại (giữ nguyên đáp án và lời giải)
+  const handleShuffleCurrentExam = async () => {
     sound.playClick();
     if (!currentExam || !currentExam.questions || currentExam.questions.length === 0) return;
 
     const shuffledQuestions = applyQuizShuffle(currentExam.questions, {
-      shuffleQuestions: shuffleQ,
-      shuffleAnswers: shuffleA,
+      shuffleQuestions: true,
+      shuffleAnswers: false, // Bỏ hoàn toàn trộn đáp án
     });
 
     const updatedExam: CustomExam = {
@@ -813,13 +813,7 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
 
     setCustomExams((prev) => prev.map((e) => (e.id === updatedExam.id ? updatedExam : e)));
     await saveCustomExamToFirebase(updatedExam);
-    flashMessage(
-      shuffleQ && shuffleA
-        ? 'Đã trộn ngẫu nhiên thứ tự câu hỏi và các đáp án (A, B, C, D)!'
-        : shuffleQ
-        ? 'Đã trộn ngẫu nhiên thứ tự các câu hỏi!'
-        : 'Đã trộn ngẫu nhiên thứ tự các đáp án (A, B, C, D)!'
-    );
+    flashMessage('Đã xáo trộn ngẫu nhiên thứ tự các câu hỏi trong đề (giữ nguyên các đáp án và lời giải chuẩn)!');
   };
 
   // ==========================================================================
@@ -1892,15 +1886,15 @@ Yêu cầu chất lượng:
 
                 {/* Question Actions */}
                 <div className="flex flex-wrap items-center gap-2">
-                  {/* Shuffle Questions & Answers button */}
+                  {/* Shuffle Questions button (Chỉ trộn thứ tự câu hỏi, giữ nguyên đáp án & lời giải) */}
                   <button
                     type="button"
-                    onClick={() => handleShuffleCurrentExam(true, true)}
+                    onClick={() => handleShuffleCurrentExam()}
                     className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-sky-50 border border-sky-300 hover:bg-sky-100 text-sky-900 text-xs font-bold shadow-2xs transition-colors cursor-pointer"
-                    title="Đảo ngẫu nhiên vị trí các câu hỏi và các đáp án A, B, C, D trong đề này"
+                    title="Xáo trộn ngẫu nhiên thứ tự các câu hỏi trong đề này (giữ nguyên các đáp án A, B, C, D và lời giải thích chuẩn)"
                   >
                     <Shuffle className="w-4 h-4 text-sky-600" />
-                    <span>Trộn câu & đáp án</span>
+                    <span>Trộn thứ tự câu hỏi</span>
                   </button>
 
                   {/* Deduplicate Questions button */}

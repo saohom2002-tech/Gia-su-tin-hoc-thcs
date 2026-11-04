@@ -320,14 +320,14 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                   onShuffleSession();
                   setCurrentIndex(0);
                   setShowHint(false);
-                  setShuffleNotice('✓ Đã trộn ngẫu nhiên thứ tự câu hỏi và các đáp án!');
+                  setShuffleNotice('✓ Đã xáo trộn ngẫu nhiên thứ tự các câu hỏi trong đề!');
                   setTimeout(() => setShuffleNotice(''), 3000);
                 }}
                 className="px-3 py-2 rounded-xl border-2 border-purple-200 bg-purple-50 hover:bg-purple-100 text-purple-900 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
-                title="Trộn ngẫu nhiên lại thứ tự các câu hỏi và các đáp án A, B, C, D"
+                title="Xáo trộn ngẫu nhiên lại thứ tự các câu hỏi trong đề (giữ nguyên đáp án và lời giải chuẩn)"
               >
                 <Shuffle className="w-4 h-4 text-purple-600" />
-                <span>Trộn câu & đáp án</span>
+                <span>Trộn thứ tự câu hỏi</span>
               </button>
             )}
 

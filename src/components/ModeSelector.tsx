@@ -118,70 +118,22 @@ export const ModeSelector: React.FC<ModeSelectorProps> = ({
       </div>
 
       {/* Shuffle Options Bar */}
-      {(onToggleShuffleQuestions || onToggleShuffleAnswers) && (
-        <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2 text-xs font-bold text-slate-700">
-            <Shuffle className="w-4 h-4 text-sky-600" />
-            <span>Tùy chọn trộn đề ngẫu nhiên (Chống học vẹt):</span>
-          </div>
+      <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2 text-xs font-bold text-slate-700">
+          <Shuffle className="w-4 h-4 text-sky-600" />
+          <span>Chế độ xáo trộn đề (Chống học vẹt vị trí câu):</span>
+        </div>
 
-          <div className="flex flex-wrap items-center gap-2.5">
-            {onToggleShuffleQuestions && (
-              <button
-                type="button"
-                onClick={() => {
-                  sound.playClick();
-                  onToggleShuffleQuestions(!shuffleQuestions);
-                }}
-                className={`px-3.5 py-2 rounded-xl border-2 text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
-                  shuffleQuestions
-                    ? 'bg-sky-50 border-sky-500 text-sky-900 shadow-2xs'
-                    : 'bg-slate-50 border-slate-200 text-slate-500 hover:border-slate-300'
-                }`}
-              >
-                <span
-                  className={`w-4 h-4 rounded-md flex items-center justify-center text-[10px] ${
-                    shuffleQuestions
-                      ? 'bg-sky-600 text-white'
-                      : 'bg-white border border-slate-300 text-transparent'
-                  }`}
-                >
-                  ✓
-                </span>
-                <Shuffle className="w-3.5 h-3.5 text-sky-600" />
-                <span>Trộn thứ tự câu hỏi</span>
-              </button>
-            )}
-
-            {onToggleShuffleAnswers && (
-              <button
-                type="button"
-                onClick={() => {
-                  sound.playClick();
-                  onToggleShuffleAnswers(!shuffleAnswers);
-                }}
-                className={`px-3.5 py-2 rounded-xl border-2 text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
-                  shuffleAnswers
-                    ? 'bg-purple-50 border-purple-500 text-purple-900 shadow-2xs'
-                    : 'bg-slate-50 border-slate-200 text-slate-500 hover:border-slate-300'
-                }`}
-              >
-                <span
-                  className={`w-4 h-4 rounded-md flex items-center justify-center text-[10px] ${
-                    shuffleAnswers
-                      ? 'bg-purple-600 text-white'
-                      : 'bg-white border border-slate-300 text-transparent'
-                  }`}
-                >
-                  ✓
-                </span>
-                <Shuffle className="w-3.5 h-3.5 text-purple-600" />
-                <span>Trộn thứ tự đáp án (A, B, C, D)</span>
-              </button>
-            )}
+        <div className="flex flex-wrap items-center gap-2.5">
+          <div className="px-3 py-1.5 rounded-xl border border-sky-200 bg-sky-50 text-sky-900 text-xs font-bold flex items-center gap-2 shadow-2xs">
+            <span className="w-4 h-4 rounded-md bg-sky-600 text-white flex items-center justify-center text-[10px]">
+              ✓
+            </span>
+            <Shuffle className="w-3.5 h-3.5 text-sky-600" />
+            <span>Tự động xáo thứ tự câu hỏi khi vào luyện (Giữ nguyên đáp án & lời giải chuẩn)</span>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };

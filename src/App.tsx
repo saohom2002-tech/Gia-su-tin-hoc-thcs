@@ -595,9 +595,10 @@ export default function App() {
       return;
     }
 
+    // Tự động xáo ngẫu nhiên thứ tự câu hỏi trong đề khi học sinh vào luyện thi, giữ nguyên đáp án & lời giải
     const preparedQuestions = applyQuizShuffle(exam.questions, {
-      shuffleQuestions,
-      shuffleAnswers,
+      shuffleQuestions: true,
+      shuffleAnswers: false,
     });
 
     const newSession: QuizSession = {
@@ -977,10 +978,10 @@ export default function App() {
         }
       }
 
-      // Trộn thứ tự câu hỏi và đáp án theo tùy chọn
+      // Tự động xáo ngẫu nhiên thứ tự các câu hỏi khi học sinh vào luyện thi, giữ nguyên đáp án & lời giải
       const preparedQuestions = applyQuizShuffle(questions, {
-        shuffleQuestions,
-        shuffleAnswers,
+        shuffleQuestions: true,
+        shuffleAnswers: false,
       });
 
       // Initialize session
@@ -1013,7 +1014,7 @@ export default function App() {
       console.warn('API error, using local fallback:', err);
       const fallback = applyQuizShuffle(
         generateFallbackQuestions(targetKeys, reqCount, reqDifficulty, gradeNum),
-        { shuffleQuestions, shuffleAnswers }
+        { shuffleQuestions: true, shuffleAnswers: false }
       );
       const newSession: QuizSession = {
         id: `sess-${Date.now()}`,
@@ -1295,12 +1296,12 @@ export default function App() {
     setIsCertificateModalOpen(true);
   };
 
-  // Retake current quiz (Trộn lại thứ tự câu hỏi và các đáp án)
+  // Retake current quiz (Tự động xáo lại thứ tự các câu hỏi, giữ nguyên đáp án)
   const handleRetakeQuiz = () => {
     if (!currentSession) return;
     const reshuffled = applyQuizShuffle(currentSession.questions, {
       shuffleQuestions: true,
-      shuffleAnswers: true,
+      shuffleAnswers: false,
     });
     const resetSession: QuizSession = {
       ...currentSession,
@@ -1318,13 +1319,13 @@ export default function App() {
     setStep('quiz');
   };
 
-  // Trộn ngẫu nhiên câu hỏi & đáp án ngay trong lúc đang làm bài
+  // Trộn ngẫu nhiên câu hỏi ngay trong lúc đang làm bài (giữ nguyên đáp án)
   const handleShuffleActiveSession = () => {
     setCurrentSession((prev) => {
       if (!prev) return null;
       const reshuffled = applyQuizShuffle(prev.questions, {
         shuffleQuestions: true,
-        shuffleAnswers: true,
+        shuffleAnswers: false,
       });
       return {
         ...prev,
