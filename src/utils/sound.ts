@@ -1,3 +1,5 @@
+import { bgmManager } from './bgmManager';
+
 // Web Audio API lightweight sound synthesizer (no external audio assets needed)
 class SoundManager {
   private ctx: AudioContext | null = null;
@@ -43,6 +45,7 @@ class SoundManager {
   }
 
   playCorrect() {
+    bgmManager.duck(600);
     if (!this.enabled) return;
     try {
       const ctx = this.getContext();
@@ -90,6 +93,7 @@ class SoundManager {
   }
 
   playComplete() {
+    bgmManager.duck(1200);
     if (!this.enabled) return;
     try {
       const ctx = this.getContext();

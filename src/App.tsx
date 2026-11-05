@@ -37,6 +37,7 @@ import { EssayModal } from './components/EssayModal';
 import { MistakeNotebookModal } from './components/MistakeNotebookModal';
 import { ScorebookLeaderboardModal } from './components/ScorebookLeaderboardModal';
 import { CertificateModal } from './components/CertificateModal';
+import { BgmMusicPlayer } from './components/BgmMusicPlayer';
 import {
   INITIAL_SCORE_RECORDS,
   DEFAULT_EXAM_BATCHES,
@@ -2076,6 +2077,9 @@ export default function App() {
           setStudioInitialAction(null);
         }}
       />
+
+      {/* Trình phát nhạc nền không lời chuẩn Wayground / Lofi Focus */}
+      <BgmMusicPlayer />
     </div>
   );
 }
