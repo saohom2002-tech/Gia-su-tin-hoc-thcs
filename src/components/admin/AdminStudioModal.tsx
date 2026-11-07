@@ -28,7 +28,7 @@ import {
   isMultipleSelectQuestion,
   getMultipleSelectCorrectIndices,
 } from '../../utils/questionEvaluator';
-import { applyQuizShuffle } from '../../utils/quizShuffler';
+import { applyQuizShuffle, rebalanceExamAnswers } from '../../utils/quizShuffler';
 import { parseExamDocumentClientSide, ClientDocumentParseRequest } from '../../utils/clientDocumentExtractor';
 import { sound } from '../../utils/sound';
 import {
@@ -814,6 +814,24 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
     setCustomExams((prev) => prev.map((e) => (e.id === updatedExam.id ? updatedExam : e)));
     await saveCustomExamToFirebase(updatedExam);
     flashMessage('Đã xáo trộn ngẫu nhiên thứ tự các câu hỏi trong đề (giữ nguyên các đáp án và lời giải chuẩn)!');
+  };
+
+  // Phân bổ ngẫu nhiên và cân bằng đều vị trí đáp án đúng (A, B, C, D mỗi loại ~25%)
+  const handleRebalanceCurrentExamAnswers = async () => {
+    sound.playClick();
+    if (!currentExam || !currentExam.questions || currentExam.questions.length === 0) return;
+
+    const rebalancedQuestions = rebalanceExamAnswers(currentExam.questions);
+
+    const updatedExam: CustomExam = {
+      ...currentExam,
+      questions: rebalancedQuestions,
+      updatedAt: Date.now(),
+    };
+
+    setCustomExams((prev) => prev.map((e) => (e.id === updatedExam.id ? updatedExam : e)));
+    await saveCustomExamToFirebase(updatedExam);
+    flashMessage('🎉 Đã phân bổ ngẫu nhiên và cân bằng đều đáp án A, B, C, D cho toàn bộ đề thi!');
   };
 
   // ==========================================================================
@@ -1895,6 +1913,17 @@ Yêu cầu chất lượng:
                   >
                     <Shuffle className="w-4 h-4 text-sky-600" />
                     <span>Trộn thứ tự câu hỏi</span>
+                  </button>
+
+                  {/* Rebalance Answers button (Phân bổ ngẫu nhiên A, B, C, D đều nhau) */}
+                  <button
+                    type="button"
+                    onClick={() => handleRebalanceCurrentExamAnswers()}
+                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-purple-50 border border-purple-300 hover:bg-purple-100 text-purple-900 text-xs font-bold shadow-2xs transition-colors cursor-pointer"
+                    title="Phân bổ ngẫu nhiên và cân bằng đều vị trí đáp án đúng (A, B, C, D mỗi loại ~25%) để học sinh không đoán mò được"
+                  >
+                    <Shuffle className="w-4 h-4 text-purple-600" />
+                    <span>Cân bằng đáp án (A-B-C-D)</span>
                   </button>
 
                   {/* Deduplicate Questions button */}

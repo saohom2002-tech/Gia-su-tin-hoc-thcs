@@ -48,6 +48,82 @@ function isLastOptionAllOfAbove(options: string[]): boolean {
 }
 
 /**
+ * Chu kỳ phân bổ cân bằng 4 đáp án A, B, C, D:
+ * Đảm bảo mỗi nhóm 4 câu hỏi có đủ A, B, C, D và không có 2 câu liên tiếp trùng đáp án
+ */
+const BALANCED_CYCLE = [1, 2, 3, 0, 2, 0, 3, 1, 3, 1, 0, 2, 0, 3, 1, 2];
+
+/**
+ * Phân bổ ngẫu nhiên vị trí đáp án đúng cho 1 câu hỏi trắc nghiệm
+ */
+export function rebalanceQuestion(q: Question, assignedIndex: number): Question {
+  if (q.type && q.type !== 'multiple_choice') return q;
+  if (!Array.isArray(q.options) || q.options.length !== 4) return q;
+  if (typeof q.correctAnswer !== 'number' || q.correctAnswer < 0 || q.correctAnswer > 3) return q;
+
+  // Kiểm tra nếu có phương án phụ thuộc vị trí ("Cả A và B", "Tất cả các đáp án trên")
+  if (hasFixedLetterReference(q.options) || isLastOptionAllOfAbove(q.options)) {
+    return q;
+  }
+
+  const originalIndex = q.correctAnswer;
+  const correctText = q.options[originalIndex];
+  const wrongTexts = q.options.filter((_, i) => i !== originalIndex);
+
+  // Xáo trộn nhẹ các phương án sai
+  for (let i = wrongTexts.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [wrongTexts[i], wrongTexts[j]] = [wrongTexts[j], wrongTexts[i]];
+  }
+
+  const newOptions: string[] = [];
+  let w = 0;
+  for (let i = 0; i < 4; i++) {
+    if (i === assignedIndex) {
+      newOptions.push(correctText);
+    } else {
+      newOptions.push(wrongTexts[w++]);
+    }
+  }
+
+  // Cập nhật lời giải nếu có ghi rõ "Đáp án đúng là A:" hoặc "Đáp án A:"
+  let newExplanation = q.explanation;
+  if (newExplanation) {
+    const oldLetter = String.fromCharCode(65 + originalIndex);
+    const newLetter = String.fromCharCode(65 + assignedIndex);
+    newExplanation = newExplanation.replace(
+      new RegExp(`\\b(Đáp án(\\s+đúng)?(\\s+là)?|Phương án)\\s+${oldLetter}\\b`, 'gi'),
+      `$1 ${newLetter}`
+    );
+  }
+
+  return {
+    ...q,
+    options: newOptions,
+    correctAnswer: assignedIndex,
+    explanation: newExplanation,
+  };
+}
+
+/**
+ * Phân bổ ngẫu nhiên và cân bằng đều vị trí đáp án đúng (A, B, C, D mỗi loại ~25%)
+ * cho toàn bộ danh sách câu hỏi trong một đề thi, giúp học sinh không đoán mò được.
+ */
+export function rebalanceExamAnswers(questions: Question[]): Question[] {
+  if (!questions || questions.length === 0) return [];
+  let mcqIdx = 0;
+  return questions.map((q) => {
+    if (q.type === 'multiple_choice' || (!q.type && q.options && q.options.length === 4)) {
+      const target = BALANCED_CYCLE[mcqIdx % BALANCED_CYCLE.length];
+      const rebalanced = rebalanceQuestion(q, target);
+      mcqIdx++;
+      return rebalanced;
+    }
+    return q;
+  });
+}
+
+/**
  * ĐÃ BỎ CHỨC NĂNG TRỘN ĐÁP ÁN:
  * Luôn giữ nguyên thứ tự các phương án A, B, C, D gốc của câu hỏi để tránh làm
  * lệch đáp án đúng và lời giải thích chi tiết sư phạm (Explanation).

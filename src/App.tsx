@@ -38,6 +38,7 @@ import { MistakeNotebookModal } from './components/MistakeNotebookModal';
 import { ScorebookLeaderboardModal } from './components/ScorebookLeaderboardModal';
 import { CertificateModal } from './components/CertificateModal';
 import { BgmMusicPlayer } from './components/BgmMusicPlayer';
+import { SidebarMenu } from './components/SidebarMenu';
 import {
   INITIAL_SCORE_RECORDS,
   DEFAULT_EXAM_BATCHES,
@@ -57,6 +58,7 @@ import {
   moveCustomExamToTrash,
   getLocalCustomExams,
   subscribeToCurriculumBank,
+  subscribeToGSheetWebhookUrl,
   getStoredAdminSession,
   saveAdminSession,
   isAuthorizedAdmin,
@@ -67,7 +69,7 @@ import { BUILT_IN_QUESTIONS } from './data/questionBank';
 import { AdminAuthModal } from './components/admin/AdminAuthModal';
 import { AdminStudioModal } from './components/admin/AdminStudioModal';
 import { AdminExamSection } from './components/admin/AdminExamSection';
-import { sendScoreToGoogleSheetWebhook } from './services/googleSheets';
+import { sendScoreToGoogleSheetWebhook, setGlobalWebhookUrl } from './services/googleSheets';
 import { QUESTIONS_GRADE_5 } from './data/questionsGrade5';
 import { Grade5ExamAuditAndGameModal } from './components/Grade5ExamAuditAndGameModal';
 import {
@@ -156,6 +158,46 @@ export default function App() {
   const [isGrade5AuditModalOpen, setIsGrade5AuditModalOpen] = useState<boolean>(false);
   const [grade5AuditInitialTab, setGrade5AuditInitialTab] = useState<'audit' | 'game'>('audit');
   const [lastUpdatedProfileMsg, setLastUpdatedProfileMsg] = useState<string>('');
+
+  // Sidebar state (Thanh Menu bên trái)
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('ontap_sidebar_collapsed') === 'true';
+    } catch {
+      return false;
+    }
+  });
+  const [isSidebarMobileOpen, setIsSidebarMobileOpen] = useState<boolean>(false);
+
+  const toggleSidebarCollapse = () => {
+    setIsSidebarCollapsed((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem('ontap_sidebar_collapsed', String(next));
+      } catch {}
+      return next;
+    });
+  };
+
+  const handleToggleSidebar = () => {
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      setIsSidebarMobileOpen((prev) => !prev);
+    } else {
+      toggleSidebarCollapse();
+    }
+  };
+
+  const handleScrollToCustomExams = () => {
+    if (step !== 'setup') {
+      setStep('setup');
+    }
+    setTimeout(() => {
+      const el = document.getElementById('admin-exam-section');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 120);
+  };
 
   // Track previous step before entering print view
   const [stepBeforePrint, setStepBeforePrint] = useState<'setup' | 'result'>('setup');
@@ -306,10 +348,16 @@ export default function App() {
       setTopicQuestionCounts(counts);
     });
 
+    // Lắng nghe cấu hình Google Sheets Webhook từ Firebase (để mọi máy học sinh đều nhận được)
+    const unsubscribeGSheetWebhook = subscribeToGSheetWebhookUrl((url) => {
+      setGlobalWebhookUrl(url);
+    });
+
     return () => {
       unsubscribeScores();
       unsubscribeExams();
       unsubscribeCurriculumBank();
+      unsubscribeGSheetWebhook();
     };
   }, []);
 
@@ -1412,30 +1460,62 @@ export default function App() {
   ]);
 
   return (
-    <div className="min-h-screen bg-[#FFF5CF] flex flex-col text-slate-800">
-      {/* Global Header với nút cố định Bắt đầu ôn tập thay thế */}
-      <Header
-        onOpenHistory={() => setIsHistoryOpen(true)}
-        historyCount={history.length}
+    <div className="min-h-screen bg-[#FFF5CF] flex text-slate-800">
+      {/* Thanh Menu Chính Bên Trái (Desktop Pinned & Mobile Drawer) */}
+      <SidebarMenu
+        isOpenMobile={isSidebarMobileOpen}
+        onCloseMobile={() => setIsSidebarMobileOpen(false)}
+        isCollapsed={isSidebarCollapsed}
+        onToggleCollapse={toggleSidebarCollapse}
+        activeSection={step === 'setup' ? 'home' : step}
         onGoHome={() => setStep('setup')}
-        isHome={step === 'setup'}
+        onScrollToCustomExams={handleScrollToCustomExams}
+        onOpenScorebook={() => setIsScorebookModalOpen(true)}
+        onOpenMistakes={() => setIsMistakeModalOpen(true)}
+        onOpenHistory={() => setIsHistoryOpen(true)}
+        onOpenAdminStudio={handleOpenAdminStudio}
+        onOpenEssayModal={() => setIsEssayModalOpen(true)}
+        onOpenGrade5Game={() => handleLaunchMidtermExam(5, 'all')}
+        onOpenProfileModal={() => setIsProfileModalOpen(true)}
+        studentProfile={studentProfile}
+        mistakesCount={mistakes.length}
+        historyCount={history.length}
+        customExamsCount={customExams.length}
+        isAdminLoggedIn={Boolean(adminSession && isAuthorizedAdmin(adminSession.email))}
         soundEnabled={soundEnabled}
         onToggleSound={toggleSound}
-        studentProfile={studentProfile}
-        onOpenProfileModal={() => setIsProfileModalOpen(true)}
-        onOpenMistakes={() => setIsMistakeModalOpen(true)}
-        mistakesCount={mistakes.length}
-        onOpenScorebook={() => setIsScorebookModalOpen(true)}
-        onOpenAdminStudio={handleOpenAdminStudio}
-        isAdminLoggedIn={Boolean(adminSession && isAuthorizedAdmin(adminSession.email))}
-        onStartGenerateQuiz={handleStartGenerateQuiz}
-        isGenerating={isGenerating}
-        canStartQuiz={isCustomMode || selectedLessons.length > 0}
-        summaryInfo={headerSummaryInfo}
       />
 
-      {/* Main Container */}
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
+      {/* Vùng Nội Dung Chính: Tự động thụt lề theo Sidebar trên màn hình Desktop */}
+      <div
+        className={`flex-1 flex flex-col min-w-0 transition-all duration-300 ease-in-out ${
+          isSidebarCollapsed ? 'lg:pl-20' : 'lg:pl-64'
+        }`}
+      >
+        {/* Global Header với nút Menu Toggle & Bắt đầu ôn tập */}
+        <Header
+          onToggleSidebar={handleToggleSidebar}
+          onOpenHistory={() => setIsHistoryOpen(true)}
+          historyCount={history.length}
+          onGoHome={() => setStep('setup')}
+          isHome={step === 'setup'}
+          soundEnabled={soundEnabled}
+          onToggleSound={toggleSound}
+          studentProfile={studentProfile}
+          onOpenProfileModal={() => setIsProfileModalOpen(true)}
+          onOpenMistakes={() => setIsMistakeModalOpen(true)}
+          mistakesCount={mistakes.length}
+          onOpenScorebook={() => setIsScorebookModalOpen(true)}
+          onOpenAdminStudio={handleOpenAdminStudio}
+          isAdminLoggedIn={Boolean(adminSession && isAuthorizedAdmin(adminSession.email))}
+          onStartGenerateQuiz={handleStartGenerateQuiz}
+          isGenerating={isGenerating}
+          canStartQuiz={isCustomMode || selectedLessons.length > 0}
+          summaryInfo={headerSummaryInfo}
+        />
+
+        {/* Main Container */}
+        <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {step === 'setup' && (
           <div className="space-y-8 animate-in fade-in-50">
             {/* Resume pending in-progress quiz banner */}
@@ -1761,17 +1841,19 @@ export default function App() {
             />
 
             {/* MỤC: QUẢN TRỊ ĐỀ ĐÃ TẠO & ĐỀ GIÁO VIÊN (ADMIN STUDIO) */}
-            <AdminExamSection
-              customExams={customExams}
-              currentGradeFilter={currentGradeFilter}
-              onLaunchExam={handleLaunchCustomExam}
-              onPrintExam={handlePrintCustomExam}
-              onOpenAdminStudio={handleOpenAdminStudio}
-              onUpdateExam={handleUpdateCustomExam}
-              onDeleteExam={handleDeleteCustomExam}
-              onDuplicateExam={handleDuplicateCustomExam}
-              isAdmin={Boolean(adminSession && isAuthorizedAdmin(adminSession.email))}
-            />
+            <div id="admin-exam-section">
+              <AdminExamSection
+                customExams={customExams}
+                currentGradeFilter={currentGradeFilter}
+                onLaunchExam={handleLaunchCustomExam}
+                onPrintExam={handlePrintCustomExam}
+                onOpenAdminStudio={handleOpenAdminStudio}
+                onUpdateExam={handleUpdateCustomExam}
+                onDeleteExam={handleDeleteCustomExam}
+                onDuplicateExam={handleDuplicateCustomExam}
+                isAdmin={Boolean(adminSession && isAuthorizedAdmin(adminSession.email))}
+              />
+            </div>
 
             {/* Step 1: Chọn Khối lớp & Bài học (Hỗ trợ chọn nhiều bài học) */}
             <div id="lesson-selector-section">
@@ -1974,6 +2056,7 @@ export default function App() {
           </div>
         </div>
       </footer>
+    </div>
 
       {/* History Modal */}
       <HistoryModal

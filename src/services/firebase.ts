@@ -267,6 +267,62 @@ export async function syncBatchScoresToFirebase(scores: StudentScoreRecord[]): P
 }
 
 // ============================================================================
+// SYSTEM CONFIGURATION (GOOGLE SHEETS WEBHOOK, SETTINGS)
+// ============================================================================
+const SYSTEM_CONFIG_REF_PATH = 'system_config';
+
+/**
+ * Đăng ký lắng nghe thay đổi Webhook URL của Google Sheets từ Firebase
+ */
+export function subscribeToGSheetWebhookUrl(onUpdate: (url: string) => void): () => void {
+  const configRef = ref(db, `${SYSTEM_CONFIG_REF_PATH}/gsheet_webhook_url`);
+  const unsubscribe = onValue(
+    configRef,
+    (snapshot) => {
+      const val = snapshot.val();
+      if (typeof val === 'string' && val.trim().length > 0) {
+        try {
+          localStorage.setItem('ontap_gsheet_webhook_url', val.trim());
+        } catch {}
+        onUpdate(val.trim());
+      } else {
+        const local = localStorage.getItem('ontap_gsheet_webhook_url') || '';
+        onUpdate(local);
+      }
+    },
+    (err) => {
+      console.warn('Lỗi đọc Webhook URL từ Firebase, dùng localStorage:', err);
+      const local = localStorage.getItem('ontap_gsheet_webhook_url') || '';
+      onUpdate(local);
+    }
+  );
+  return unsubscribe;
+}
+
+/**
+ * Lưu Webhook URL của Google Sheets lên Firebase để tất cả máy học sinh đều nhận được
+ */
+export async function saveGSheetWebhookUrlToFirebase(url: string): Promise<boolean> {
+  const cleanUrl = url.trim();
+  try {
+    const configRef = ref(db, `${SYSTEM_CONFIG_REF_PATH}/gsheet_webhook_url`);
+    await set(configRef, cleanUrl);
+    try {
+      localStorage.setItem('ontap_gsheet_webhook_url', cleanUrl);
+    } catch {}
+    return true;
+  } catch (error) {
+    console.error('Lỗi lưu GSheet Webhook URL lên Firebase:', error);
+    try {
+      localStorage.setItem('ontap_gsheet_webhook_url', cleanUrl);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+}
+
+// ============================================================================
 // ADMIN CUSTOM EXAMS & PRACTICE TESTS (ĐỀ THI & ĐỀ ÔN TẬP TỪ ADMIN)
 // ============================================================================
 const CUSTOM_EXAMS_REF_PATH = 'admin_custom_exams';

@@ -12,7 +12,9 @@ import {
   ShieldCheck,
   Lock,
   Play,
-  Loader2
+  Loader2,
+  Menu,
+  PanelLeft
 } from 'lucide-react';
 import { sound } from '../utils/sound';
 import { StudentProfile } from '../types/quiz';
@@ -39,6 +41,7 @@ interface HeaderProps {
   onOpenScorebook?: () => void;
   onOpenAdminStudio?: () => void;
   isAdminLoggedIn?: boolean;
+  onToggleSidebar?: () => void;
 
   // Nút cố định trên thanh tiêu đề thay thế thanh trôi nổi ở dưới
   onStartGenerateQuiz?: () => void;
@@ -61,6 +64,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenScorebook,
   onOpenAdminStudio,
   isAdminLoggedIn = false,
+  onToggleSidebar,
   onStartGenerateQuiz,
   isGenerating = false,
   canStartQuiz = true,
@@ -68,13 +72,30 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   return (
     <header className="no-print sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b-2 border-sky-200/90 shadow-xs">
-      <div className="max-w-6xl mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2 sm:gap-3">
-        {/* Logo and Brand */}
-        <button
-          onClick={onGoHome}
-          className="flex items-center gap-2.5 sm:gap-3 text-left group transition-transform active:scale-95 shrink-0 cursor-pointer"
-          title="Về trang chọn bài học"
-        >
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2 sm:gap-3">
+        {/* Left Side: Nút Mở Menu & Logo */}
+        <div className="flex items-center gap-2">
+          {onToggleSidebar && (
+            <button
+              type="button"
+              onClick={() => {
+                sound.playClick();
+                onToggleSidebar();
+              }}
+              className="p-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 border border-slate-200 lg:border-transparent transition-all cursor-pointer shrink-0"
+              title="Đóng / Mở thanh menu chính bên trái"
+              aria-label="Thanh menu chính"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+          )}
+
+          {/* Logo and Brand */}
+          <button
+            onClick={onGoHome}
+            className="flex items-center gap-2.5 sm:gap-3 text-left group transition-transform active:scale-95 shrink-0 cursor-pointer"
+            title="Về trang chọn bài học"
+          >
           <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-sky-500 via-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-sky-500/25 group-hover:scale-105 transition-transform">
             <GraduationCap className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
@@ -93,6 +114,7 @@ export const Header: React.FC<HeaderProps> = ({
             </p>
           </div>
         </button>
+      </div>
 
         {/* NÚT CỐ ĐỊNH TRÊN THANH TIÊU ĐỀ: TẠO CÂU HỎI & BẮT ĐẦU ÔN TẬP (NẰM CHÍNH GIỮA / NỔI BẬT) */}
         {isHome && onStartGenerateQuiz && (

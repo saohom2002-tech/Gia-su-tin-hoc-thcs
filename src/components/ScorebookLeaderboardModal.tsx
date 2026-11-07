@@ -20,11 +20,26 @@ import {
   User,
   GraduationCap,
   ExternalLink,
-  Cloud
+  Cloud,
+  RefreshCw,
+  Copy,
+  Check,
+  Settings,
+  AlertCircle,
+  Send,
+  Zap
 } from 'lucide-react';
 import { sound } from '../utils/sound';
 import { StudentAvatar } from './StudentAvatar';
-import { GOOGLE_SHEET_URL, exportScoresToGoogleSheetCSV } from '../services/googleSheets';
+import {
+  GOOGLE_SHEET_URL,
+  exportScoresToGoogleSheetCSV,
+  getGlobalWebhookUrl,
+  setGlobalWebhookUrl,
+  syncBatchScoresToGoogleSheet,
+  GOOGLE_APPS_SCRIPT_SAMPLE_CODE
+} from '../services/googleSheets';
+import { saveGSheetWebhookUrlToFirebase } from '../services/firebase';
 
 interface ScorebookLeaderboardModalProps {
   isOpen: boolean;
@@ -64,6 +79,105 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
   const [manualLesson, setManualLesson] = useState<string>('Bài kiểm tra khảo sát');
   const [manualScore, setManualScore] = useState<string>('10');
   const [manualNotes, setManualNotes] = useState<string>('');
+
+  // Google Sheets Webhook & Realtime Sync States
+  const [isGSheetModalOpen, setIsGSheetModalOpen] = useState<boolean>(false);
+  const [webhookUrlInput, setWebhookUrlInput] = useState<string>(() => getGlobalWebhookUrl());
+  const [isSavingWebhook, setIsSavingWebhook] = useState<boolean>(false);
+  const [isSyncingBatch, setIsSyncingBatch] = useState<boolean>(false);
+  const [batchProgress, setBatchProgress] = useState<{ sent: number; total: number } | null>(null);
+  const [syncStatusMsg, setSyncStatusMsg] = useState<{ type: 'success' | 'error' | 'info'; text: string } | null>(null);
+  const [hasCopiedScript, setHasCopiedScript] = useState<boolean>(false);
+
+  // Cập nhật webhookUrlInput khi mở modal
+  const handleOpenGSheetModal = () => {
+    setWebhookUrlInput(getGlobalWebhookUrl());
+    setSyncStatusMsg(null);
+    setBatchProgress(null);
+    setIsGSheetModalOpen(true);
+  };
+
+  const handleCopyAppsScript = async () => {
+    try {
+      await navigator.clipboard.writeText(GOOGLE_APPS_SCRIPT_SAMPLE_CODE);
+      setHasCopiedScript(true);
+      sound.playClick();
+      setTimeout(() => setHasCopiedScript(false), 3000);
+    } catch {
+      alert('Vui lòng chọn và sao chép thủ công đoạn mã.');
+    }
+  };
+
+  const handleSaveWebhookUrl = async () => {
+    const cleanUrl = webhookUrlInput.trim();
+    setIsSavingWebhook(true);
+    setGlobalWebhookUrl(cleanUrl);
+    const saved = await saveGSheetWebhookUrlToFirebase(cleanUrl);
+    setIsSavingWebhook(false);
+
+    if (saved) {
+      sound.playSuccess();
+      setSyncStatusMsg({
+        type: 'success',
+        text: cleanUrl
+          ? 'Đã lưu và đồng bộ Webhook URL lên toàn hệ thống thành công! Từ bây giờ học sinh nộp bài sẽ tự động vào Google Sheets.'
+          : 'Đã hủy cấu hình Webhook Google Sheets.',
+      });
+    } else {
+      setSyncStatusMsg({
+        type: 'error',
+        text: 'Không thể lưu Webhook URL. Vui lòng kiểm tra lại kết nối mạng.',
+      });
+    }
+  };
+
+  const handleSyncAllExistingToGSheets = async () => {
+    const currentUrl = webhookUrlInput.trim() || getGlobalWebhookUrl();
+    if (!currentUrl) {
+      setSyncStatusMsg({
+        type: 'error',
+        text: 'Vui lòng dán và lưu Webhook URL trước khi bấm đồng bộ hàng loạt.',
+      });
+      return;
+    }
+
+    if (scores.length === 0) {
+      setSyncStatusMsg({
+        type: 'info',
+        text: 'Hiện chưa có dữ liệu điểm học sinh để đồng bộ.',
+      });
+      return;
+    }
+
+    setIsSyncingBatch(true);
+    setBatchProgress({ sent: 0, total: scores.length });
+    setSyncStatusMsg({
+      type: 'info',
+      text: `Đang gửi ${scores.length} học sinh sang Google Sheets...`,
+    });
+
+    const result = await syncBatchScoresToGoogleSheet(
+      scores,
+      currentUrl,
+      (sent, total) => {
+        setBatchProgress({ sent, total });
+      }
+    );
+
+    setIsSyncingBatch(false);
+    if (result.success) {
+      sound.playSuccess();
+      setSyncStatusMsg({
+        type: 'success',
+        text: `Đã hoàn tất đồng bộ thành công toàn bộ ${result.sent} học sinh sang Google Sheets!`,
+      });
+    } else {
+      setSyncStatusMsg({
+        type: 'error',
+        text: `Đồng bộ bị gián đoạn: ${result.error || 'Lỗi không xác định'}`,
+      });
+    }
+  };
 
   // Chuẩn hóa tên đợt thi của toàn bộ danh sách điểm
   const normalizedScores = useMemo(() => {
@@ -421,6 +535,18 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
                 >
                   <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
                   <span>Xuất Excel/CSV</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handleOpenGSheetModal}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-800 font-bold text-xs transition-all cursor-pointer shadow-xs"
+                  title="Cấu hình tự động đồng bộ điểm thi từ Firebase sang Google Sheets theo thời gian thực"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 text-blue-600 ${isSyncingBatch ? 'animate-spin' : ''}`} />
+                  <span>Tự động đồng bộ</span>
+                  {Boolean(getGlobalWebhookUrl()) && (
+                    <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse ml-0.5" title="Đang kích hoạt đồng bộ Realtime" />
+                  )}
                 </button>
                 <a
                   href={GOOGLE_SHEET_URL}
@@ -870,6 +996,244 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        )}
+        {/* Modal Cấu hình & Đồng bộ Google Sheets Realtime Webhook */}
+        {isGSheetModalOpen && (
+          <div className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+            <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[92vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+              {/* Header */}
+              <div className="p-4 sm:p-5 border-b border-slate-200 flex items-center justify-between bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 text-white">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center shadow-inner">
+                    <FileSpreadsheet className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-black text-base sm:text-lg flex items-center gap-2">
+                      Tự Động Đồng Bộ Google Sheets
+                      <span className="text-[10px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-full bg-emerald-400 text-emerald-950">
+                        Realtime Webhook
+                      </span>
+                    </h3>
+                    <p className="text-xs text-emerald-100 font-medium">
+                      Học sinh nộp bài thi ➔ Điểm số tự động ghi thẳng 1 dòng mới vào Google Sheets
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsGSheetModalOpen(false)}
+                  className="p-1.5 rounded-xl hover:bg-white/20 text-white transition-colors cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Body */}
+              <div className="p-4 sm:p-6 overflow-y-auto space-y-5 flex-1 text-slate-800 text-xs sm:text-sm">
+                {/* Trạng thái kết nối */}
+                <div
+                  className={`p-3.5 rounded-2xl border flex items-center gap-3 ${
+                    Boolean(getGlobalWebhookUrl())
+                      ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
+                      : 'bg-amber-50 border-amber-200 text-amber-900'
+                  }`}
+                >
+                  <div
+                    className={`w-3 h-3 rounded-full shrink-0 ${
+                      Boolean(getGlobalWebhookUrl()) ? 'bg-emerald-500 animate-pulse' : 'bg-amber-400'
+                    }`}
+                  />
+                  <div className="flex-1">
+                    <div className="font-bold text-xs uppercase tracking-wider">
+                      {Boolean(getGlobalWebhookUrl()) ? '🟢 Đang hoạt động Realtime' : '🟡 Chưa kích hoạt Webhook'}
+                    </div>
+                    <div className="text-xs opacity-90 mt-0.5">
+                      {Boolean(getGlobalWebhookUrl())
+                        ? 'Mỗi khi học sinh hoàn thành bài thi ở bất kỳ máy nào, điểm số sẽ tự động gửi thẳng vào Google Sheets.'
+                        : 'Làm theo 4 bước bên dưới để tạo Webhook tự động ghi điểm lên Google Sheets.'}
+                    </div>
+                  </div>
+                </div>
+
+                {/* 4 Bước thiết lập nhanh */}
+                <div className="space-y-3 bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                  <div className="font-extrabold text-slate-900 text-xs uppercase tracking-wide flex items-center gap-2">
+                    <Zap className="w-4 h-4 text-amber-500" />
+                    <span>Hướng dẫn thiết lập 4 bước nhanh (chỉ cần làm 1 lần duy nhất)</span>
+                  </div>
+
+                  <ol className="list-decimal list-inside space-y-2 text-xs text-slate-700 leading-relaxed font-medium">
+                    <li>
+                      Mở Google Sheets{' '}
+                      <a
+                        href={GOOGLE_SHEET_URL}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-emerald-600 font-bold underline hover:text-emerald-700"
+                      >
+                        cosodulieu
+                      </a>
+                      , chọn menu <b>Tiện ích mở rộng (Extensions)</b> ➔ chọn <b>Apps Script</b>.
+                    </li>
+                    <li>
+                      Xóa hết mã có sẵn, bấm nút sao chép bên dưới rồi dán vào ➔ bấm <b>Ctrl + S</b> để lưu.
+                    </li>
+                    <li>
+                      Bấm nút <b>Triển khai (Deploy)</b> ở góc trên bên phải ➔ <b>Tùy chọn triển khai mới (New deployment)</b>:
+                      <ul className="list-disc list-inside ml-4 mt-1 space-y-0.5 text-slate-600">
+                        <li>Chọn loại hình: <b>Ứng dụng web (Web app)</b>.</li>
+                        <li>Ai có quyền truy cập (Who has access): <b>Bất kỳ ai (Anyone)</b>.</li>
+                        <li>Bấm <b>Triển khai</b> ➔ Cấp quyền nếu hỏi ➔ Sao chép <b>URL ứng dụng web</b>.</li>
+                      </ul>
+                    </li>
+                    <li>
+                      Dán URL nhận được vào ô bên dưới rồi nhấn <b>Lưu & Kích hoạt</b>.
+                    </li>
+                  </ol>
+
+                  {/* Nút sao chép mã Apps Script */}
+                  <div className="pt-2">
+                    <button
+                      type="button"
+                      onClick={handleCopyAppsScript}
+                      className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl font-bold text-xs transition-all cursor-pointer shadow-sm ${
+                        hasCopiedScript
+                          ? 'bg-emerald-600 text-white'
+                          : 'bg-white hover:bg-slate-100 text-slate-800 border border-slate-300'
+                      }`}
+                    >
+                      {hasCopiedScript ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4 text-indigo-600" />}
+                      <span>{hasCopiedScript ? 'Đã sao chép mã Apps Script!' : 'Sao chép mã Google Apps Script mẫu'}</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Ô nhập Webhook URL */}
+                <div className="space-y-2">
+                  <label className="font-bold text-slate-800 text-xs block">
+                    Đường link Webhook URL (URL ứng dụng web từ Google Apps Script):
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="url"
+                      value={webhookUrlInput}
+                      onChange={(e) => setWebhookUrlInput(e.target.value)}
+                      placeholder="https://script.google.com/macros/s/.../exec"
+                      className="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-slate-50/50"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleSaveWebhookUrl}
+                      disabled={isSavingWebhook}
+                      className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold text-xs flex items-center gap-1.5 shadow-md shadow-emerald-600/20 cursor-pointer shrink-0"
+                    >
+                      {isSavingWebhook ? (
+                        <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                      ) : (
+                        <Check className="w-3.5 h-3.5" />
+                      )}
+                      <span>Lưu & Kích hoạt</span>
+                    </button>
+                  </div>
+                  <p className="text-[11px] text-slate-500">
+                    URL này được lưu lên Firebase Realtime Database nên tất cả học sinh làm bài trên mọi máy/điện thoại đều sẽ tự động đồng bộ.
+                  </p>
+                </div>
+
+                {/* Thông báo kết quả thao tác */}
+                {syncStatusMsg && (
+                  <div
+                    className={`p-3 rounded-xl border text-xs font-semibold flex items-center gap-2 ${
+                      syncStatusMsg.type === 'success'
+                        ? 'bg-emerald-50 border-emerald-300 text-emerald-800'
+                        : syncStatusMsg.type === 'error'
+                        ? 'bg-rose-50 border-rose-300 text-rose-800'
+                        : 'bg-blue-50 border-blue-300 text-blue-800'
+                    }`}
+                  >
+                    {syncStatusMsg.type === 'success' && <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />}
+                    {syncStatusMsg.type === 'error' && <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />}
+                    {syncStatusMsg.type === 'info' && <RefreshCw className="w-4 h-4 text-blue-600 animate-spin shrink-0" />}
+                    <span>{syncStatusMsg.text}</span>
+                  </div>
+                )}
+
+                {/* Card Đồng bộ toàn bộ dữ liệu cũ hiện có từ Firebase */}
+                <div className="p-4 rounded-2xl border border-indigo-200 bg-gradient-to-br from-indigo-50/80 to-blue-50/80 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-extrabold text-indigo-950 text-xs uppercase tracking-wide flex items-center gap-2">
+                        <Cloud className="w-4 h-4 text-indigo-600" />
+                        <span>Đồng bộ ngay {scores.length} học sinh hiện có sang Google Sheets</span>
+                      </div>
+                      <p className="text-xs text-indigo-800/80 mt-0.5">
+                        Đẩy toàn bộ {scores.length} lượt thi hiện đang lưu trên Firebase vào bảng tính Google Sheets ngay lập tức.
+                      </p>
+                    </div>
+                  </div>
+
+                  {batchProgress && (
+                    <div className="space-y-1.5 pt-1">
+                      <div className="flex justify-between text-xs font-bold text-indigo-900">
+                        <span>Tiến độ đồng bộ:</span>
+                        <span>
+                          {batchProgress.sent} / {batchProgress.total} học sinh ({Math.round((batchProgress.sent / batchProgress.total) * 100)}%)
+                        </span>
+                      </div>
+                      <div className="w-full bg-indigo-200 rounded-full h-2.5 overflow-hidden">
+                        <div
+                          className="bg-indigo-600 h-2.5 rounded-full transition-all duration-300"
+                          style={{
+                            width: `${Math.round((batchProgress.sent / batchProgress.total) * 100)}%`,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="pt-1 flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={handleSyncAllExistingToGSheets}
+                      disabled={isSyncingBatch}
+                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-bold text-xs shadow-md shadow-indigo-600/25 transition-all cursor-pointer"
+                    >
+                      {isSyncingBatch ? (
+                        <RefreshCw className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Send className="w-4 h-4" />
+                      )}
+                      <span>
+                        {isSyncingBatch
+                          ? `Đang gửi ${batchProgress?.sent || 0}/${scores.length}...`
+                          : `Đẩy ngay ${scores.length} học sinh sang Google Sheets`}
+                      </span>
+                    </button>
+                    <a
+                      href={GOOGLE_SHEET_URL}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs transition-all cursor-pointer"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5 text-slate-500" />
+                      <span>Xem Google Sheets</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="p-4 border-t border-slate-200 bg-slate-50 flex items-center justify-end">
+                <button
+                  type="button"
+                  onClick={() => setIsGSheetModalOpen(false)}
+                  className="px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs transition-colors cursor-pointer"
+                >
+                  Đóng
+                </button>
+              </div>
             </div>
           </div>
         )}

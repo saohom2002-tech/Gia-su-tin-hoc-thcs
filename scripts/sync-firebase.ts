@@ -3,6 +3,7 @@ import { getDatabase, ref, get, set } from 'firebase/database';
 import { DEFAULT_CUSTOM_EXAMS } from '../src/data/defaultCustomExams';
 import { INITIAL_SCORE_RECORDS } from '../src/data/defaultScores';
 import { CURRICULUM_LESSONS, BUILT_IN_QUESTIONS } from '../src/data/curriculum';
+import { rebalanceExamAnswers } from '../src/utils/quizShuffler';
 
 // Cho phép kết nối TLS khi đồng hồ hệ thống đặt ở năm 2026
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
@@ -125,22 +126,33 @@ async function main() {
     scoresMap.set(sc.id, sanitize(sc));
   }
 
-  // 3. Ghi đề thi và bảng điểm lên Firebase mới (gstinhoc)
+  // 2b. Cân bằng ngẫu nhiên các đáp án A, B, C, D cho toàn bộ đề thi nếu phát hiện bị lệch sang đáp án A
+  for (const [id, ex] of examsMap.entries()) {
+    if (Array.isArray(ex.questions) && ex.questions.length > 0) {
+      let zeroCount = 0;
+      let mcqCount = 0;
+      ex.questions.forEach((q: any) => {
+        if (q.type === 'multiple_choice' || (!q.type && q.options && q.options.length === 4)) {
+          mcqCount++;
+          if (q.correctAnswer === 0) zeroCount++;
+        }
+      });
+      if (mcqCount >= 4 && zeroCount / mcqCount > 0.4) {
+        console.log(`  -> Tự động cân bằng vị trí đáp án cho đề [${ex.title}] (${zeroCount}/${mcqCount} câu là đáp án A)...`);
+        ex.questions = rebalanceExamAnswers(ex.questions);
+        ex.updatedAt = Date.now();
+      }
+    }
+  }
+
+  // 3. Ghi đề thi lên Firebase mới (gstinhoc)
   const examsPayload: Record<string, any> = {};
   for (const [id, ex] of examsMap.entries()) {
     examsPayload[id] = ex;
   }
 
-  const scoresPayload: Record<string, any> = {};
-  for (const [id, sc] of scoresMap.entries()) {
-    scoresPayload[id] = sc;
-  }
-
   await set(ref(newDb, 'admin_custom_exams'), examsPayload);
   console.log(`✅ Đã cập nhật ${Object.keys(examsPayload).length} đề thi lên Firebase mới (gstinhoc/admin_custom_exams)!`);
-
-  await set(ref(newDb, 'ontap_scores'), scoresPayload);
-  console.log(`✅ Đã cập nhật ${Object.keys(scoresPayload).length} bản ghi điểm lên Firebase mới (gstinhoc/ontap_scores)!`);
 
   // 4. Đồng bộ thêm danh mục bài học & ngân hàng câu hỏi SGK lên nhánh curriculum_bank để lưu trữ đầy đủ trên đám mây
   await set(

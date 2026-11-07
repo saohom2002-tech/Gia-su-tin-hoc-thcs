@@ -476,7 +476,8 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
             <DifficultyBadge difficulty={currentQ.difficulty} size="sm" showSubtext={true} />
           </div>
 
-          {currentQ.hint && (
+          {/* Nút Xem gợi ý: Chỉ hiển thị trong Chế độ Học tập / Ôn tập tự do. Tuyệt đối ẩn trong Chế độ Thi thử có tính giờ */}
+          {session.mode === 'practice' && currentQ.hint && (
             <button
               onClick={() => {
                 sound.playClick();
@@ -490,8 +491,8 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
           )}
         </div>
 
-        {/* Hint Box */}
-        {showHint && currentQ.hint && (
+        {/* Hint Box (Chỉ hiển thị khi ở Chế độ Học tập / Ôn tập tự do) */}
+        {session.mode === 'practice' && showHint && currentQ.hint && (
           <div className="p-4 rounded-2xl bg-[#FFF5CF] border-2 border-amber-300 text-amber-950 text-xs sm:text-sm leading-relaxed animate-in fade-in-50 flex items-start gap-2.5 shadow-xs">
             <Sparkles className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
             <div>

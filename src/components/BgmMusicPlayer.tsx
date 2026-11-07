@@ -269,11 +269,19 @@ export const BgmMusicPlayer: React.FC = () => {
       {/* NÚT NỔI Ở GÓC MÀN HÌNH (FLOATING ACTION BUTTON) */}
       <div className="flex items-center gap-1.5">
         {/* Nút bấm chính mở menu âm nhạc */}
-        <button
-          type="button"
+        <div
+          role="button"
+          tabIndex={0}
           onClick={() => {
             sound.playClick();
             setIsOpen(!isOpen);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              sound.playClick();
+              setIsOpen(!isOpen);
+            }
           }}
           className={`flex items-center gap-2 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-full font-bold text-xs sm:text-sm shadow-xl transition-all cursor-pointer ${
             bgmState.isPlaying
@@ -322,7 +330,7 @@ export const BgmMusicPlayer: React.FC = () => {
               <Play className="w-3.5 h-3.5 fill-current ml-0.5 text-indigo-600" />
             )}
           </button>
-        </button>
+        </div>
       </div>
     </aside>
   );
