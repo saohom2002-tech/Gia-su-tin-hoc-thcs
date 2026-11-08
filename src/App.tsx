@@ -50,6 +50,8 @@ import {
   subscribeToScores,
   saveScoreToFirebase,
   deleteScoreFromFirebase,
+  deleteScoresByClassFromFirebase,
+  renameClassInFirebase,
   syncBatchScoresToFirebase,
   subscribeToCustomExams,
   syncInitialCustomExamsToFirebase,
@@ -72,6 +74,9 @@ import { AdminExamSection } from './components/admin/AdminExamSection';
 import { sendScoreToGoogleSheetWebhook, setGlobalWebhookUrl } from './services/googleSheets';
 import { QUESTIONS_GRADE_5 } from './data/questionsGrade5';
 import { Grade5ExamAuditAndGameModal } from './components/Grade5ExamAuditAndGameModal';
+import { InteractiveGameModal } from './components/InteractiveGameModal';
+import { TBSGameItem } from './data/sidebarGames';
+import schoolLogo from './assets/logo-thcs-tan-binh.jpg';
 import {
   Sparkles,
   Play,
@@ -158,6 +163,9 @@ export default function App() {
   const [isGrade5AuditModalOpen, setIsGrade5AuditModalOpen] = useState<boolean>(false);
   const [grade5AuditInitialTab, setGrade5AuditInitialTab] = useState<'audit' | 'game'>('audit');
   const [lastUpdatedProfileMsg, setLastUpdatedProfileMsg] = useState<string>('');
+
+  const [selectedGame, setSelectedGame] = useState<TBSGameItem | null>(null);
+  const [isGameModalOpen, setIsGameModalOpen] = useState<boolean>(false);
 
   // Sidebar state (Thanh Menu bên trái)
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(() => {
@@ -1327,6 +1335,37 @@ export default function App() {
     });
   };
 
+  const handleDeleteClass = async (className: string): Promise<number> => {
+    const res = await deleteScoresByClassFromFirebase(className);
+    setScores((prev) => {
+      const updated = prev.filter(
+        (s) => (s.className || '').trim().toLowerCase() !== className.trim().toLowerCase()
+      );
+      try {
+        localStorage.setItem('ontap_student_scorebook', JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+    return res.count;
+  };
+
+  const handleRenameClass = async (oldClassName: string, newClassName: string): Promise<number> => {
+    const res = await renameClassInFirebase(oldClassName, newClassName);
+    setScores((prev) => {
+      const updated = prev.map((s) => {
+        if ((s.className || '').trim().toLowerCase() === oldClassName.trim().toLowerCase()) {
+          return { ...s, className: newClassName.trim() };
+        }
+        return s;
+      });
+      try {
+        localStorage.setItem('ontap_student_scorebook', JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+    return res.count;
+  };
+
   const handleResetDemoScores = () => {
     sound.playClick();
     setScores(INITIAL_SCORE_RECORDS);
@@ -1477,6 +1516,10 @@ export default function App() {
         onOpenEssayModal={() => setIsEssayModalOpen(true)}
         onOpenGrade5Game={() => handleLaunchMidtermExam(5, 'all')}
         onOpenProfileModal={() => setIsProfileModalOpen(true)}
+        onSelectGame={(game) => {
+          setSelectedGame(game);
+          setIsGameModalOpen(true);
+        }}
         studentProfile={studentProfile}
         mistakesCount={mistakes.length}
         historyCount={history.length}
@@ -1577,13 +1620,27 @@ export default function App() {
                   <Sparkles className="w-3.5 h-3.5 text-yellow-300" />
                   <span>Chương trình GDPT 2018 - Đầy đủ 2 Cấp: Tiểu học (Khối 3, 4, 5) & THCS (Khối 6, 7, 8, 9) (SGK Kết Nối Tri Thức)</span>
                 </div>
-                <div>
-                  <h1 className="text-3xl sm:text-5xl font-black tracking-tight font-['Be_Vietnam_Pro','Plus_Jakarta_Sans',sans-serif] leading-normal py-1 text-white drop-shadow-xs">
-                    GIA SƯ TIN HỌC TIỂU HỌC & THCS
-                  </h1>
-                  <div className="flex items-center gap-2 mt-1.5 text-yellow-300 text-sm sm:text-base font-extrabold">
-                    <GraduationCap className="w-5 h-5 text-yellow-300" />
-                    <span>Tác giả: GV: Ms. Trúc Tin Học</span>
+                {/* Tiêu đề & Logo Trường THCS Tân Bình */}
+                <div className="flex items-center gap-3.5 sm:gap-5 pt-1">
+                  <div className="relative shrink-0">
+                    <img
+                      src={schoolLogo}
+                      alt="Logo Trường THCS Tân Bình"
+                      className="w-16 h-16 sm:w-20 sm:h-20 md:w-22 md:h-22 rounded-full object-contain bg-white p-1 shadow-xl border-2 border-white/90 ring-4 ring-white/20 transition-transform hover:scale-105"
+                    />
+                  </div>
+                  <div>
+                    <h1 className="text-3xl sm:text-5xl font-black tracking-tight font-['Be_Vietnam_Pro','Plus_Jakarta_Sans',sans-serif] leading-tight text-white drop-shadow-xs">
+                      GIA SƯ TIN HỌC
+                    </h1>
+                    <div className="flex flex-wrap items-center gap-2 mt-1.5 text-yellow-300 text-sm sm:text-base font-extrabold">
+                      <GraduationCap className="w-5 h-5 text-yellow-300 shrink-0" />
+                      <span>Tác giả: GV: Ms. Trúc Tin Học</span>
+                      <span className="hidden sm:inline text-white/50">•</span>
+                      <span className="inline-flex items-center text-white font-bold text-xs sm:text-sm bg-white/20 px-2.5 py-0.5 rounded-full border border-white/30 backdrop-blur-xs">
+                        Trường THCS Tân Bình
+                      </span>
+                    </div>
                   </div>
                 </div>
 
@@ -2047,7 +2104,7 @@ export default function App() {
         <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <GraduationCap className="w-4 h-4 text-indigo-600" />
-            <span className="font-extrabold text-slate-800">GIA SƯ TIN HỌC TIỂU HỌC & THCS</span>
+            <span className="font-extrabold text-slate-800">GIA SƯ TIN HỌC</span>
             <span>-</span>
             <span className="font-bold text-indigo-700">Tác giả: GV: Ms. Trúc Tin Học</span>
           </div>
@@ -2115,6 +2172,8 @@ export default function App() {
         scores={scores}
         onAddScore={handleAddScore}
         onDeleteScore={handleDeleteScore}
+        onDeleteClass={handleDeleteClass}
+        onRenameClass={handleRenameClass}
         onResetDemoScores={handleResetDemoScores}
         onOpenCertificate={handleOpenCertificate}
         onOpenBatchCertificates={handleOpenBatchCertificates}
@@ -2158,6 +2217,16 @@ export default function App() {
         onClearInitialAction={() => {
           setStudioInitialExamId(null);
           setStudioInitialAction(null);
+        }}
+      />
+
+      {/* Modal Trò Chơi Tương Tác Học Tập TBS & Đua Vịt */}
+      <InteractiveGameModal
+        game={selectedGame}
+        isOpen={isGameModalOpen}
+        onClose={() => {
+          setIsGameModalOpen(false);
+          setSelectedGame(null);
         }}
       />
 

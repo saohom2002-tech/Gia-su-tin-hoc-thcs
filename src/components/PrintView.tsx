@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { QuizSession, StudentProfile, Question } from '../types/quiz';
 import { Printer, ArrowLeft, CheckSquare, Eye, EyeOff } from 'lucide-react';
 import { DifficultyBadge } from './DifficultyBadge';
+import schoolLogo from '../assets/logo-thcs-tan-binh.jpg';
 
 interface PrintViewProps {
   session: QuizSession;
@@ -157,31 +158,38 @@ export const PrintView: React.FC<PrintViewProps> = ({ session, onBack, studentPr
         {/* Header exam style */}
         <div className="border-b-2 border-slate-800 pb-4 mb-6">
           <div className="grid grid-cols-2 gap-4 text-xs font-serif leading-relaxed mb-4">
-            <div>
-              <p className="font-bold uppercase tracking-wider">
-                TRƯỜNG THCS: {studentProfile?.schoolName || '.....................................................'}
-              </p>
-              <p>
-                Họ và tên học sinh:{' '}
-                {useStudentInfo && studentProfile?.fullName ? (
-                  <strong className="underline underline-offset-2 font-bold">{studentProfile.fullName}</strong>
-                ) : (
-                  '...........................................'
-                )}
-              </p>
-              <p>
-                Lớp:{' '}
-                {useStudentInfo && studentProfile?.className ? (
-                  <strong className="font-bold">{studentProfile.className}</strong>
-                ) : (
-                  '8........'
-                )}{' '}
-                Số báo danh: ..................
-              </p>
+            <div className="flex items-start gap-3">
+              <img
+                src={schoolLogo}
+                alt="Logo THCS Tân Bình"
+                className="w-12 h-12 rounded-full object-contain shrink-0 border border-slate-300 p-0.5 print:border-none"
+              />
+              <div>
+                <p className="font-bold uppercase tracking-wider">
+                  TRƯỜNG THCS: {studentProfile?.schoolName || 'TÂN BÌNH'}
+                </p>
+                <p>
+                  Họ và tên học sinh:{' '}
+                  {useStudentInfo && studentProfile?.fullName ? (
+                    <strong className="underline underline-offset-2 font-bold">{studentProfile.fullName}</strong>
+                  ) : (
+                    '...........................................'
+                  )}
+                </p>
+                <p>
+                  Lớp:{' '}
+                  {useStudentInfo && studentProfile?.className ? (
+                    <strong className="font-bold">{studentProfile.className}</strong>
+                  ) : (
+                    '8........'
+                  )}{' '}
+                  Số báo danh: ..................
+                </p>
+              </div>
             </div>
             <div className="text-right">
               <p className="font-bold uppercase tracking-wider text-indigo-900">
-                GIA SƯ TIN HỌC TIỂU HỌC & THCS - GV: MS. TRÚC TIN HỌC
+                GIA SƯ TIN HỌC - GV: MS. TRÚC TIN HỌC
               </p>
               <p>Môn: <strong>Tin học {session.grade || (studentProfile?.grade ? studentProfile.grade : 'THCS')}</strong></p>
               <p>Thời gian làm bài: <strong>{Math.round(session.totalQuestions * 1.5)} phút</strong></p>

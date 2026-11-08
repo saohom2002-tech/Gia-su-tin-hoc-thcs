@@ -92,6 +92,14 @@ class SoundManager {
     } catch {}
   }
 
+  playTrash() {
+    this.playClick();
+  }
+
+  playDelete() {
+    this.playClick();
+  }
+
   playComplete() {
     bgmManager.duck(1200);
     if (!this.enabled) return;

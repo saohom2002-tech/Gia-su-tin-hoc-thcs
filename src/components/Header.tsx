@@ -19,6 +19,7 @@ import {
 import { sound } from '../utils/sound';
 import { StudentProfile } from '../types/quiz';
 import { StudentAvatar } from './StudentAvatar';
+import schoolLogo from '../assets/logo-thcs-tan-binh.jpg';
 
 export interface HeaderSummaryInfo {
   lesson: string;
@@ -96,8 +97,12 @@ export const Header: React.FC<HeaderProps> = ({
             className="flex items-center gap-2.5 sm:gap-3 text-left group transition-transform active:scale-95 shrink-0 cursor-pointer"
             title="Về trang chọn bài học"
           >
-          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-sky-500 via-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-sky-500/25 group-hover:scale-105 transition-transform">
-            <GraduationCap className="w-5 h-5 sm:w-6 sm:h-6" />
+          <div className="relative shrink-0">
+            <img
+              src={schoolLogo}
+              alt="Logo Trường THCS Tân Bình"
+              className="w-10 h-10 rounded-full object-contain bg-white p-0.5 border-2 border-sky-300 shadow-md group-hover:scale-105 transition-transform"
+            />
           </div>
           <div>
             <div className="flex items-center gap-1.5">

@@ -307,13 +307,6 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
               >
                 CẤP TIỂU HỌC
               </h3>
-              <p
-                className={`text-xs sm:text-sm font-medium mt-0.5 ${
-                  isTieuHoc ? 'text-white/90' : 'text-slate-500'
-                }`}
-              >
-                Làm quen máy tính, Paint & Scratch
-              </p>
             </div>
           </button>
 
@@ -363,13 +356,6 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
               >
                 CẤP THCS
               </h3>
-              <p
-                className={`text-xs sm:text-sm font-medium mt-0.5 ${
-                  !isTieuHoc ? 'text-white/90' : 'text-slate-500'
-                }`}
-              >
-                Tin học cơ bản, Bảng tính & Python
-              </p>
             </div>
           </button>
         </div>

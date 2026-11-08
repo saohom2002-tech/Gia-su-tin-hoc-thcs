@@ -246,6 +246,71 @@ export async function deleteScoreFromFirebase(scoreId: string): Promise<boolean>
   }
 }
 
+/**
+ * Xóa toàn bộ học sinh và bản ghi điểm của một lớp cụ thể khỏi Firebase Realtime Database
+ */
+export async function deleteScoresByClassFromFirebase(className: string): Promise<{ success: boolean; count: number }> {
+  try {
+    const scoresRef = ref(db, SCORES_REF_PATH);
+    const snapshot = await get(scoresRef);
+    if (!snapshot.exists()) return { success: true, count: 0 };
+
+    const data = snapshot.val();
+    const target = className.trim().toLowerCase();
+    const keysToDelete: string[] = [];
+
+    for (const key of Object.keys(data)) {
+      const item = data[key];
+      const itemClass = (item?.className || '').trim().toLowerCase();
+      if (itemClass === target) {
+        keysToDelete.push(key);
+      }
+    }
+
+    for (const key of keysToDelete) {
+      await remove(ref(db, `${SCORES_REF_PATH}/${key}`));
+    }
+
+    return { success: true, count: keysToDelete.length };
+  } catch (error) {
+    console.error('Lỗi xóa lớp khỏi Firebase:', error);
+    return { success: false, count: 0 };
+  }
+}
+
+/**
+ * Đổi tên một lớp trong toàn bộ cơ sở dữ liệu Firebase Realtime Database
+ */
+export async function renameClassInFirebase(
+  oldClassName: string,
+  newClassName: string
+): Promise<{ success: boolean; count: number }> {
+  try {
+    const scoresRef = ref(db, SCORES_REF_PATH);
+    const snapshot = await get(scoresRef);
+    if (!snapshot.exists()) return { success: true, count: 0 };
+
+    const data = snapshot.val();
+    const target = oldClassName.trim().toLowerCase();
+    const cleanNew = newClassName.trim();
+    let updatedCount = 0;
+
+    for (const key of Object.keys(data)) {
+      const item = data[key];
+      const itemClass = (item?.className || '').trim().toLowerCase();
+      if (itemClass === target) {
+        await set(ref(db, `${SCORES_REF_PATH}/${key}/className`), cleanNew);
+        updatedCount++;
+      }
+    }
+
+    return { success: true, count: updatedCount };
+  } catch (error) {
+    console.error('Lỗi đổi tên lớp trên Firebase:', error);
+    return { success: false, count: 0 };
+  }
+}
+
 export async function syncBatchScoresToFirebase(scores: StudentScoreRecord[]): Promise<boolean> {
   try {
     const scoresRef = ref(db, SCORES_REF_PATH);

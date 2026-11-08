@@ -725,6 +725,10 @@ YÊU CẦU ĐẦU RA JSON:
   }
 });
 
+// Static assets for self-hosted games and public folder
+app.use('/games', express.static(path.resolve(__dirname, 'public/games')));
+app.use(express.static(path.resolve(__dirname, 'public')));
+
 // Serve frontend
 const isProd = process.env.NODE_ENV === 'production';
 if (!isProd) {

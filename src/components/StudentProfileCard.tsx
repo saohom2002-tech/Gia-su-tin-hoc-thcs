@@ -332,10 +332,15 @@ export const StudentProfileCard: React.FC<StudentProfileCardProps> = ({
                       <button
                         type="button"
                         onClick={() => {
-                          setClassName(customClass);
+                          const badWordsRegex = /\b(chó|ngu|thiểu năng|đần|óc chó|khùng|điên|cặc|lồn|buồi|địt|đụ|đĩ|cave|mẹ mày|bố mày)\b/i;
+                          if (badWordsRegex.test(customClass)) {
+                            alert('⚠️ Tên lớp chứa từ ngữ không phù hợp chuẩn mực học đường. Vui lòng chọn hoặc nhập tên lớp học nghiêm túc!');
+                            return;
+                          }
+                          setClassName(customClass.trim());
                           setIsGradeDropdownOpen(false);
                         }}
-                        className="px-2.5 py-1.5 rounded-xl bg-indigo-600 text-white text-xs font-bold"
+                        className="px-2.5 py-1.5 rounded-xl bg-indigo-600 text-white text-xs font-bold cursor-pointer"
                       >
                         Chọn
                       </button>

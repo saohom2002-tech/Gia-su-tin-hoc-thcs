@@ -27,7 +27,11 @@ import {
   Settings,
   AlertCircle,
   Send,
-  Zap
+  Zap,
+  ArrowUpDown,
+  Clock,
+  ArrowUp,
+  ArrowDown
 } from 'lucide-react';
 import { sound } from '../utils/sound';
 import { StudentAvatar } from './StudentAvatar';
@@ -47,6 +51,8 @@ interface ScorebookLeaderboardModalProps {
   scores: StudentScoreRecord[];
   onAddScore: (score: StudentScoreRecord) => void;
   onDeleteScore: (scoreId: string) => void;
+  onDeleteClass?: (className: string) => Promise<number>;
+  onRenameClass?: (oldClassName: string, newClassName: string) => Promise<number>;
   onResetDemoScores?: () => void;
   onOpenCertificate: (cert: CertificateData) => void;
   onOpenBatchCertificates: (certs: CertificateData[]) => void;
@@ -58,6 +64,8 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
   scores,
   onAddScore,
   onDeleteScore,
+  onDeleteClass,
+  onRenameClass,
   onResetDemoScores,
   onOpenCertificate,
   onOpenBatchCertificates,
@@ -69,6 +77,15 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
   const [selectedGrade, setSelectedGrade] = useState<string>('all');
   const [selectedClass, setSelectedClass] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [sortBy, setSortBy] = useState<'score_desc' | 'score_asc' | 'time_asc' | 'date_desc' | 'name_asc'>('score_desc');
+
+  // Format seconds to mm:ss
+  const formatTimeSpent = (seconds?: number): string => {
+    if (!seconds || seconds <= 0) return '00:00';
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  };
 
   // Add manual score modal state
   const [isAddScoreOpen, setIsAddScoreOpen] = useState<boolean>(false);
@@ -88,6 +105,68 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
   const [batchProgress, setBatchProgress] = useState<{ sent: number; total: number } | null>(null);
   const [syncStatusMsg, setSyncStatusMsg] = useState<{ type: 'success' | 'error' | 'info'; text: string } | null>(null);
   const [hasCopiedScript, setHasCopiedScript] = useState<boolean>(false);
+
+  // Class Management States
+  const [isClassManagerOpen, setIsClassManagerOpen] = useState<boolean>(false);
+  const [classManagerSearch, setClassManagerSearch] = useState<string>('');
+  const [renameTargetClass, setRenameTargetClass] = useState<string | null>(null);
+  const [renameInputVal, setRenameInputVal] = useState<string>('');
+  const [isProcessingClass, setIsProcessingClass] = useState<boolean>(false);
+
+  // Class Management Handlers
+  const handleDeleteClassDirect = async (targetClass: string) => {
+    const count = normalizedScores.filter((s) => s.className === targetClass).length;
+    const confirmed = window.confirm(
+      `⚠️ CẢNH BÁO QUẢN TRỊ VIÊN:\n\nBạn có chắc chắn muốn xóa LỚP "${targetClass}" và TOÀN BỘ ${count} lượt làm bài của lớp này khỏi hệ thống không?\n\n(Thao tác này sẽ xóa vĩnh viễn khỏi Firebase và Bảng Vàng).`
+    );
+    if (!confirmed) return;
+
+    setIsProcessingClass(true);
+    try {
+      if (onDeleteClass) {
+        await onDeleteClass(targetClass);
+      } else {
+        const toDelete = normalizedScores.filter((s) => s.className === targetClass);
+        for (const item of toDelete) {
+          onDeleteScore(item.id);
+        }
+      }
+      sound.playTrash();
+      if (selectedClass === targetClass) {
+        setSelectedClass('all');
+      }
+    } finally {
+      setIsProcessingClass(false);
+    }
+  };
+
+  const handleStartRenameClass = (targetClass: string) => {
+    setRenameTargetClass(targetClass);
+    setRenameInputVal(targetClass);
+  };
+
+  const handleConfirmRenameClass = async () => {
+    if (!renameTargetClass || !renameInputVal.trim()) return;
+    const cleanNew = renameInputVal.trim();
+    if (cleanNew === renameTargetClass) {
+      setRenameTargetClass(null);
+      return;
+    }
+
+    setIsProcessingClass(true);
+    try {
+      if (onRenameClass) {
+        await onRenameClass(renameTargetClass, cleanNew);
+      }
+      sound.playSuccess();
+      if (selectedClass === renameTargetClass) {
+        setSelectedClass(cleanNew);
+      }
+      setRenameTargetClass(null);
+    } finally {
+      setIsProcessingClass(false);
+    }
+  };
 
   // Cập nhật webhookUrlInput khi mở modal
   const handleOpenGSheetModal = () => {
@@ -226,13 +305,60 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
     });
   }, [normalizedScores, selectedBatch, selectedGrade, selectedClass, searchQuery]);
 
-  // Leaderboard ranking (sorted by score desc, then timeSpent asc)
+  // Leaderboard ranking (sorted by score desc, then timeSpent asc, then date desc)
   const rankedLeaderboard = useMemo(() => {
     return [...filteredScores].sort((a, b) => {
+      // 1. Điểm cao xuống thấp
       if (b.score !== a.score) return b.score - a.score;
-      return (a.timeSpentSeconds || 0) - (b.timeSpentSeconds || 0);
+      // 2. Trùng điểm: xếp theo thời gian làm bài tính giờ (làm nhanh hơn xếp trên)
+      const timeA = typeof a.timeSpentSeconds === 'number' && a.timeSpentSeconds > 0 ? a.timeSpentSeconds : 999999;
+      const timeB = typeof b.timeSpentSeconds === 'number' && b.timeSpentSeconds > 0 ? b.timeSpentSeconds : 999999;
+      if (timeA !== timeB) return timeA - timeB;
+      // 3. Trùng cả thời gian: nộp mới hơn xếp trên
+      return (b.date || 0) - (a.date || 0);
     });
   }, [filteredScores]);
+
+  // Sổ Điểm Lớp: Sắp xếp linh hoạt theo tiêu chí người dùng chọn
+  const sortedScores = useMemo(() => {
+    return [...filteredScores].sort((a, b) => {
+      if (sortBy === 'score_desc') {
+        // 1. Điểm từ cao xuống thấp
+        if (b.score !== a.score) return b.score - a.score;
+        // 2. Trùng điểm: xếp theo thời gian làm bài tính giờ (làm nhanh hơn xếp trên)
+        const timeA = typeof a.timeSpentSeconds === 'number' && a.timeSpentSeconds > 0 ? a.timeSpentSeconds : 999999;
+        const timeB = typeof b.timeSpentSeconds === 'number' && b.timeSpentSeconds > 0 ? b.timeSpentSeconds : 999999;
+        if (timeA !== timeB) return timeA - timeB;
+        // 3. Trùng cả thời gian: nộp mới hơn xếp trên
+        return (b.date || 0) - (a.date || 0);
+      }
+
+      if (sortBy === 'score_asc') {
+        if (a.score !== b.score) return a.score - b.score;
+        const timeA = typeof a.timeSpentSeconds === 'number' && a.timeSpentSeconds > 0 ? a.timeSpentSeconds : 999999;
+        const timeB = typeof b.timeSpentSeconds === 'number' && b.timeSpentSeconds > 0 ? b.timeSpentSeconds : 999999;
+        if (timeA !== timeB) return timeA - timeB;
+        return (b.date || 0) - (a.date || 0);
+      }
+
+      if (sortBy === 'time_asc') {
+        const timeA = typeof a.timeSpentSeconds === 'number' && a.timeSpentSeconds > 0 ? a.timeSpentSeconds : 999999;
+        const timeB = typeof b.timeSpentSeconds === 'number' && b.timeSpentSeconds > 0 ? b.timeSpentSeconds : 999999;
+        if (timeA !== timeB) return timeA - timeB;
+        return b.score - a.score;
+      }
+
+      if (sortBy === 'date_desc') {
+        return (b.date || 0) - (a.date || 0);
+      }
+
+      if (sortBy === 'name_asc') {
+        return a.studentName.localeCompare(b.studentName, 'vi');
+      }
+
+      return 0;
+    });
+  }, [filteredScores, sortBy]);
 
   if (!isOpen) return null;
 
@@ -275,11 +401,23 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
     onOpenBatchCertificates(certList);
   };
 
-  // Export Gradebook to CSV
+  // Export Gradebook to CSV (theo đúng thứ tự đã sắp xếp)
   const handleExportCSV = () => {
     sound.playClick();
-    const headers = ['STT', 'Họ và tên', 'Lớp', 'Trường', 'Đợt thi', 'Nội dung bài thi', 'Điểm số', 'Tỷ lệ %', 'Xếp loại', 'Ngày thi'];
-    const rows = filteredScores.map((s, idx) => [
+    const headers = [
+      'STT',
+      'Họ và tên',
+      'Lớp',
+      'Trường',
+      'Đợt thi',
+      'Nội dung bài thi',
+      'Điểm số',
+      'Thời gian làm bài',
+      'Tỷ lệ %',
+      'Xếp loại',
+      'Ngày thi',
+    ];
+    const rows = sortedScores.map((s, idx) => [
       idx + 1,
       `"${s.studentName}"`,
       `"${s.className}"`,
@@ -287,6 +425,7 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
       `"${s.examBatch}"`,
       `"${s.lessonTitle}"`,
       s.score.toFixed(1),
+      `"${formatTimeSpent(s.timeSpentSeconds)}"`,
       `${s.percentage}%`,
       `"${getRankByScore(s.score)}"`,
       `"${new Date(s.date).toLocaleDateString('vi-VN')}"`,
@@ -464,7 +603,7 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
             </div>
 
             {/* Filter by Class */}
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 flex-wrap">
               <span className="font-bold text-slate-700">Lớp:</span>
               <select
                 value={selectedClass}
@@ -481,6 +620,35 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
                   );
                 })}
               </select>
+
+              {/* Nút Xóa lớp này (khi đang chọn 1 lớp cụ thể) */}
+              {selectedClass !== 'all' && (
+                <button
+                  type="button"
+                  onClick={() => handleDeleteClassDirect(selectedClass)}
+                  disabled={isProcessingClass}
+                  className="px-2 py-1.5 rounded-xl border border-rose-300 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs flex items-center gap-1 transition-all shadow-2xs cursor-pointer animate-in fade-in"
+                  title={`Xóa toàn bộ điểm của lớp "${selectedClass}"`}
+                >
+                  <Trash2 className="w-3.5 h-3.5 text-rose-600" />
+                  <span className="hidden sm:inline">Xóa lớp này</span>
+                </button>
+              )}
+
+              {/* Nút Quản lý lớp */}
+              <button
+                type="button"
+                onClick={() => {
+                  sound.playClick();
+                  setClassManagerSearch('');
+                  setIsClassManagerOpen(true);
+                }}
+                className="px-2 py-1.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs flex items-center gap-1 transition-all shadow-2xs cursor-pointer"
+                title="Mở danh sách quản lý, đổi tên và xóa các lớp học"
+              >
+                <Settings className="w-3.5 h-3.5 text-slate-500" />
+                <span className="hidden md:inline">Quản lý lớp</span>
+              </button>
             </div>
 
             {/* Search Input */}
@@ -491,8 +659,29 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
                 placeholder="Tìm tên học sinh, lớp..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-8 pr-3 py-1.5 rounded-xl border border-slate-300 bg-white text-xs w-40 sm:w-52 focus:outline-indigo-500"
+                className="pl-8 pr-3 py-1.5 rounded-xl border border-slate-300 bg-white text-xs w-36 sm:w-48 focus:outline-indigo-500"
               />
+            </div>
+
+            {/* Sắp xếp tiêu chí */}
+            <div className="flex items-center gap-1.5">
+              <ArrowUpDown className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+              <span className="font-bold text-slate-700">Sắp xếp:</span>
+              <select
+                value={sortBy}
+                onChange={(e) => {
+                  sound.playClick();
+                  setSortBy(e.target.value as any);
+                }}
+                className="px-2.5 py-1.5 rounded-xl border border-blue-300 bg-blue-50/70 hover:bg-blue-100/70 font-bold text-blue-900 text-xs shadow-2xs focus:outline-blue-500 cursor-pointer"
+                title="Chọn tiêu chuẩn sắp xếp danh sách"
+              >
+                <option value="score_desc">🏆 Điểm cao ➔ thấp (Trùng điểm: làm nhanh xếp trên)</option>
+                <option value="time_asc">⏱️ Thời gian làm bài nhanh nhất</option>
+                <option value="date_desc">📅 Mới nộp gần đây nhất</option>
+                <option value="score_asc">📉 Điểm thấp ➔ cao</option>
+                <option value="name_asc">🔤 Tên học sinh (A ➔ Z)</option>
+              </select>
             </div>
           </div>
 
@@ -774,25 +963,75 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
                 <thead className="bg-slate-100/80 text-slate-700 font-bold border-b border-slate-200 uppercase tracking-wider text-[11px]">
                   <tr>
                     <th className="py-3 px-3 w-12 text-center">STT</th>
-                    <th className="py-3 px-3">Học sinh</th>
+                    <th
+                      className="py-3 px-3 cursor-pointer hover:bg-slate-200/60 transition-colors select-none"
+                      onClick={() => {
+                        sound.playClick();
+                        setSortBy(sortBy === 'name_asc' ? 'score_desc' : 'name_asc');
+                      }}
+                      title="Bấm để sắp xếp theo tên học sinh"
+                    >
+                      <div className="flex items-center gap-1">
+                        <span>Học sinh</span>
+                        {sortBy === 'name_asc' ? (
+                          <ArrowUp className="w-3 h-3 text-indigo-600" />
+                        ) : (
+                          <ArrowUpDown className="w-3 h-3 text-slate-400" />
+                        )}
+                      </div>
+                    </th>
                     <th className="py-3 px-3">Lớp & Trường</th>
                     <th className="py-3 px-3">Đợt thi</th>
                     <th className="py-3 px-3">Bài kiểm tra</th>
-                    <th className="py-3 px-3 text-center">Điểm</th>
+                    <th
+                      className="py-3 px-3 text-center cursor-pointer hover:bg-slate-200/60 transition-colors select-none bg-indigo-50/50"
+                      onClick={() => {
+                        sound.playClick();
+                        setSortBy(sortBy === 'score_desc' ? 'score_asc' : 'score_desc');
+                      }}
+                      title="Bấm để đảo chiều sắp xếp theo điểm số"
+                    >
+                      <div className="inline-flex items-center gap-1 font-extrabold text-indigo-900">
+                        <span>Điểm</span>
+                        {sortBy === 'score_desc' ? (
+                          <ArrowDown className="w-3.5 h-3.5 text-indigo-600" />
+                        ) : sortBy === 'score_asc' ? (
+                          <ArrowUp className="w-3.5 h-3.5 text-indigo-600" />
+                        ) : (
+                          <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
+                        )}
+                      </div>
+                    </th>
                     <th className="py-3 px-3 text-center">Xếp loại</th>
-                    <th className="py-3 px-3 text-center">Ngày thi</th>
+                    <th
+                      className="py-3 px-3 text-center cursor-pointer hover:bg-slate-200/60 transition-colors select-none"
+                      onClick={() => {
+                        sound.playClick();
+                        setSortBy(sortBy === 'date_desc' ? 'time_asc' : 'date_desc');
+                      }}
+                      title="Bấm để sắp xếp theo ngày thi hoặc thời gian"
+                    >
+                      <div className="inline-flex items-center gap-1">
+                        <span>Ngày thi</span>
+                        {sortBy === 'date_desc' ? (
+                          <ArrowDown className="w-3 h-3 text-indigo-600" />
+                        ) : (
+                          <ArrowUpDown className="w-3 h-3 text-slate-400" />
+                        )}
+                      </div>
+                    </th>
                     <th className="py-3 px-3 text-center">Hành động</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 text-slate-700">
-                  {filteredScores.length === 0 ? (
+                  {sortedScores.length === 0 ? (
                     <tr>
                       <td colSpan={9} className="py-8 text-center text-slate-400">
                         Chưa có dữ liệu điểm nào trong sổ!
                       </td>
                     </tr>
                   ) : (
-                    filteredScores.map((s, idx) => (
+                    sortedScores.map((s, idx) => (
                       <tr key={s.id} className="hover:bg-slate-50/80 transition-colors">
                         <td className="py-2.5 px-3 text-center font-mono font-semibold text-slate-500">
                           {idx + 1}
@@ -813,8 +1052,19 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
                         <td className="py-2.5 px-3 font-medium text-slate-800 max-w-[180px] truncate" title={s.lessonTitle}>
                           {s.lessonTitle}
                         </td>
-                        <td className="py-2.5 px-3 text-center font-black text-sm text-indigo-950 font-['Lexend']">
-                          {s.score.toFixed(1)}
+                        <td className="py-2.5 px-3 text-center">
+                          <div className="font-black text-sm text-indigo-950 font-['Lexend']">
+                            {s.score.toFixed(1)}
+                          </div>
+                          {s.timeSpentSeconds !== undefined && s.timeSpentSeconds > 0 && (
+                            <div
+                              className="text-[10px] text-slate-500 font-mono inline-flex items-center justify-center gap-0.5 mt-0.5 bg-slate-100 px-1.5 py-0.5 rounded-md"
+                              title={`Thời gian làm bài: ${formatTimeSpent(s.timeSpentSeconds)}`}
+                            >
+                              <Clock className="w-2.5 h-2.5 text-slate-400" />
+                              <span>{formatTimeSpent(s.timeSpentSeconds)}</span>
+                            </div>
+                          )}
                         </td>
                         <td className="py-2.5 px-3 text-center">
                           <span
@@ -873,7 +1123,7 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
 
             {/* Bottom tools for gradebook */}
             <div className="flex items-center justify-between pt-2 text-xs text-slate-500">
-              <div>Tổng số: <strong>{filteredScores.length} lượt điểm</strong> đã lưu</div>
+              <div>Tổng số: <strong>{sortedScores.length} lượt điểm</strong> đã lưu</div>
               {onResetDemoScores && (
                 <button
                   type="button"
@@ -1229,6 +1479,149 @@ export const ScorebookLeaderboardModal: React.FC<ScorebookLeaderboardModalProps>
                 <button
                   type="button"
                   onClick={() => setIsGSheetModalOpen(false)}
+                  className="px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs transition-colors cursor-pointer"
+                >
+                  Đóng
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Modal: Quản Lý Danh Sách Lớp Học (Xóa & Đổi tên lớp dành riêng cho Admin) */}
+        {isClassManagerOpen && (
+          <div className="fixed inset-0 z-[65] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+            <div className="bg-white rounded-3xl max-w-xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+              {/* Header */}
+              <div className="p-4 sm:p-5 border-b border-slate-200 flex items-center justify-between bg-gradient-to-r from-indigo-700 via-indigo-600 to-purple-600 text-white">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center shadow-inner">
+                    <GraduationCap className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-black text-base sm:text-lg flex items-center gap-2">
+                      Quản Lý Danh Sách Lớp Học
+                      <span className="text-[10px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-full bg-indigo-400 text-indigo-950">
+                        {availableClasses.length} lớp
+                      </span>
+                    </h3>
+                    <p className="text-xs text-indigo-100 font-medium">
+                      Xóa các lớp học sinh đặt tên không chuẩn hoặc đổi tên lớp để chuẩn hóa dữ liệu
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsClassManagerOpen(false);
+                    setRenameTargetClass(null);
+                  }}
+                  className="p-1.5 rounded-xl hover:bg-white/20 text-white transition-colors cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Search & Actions */}
+              <div className="p-4 border-b border-slate-200 bg-slate-50 flex items-center gap-2">
+                <div className="relative flex-1">
+                  <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5" />
+                  <input
+                    type="text"
+                    value={classManagerSearch}
+                    onChange={(e) => setClassManagerSearch(e.target.value)}
+                    placeholder="Tìm tên lớp cần xóa hoặc đổi tên (VD: chó ngu, 9A1...)"
+                    className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-300 bg-white text-xs font-semibold focus:outline-indigo-500"
+                  />
+                </div>
+              </div>
+
+              {/* Class List */}
+              <div className="p-4 sm:p-5 overflow-y-auto space-y-2 flex-1 divide-y divide-slate-100">
+                {availableClasses
+                  .filter((cls) => cls.toLowerCase().includes(classManagerSearch.toLowerCase().trim()))
+                  .map((cls) => {
+                    const count = normalizedScores.filter((s) => s.className === cls).length;
+                    const isRenaming = renameTargetClass === cls;
+
+                    return (
+                      <div
+                        key={cls}
+                        className="pt-2 first:pt-0 flex items-center justify-between gap-3 hover:bg-slate-50/80 p-2 rounded-xl transition-colors"
+                      >
+                        <div className="flex items-center gap-2.5 flex-1 min-w-0">
+                          {isRenaming ? (
+                            <div className="flex items-center gap-2 flex-1">
+                              <input
+                                type="text"
+                                value={renameInputVal}
+                                onChange={(e) => setRenameInputVal(e.target.value)}
+                                className="px-3 py-1.5 rounded-xl border-2 border-indigo-500 text-xs font-bold text-slate-900 bg-white flex-1"
+                                placeholder="Nhập tên lớp chuẩn..."
+                                autoFocus
+                              />
+                              <button
+                                type="button"
+                                onClick={handleConfirmRenameClass}
+                                disabled={isProcessingClass}
+                                className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold cursor-pointer"
+                              >
+                                Lưu
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setRenameTargetClass(null)}
+                                className="px-2 py-1.5 rounded-xl border border-slate-300 text-slate-600 text-xs font-bold hover:bg-slate-100 cursor-pointer"
+                              >
+                                Hủy
+                              </button>
+                            </div>
+                          ) : (
+                            <>
+                              <span className="font-extrabold text-xs sm:text-sm text-slate-900 truncate">
+                                Lớp {cls}
+                              </span>
+                              <span className="text-[11px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-full shrink-0">
+                                {count} học sinh
+                              </span>
+                            </>
+                          )}
+                        </div>
+
+                        {!isRenaming && (
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            <button
+                              type="button"
+                              onClick={() => handleStartRenameClass(cls)}
+                              className="px-2.5 py-1.5 rounded-xl border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50 text-slate-600 hover:text-indigo-700 font-bold text-xs flex items-center gap-1 transition-all cursor-pointer"
+                              title={`Đổi tên lớp "${cls}"`}
+                            >
+                              <Edit3 className="w-3.5 h-3.5 text-indigo-600" />
+                              <span className="hidden sm:inline">Đổi tên</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteClassDirect(cls)}
+                              disabled={isProcessingClass}
+                              className="px-2.5 py-1.5 rounded-xl border border-rose-200 bg-rose-50/70 hover:bg-rose-100 text-rose-700 font-bold text-xs flex items-center gap-1 transition-all cursor-pointer shadow-2xs"
+                              title={`Xóa vĩnh viễn toàn bộ ${count} học sinh của lớp "${cls}"`}
+                            >
+                              <Trash2 className="w-3.5 h-3.5 text-rose-600" />
+                              <span>Xóa lớp</span>
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+              </div>
+
+              {/* Footer */}
+              <div className="p-3 border-t border-slate-200 bg-slate-50 flex items-center justify-between text-xs text-slate-500">
+                <span>* Lưu ý: Xóa lớp sẽ xóa vĩnh viễn toàn bộ học sinh thuộc lớp đó.</span>
+                <button
+                  type="button"
+                  onClick={() => setIsClassManagerOpen(false)}
                   className="px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs transition-colors cursor-pointer"
                 >
                   Đóng

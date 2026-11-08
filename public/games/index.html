@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="utf-8">
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=47dc72f7-93fc-4267-bcf5-46b944144070
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GIA SƯ TIN HỌC — TRƯỜNG THCS TÂN BÌNH</title>
+<meta name="description" content="GIA SƯ TIN HỌC — Web game học tập tương tác Trường THCS Tân Bình. Ôn tập kiến thức với các trò chơi sôi động: kéo co, đua xe, đua vịt, thuyền rồng, xúc xắc, đấu trường trực tuyến...">
+<meta name="theme-color" content="#0d6efd">
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="alternate icon" href="/logo-thcs-tan-binh.jpg">
+<link rel="alternate icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%230d6efd'/%3E%3Cstop offset='1' stop-color='%230a58ca'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Ctext x='32' y='44' font-size='32' text-anchor='middle'%3E🏫%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="assets/css/app.css">
+<link rel="stylesheet" href="assets/css/games.css">
+<script>try{var t=JSON.parse(localStorage.getItem("gfe_theme")||'"light"');document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light")}catch(e){}</script>
+<script>
+  (function() {
+    function enforceBrand() {
+      const tx = document.querySelector('.brand-tx');
+      if (tx && tx.textContent !== 'GAME AND LEARN') {
+        tx.textContent = 'GAME AND LEARN';
+      }
+      const sub = document.querySelector('.brand-sub');
+      if (sub && sub.textContent !== 'TRƯỜNG THCS TÂN BÌNH') {
+        sub.textContent = 'TRƯỜNG THCS TÂN BÌNH';
+      }
+      const hsb = document.querySelector('.hsb-name');
+      if (hsb && hsb.textContent.trim() !== 'TRƯỜNG THCS TÂN BÌNH') {
+        hsb.textContent = 'TRƯỜNG THCS TÂN BÌNH';
+      }
+      const hcpBadge = document.querySelector('.hcp-badge b');
+      if (hcpBadge && hcpBadge.textContent !== 'Ms Trúc') {
+        hcpBadge.textContent = 'Ms Trúc';
+      }
+      const phoneItem = document.querySelector('.hcp-item[href*="tel"]');
+      if (phoneItem) {
+        phoneItem.href = 'tel:0908959627';
+        phoneItem.title = 'Gọi điện cho Ms Trúc: 0908.959.627';
+        const span = phoneItem.querySelector('span:last-child');
+        if (span) span.textContent = '0908.959.627';
+      }
+      const zaloItem = document.querySelector('.hcp-item[href*="zalo"]');
+      if (zaloItem) {
+        zaloItem.href = 'https://zalo.me/0908959627';
+        zaloItem.title = 'Chat Zalo với Ms Trúc';
+      }
+      const mailItem = document.querySelector('.hcp-item[href*="mailto"], a.email');
+      if (mailItem) {
+        mailItem.href = 'mailto:tranthithanhtruc1980@gmail.com';
+        mailItem.title = 'Gửi email cho Ms Trúc: tranthithanhtruc1980@gmail.com';
+      }
+      document.querySelectorAll('img[src*="thanhbinh"], .brand-logo img, .sp-logo img, .hsb-logo img').forEach(function(img) {
+        if (!img.src.includes('logo-thcs-tan-binh') && !img.src.includes('logo.png')) {
+          img.src = '/logo-thcs-tan-binh.jpg';
+        }
+      });
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', enforceBrand);
+    } else {
+      enforceBrand();
+    }
+    setInterval(enforceBrand, 150);
+  })();
+</script>
+</head>
+<body>
+  <div id="splash">
+    <div class="sp-logo" style="width:92px;height:92px;border-radius:24px;background:#fff;box-shadow:0 14px 36px rgba(10,88,202,0.3);display:grid;place-items:center;overflow:hidden;border:2px solid rgba(13,110,253,0.2);padding:0">
+      <img src="logo.png" alt="THCS Tân Bình" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.src='/logo-thcs-tan-binh.jpg'">
+    </div>
+    <div class="dots3"><i></i><i></i><i></i></div>
+  </div>
+
+  <!-- HEADER MỎNG -->
+  <header class="topbar">
+    <button class="hb" id="hb" aria-label="Mở/đóng menu"><i></i></button>
+    <a class="brand" href="#/" title="GAME AND LEARN — TRƯỜNG THCS TÂN BÌNH">
+      <span class="brand-logo" style="width:36px;height:36px;border-radius:10px;background:#fff;border:1px solid var(--line-2);box-shadow:var(--shadow-sm);padding:0;overflow:hidden;display:grid;place-items:center;flex:0 0 auto">
+        <img src="logo.png" alt="THCS Tân Bình" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.src='/logo-thcs-tan-binh.jpg'">
+      </span>
+      <span style="display:flex;flex-direction:column;line-height:1.15">
+        <span class="brand-tx" style="font-size:15px;letter-spacing:-0.01em">GAME AND LEARN</span>
+        <span class="brand-sub hide-sm">TRƯỜNG THCS TÂN BÌNH</span>
+      </span>
+    </a>
+    <span class="crumb" id="crumb"></span>
+    <span class="tb-sp"></span>
+    <span class="tb-net hide" id="netBadge">⚡ Ngoại tuyến</span>
+    <button class="tb-btn accent" id="tbJoin" title="Vào phòng bằng mã PIN">🔢 <span class="hide-sm">Vào phòng</span></button>
+    <button class="tb-btn hide-sm" id="tbFs" title="Toàn màn hình">⛶</button>
+    <button class="theme-sw" id="themeSw" title="Sáng / Tối" aria-label="Đổi giao diện sáng tối"><b class="ts-k"></b></button>
+    <button class="tb-user" id="tbUser" title="Tài khoản"></button>
+  </header>
+
+  <!-- MENU HAMBURGER -->
+  <aside class="drawer" id="drawer">
+    <div class="drawer-search">
+      <button class="ds-ic" id="navSearchIc" title="Tìm kiếm" aria-label="Tìm kiếm">🔎</button>
+      <input id="navSearch" type="search" placeholder="Tìm trò chơi, hoạt động…" autocomplete="off" aria-label="Tìm kiếm trong menu">
+      <button class="ds-clear" id="navSearchClear" title="Xoá" aria-label="Xoá tìm kiếm">✕</button>
+    </div>
+    <nav class="drawer-scroll" id="navList"></nav>
+    <div class="drawer-foot" id="drawerFoot"></div>
+  </aside>
+  <div class="backdrop" id="backdrop"></div>
+
+  <!-- NỘI DUNG -->
+  <main class="main" id="main"><div id="view"></div></main>
+  <div id="toasts"></div>
+
+  <!-- Thư viện ngoài (tự bỏ qua khi offline) -->
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+
+  <!-- Dữ liệu offline (giáo viên tải từ trang Quản trị, đặt vào thư mục data/) -->
+  <script defer src="data/questions-offline.js"></script>
+
+  <!-- Ứng dụng -->
+  <script defer src="assets/js/config.js"></script>
+  <script defer src="assets/js/core/utils.js"></script>
+  <script defer src="assets/js/core/art.js"></script>
+  <script defer src="assets/js/core/quiz.js"></script>
+  <script defer src="assets/js/core/demo-data.js"></script>
+  <script defer src="assets/js/core/firebase.js"></script>
+  <script defer src="assets/js/core/data.js"></script>
+  <script defer src="assets/js/core/importer.js"></script>
+  <script defer src="assets/js/core/room.js"></script>
+  <script defer src="assets/js/games/kit.js"></script>
+  <script defer src="assets/js/games/keo-co.js"></script>
+  <script defer src="assets/js/games/race.js"></script>
+  <script defer src="assets/js/games/xuc-xac.js"></script>
+  <script defer src="assets/js/games/dau-truong.js"></script>
+  <script defer src="assets/js/games/trieu-phu.js"></script>
+  <script defer src="assets/js/games/lat-manh.js"></script>
+  <script defer src="assets/js/games/vong-quay.js"></script>
+  <script defer src="assets/js/games/shooter.js"></script>
+  <script defer src="assets/js/games/o-chu.js"></script>
+  <script defer src="assets/js/games/olympia.js"></script>
+  <script defer src="assets/js/activities/duck-race.js"></script>
+  <script defer src="assets/js/pages/home.js"></script>
+  <script defer src="assets/js/pages/player.js"></script>
+  <script defer src="assets/js/admin/admin.js"></script>
+  <script defer src="assets/js/app.js"></script>
+</body>
+</html>
+<script async src="/.netlify/scripts/hud?variant=public" data-nf-variant="public" data-netlify-site-id="47dc72f7-93fc-4267-bcf5-46b944144070" data-app-host="app.netlify.com" data-account-tier="free"></script>

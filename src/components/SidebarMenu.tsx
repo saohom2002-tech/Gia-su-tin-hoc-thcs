@@ -24,6 +24,8 @@ import {
 import { StudentProfile } from '../types/quiz';
 import { StudentAvatar } from './StudentAvatar';
 import { sound } from '../utils/sound';
+import schoolLogo from '../assets/logo-thcs-tan-binh.jpg';
+import { SIDEBAR_GAMES, SIDEBAR_ACTIVITIES, TBSGameItem } from '../data/sidebarGames';
 
 export interface SidebarMenuProps {
   isOpenMobile: boolean;
@@ -42,6 +44,7 @@ export interface SidebarMenuProps {
   onOpenEssayModal: () => void;
   onOpenGrade5Game: () => void;
   onOpenProfileModal: () => void;
+  onSelectGame?: (game: TBSGameItem) => void;
 
   // Data & Badges
   studentProfile?: StudentProfile;
@@ -68,6 +71,7 @@ export const SidebarMenu: React.FC<SidebarMenuProps> = ({
   onOpenEssayModal,
   onOpenGrade5Game,
   onOpenProfileModal,
+  onSelectGame,
   studentProfile,
   mistakesCount = 0,
   historyCount = 0,
@@ -95,8 +99,12 @@ export const SidebarMenu: React.FC<SidebarMenuProps> = ({
             className="flex items-center gap-3 text-left min-w-0 group cursor-pointer"
             title="Gia Sư Tin Học THCS - Về trang chủ"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 via-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-sky-500/25 shrink-0 group-hover:scale-105 transition-transform">
-              <GraduationCap className="w-5 h-5 sm:w-6 sm:h-6" />
+            <div className="relative shrink-0">
+              <img
+                src={schoolLogo}
+                alt="Logo THCS Tân Bình"
+                className="w-10 h-10 rounded-full object-contain bg-white p-0.5 border border-sky-300 shadow-md shrink-0 group-hover:scale-105 transition-transform"
+              />
             </div>
 
             {!isCollapsed && (
@@ -218,6 +226,103 @@ export const SidebarMenu: React.FC<SidebarMenuProps> = ({
               <Gamepad2 className="w-5 h-5 text-emerald-600 shrink-0 group-hover:scale-110 transition-transform" />
               {!isCollapsed && <span className="truncate">Game Học Tập Khối 5</span>}
             </button>
+          </div>
+
+          {/* Nhóm: TRÒ CHƠI */}
+          <div className="space-y-1">
+            {!isCollapsed && (
+              <div className="px-3 text-[10px] font-black uppercase tracking-wider text-slate-500 mb-2 flex items-center justify-between">
+                <span>TRÒ CHƠI</span>
+                <span className="text-[9px] font-bold text-sky-700 bg-sky-100 px-1.5 py-0.5 rounded-full border border-sky-300">
+                  {SIDEBAR_GAMES.length}
+                </span>
+              </div>
+            )}
+
+            {SIDEBAR_GAMES.map((game) => (
+              <button
+                key={game.id}
+                type="button"
+                onClick={() => {
+                  sound.playClick();
+                  if (onSelectGame) onSelectGame(game);
+                  onCloseMobile();
+                }}
+                className={`w-full flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-700 hover:bg-sky-50/80 hover:text-sky-950 transition-all group cursor-pointer ${
+                  game.isComingSoon ? 'opacity-75 hover:opacity-100' : ''
+                }`}
+                title={`${game.name}${game.description ? ` — ${game.description}` : ''}`}
+              >
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div
+                    className={`w-8 h-8 rounded-xl bg-gradient-to-tr ${game.bgGradient} flex items-center justify-center text-base shrink-0 shadow-2xs border border-white/60 group-hover:scale-105 transition-transform`}
+                  >
+                    {game.icon}
+                  </div>
+                  {!isCollapsed && (
+                    <span className="truncate text-left text-xs font-bold text-slate-800 group-hover:text-sky-800">
+                      {game.shortName || game.name}
+                    </span>
+                  )}
+                </div>
+
+                {!isCollapsed && game.badge && (
+                  <span
+                    className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold shrink-0 ${
+                      game.badgeType === 'online'
+                        ? 'bg-emerald-100 text-emerald-700 border border-emerald-300/80'
+                        : game.badgeType === 'soon'
+                        ? 'bg-slate-100 text-slate-500 border border-slate-200'
+                        : 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                    }`}
+                  >
+                    {game.badge}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* Nhóm: HOẠT ĐỘNG */}
+          <div className="space-y-1">
+            {!isCollapsed && (
+              <div className="px-3 text-[10px] font-black uppercase tracking-wider text-slate-500 mb-2">
+                HOẠT ĐỘNG
+              </div>
+            )}
+
+            {SIDEBAR_ACTIVITIES.map((act) => (
+              <button
+                key={act.id}
+                type="button"
+                onClick={() => {
+                  sound.playClick();
+                  if (onSelectGame) onSelectGame(act);
+                  onCloseMobile();
+                }}
+                className="w-full flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-700 hover:bg-emerald-50/80 hover:text-emerald-950 transition-all group cursor-pointer"
+                title={`${act.name}${act.description ? ` — ${act.description}` : ''}`}
+              >
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div
+                    className={`w-8 h-8 rounded-xl bg-gradient-to-tr ${act.bgGradient} flex items-center justify-center text-base shrink-0 shadow-2xs border border-white/60 group-hover:scale-105 transition-transform`}
+                  >
+                    {act.icon}
+                  </div>
+                  {!isCollapsed && (
+                    <span className="truncate text-left text-xs font-bold text-slate-800 group-hover:text-emerald-800">
+                      {act.shortName || act.name}
+                    </span>
+                  )}
+                </div>
+
+                {!isCollapsed && act.badge && (
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 shrink-0">
+                    {act.badge}
+                  </span>
+                )}
+              </button>
+            ))}
           </div>
 
           {/* Nhóm 2: Bảng Vàng & Vinh Danh */}
