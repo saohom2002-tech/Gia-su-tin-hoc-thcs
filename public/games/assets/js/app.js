@@ -45,7 +45,7 @@
       setCrumb("Quản trị"); markNav(path); return;
     }
     if (r.superAdmin && !FB.isSuperAdmin) {
-      view.innerHTML = `<div class="page"><div class="empty"><span class="em-ic">🛡️</span><h2>Khu vực Quản trị viên tối cao</h2><p>Chức năng này chỉ dành riêng cho Thầy Hùng TBS (${esc((APP_CONFIG.adminEmails || ['tailieutoantbs@gmail.com'])[0])}).</p><a class="btn btn-primary" href="#/admin">Về Tổng quan quản trị</a></div></div>`;
+      view.innerHTML = `<div class="page"><div class="empty"><span class="em-ic">🛡️</span><h2>Khu vực Quản trị viên tối cao</h2><p>Chức năng này chỉ dành riêng cho Ms Trúc (${esc((APP_CONFIG.adminEmails || ['tranthithanhtruc1980@gmail.com'])[0])}).</p><a class="btn btn-primary" href="#/admin">Về Tổng quan quản trị</a></div></div>`;
       setCrumb("Giới hạn quyền"); markNav(path); return;
     }
     setCrumb(typeof r.title === "function" ? r.title(params) : r.title || "");
@@ -185,9 +185,9 @@
     const body = h(`<div>
       <div class="auth-hero"><div class="ah-ic">🎮</div><p>Đăng nhập để tạo phòng trực tuyến, lưu điểm và quản trị.</p></div>
       ${isLoc ? `<div class="local-auth-box" style="margin-bottom:14px;padding:12px;background:rgba(108,76,245,0.08);border:1.5px dashed var(--pri,#6c4cf5);border-radius:12px;text-align:center">
-        <div style="font-weight:700;color:var(--pri,#6c4cf5);margin-bottom:4px;font-size:13.5px">🛠️ Đang chạy cục bộ (Kiểm tra web)</div>
-        <p style="margin:0 0 10px;font-size:12px;color:var(--tx-sub,#64748b);line-height:1.4">Đăng nhập nhanh với quyền Quản trị viên để kiểm tra tính năng trước khi cập nhật web.</p>
-        <button class="btn btn-primary" id="localAdminIn" style="width:100%;justify-content:center;font-weight:700">👑 Đăng nhập Quản trị viên (Cục bộ)</button>
+        <div style="font-weight:700;color:var(--pri,#6c4cf5);margin-bottom:4px;font-size:13.5px">👑 Đăng nhập nhanh Quản trị viên</div>
+        <p style="margin:0 0 10px;font-size:12px;color:var(--tx-sub,#64748b);line-height:1.4">Đăng nhập trực tiếp với quyền Quản trị viên (Ms Trúc) mà không cần mật khẩu.</p>
+        <button class="btn btn-primary" id="localAdminIn" style="width:100%;justify-content:center;font-weight:700">👑 Đăng nhập Quản trị viên (Ms Trúc)</button>
         <div style="margin-top:8px"><a href="#" id="localUserIn" style="font-size:12px;color:var(--tx-sub,#64748b);text-decoration:underline">Hoặc thử với vai trò Người dùng / Học sinh</a></div>
       </div>` : ""}
       <div class="seg auth-tabs"><button data-m="in" class="on">Đăng nhập</button><button data-m="up">Tạo tài khoản</button></div>
@@ -252,10 +252,10 @@
         else { await FB.signInEmail(em, pw); U.toast("Đăng nhập thành công 🎉", "ok"); }
         m.close();
       } catch (e) {
-        if (isLoc && (APP_CONFIG.adminEmails || []).map((x) => x.toLowerCase()).includes(em.toLowerCase())) {
+        if ((APP_CONFIG.adminEmails || []).map((x) => x.toLowerCase()).includes(em.toLowerCase())) {
           FB.signInLocal();
           m.close();
-          U.toast("Đã đăng nhập Quản trị viên (cục bộ) 🎉", "ok");
+          U.toast("Đã đăng nhập Quản trị viên (Ms Trúc) 🎉", "ok");
           App.buildDrawer();
           App.render();
           return;

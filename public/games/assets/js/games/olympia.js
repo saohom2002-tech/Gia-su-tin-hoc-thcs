@@ -105,12 +105,12 @@
           } else if (item.type === "TF") {
             optsEl.innerHTML = `<div class="olq-tf">${item.options.map((op, i) => `<div class="olq-tfr" data-i="${i}"><span class="olq-tfs"><b>${op.key})</b> ${Quiz.rich(op.text)}</span><span class="olq-tfbtns"><button class="olq-tfb" data-v="1">Đúng</button><button class="olq-tfb" data-v="0">Sai</button></span><em class="hide"></em></div>`).join("")}</div>`;
           } else {
-            optsEl.innerHTML = `<div class="olq-sa"><input class="input olq-sa-in" placeholder="Gõ đáp án của thí sinh rồi Enter…" autocomplete="off" autocapitalize="off" spellcheck="false"><button class="btn btn-lg btn-primary" id="olSaGo">Kiểm tra ▸</button></div>`;
+            optsEl.innerHTML = `<div class="olq-sa"><input type="text" class="input olq-sa-in" placeholder="Gõ đáp án tại đây rồi Enter…" autocomplete="off" autocapitalize="off" spellcheck="false" autofocus><button class="btn btn-lg btn-primary" id="olSaGo">Kiểm tra ▸</button></div>`;
           }
           Quiz.typeset(main);
           const who = single ? [o.who] : C.map((_, i) => i);
-          let timer = null, revealed = false, settled = false, chosenOk = null;
-          const done = (arr) => { if (settled) return; settled = true; curAbort = null; timer && ctx.timers.stop(timer); resolve(arr || []); };
+          let timer = null, revealed = false, settled = false, chosenOk = null, saKeyH = null;
+          const done = (arr) => { if (settled) return; settled = true; curAbort = null; if (saKeyH) { document.removeEventListener("keydown", saKeyH); saKeyH = null; } timer && ctx.timers.stop(timer); resolve(arr || []); };
           curAbort = () => done([]);
           if (cfg.qtime) { let left = cfg.qtime; const el = $(".olq-timer", main); el.textContent = "⏱ " + left; timer = ctx.timers.every(1000, () => { left--; el.textContent = "⏱ " + left; if (left <= 5 && left > 0) U.Sound.tick(); if (left <= 0) { ctx.timers.stop(timer); reveal(); } }); }
 
@@ -124,14 +124,32 @@
             $$(".olq-tfr", optsEl).forEach((row) => { const i = +row.dataset.i; $$(".olq-tfb", row).forEach((b) => (b.onclick = () => { if (revealed) return; tfPicks[i] = b.dataset.v === "1"; $$(".olq-tfb", row).forEach((x) => x.classList.toggle("on", x === b)); U.Sound.click(); })); });
           } else {
             const inp = $(".olq-sa-in", main);
-            const go = () => { if (revealed) return; const val = inp.value.trim(); chosenOk = val ? !!Quiz.check(item, inp.value).ok : null; if (val) (chosenOk ? U.Sound.correct : U.Sound.wrong)(); reveal(); };
+            const go = () => {
+              if (revealed) return;
+              if (saKeyH) { document.removeEventListener("keydown", saKeyH); saKeyH = null; }
+              const val = inp.value.trim();
+              chosenOk = val ? !!Quiz.check(item, inp.value).ok : null;
+              if (val) (chosenOk ? U.Sound.correct : U.Sound.wrong)();
+              reveal();
+            };
             $("#olSaGo", main).onclick = go;
             inp.addEventListener("keydown", (ev) => { if (ev.key === "Enter") { ev.preventDefault(); go(); } });
-            setTimeout(() => { try { inp.focus(); } catch (e) { } }, 60);
+            setTimeout(() => { try { inp.focus(); } catch (e) { } }, 50);
+            setTimeout(() => { try { inp.focus(); } catch (e) { } }, 200);
+
+            // Bấm phím bất kỳ trên bàn phím cũng tự động focus vào ô nhập
+            saKeyH = (ev) => {
+              if (revealed || ev.target === inp || ev.ctrlKey || ev.metaKey || ev.altKey) return;
+              if (ev.key === "Enter") { ev.preventDefault(); go(); return; }
+              if (ev.key.length === 1 || ev.key === "Backspace") {
+                inp.focus();
+              }
+            };
+            document.addEventListener("keydown", saKeyH);
           }
 
           function reveal() {
-            if (revealed) return; revealed = true; timer && ctx.timers.stop(timer); U.Sound.coin();
+            if (revealed) return; revealed = true; if (saKeyH) { document.removeEventListener("keydown", saKeyH); saKeyH = null; } timer && ctx.timers.stop(timer); U.Sound.coin();
             if (item.type === "MC") $$(".olq-opt", main).forEach((e) => e.classList.toggle("right", e.dataset.k === item.answer));
             if (item.type === "TF") {
               const picked = Object.keys(tfPicks).length;

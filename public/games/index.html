@@ -54,6 +54,15 @@
         mailItem.href = 'mailto:tranthithanhtruc1980@gmail.com';
         mailItem.title = 'Gửi email cho Ms Trúc: tranthithanhtruc1980@gmail.com';
       }
+      const addrEl = document.querySelector('.sf-addr');
+      if (addrEl && !addrEl.textContent.includes('873 Cách Mạng Tháng 8')) {
+        addrEl.innerHTML = '📍 <b>Địa chỉ:</b> 873 Cách Mạng Tháng 8, Phường Tân Sơn Nhất, TP.HCM';
+      }
+      const webEl = document.querySelector('.sf-web a');
+      if (webEl && (webEl.href.includes('thanhbinh.edu.vn') || webEl.textContent.includes('thanhbinh.edu.vn'))) {
+        webEl.href = 'https://thcstanbinh.hcm.edu.vn';
+        webEl.textContent = 'thcstanbinh.hcm.edu.vn';
+      }
       document.querySelectorAll('img[src*="thanhbinh"], .brand-logo img, .sp-logo img, .hsb-logo img').forEach(function(img) {
         if (!img.src.includes('logo-thcs-tan-binh') && !img.src.includes('logo.png')) {
           img.src = '/logo-thcs-tan-binh.jpg';

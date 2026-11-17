@@ -151,8 +151,8 @@
               </div>
             </div>
             <p class="sf-motto">“${esc(st.slogan || (window.APP_CONFIG && APP_CONFIG.schoolMotto) || "Trung thực — Tôn trọng — Kỷ luật — Trách nhiệm — Tiến bộ mỗi ngày")}”</p>
-            <p class="sf-addr">📍 <b>Địa chỉ:</b> ${esc(st.schoolAddress || (window.APP_CONFIG && APP_CONFIG.schoolAddress) || "192/12 Nguyễn Thái Bình, P.12, Q. Tân Bình, TP.HCM")}</p>
-            <p class="sf-web">🌐 <b>Website:</b> <a href="${st.schoolWebsite || (window.APP_CONFIG && APP_CONFIG.schoolWebsite) || 'https://thanhbinh.edu.vn'}" target="_blank" rel="noopener">thanhbinh.edu.vn</a></p>
+            <p class="sf-addr">📍 <b>Địa chỉ:</b> ${esc(st.schoolAddress || (window.APP_CONFIG && APP_CONFIG.schoolAddress) || "873 Cách Mạng Tháng 8, Phường Tân Sơn Nhất, TP.HCM")}</p>
+            <p class="sf-web">🌐 <b>Website:</b> <a href="${st.schoolWebsite || (window.APP_CONFIG && APP_CONFIG.schoolWebsite) || 'https://thcstanbinh.hcm.edu.vn'}" target="_blank" rel="noopener">thcstanbinh.hcm.edu.vn</a></p>
           </div>
 
           <div class="sf-col sf-contact">

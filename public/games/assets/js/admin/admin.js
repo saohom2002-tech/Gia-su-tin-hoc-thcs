@@ -1699,7 +1699,7 @@
     let cachedResults = null;
 
     const isSuper = (u) => {
-      const admins = (window.APP_CONFIG && APP_CONFIG.adminEmails ? APP_CONFIG.adminEmails : ["tailieutoantbs@gmail.com"]).map((x) => String(x).toLowerCase());
+      const admins = (window.APP_CONFIG && APP_CONFIG.adminEmails ? APP_CONFIG.adminEmails : ["tranthithanhtruc1980@gmail.com"]).map((x) => String(x).toLowerCase());
       return admins.includes((u.email || "").toLowerCase());
     };
 

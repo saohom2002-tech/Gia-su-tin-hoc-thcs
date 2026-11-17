@@ -21,6 +21,7 @@
   FB.isLocal = () => {
     try {
       if (C && C.allowLocalAuth === false) return false;
+      if (C && C.allowLocalAuth === true) return true;
       const proto = window.location.protocol;
       const h = window.location.hostname;
       return proto === "file:" ||
@@ -104,7 +105,7 @@
   FB.checkSuperAdmin = (u) => {
     if (!u || !u.email) return false;
     const em = u.email.toLowerCase();
-    const isListed = (C.adminEmails || ["tailieutoantbs@gmail.com"]).map((x) => x.toLowerCase()).includes(em);
+    const isListed = (C.adminEmails || ["tranthithanhtruc1980@gmail.com"]).map((x) => x.toLowerCase()).includes(em);
     const viaGoogle = (u.providerData || []).some((p) => p.providerId === "google.com");
     return isListed && (u.emailVerified || viaGoogle || u.isLocal);
   };
@@ -146,11 +147,11 @@
 
   /* Đăng nhập giả lập cục bộ dành riêng cho kiểm tra web */
   FB.signInLocal = (customUser) => {
-    const adminEmail = (C.adminEmails && C.adminEmails[0]) || "tailieutoantbs@gmail.com";
+    const adminEmail = (C.adminEmails && C.adminEmails[0]) || "tranthithanhtruc1980@gmail.com";
     const u = customUser || {
-      uid: "local_admin_tbs",
+      uid: "local_admin_ms_truc",
       email: adminEmail,
-      displayName: "HÙNG TBS (Quản trị)",
+      displayName: "Ms Trúc (Quản trị)",
       photoURL: "",
       emailVerified: true,
       isLocal: true,

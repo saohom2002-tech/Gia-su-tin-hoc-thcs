@@ -15,8 +15,8 @@
     adminZalo: (window.APP_CONFIG && window.APP_CONFIG.adminZalo) || "https://zalo.me/0908959627",
     adminEmail: (window.APP_CONFIG && window.APP_CONFIG.adminEmail) || "tranthithanhtruc1980@gmail.com",
     schoolName: (window.APP_CONFIG && window.APP_CONFIG.schoolName) || "Trường THCS Tân Bình",
-    schoolAddress: (window.APP_CONFIG && window.APP_CONFIG.schoolAddress) || "192/12 Nguyễn Thái Bình, P.12, Q. Tân Bình, TP.HCM",
-    schoolWebsite: (window.APP_CONFIG && window.APP_CONFIG.schoolWebsite) || "https://thanhbinh.edu.vn",
+    schoolAddress: (window.APP_CONFIG && window.APP_CONFIG.schoolAddress) || "873 Cách Mạng Tháng 8, Phường Tân Sơn Nhất, TP.HCM",
+    schoolWebsite: (window.APP_CONFIG && window.APP_CONFIG.schoolWebsite) || "https://thcstanbinh.hcm.edu.vn",
     googleSheetId: (window.APP_CONFIG && window.APP_CONFIG.googleSheetId) || "1e1NUbsrBZ9Lf4pGHE4BriYwB1i0_kzBXwkhU4831z4k",
     googleDriveFolderId: (window.APP_CONFIG && window.APP_CONFIG.googleDriveFolderId) || "1MnvzQAzv62Xiw9ziU2jH5T37ObFmADg4",
     creatorEmails: [],
@@ -101,6 +101,8 @@
         DB.settings.adminPhoneTel = "0908959627";
         DB.settings.adminZalo = "https://zalo.me/0908959627";
         DB.settings.adminEmail = "tranthithanhtruc1980@gmail.com";
+        DB.settings.schoolAddress = "873 Cách Mạng Tháng 8, Phường Tân Sơn Nhất, TP.HCM";
+        DB.settings.schoolWebsite = "https://thcstanbinh.hcm.edu.vn";
         if (window.FB && FB.user) FB.updateRoles(FB.user);
         DB.source = "cloud"; ok = true;
         U.store.set("cache", { questions: DB.questions, sets: DB.sets, gameConfigs: DB.gameConfigs, settings: DB.settings, presets: DB.presets, at: Date.now() });
@@ -122,6 +124,8 @@
         DB.settings.adminPhoneTel = "0908959627";
         DB.settings.adminZalo = "https://zalo.me/0908959627";
         DB.settings.adminEmail = "tranthithanhtruc1980@gmail.com";
+        DB.settings.schoolAddress = "873 Cách Mạng Tháng 8, Phường Tân Sơn Nhất, TP.HCM";
+        DB.settings.schoolWebsite = "https://thcstanbinh.hcm.edu.vn";
         DB.source = local ? "local-file" : pickData === off ? "offline-file" : "cache";
       } else { DB.source = "demo"; DB.questions = []; }
     }
@@ -133,6 +137,8 @@
     DB.settings.adminPhoneTel = "0908959627";
     DB.settings.adminZalo = "https://zalo.me/0908959627";
     DB.settings.adminEmail = "tranthithanhtruc1980@gmail.com";
+    DB.settings.schoolAddress = "873 Cách Mạng Tháng 8, Phường Tân Sơn Nhất, TP.HCM";
+    DB.settings.schoolWebsite = "https://thcstanbinh.hcm.edu.vn";
     DB.usingDemo = !DB.questions.length;
     DB.loaded = true; DB.emit();
   };
@@ -524,16 +530,16 @@
         return s.docs.map((d) => Object.assign({ id: d.id }, d.data()));
       } catch (e) {
         return [{
-          displayName: "HÙNG TBS (Quản trị)",
-          email: "tailieutoantbs@gmail.com",
+          displayName: "Ms Trúc (Quản trị)",
+          email: "tranthithanhtruc1980@gmail.com",
           provider: "local",
           lastLogin: Date.now()
         }];
       }
     }
     return [{
-      displayName: "HÙNG TBS (Quản trị)",
-      email: "tailieutoantbs@gmail.com",
+      displayName: "Ms Trúc (Quản trị)",
+      email: "tranthithanhtruc1980@gmail.com",
       provider: "local",
       lastLogin: Date.now()
     }];

@@ -9,10 +9,10 @@ window.APP_CONFIG = {
   schoolName: "Trường THCS Tân Bình",
   schoolShort: "TRƯỜNG THCS TÂN BÌNH",
   schoolMotto: "Học tập chủ động — Vững vàng tri thức — Tự tin tương lai",
-  schoolWebsite: "",
+  schoolWebsite: "https://thcstanbinh.hcm.edu.vn",
   schoolLogo: "logo.png",
   schoolFallbackLogo: "logo.png",
-  schoolAddress: "Phường Tân Sơn Nhất, Q. Tân Bình, TP.HCM",
+  schoolAddress: "873 Cách Mạng Tháng 8, Phường Tân Sơn Nhất, TP.HCM",
 
   /* Thông tin tác giả */
   adminName: "Ms Trúc",
