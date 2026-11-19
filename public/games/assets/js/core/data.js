@@ -17,7 +17,7 @@
     schoolName: (window.APP_CONFIG && window.APP_CONFIG.schoolName) || "Trường THCS Tân Bình",
     schoolAddress: (window.APP_CONFIG && window.APP_CONFIG.schoolAddress) || "873 Cách Mạng Tháng 8, Phường Tân Sơn Nhất, TP.HCM",
     schoolWebsite: (window.APP_CONFIG && window.APP_CONFIG.schoolWebsite) || "https://thcstanbinh.hcm.edu.vn",
-    googleSheetId: (window.APP_CONFIG && window.APP_CONFIG.googleSheetId) || "1e1NUbsrBZ9Lf4pGHE4BriYwB1i0_kzBXwkhU4831z4k",
+    googleSheetId: (window.APP_CONFIG && window.APP_CONFIG.googleSheetId) || "1sw7iAQZw2cD7USR3O5tY6P6MvOqbWBvhuBORvr0dxNo",
     googleDriveFolderId: (window.APP_CONFIG && window.APP_CONFIG.googleDriveFolderId) || "1MnvzQAzv62Xiw9ziU2jH5T37ObFmADg4",
     creatorEmails: [],
     classes: [
@@ -48,7 +48,7 @@
     quickLinks: [
       { id: "ql_contact", title: "Liên Hệ Thầy Hùng TBS", desc: "Quản trị hệ thống · Hotline/Zalo: 0907.117.193", url: "https://zalo.me/0907117193", icon: "📞", color: "#16a34a", badge: "0907.117.193", external: true },
       { id: "ql_school", title: "Trường THCS Tân Bình", desc: "Hệ thống học tập & khảo sát trực tuyến", url: "#/", icon: "🏫", color: "#0a58ca", badge: "THCS Tân Bình", external: false },
-      { id: "ql_sheet", title: "Google Sheet Đề Gốc", desc: "Ngân hàng 153+ câu hỏi Toán 12 của Thầy Hùng TBS", url: "https://docs.google.com/spreadsheets/d/1e1NUbsrBZ9Lf4pGHE4BriYwB1i0_kzBXwkhU4831z4k/edit?gid=0#gid=0", icon: "📊", color: "#10b981", badge: "Sheet gốc", external: true },
+      { id: "ql_sheet", title: "Google Sheet Đề Gốc", desc: "Ngân hàng câu hỏi Tin học của Ms Trúc", url: "https://docs.google.com/spreadsheets/d/1sw7iAQZw2cD7USR3O5tY6P6MvOqbWBvhuBORvr0dxNo/edit?gid=0#gid=0", icon: "📊", color: "#10b981", badge: "Sheet gốc", external: true },
       { id: "ql_drive", title: "Google Drive Tài Liệu", desc: "Thư mục hình ảnh và tư liệu minh họa", url: "https://drive.google.com/drive/folders/1MnvzQAzv62Xiw9ziU2jH5T37ObFmADg4?lfhs=2", icon: "📁", color: "#0284c7", badge: "Drive gốc", external: true },
       { id: "ql_host", title: "Mở Phòng Thi Đấu", desc: "Tổ chức thi trực tuyến bằng mã PIN", url: "#/host", icon: "📡", color: "#0d6efd", badge: "Host phòng", external: false },
       { id: "ql_join", title: "Vào Phòng Bằng PIN", desc: "Học sinh nhập PIN vào làm bài thi", url: "#/join", icon: "🔢", color: "#f59e0b", badge: "Thí sinh", external: false },

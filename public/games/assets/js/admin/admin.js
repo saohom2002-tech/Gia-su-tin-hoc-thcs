@@ -22,7 +22,7 @@
     qs.forEach((q) => by[Quiz.baseType(q.Type)] = (by[Quiz.baseType(q.Type)] || 0) + 1);
     const f = DB.facets(qs);
     const s = DB.settings;
-    const sheetId = s.googleSheetId || (window.APP_CONFIG && APP_CONFIG.googleSheetId) || "1e1NUbsrBZ9Lf4pGHE4BriYwB1i0_kzBXwkhU4831z4k";
+    const sheetId = s.googleSheetId || (window.APP_CONFIG && APP_CONFIG.googleSheetId) || "1sw7iAQZw2cD7USR3O5tY6P6MvOqbWBvhuBORvr0dxNo";
     const folderId = s.googleDriveFolderId || (window.APP_CONFIG && APP_CONFIG.googleDriveFolderId) || "1MnvzQAzv62Xiw9ziU2jH5T37ObFmADg4";
     const editUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/edit?gid=0#gid=0`;
     const folderUrl = `https://drive.google.com/drive/folders/${folderId}?lfhs=2`;
@@ -42,7 +42,7 @@
         <span style="font-size:26px">☁️</span>
         <div style="flex:1;min-width:240px">
           <b style="font-size:15.5px;color:var(--text)">Dữ liệu gốc Google Sheet & Google Drive:</b>
-          <div class="muted" style="font-size:13px;margin-top:2px">Trang tính ngân hàng câu hỏi & Thư mục tài liệu của Thầy Hùng TBS</div>
+          <div class="muted" style="font-size:13px;margin-top:2px">Trang tính ngân hàng câu hỏi Tin học của Ms Trúc</div>
         </div>
         <a class="btn btn-sm btn-ghost" href="${editUrl}" target="_blank" rel="noopener">📊 Mở Google Sheet gốc ↗</a>
         <a class="btn btn-sm btn-ghost" href="${folderUrl}" target="_blank" rel="noopener">📁 Mở Thư mục Drive ↗</a>
@@ -76,19 +76,19 @@
     const isSuper = FB.isSuperAdmin;
     const st = { flt: U.store.get("admFlt", {}), page: 0, per: 30, sel: new Set() };
     const s = DB.settings;
-    const sheetId = s.googleSheetId || (window.APP_CONFIG && APP_CONFIG.googleSheetId) || "1e1NUbsrBZ9Lf4pGHE4BriYwB1i0_kzBXwkhU4831z4k";
+    const sheetId = s.googleSheetId || (window.APP_CONFIG && APP_CONFIG.googleSheetId) || "1sw7iAQZw2cD7USR3O5tY6P6MvOqbWBvhuBORvr0dxNo";
     const folderId = s.googleDriveFolderId || (window.APP_CONFIG && APP_CONFIG.googleDriveFolderId) || "1MnvzQAzv62Xiw9ziU2jH5T37ObFmADg4";
     const editUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/edit?gid=0#gid=0`;
     const folderUrl = `https://drive.google.com/drive/folders/${folderId}?lfhs=2`;
 
-    view.innerHTML = `<div class="page">${header("📚", "Ngân hàng câu hỏi", "Hệ thống quản trị hoàn chỉnh: Soạn thảo · Lưu trữ · Trích xuất theo chuẩn 15 cột của Thầy Hùng TBS.", "linear-gradient(135deg,#818cf8,#22d3ee)")}
+    view.innerHTML = `<div class="page">${header("📚", "Ngân hàng câu hỏi", "Hệ thống quản trị hoàn chỉnh: Soạn thảo · Lưu trữ · Trích xuất theo chuẩn 15 cột của Ms Trúc.", "linear-gradient(135deg,#818cf8,#22d3ee)")}
       
       <!-- THANH LIÊN KẾT NGUỒN DỮ LIỆU GỐC -->
       <div class="card" style="display:flex;align-items:center;gap:12px;padding:12px 16px;margin-bottom:14px;background:var(--bg-elevated);border-left:4px solid #10b981;flex-wrap:wrap" data-reveal>
         <span style="font-size:22px">☁️</span>
         <div style="flex:1;min-width:240px">
           <b>Dữ liệu gốc Google Sheet & Google Drive:</b>
-          <div class="muted" style="font-size:13px">Trang tính câu hỏi Toán 12 & Thư mục tài liệu của Thầy Hùng TBS</div>
+          <div class="muted" style="font-size:13px">Trang tính câu hỏi Tin học của Ms Trúc</div>
         </div>
         <a class="btn btn-sm btn-ghost" href="${editUrl}" target="_blank" rel="noopener">📊 Mở Google Sheet gốc ↗</a>
         <a class="btn btn-sm btn-ghost" href="${folderUrl}" target="_blank" rel="noopener">📁 Mở Thư mục Drive ↗</a>
@@ -918,7 +918,7 @@
   /* ----- Đồng bộ từ Google Sheet & Thư mục Google Drive của Thầy ----- */
   A.syncGoogleSheet = () => {
     const s = DB.settings;
-    const sheetId = s.googleSheetId || (window.APP_CONFIG && APP_CONFIG.googleSheetId) || "1e1NUbsrBZ9Lf4pGHE4BriYwB1i0_kzBXwkhU4831z4k";
+    const sheetId = s.googleSheetId || (window.APP_CONFIG && APP_CONFIG.googleSheetId) || "1sw7iAQZw2cD7USR3O5tY6P6MvOqbWBvhuBORvr0dxNo";
     const folderId = s.googleDriveFolderId || (window.APP_CONFIG && APP_CONFIG.googleDriveFolderId) || "1MnvzQAzv62Xiw9ziU2jH5T37ObFmADg4";
     const cleanSheetId = (id) => String(id || "").replace(/^.*\/d\//, "").replace(/\/edit.*$/, "").replace(/[\?#].*$/, "").trim();
     const curSheetId = cleanSheetId(sheetId);
@@ -2130,7 +2130,7 @@
           <div class="field"><label>ID / Liên kết Thư mục Google Drive gốc</label>
             <div class="row"><input class="input" data-k="googleDriveFolderId" value="${esc(s.googleDriveFolderId || "")}">
               <a class="btn btn-ghost btn-sm" href="https://drive.google.com/drive/folders/${esc(s.googleDriveFolderId || "")}?lfhs=2" target="_blank" rel="noopener">📁 Mở Drive</a></div></div>
-          <p class="muted" style="margin:0;font-size:13px">Hệ thống sẽ đồng bộ và liên kết trực tiếp tới Google Sheet và Google Drive này của Thầy Hùng TBS.</p>
+          <p class="muted" style="margin:0;font-size:13px">Hệ thống sẽ đồng bộ và liên kết trực tiếp tới Google Sheet này của Ms Trúc.</p>
         </div></div>
         <div class="card" data-reveal><div class="card-h"><h3>💾 Dữ liệu & offline</h3></div><div class="stack">
           <p class="muted" style="margin:0">Tải <b>questions-offline.js</b> rồi đặt vào thư mục <code>data/</code> (cùng cấp <code>index.html</code>). Khi không có Internet, web tự dùng file này.</p>
