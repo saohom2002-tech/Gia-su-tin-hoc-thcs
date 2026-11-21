@@ -22,11 +22,11 @@
     creatorEmails: [],
     classes: [
       {
-        id: "cls_12a1",
-        code: "12A1",
-        name: "Lớp 12A1",
-        grade: "12",
-        desc: "Toán 12 — Thầy Hùng TBS",
+        id: "cls_7_1",
+        code: "7/1",
+        name: "Lớp 7/1",
+        grade: "7",
+        desc: "Tin học 7 — THCS Tân Bình (Ms Trúc)",
         members: [
           "Nguyễn Văn An", "Trần Thị Bình", "Lê Hoàng Long", "Phạm Minh Thư",
           "Đỗ Quốc Bảo", "Vũ Ngọc Ánh", "Hoàng Gia Huy", "Bùi Mai Phương",
@@ -34,19 +34,43 @@
         ]
       },
       {
-        id: "cls_12a2",
-        code: "12A2",
-        name: "Lớp 12A2",
-        grade: "12",
-        desc: "Toán 12 — Thầy Hùng TBS",
+        id: "cls_7_2",
+        code: "7/2",
+        name: "Lớp 7/2",
+        grade: "7",
+        desc: "Tin học 7 — THCS Tân Bình (Ms Trúc)",
         members: [
           "Lý Gia Hân", "Trương Trọng Nghĩa", "Võ Quỳnh Nga", "Tạ Đình Phong",
           "Lê Thảo My", "Nguyễn Đức Phúc", "Trần Tuấn Anh", "Nguyễn Kim Ngân"
         ]
+      },
+      {
+        id: "cls_6_1",
+        code: "6/1",
+        name: "Lớp 6/1",
+        grade: "6",
+        desc: "Tin học 6 — THCS Tân Bình (Ms Trúc)",
+        members: []
+      },
+      {
+        id: "cls_8_1",
+        code: "8/1",
+        name: "Lớp 8/1",
+        grade: "8",
+        desc: "Tin học 8 — THCS Tân Bình (Ms Trúc)",
+        members: []
+      },
+      {
+        id: "cls_9_1",
+        code: "9/1",
+        name: "Lớp 9/1",
+        grade: "9",
+        desc: "Tin học 9 — THCS Tân Bình (Ms Trúc)",
+        members: []
       }
     ],
     quickLinks: [
-      { id: "ql_contact", title: "Liên Hệ Thầy Hùng TBS", desc: "Quản trị hệ thống · Hotline/Zalo: 0907.117.193", url: "https://zalo.me/0907117193", icon: "📞", color: "#16a34a", badge: "0907.117.193", external: true },
+      { id: "ql_contact", title: "Liên Hệ Ms Trúc", desc: "Quản trị hệ thống · Hotline/Zalo: 0908.959.627", url: "https://zalo.me/0908959627", icon: "📞", color: "#16a34a", badge: "0908.959.627", external: true },
       { id: "ql_school", title: "Trường THCS Tân Bình", desc: "Hệ thống học tập & khảo sát trực tuyến", url: "#/", icon: "🏫", color: "#0a58ca", badge: "THCS Tân Bình", external: false },
       { id: "ql_sheet", title: "Google Sheet Đề Gốc", desc: "Ngân hàng câu hỏi Tin học của Ms Trúc", url: "https://docs.google.com/spreadsheets/d/1sw7iAQZw2cD7USR3O5tY6P6MvOqbWBvhuBORvr0dxNo/edit?gid=0#gid=0", icon: "📊", color: "#10b981", badge: "Sheet gốc", external: true },
       { id: "ql_drive", title: "Google Drive Tài Liệu", desc: "Thư mục hình ảnh và tư liệu minh họa", url: "https://drive.google.com/drive/folders/1MnvzQAzv62Xiw9ziU2jH5T37ObFmADg4?lfhs=2", icon: "📁", color: "#0284c7", badge: "Drive gốc", external: true },

@@ -1397,27 +1397,31 @@
         size: "md",
         body: `<div class="stack" style="gap:12px">
           <div class="field"><label>Tên lớp / Nhóm <span style="color:#ef4444">*</span></label>
-            <input class="input" id="clsName" placeholder="Ví dụ: Lớp 12A1, Đội tuyển HSG..." value="${esc(cls.name)}"></div>
+            <input class="input" id="clsName" placeholder="Ví dụ: Lớp 7/1, Lớp 7/2, Đội tuyển Tin học..." value="${esc(cls.name)}"></div>
           <div class="grid2">
             <div class="field"><label>Mã lớp rút gọn</label>
-              <input class="input" id="clsCode" placeholder="Ví dụ: 12A1" value="${esc(cls.code || "")}"></div>
+              <input class="input" id="clsCode" placeholder="Ví dụ: 7/1 hoặc 7/2" value="${esc(cls.code || "")}"></div>
             <div class="field"><label>Khối lớp</label>
               <select class="select" id="clsGrade">
-                <option value="12" ${cls.grade === "12" ? "selected" : ""}>Khối 12</option>
-                <option value="11" ${cls.grade === "11" ? "selected" : ""}>Khối 11</option>
-                <option value="10" ${cls.grade === "10" ? "selected" : ""}>Khối 10</option>
-                <option value="Khác" ${cls.grade === "Khác" ? "selected" : ""}>Khối khác / Ôn thi</option>
+                <option value="6" ${cls.grade === "6" ? "selected" : ""}>Khối 6</option>
+                <option value="7" ${cls.grade === "7" ? "selected" : ""}>Khối 7</option>
+                <option value="8" ${cls.grade === "8" ? "selected" : ""}>Khối 8</option>
+                <option value="9" ${cls.grade === "9" ? "selected" : ""}>Khối 9</option>
+                <option value="5" ${cls.grade === "5" ? "selected" : ""}>Khối 5 (Tiểu học)</option>
+                <option value="4" ${cls.grade === "4" ? "selected" : ""}>Khối 4 (Tiểu học)</option>
+                <option value="3" ${cls.grade === "3" ? "selected" : ""}>Khối 3 (Tiểu học)</option>
+                <option value="Khác" ${cls.grade === "Khác" ? "selected" : ""}>Khối khác / CLB Tin học</option>
               </select></div>
           </div>
           <div class="field"><label>Mô tả / Ghi chú</label>
-            <textarea class="textarea" id="clsDesc" rows="2" placeholder="Ghi chú về lớp, năm học, mục tiêu...">${esc(cls.desc || "")}</textarea></div>
+            <textarea class="textarea" id="clsDesc" rows="2" placeholder="Ví dụ: Tin học THCS Tân Bình — Ms Trúc">${esc(cls.desc || "")}</textarea></div>
           <div class="field">
             <div class="row" style="justify-content:space-between;align-items:center;margin-bottom:4px">
               <label style="margin:0">Danh sách học sinh (mỗi dòng một tên)</label>
               <small class="muted">Hiện có: <b>${(cls.members || []).length} học sinh</b></small>
             </div>
             <textarea class="textarea" id="clsMembers" rows="5" placeholder="Nguyễn Văn An&#10;Trần Thị Bình&#10;Lê Hoàng Long&#10;... (có thể dán thẳng cột tên từ file Excel)">${esc((cls.members || []).join("\n"))}</textarea>
-            <small class="muted">Thầy có thể dán danh sách học sinh ngay bây giờ hoặc chỉnh sửa chi tiết bất kỳ lúc nào.</small>
+            <small class="muted">Cô/Thầy có thể dán danh sách học sinh ngay bây giờ hoặc chỉnh sửa chi tiết bất kỳ lúc nào.</small>
           </div>
         </div>`,
         actions: [
@@ -1461,16 +1465,20 @@
         <div class="stat-tiles stg">
           <div class="stat-tile" style="--i:0"><i>🏫</i><b>${classes.length}</b><span>Lớp / nhóm học</span></div>
           <div class="stat-tile" style="--i:1"><i>👥</i><b>${totalStudents}</b><span>Tổng số học sinh</span></div>
-          <div class="stat-tile" style="--i:2"><i>🎓</i><b>${classes.filter(c => c.grade === "12").length}</b><span>Lớp Khối 12</span></div>
-          <div class="stat-tile" style="--i:3"><i>📖</i><b>${classes.filter(c => c.grade === "11" || c.grade === "10").length}</b><span>Lớp Khối 10 & 11</span></div>
+          <div class="stat-tile" style="--i:2"><i>🎓</i><b>${classes.filter(c => ["6","7"].includes(c.grade)).length}</b><span>Lớp Khối 6 & 7</span></div>
+          <div class="stat-tile" style="--i:3"><i>📖</i><b>${classes.filter(c => ["8","9"].includes(c.grade)).length}</b><span>Lớp Khối 8 & 9</span></div>
         </div>
         <div class="adm-tools">
           <input class="input" id="cSearch" placeholder="🔎 Tìm tên lớp, mã lớp…" value="${esc(qSearch)}" style="max-width:260px">
           <select class="select" id="cGrade" style="max-width:170px">
             <option value="">Tất cả khối lớp</option>
-            <option value="12" ${qGrade === "12" ? "selected" : ""}>Khối 12</option>
-            <option value="11" ${qGrade === "11" ? "selected" : ""}>Khối 11</option>
-            <option value="10" ${qGrade === "10" ? "selected" : ""}>Khối 10</option>
+            <option value="6" ${qGrade === "6" ? "selected" : ""}>Khối 6</option>
+            <option value="7" ${qGrade === "7" ? "selected" : ""}>Khối 7</option>
+            <option value="8" ${qGrade === "8" ? "selected" : ""}>Khối 8</option>
+            <option value="9" ${qGrade === "9" ? "selected" : ""}>Khối 9</option>
+            <option value="5" ${qGrade === "5" ? "selected" : ""}>Khối 5</option>
+            <option value="4" ${qGrade === "4" ? "selected" : ""}>Khối 4</option>
+            <option value="3" ${qGrade === "3" ? "selected" : ""}>Khối 3</option>
             <option value="Khác" ${qGrade === "Khác" ? "selected" : ""}>Khối khác</option>
           </select>
           <span class="grow"></span>

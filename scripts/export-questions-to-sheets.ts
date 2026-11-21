@@ -334,7 +334,56 @@ window.OFFLINE_DATA = ${JSON.stringify({
     adminPhoneTel: "0908959627",
     adminZalo: "https://zalo.me/0908959627",
     adminEmail: "tranthithanhtruc1980@gmail.com",
-    googleSheetId: "1sw7iAQZw2cD7USR3O5tY6P6MvOqbWBvhuBORvr0dxNo"
+    googleSheetId: "1sw7iAQZw2cD7USR3O5tY6P6MvOqbWBvhuBORvr0dxNo",
+    classes: [
+      {
+        id: "cls_7_1",
+        code: "7/1",
+        name: "Lớp 7/1",
+        grade: "7",
+        desc: "Tin học 7 — THCS Tân Bình (Ms Trúc)",
+        members: [
+          "Nguyễn Văn An", "Trần Thị Bình", "Lê Hoàng Long", "Phạm Minh Thư",
+          "Đỗ Quốc Bảo", "Vũ Ngọc Ánh", "Hoàng Gia Huy", "Bùi Mai Phương",
+          "Đặng Tuấn Kiệt", "Ngô Bảo Châu", "Dương Thu Trang", "Phan Hải Đăng"
+        ]
+      },
+      {
+        id: "cls_7_2",
+        code: "7/2",
+        name: "Lớp 7/2",
+        grade: "7",
+        desc: "Tin học 7 — THCS Tân Bình (Ms Trúc)",
+        members: [
+          "Lý Gia Hân", "Trương Trọng Nghĩa", "Võ Quỳnh Nga", "Tạ Đình Phong",
+          "Lê Thảo My", "Nguyễn Đức Phúc", "Trần Tuấn Anh", "Nguyễn Kim Ngân"
+        ]
+      },
+      {
+        id: "cls_6_1",
+        code: "6/1",
+        name: "Lớp 6/1",
+        grade: "6",
+        desc: "Tin học 6 — THCS Tân Bình (Ms Trúc)",
+        members: []
+      },
+      {
+        id: "cls_8_1",
+        code: "8/1",
+        name: "Lớp 8/1",
+        grade: "8",
+        desc: "Tin học 8 — THCS Tân Bình (Ms Trúc)",
+        members: []
+      },
+      {
+        id: "cls_9_1",
+        code: "9/1",
+        name: "Lớp 9/1",
+        grade: "9",
+        desc: "Tin học 9 — THCS Tân Bình (Ms Trúc)",
+        members: []
+      }
+    ]
   },
   presets: []
 }, null, 2)};
