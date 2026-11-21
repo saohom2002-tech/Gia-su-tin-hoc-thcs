@@ -20,6 +20,27 @@
 <script>try{var t=JSON.parse(localStorage.getItem("gfe_theme")||'"light"');document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light")}catch(e){}</script>
 <script>
   (function() {
+    try {
+      var c = JSON.parse(localStorage.getItem("gfe_cache") || "null");
+      if (c) {
+        var hasMath = (c.questions || []).some(function(q) {
+          return q.Subject === 'Toán' || q.Subject === 'Toán học' || (q.Chapter && q.Chapter.indexOf('NGUYÊN HÀM') !== -1);
+        });
+        var hasOldClasses = (c.settings && c.settings.classes || []).some(function(cls) {
+          return cls.grade === '12' || cls.grade === '11' || (cls.desc && cls.desc.indexOf('Thầy Hùng') !== -1);
+        });
+        if (hasMath || hasOldClasses) {
+          localStorage.removeItem("gfe_cache");
+          localStorage.removeItem("gfe_localFile");
+          localStorage.removeItem("gfe_admFlt");
+          console.log("[Clean] Đã tự động dọn dẹp cache câu hỏi Toán và lớp 12 cũ.");
+        }
+      }
+    } catch(e) {}
+  })();
+</script>
+<script>
+  (function() {
     function enforceBrand() {
       const tx = document.querySelector('.brand-tx');
       if (tx && tx.textContent !== 'GAME AND LEARN') {
@@ -132,34 +153,34 @@
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
 
   <!-- Dữ liệu offline (giáo viên tải từ trang Quản trị, đặt vào thư mục data/) -->
-  <script defer src="data/questions-offline.js"></script>
+  <script defer src="data/questions-offline.js?v=20261121_thcs4"></script>
 
   <!-- Ứng dụng -->
-  <script defer src="assets/js/config.js"></script>
-  <script defer src="assets/js/core/utils.js"></script>
-  <script defer src="assets/js/core/art.js"></script>
-  <script defer src="assets/js/core/quiz.js"></script>
-  <script defer src="assets/js/core/demo-data.js"></script>
-  <script defer src="assets/js/core/firebase.js"></script>
-  <script defer src="assets/js/core/data.js"></script>
-  <script defer src="assets/js/core/importer.js"></script>
-  <script defer src="assets/js/core/room.js"></script>
-  <script defer src="assets/js/games/kit.js"></script>
-  <script defer src="assets/js/games/keo-co.js"></script>
-  <script defer src="assets/js/games/race.js"></script>
-  <script defer src="assets/js/games/xuc-xac.js"></script>
-  <script defer src="assets/js/games/dau-truong.js"></script>
-  <script defer src="assets/js/games/trieu-phu.js"></script>
-  <script defer src="assets/js/games/lat-manh.js"></script>
-  <script defer src="assets/js/games/vong-quay.js"></script>
-  <script defer src="assets/js/games/shooter.js"></script>
-  <script defer src="assets/js/games/o-chu.js"></script>
-  <script defer src="assets/js/games/olympia.js"></script>
-  <script defer src="assets/js/activities/duck-race.js"></script>
-  <script defer src="assets/js/pages/home.js"></script>
-  <script defer src="assets/js/pages/player.js"></script>
-  <script defer src="assets/js/admin/admin.js"></script>
-  <script defer src="assets/js/app.js"></script>
+  <script defer src="assets/js/config.js?v=20261121_thcs4"></script>
+  <script defer src="assets/js/core/utils.js?v=20261121_thcs4"></script>
+  <script defer src="assets/js/core/art.js?v=20261121_thcs4"></script>
+  <script defer src="assets/js/core/quiz.js?v=20261121_thcs4"></script>
+  <script defer src="assets/js/core/demo-data.js?v=20261121_thcs4"></script>
+  <script defer src="assets/js/core/firebase.js?v=20261121_thcs4"></script>
+  <script defer src="assets/js/core/data.js?v=20261121_thcs4"></script>
+  <script defer src="assets/js/core/importer.js?v=20261121_thcs4"></script>
+  <script defer src="assets/js/core/room.js?v=20261121_thcs4"></script>
+  <script defer src="assets/js/games/kit.js?v=20261121_thcs4"></script>
+  <script defer src="assets/js/games/keo-co.js?v=20261121_thcs4"></script>
+  <script defer src="assets/js/games/race.js?v=20261121_thcs4"></script>
+  <script defer src="assets/js/games/xuc-xac.js?v=20261121_thcs4"></script>
+  <script defer src="assets/js/games/dau-truong.js?v=20261121_thcs4"></script>
+  <script defer src="assets/js/games/trieu-phu.js?v=20261121_thcs4"></script>
+  <script defer src="assets/js/games/lat-manh.js?v=20261121_thcs4"></script>
+  <script defer src="assets/js/games/vong-quay.js?v=20261121_thcs4"></script>
+  <script defer src="assets/js/games/shooter.js?v=20261121_thcs4"></script>
+  <script defer src="assets/js/games/o-chu.js?v=20261121_thcs4"></script>
+  <script defer src="assets/js/games/olympia.js?v=20261121_thcs4"></script>
+  <script defer src="assets/js/activities/duck-race.js?v=20261121_thcs4"></script>
+  <script defer src="assets/js/pages/home.js?v=20261121_thcs4"></script>
+  <script defer src="assets/js/pages/player.js?v=20261121_thcs4"></script>
+  <script defer src="assets/js/admin/admin.js?v=20261121_thcs4"></script>
+  <script defer src="assets/js/app.js?v=20261121_thcs4"></script>
 </body>
 </html>
 <script async src="/.netlify/scripts/hud?variant=public" data-nf-variant="public" data-netlify-site-id="47dc72f7-93fc-4267-bcf5-46b944144070" data-app-host="app.netlify.com" data-account-tier="free"></script>

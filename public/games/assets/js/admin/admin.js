@@ -73,7 +73,7 @@
 
   /* ======================= NGÂN HÀNG CÂU HỎI ======================= */
   A.questions = (view) => {
-    const isSuper = FB.isSuperAdmin;
+    const isSuper = Boolean(FB.isSuperAdmin || FB.isLocalMode || (FB.user && (FB.user.isLocal || FB.user.isAdmin)));
     const st = { flt: U.store.get("admFlt", {}), page: 0, per: 30, sel: new Set() };
     const s = DB.settings;
     const sheetId = s.googleSheetId || (window.APP_CONFIG && APP_CONFIG.googleSheetId) || "1sw7iAQZw2cD7USR3O5tY6P6MvOqbWBvhuBORvr0dxNo";
@@ -108,6 +108,8 @@
         </div>
         <div class="btn-group" style="display:inline-flex;gap:4px">
           <button class="btn btn-ghost" id="qOff" title="Lưu toàn bộ ra file data/questions-offline.js để dùng ngoại tuyến">💾 Bản offline (data/)</button>
+          <button class="btn btn-primary" id="qSyncCloud" style="font-weight:700" title="Đẩy toàn bộ 1.089 câu hỏi Tin học lên Cloud Firestore để máy nào mở web cũng có">☁️ Đồng bộ Tin học lên Cloud</button>
+          <button class="btn btn-danger" id="qPurgeMath" style="font-weight:700" title="Xóa toàn bộ câu hỏi môn Toán, chỉ giữ lại môn Tin học">🗑️ Xóa hết câu hỏi Toán</button>
           ${!DB.questions.length ? `<button class="btn btn-sm btn-primary" id="qSeed">☁️ Nạp ${DEMO_QUESTIONS.length} câu vào Firestore</button>` : ""}
         </div>
         <span class="grow"></span>
@@ -179,6 +181,51 @@
     $("#qExpX", view).onclick = () => IO.toExcel(list()).catch(fail);
     $("#qTpl", view).onclick = () => IO.template().catch(fail);
     $("#qOff", view).onclick = () => { U.download("questions-offline.js", DB.exportOfflineJS(), "text/javascript"); U.toast("Đặt file vào thư mục data/ cạnh index.html để dùng khi không có mạng", "info", 4500); };
+    const qPurgeMath = $("#qPurgeMath", view);
+    if (qPurgeMath) {
+      qPurgeMath.onclick = async () => {
+        const ok = await U.confirm(
+          "Bạn có chắc chắn muốn <b>XÓA TOÀN BỘ CÂU HỎI MÔN TOÁN</b> khỏi hệ thống không?<br><br>• Hệ thống sẽ dọn dẹp sạch toàn bộ câu hỏi Toán cũ (cả trên máy và trên Cloud Firestore).<br>• Khôi phục và giữ trọn vẹn <b>1.089 câu hỏi Tin học</b> (Khối 3–9) của Ms Trúc.<br>• Làm mới toàn bộ bộ lọc môn học và khối lớp.",
+          { danger: true, ok: "Xóa sạch môn Toán" }
+        );
+        if (!ok) return;
+        busy(qPurgeMath, true);
+        try {
+          const res = await DB.purgeMathQuestions();
+          st.flt = {};
+          U.store.set("admFlt", {});
+          st.page = 0;
+          drawFilters();
+          draw();
+          U.toast(`Đã xóa sạch câu hỏi môn Toán! Ngân hàng hiện có ${res.remainingCount} câu Tin học chuẩn.`, "ok", 4500);
+        } catch (err) {
+          fail(err);
+        } finally {
+          busy(qPurgeMath, false);
+        }
+      };
+    }
+    const qSyncCloud = $("#qSyncCloud", view);
+    if (qSyncCloud) {
+      qSyncCloud.onclick = async () => {
+        const ok = await U.confirm(
+          `Bạn có muốn đẩy toàn bộ <b>${DB.questions.length} câu hỏi Tin học</b> lên Cloud Firestore không?<br><br>Sau khi đồng bộ, tất cả máy tính của học sinh và giáo viên khi mở web đều tự động có toàn bộ câu hỏi Tin học này!`,
+          { ok: "Đồng bộ lên Cloud" }
+        );
+        if (!ok) return;
+        busy(qSyncCloud, true);
+        try {
+          const res = await DB.syncInformaticsToCloud();
+          U.toast(`Đã đồng bộ thành công ${res.count} câu hỏi Tin học lên Cloud!`, "ok", 4500);
+          drawFilters();
+          draw();
+        } catch (err) {
+          fail(err);
+        } finally {
+          busy(qSyncCloud, false);
+        }
+      };
+    }
     const qSeed = $("#qSeed", view); if (qSeed) qSeed.onclick = async () => { busy(qSeed, true); try { const r = await DB.importQuestions(DEMO_QUESTIONS, { overwrite: true }); U.toast(`Đã nạp ${r.added + r.updated} câu vào Firestore`, "ok"); drawFilters(); draw(); } catch (e) { busy(qSeed, false); fail(e); } };
     $$("#qBulk [data-b]", view).forEach((b) => (b.onclick = async () => {
       const ids = Array.from(st.sel), a = b.dataset.b;
@@ -1163,7 +1210,7 @@
   /* ======================= LỚP & NHÓM HỌC ======================= */
   A.classes = (view) => {
     let qSearch = "", qGrade = "";
-    const isSuper = FB.isSuperAdmin;
+    const isSuper = Boolean(FB.isSuperAdmin || FB.isLocalMode || (FB.user && (FB.user.isLocal || FB.user.isAdmin)));
 
     /* Modal quản lý danh sách học sinh / thành viên của một lớp */
     const modalClassMembers = (cls) => {
@@ -1391,7 +1438,7 @@
 
     const modalClass = (cls) => {
       const isNew = !cls;
-      cls = cls || { name: "", code: "", grade: "12", desc: "", members: [] };
+      cls = cls || { name: "", code: "", grade: "7", desc: "Tin học — THCS Tân Bình (Ms Trúc)", members: [] };
       const m = U.modal({
         title: isNew ? "🏫 Tạo lớp / nhóm học mới" : "✏️ Chỉnh sửa lớp học",
         size: "md",
@@ -1482,6 +1529,7 @@
             <option value="Khác" ${qGrade === "Khác" ? "selected" : ""}>Khối khác</option>
           </select>
           <span class="grow"></span>
+          <button class="btn btn-sm btn-ghost" id="cResetTHCS" style="color:#ef4444;border:1px solid rgba(239,68,68,0.3)" title="Xóa các lớp Toán 12 cũ và khôi phục các lớp chuẩn THCS Tân Bình">🔄 Đặt lại lớp chuẩn THCS</button>
           <button class="btn btn-fun" id="cAdd">➕ Thêm lớp / nhóm mới</button>
         </div>
         <div id="cBox">
@@ -1536,6 +1584,23 @@
 
       $("#cSearch", view).oninput = U.debounce((e) => { qSearch = e.target.value; draw(); }, 200);
       $("#cGrade", view).onchange = (e) => { qGrade = e.target.value; draw(); };
+      const cReset = $("#cResetTHCS", view);
+      if (cReset) {
+        cReset.onclick = async () => {
+          const ok = await U.confirm(
+            "Bạn có chắc muốn <b>Đặt lại danh sách lớp chuẩn THCS Tân Bình</b> không?<br><br>• Xóa sạch các lớp Toán 12 cũ.<br>• Khôi phục danh sách các lớp Tin học THCS: Lớp 7/1, 7/2, 6/1, 8/1, 9/1 chuẩn của trường.",
+            { danger: true, ok: "Đặt lại danh sách lớp" }
+          );
+          if (!ok) return;
+          try {
+            await DB.resetClassesToDefault();
+            U.toast("Đã khôi phục danh sách lớp chuẩn THCS Tân Bình!", "ok");
+            draw();
+          } catch (e) {
+            fail(e);
+          }
+        };
+      }
       $("#cAdd", view).onclick = () => modalClass(null);
 
       $$("[data-act=members]", view).forEach((b) => (b.onclick = () => {

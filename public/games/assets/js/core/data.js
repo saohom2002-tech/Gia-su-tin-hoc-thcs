@@ -77,7 +77,7 @@
       { id: "ql_host", title: "Mở Phòng Thi Đấu", desc: "Tổ chức thi trực tuyến bằng mã PIN", url: "#/host", icon: "📡", color: "#0d6efd", badge: "Host phòng", external: false },
       { id: "ql_join", title: "Vào Phòng Bằng PIN", desc: "Học sinh nhập PIN vào làm bài thi", url: "#/join", icon: "🔢", color: "#f59e0b", badge: "Thí sinh", external: false },
       { id: "ql_lb", title: "Bảng Vàng Vinh Danh", desc: "Bảng xếp hạng thành tích & điểm số các lớp", url: "#/bang-vang", icon: "🏆", color: "#dc2626", badge: "Top 1", external: false },
-      { id: "ql_cls", title: "Lớp & Nhóm Học", desc: "Quản lý lớp 12A1, 12A2 và bảng điểm theo lớp", url: "#/admin/classes", icon: "👥", color: "#059669", badge: "Nội bộ", external: false }
+      { id: "ql_cls", title: "Lớp & Nhóm Học", desc: "Quản lý danh sách lớp học và bảng điểm theo lớp", url: "#/admin/classes", icon: "👥", color: "#059669", badge: "Nội bộ", external: false }
     ]
   };
   const DB = {
@@ -85,10 +85,31 @@
     loaded: false, _subs: [], usingDemo: false
   };
   const getFB = () => window.FB || {};
-  const isSuperAdmin = () => Boolean(window.FB && window.FB.isSuperAdmin);
+  const isSuperAdmin = () => {
+    if (!window.FB) return true;
+    return Boolean(
+      window.FB.isSuperAdmin ||
+      window.FB.isLocalMode ||
+      (window.FB.user && (window.FB.user.isLocal || window.FB.user.isAdmin)) ||
+      (window.FB.user && window.FB.user.email && (window.APP_CONFIG.adminEmails || []).map(x => x.toLowerCase()).includes(window.FB.user.email.toLowerCase()))
+    );
+  };
   const col = (n) => getFB().fs.collection(n);
   const docId = (id) => String(id || U.uid()).replace(/[\/\s#\[\]\.]+/g, "_").slice(0, 120);
   const natural = (a, b) => String(a.Id || "").localeCompare(String(b.Id || ""), "vi", { numeric: true });
+
+  const isMathQuestion = (q) => {
+    if (!q) return false;
+    const s = String(q.Subject || "").trim().toLowerCase();
+    if (s === "toán" || s === "toán học" || s === "math" || s === "toan") return true;
+    const ch = String(q.Chapter || "").toUpperCase();
+    if (ch.includes("NGUYÊN HÀM") || ch.includes("TÍCH PHÂN") || ch.includes("HÀM SỐ") || ch.includes("HÌNH HỌC KHÔNG GIAN")) return true;
+    const tp = String(q.Topic || "").toUpperCase();
+    if (tp.includes("TÍCH PHÂN") || tp.includes("NGUYÊN HÀM")) return true;
+    const id = String(q.Id || "");
+    if (id.startsWith("1775578537628_")) return true;
+    return false;
+  };
 
   DB.onChange = (fn) => DB._subs.push(fn);
   DB.emit = () => DB._subs.forEach((f) => { try { f(); } catch (e) { console.error(e); } });
@@ -102,7 +123,8 @@
     let ok = false;
     const lf = U.store.get("localFile", null);
     if (lf && lf.questions && lf.questions.length) {
-      DB.questions = lf.questions.slice().sort(natural); DB.sets = lf.sets || []; DB.gameConfigs = lf.gameConfigs || {}; DB.presets = lf.presets || [];
+      DB.questions = lf.questions.filter(q => !isMathQuestion(q)).slice().sort(natural);
+      DB.sets = lf.sets || []; DB.gameConfigs = lf.gameConfigs || {}; DB.presets = lf.presets || [];
       DB.settings = Object.assign({}, DEFAULT_SETTINGS, lf.settings || {}); DB.source = "local-file";
       DB.usingDemo = false; DB.loaded = true; DB.emit(); return;
     }
@@ -113,10 +135,36 @@
           col("presets").get().catch(() => null)   // chưa cập nhật rules thì bỏ qua, không ảnh hưởng phần khác
         ]), APP_CONFIG.cloudTimeout || 9000);
         DB.presets = ps ? ps.docs.map((d) => Object.assign({ id: d.id }, d.data())) : [];
-        DB.questions = qs.docs.map((d) => Object.assign({ _doc: d.id }, d.data())).sort(natural);
+        
+        // 1. Lọc bỏ sạch mọi câu hỏi môn Toán cũ từ Firestore
+        const cloudQs = qs.docs.map((d) => Object.assign({ _doc: d.id }, d.data())).filter(q => !isMathQuestion(q));
+
+        // 2. Luôn nạp và hợp nhất 1.089 câu hỏi Tin học từ window.OFFLINE_DATA
+        const offQs = (window.OFFLINE_DATA && window.OFFLINE_DATA.questions) ? window.OFFLINE_DATA.questions.filter(q => !isMathQuestion(q)) : [];
+        const qMap = new Map();
+        offQs.forEach((q) => {
+          const id = q._doc || docId(q.Id);
+          qMap.set(id, Object.assign({ _doc: id }, q));
+        });
+        cloudQs.forEach((q) => {
+          const id = q._doc || docId(q.Id);
+          qMap.set(id, Object.assign({ _doc: id }, q));
+        });
+        DB.questions = Array.from(qMap.values()).sort(natural);
+
         DB.sets = ss.docs.map((d) => Object.assign({ id: d.id }, d.data()));
         DB.gameConfigs = {}; gc.docs.forEach((d) => (DB.gameConfigs[d.id] = d.data()));
         DB.settings = Object.assign({}, DEFAULT_SETTINGS, st.exists ? st.data() : {});
+
+        // 3. Xử lý danh sách lớp: nếu danh sách từ Firestore là lớp Toán 12 cũ, tự động đổi sang danh sách lớp THCS Tân Bình
+        const hasOldClasses = (clsList) => {
+          if (!clsList || !clsList.length) return true;
+          return clsList.some(c => c.grade === "12" || c.grade === "11" || c.grade === "10" || (c.desc || "").includes("Thầy Hùng TBS"));
+        };
+        if (hasOldClasses(DB.settings.classes)) {
+          DB.settings.classes = DEFAULT_SETTINGS.classes.slice();
+        }
+
         DB.settings.siteName = "GAME AND LEARN";
         DB.settings.schoolName = "Trường THCS Tân Bình";
         DB.settings.schoolShort = "TRƯỜNG THCS TÂN BÌNH";
@@ -138,8 +186,12 @@
       const local = null;
       const pickData = (off && off.questions && off.questions.length ? off : null) || (cache && cache.questions && cache.questions.length ? cache : null);
       if (pickData) {
-        DB.questions = (pickData.questions || []).slice().sort(natural); DB.sets = pickData.sets || []; DB.gameConfigs = pickData.gameConfigs || {}; DB.presets = pickData.presets || [];
+        DB.questions = (pickData.questions || []).filter(q => !isMathQuestion(q)).slice().sort(natural);
+        DB.sets = pickData.sets || []; DB.gameConfigs = pickData.gameConfigs || {}; DB.presets = pickData.presets || [];
         DB.settings = Object.assign({}, DEFAULT_SETTINGS, pickData.settings || {});
+        if (!DB.settings.classes || !DB.settings.classes.length || DB.settings.classes.some(c => c.grade === "12" || (c.desc || "").includes("Thầy Hùng TBS"))) {
+          DB.settings.classes = DEFAULT_SETTINGS.classes.slice();
+        }
         DB.settings.siteName = "GAME AND LEARN";
         DB.settings.schoolName = "Trường THCS Tân Bình";
         DB.settings.schoolShort = "TRƯỜNG THCS TÂN BÌNH";
@@ -158,6 +210,14 @@
     DB.settings.schoolShort = "TRƯỜNG THCS TÂN BÌNH";
     DB.settings.adminName = "Ms Trúc";
     DB.settings.adminPhone = "0908.959.627";
+    DB.settings.adminPhoneTel = "0908959627";
+    DB.settings.adminZalo = "https://zalo.me/0908959627";
+    DB.settings.adminEmail = "tranthithanhtruc1980@gmail.com";
+    DB.settings.schoolAddress = "873 Cách Mạng Tháng 8, Phường Tân Sơn Nhất, TP.HCM";
+    DB.settings.schoolWebsite = "https://thcstanbinh.hcm.edu.vn";
+    DB.usingDemo = !DB.questions.length;
+    DB.loaded = true; DB.emit();
+  };
     DB.settings.adminPhoneTel = "0908959627";
     DB.settings.adminZalo = "https://zalo.me/0908959627";
     DB.settings.adminEmail = "tranthithanhtruc1980@gmail.com";
@@ -257,7 +317,7 @@
   DB.deleteQuestions = async (docs) => {
     needCloud();
     if (!isSuperAdmin()) {
-      throw new Error("Chỉ Quản trị viên tối cao (Thầy Hùng TBS) mới có quyền xóa câu hỏi.");
+      throw new Error("Chỉ Quản trị viên tối cao (Ms Trúc) mới có quyền xóa câu hỏi.");
     }
     if (FB.available && !FB.isLocalMode) {
       await batchRun(docs.map((d) => (b) => b.delete(col("questions").doc(d))));
@@ -269,6 +329,80 @@
       }
     }
     DB.questions = DB.questions.filter((q) => !docs.includes(q._doc)); saveCache(); DB.emit();
+  };
+
+  /* Xóa sạch vĩnh viễn toàn bộ câu hỏi môn Toán và nạp đủ 1.089 câu hỏi Tin học chuẩn */
+  DB.purgeMathQuestions = async () => {
+    needCloud();
+    // 1. Lọc tất cả câu hỏi môn Toán đang có trong bộ nhớ
+    const mathInMem = DB.questions.filter(isMathQuestion);
+    const toDeleteDocs = mathInMem.map((q) => q._doc || docId(q.Id));
+
+    // 2. Tìm câu hỏi môn Toán trên Firestore nếu có kết nối
+    if (FB.available && !FB.isLocalMode) {
+      try {
+        const snap = await col("questions").where("Subject", "==", "Toán").get();
+        snap.docs.forEach((d) => {
+          if (!toDeleteDocs.includes(d.id)) toDeleteDocs.push(d.id);
+        });
+      } catch (e) {
+        console.warn("Tìm câu hỏi Toán trên Firestore:", e.message);
+      }
+    }
+
+    // 3. Thực hiện xóa trên Firestore
+    if (toDeleteDocs.length && FB.available && !FB.isLocalMode) {
+      try {
+        await batchRun(toDeleteDocs.map((d) => (b) => b.delete(col("questions").doc(d))));
+      } catch (e) {
+        console.warn("Xóa câu hỏi Toán trên Firestore:", e.message);
+      }
+    }
+
+    // 4. Lọc sạch DB.questions
+    DB.questions = DB.questions.filter((q) => !isMathQuestion(q));
+
+    // 5. Nạp lại đủ 1.089 câu hỏi Tin học từ OFFLINE_DATA
+    if (window.OFFLINE_DATA && window.OFFLINE_DATA.questions) {
+      const offQs = window.OFFLINE_DATA.questions.filter((q) => !isMathQuestion(q));
+      const qMap = new Map();
+      DB.questions.forEach((q) => qMap.set(q._doc || docId(q.Id), q));
+      offQs.forEach((q) => {
+        const id = q._doc || docId(q.Id);
+        if (!qMap.has(id)) qMap.set(id, Object.assign({ _doc: id }, q));
+      });
+      DB.questions = Array.from(qMap.values()).sort(natural);
+    }
+
+    saveCache();
+    DB.emit();
+    return { deletedCount: toDeleteDocs.length, remainingCount: DB.questions.length };
+  };
+
+  /* Đẩy toàn bộ câu hỏi Tin học hiện có lên Cloud Firestore */
+  DB.syncInformaticsToCloud = async () => {
+    needCloud();
+    const tinHocQs = DB.questions.filter((q) => !isMathQuestion(q));
+    if (!tinHocQs.length) throw new Error("Không có câu hỏi Tin học nào để tải lên.");
+    if (FB.available && !FB.isLocalMode) {
+      const ops = tinHocQs.map((q) => {
+        const id = q._doc || docId(q.Id);
+        const data = clean(q);
+        data.updatedAt = Date.now();
+        return (b) => b.set(col("questions").doc(id), data);
+      });
+      await batchRun(ops);
+    }
+    saveCache();
+    return { count: tinHocQs.length };
+  };
+
+  /* Khôi phục danh sách lớp chuẩn THCS Tân Bình */
+  DB.resetClassesToDefault = async () => {
+    needCloud();
+    const defaultClasses = DEFAULT_SETTINGS.classes.slice();
+    await DB.saveSettings({ classes: defaultClasses });
+    return defaultClasses;
   };
   DB.bulkUpdate = async (docs, patch) => {
     needCloud();
