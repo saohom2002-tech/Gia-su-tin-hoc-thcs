@@ -180,6 +180,26 @@
         U.store.set("cache", { questions: DB.questions, sets: DB.sets, gameConfigs: DB.gameConfigs, settings: DB.settings, presets: DB.presets, at: Date.now() });
       } catch (e) { console.warn("Firestore không khả dụng:", e.message); }
     }
+
+    // Nếu chưa đọc được câu hỏi từ Firestore mà có Realtime Database, đọc từ game_bank trên RTDB (gstinhoc)
+    if (!ok && FB.available && FB.rtdb) {
+      try {
+        const snap = await withTimeout(FB.rtdb.ref("game_bank").once("value"), 4000);
+        if (snap && snap.exists()) {
+          const gb = snap.val();
+          if (gb.questions && gb.questions.length) {
+            DB.questions = gb.questions.filter((q) => !isMathQuestion(q)).sort(natural);
+            if (gb.sets) DB.sets = gb.sets;
+            if (gb.classes) DB.settings.classes = gb.classes;
+            DB.source = "cloud";
+            ok = true;
+            U.store.set("cache", { questions: DB.questions, sets: DB.sets, gameConfigs: DB.gameConfigs, settings: DB.settings, presets: DB.presets, at: Date.now() });
+          }
+        }
+      } catch (re) {
+        console.warn("RTDB game_bank load:", re.message);
+      }
+    }
     if (!ok) {
       const cache = U.store.get("cache", null);
       const off = window.OFFLINE_DATA;
@@ -594,9 +614,23 @@
     needCloud();
     DB.settings = Object.assign({}, DB.settings, patch);
     if (FB.available && !FB.isLocalMode) {
-      await col("settings").doc("site").set(DB.settings);
+      if (FB.fs) {
+        try { await col("settings").doc("site").set(DB.settings); } catch (e) {}
+      }
+      if (FB.rtdb) {
+        try {
+          if (patch.classes) await FB.rtdb.ref("game_bank/classes").set(patch.classes);
+          await FB.rtdb.ref("game_bank/settings").set(DB.settings);
+        } catch (e) {}
+      }
     } else if (FB.available && FB.isLocalMode) {
-      try { await col("settings").doc("site").set(DB.settings); } catch (e) { console.warn("Lưu cài đặt cục bộ:", e.message); }
+      try {
+        if (FB.fs) await col("settings").doc("site").set(DB.settings);
+        if (FB.rtdb) {
+          if (patch.classes) await FB.rtdb.ref("game_bank/classes").set(patch.classes);
+          await FB.rtdb.ref("game_bank/settings").set(DB.settings);
+        }
+      } catch (e) { console.warn("Lưu cài đặt cục bộ:", e.message); }
     }
     saveCache(); DB.emit();
   };

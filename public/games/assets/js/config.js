@@ -26,14 +26,14 @@ window.APP_CONFIG = {
   googleDriveFolderId: "",
 
   firebase: {
-    apiKey: "AIzaSyBX4_WGe0BZCG0ZSG_c09GcleJ-hq4aeEY",
-    authDomain: "tpn123-f7971.firebaseapp.com",
-    databaseURL: "https:\/\/tpn123-f7971-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "tpn123-f7971",
-    storageBucket: "tpn123-f7971.firebasestorage.app",
-    messagingSenderId: "443986355362",
-    appId: "1:443986355362:web:1d62c3378d8b439ec6e3fb",
-    measurementId: "G-JFQDG5X5CN"
+    apiKey: "AIzaSyA03JGC5MofF0WZTbChvY3Z2T6Eego6MmE",
+    authDomain: "gstinhoc.firebaseapp.com",
+    databaseURL: "https://gstinhoc-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "gstinhoc",
+    storageBucket: "gstinhoc.firebasestorage.app",
+    messagingSenderId: "932677144311",
+    appId: "1:932677144311:web:396e0c28dc4b784ff14df2",
+    measurementId: "G-77J4Y3QJT7"
   },
 
   /* Chỉ những email này mới thấy menu "Quản trị".
