@@ -316,10 +316,28 @@
     App.setTheme(document.documentElement.dataset.theme || "light");
 
     App.buildDrawer();
-    await FB.init();
-    Room.init();
-    await DB.load();
-    App.applyBrand(); App.buildDrawer();
+    const dismissSplash = () => {
+      const s = $("#splash");
+      if (s) { s.classList.add("out"); setTimeout(() => s.remove(), 600); }
+    };
+    // Bảo hiểm tự động tắt màn hình chờ sau tối đa 2.5 giây
+    const splashTimer = setTimeout(dismissSplash, 2500);
+
+    try {
+      await FB.init();
+    } catch (e) { console.warn("FB.init:", e); }
+    try {
+      Room.init();
+    } catch (e) { console.warn("Room.init:", e); }
+    try {
+      await DB.load();
+    } catch (e) { console.warn("DB.load:", e); }
+
+    try {
+      App.applyBrand();
+      App.buildDrawer();
+    } catch (e) { console.warn("Brand apply:", e); }
+
     let firstAuth = true;
     FB.onAuth(() => {
       App.buildDrawer();
@@ -330,7 +348,8 @@
     firstAuth = false;
     DB.onChange(() => App.buildDrawer());
     addEventListener("hashchange", App.render);
-    $("#splash").classList.add("out"); setTimeout(() => $("#splash").remove(), 600);
+    clearTimeout(splashTimer);
+    dismissSplash();
     App.render();
   }
   document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", boot) : boot();

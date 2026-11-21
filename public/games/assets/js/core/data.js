@@ -238,14 +238,6 @@
     DB.usingDemo = !DB.questions.length;
     DB.loaded = true; DB.emit();
   };
-    DB.settings.adminPhoneTel = "0908959627";
-    DB.settings.adminZalo = "https://zalo.me/0908959627";
-    DB.settings.adminEmail = "tranthithanhtruc1980@gmail.com";
-    DB.settings.schoolAddress = "873 Cách Mạng Tháng 8, Phường Tân Sơn Nhất, TP.HCM";
-    DB.settings.schoolWebsite = "https://thcstanbinh.hcm.edu.vn";
-    DB.usingDemo = !DB.questions.length;
-    DB.loaded = true; DB.emit();
-  };
 
   /* Câu hỏi dùng để chơi (nếu ngân hàng trống => câu mẫu) */
   DB.bank = () => DB.questions.length ? DB.questions : (window.DEMO_QUESTIONS || []);
