@@ -589,14 +589,22 @@
   };
 
   /* ---------- Cấu hình game ---------- */
-  DB.gameCfg = (gid) => Object.assign({ enabled: true, setId: "" }, DB.gameConfigs[gid] || {});
+  DB.gameCfg = (gid) => Object.assign({ enabled: true, setId: "set_tin_all" }, DB.gameConfigs[gid] || {});
   DB.saveGameConfig = async (gid, patch) => {
     needCloud();
     const c = Object.assign(DB.gameCfg(gid), patch);
     if (FB.available && !FB.isLocalMode) {
-      await col("gameConfigs").doc(gid).set(c);
+      if (FB.fs) {
+        try { await col("gameConfigs").doc(gid).set(c); } catch (e) {}
+      }
+      if (FB.rtdb) {
+        try { await FB.rtdb.ref("game_bank/gameConfigs/" + gid).set(c); } catch (e) {}
+      }
     } else if (FB.available && FB.isLocalMode) {
-      try { await col("gameConfigs").doc(gid).set(c); } catch (e) { console.warn("Lưu cấu hình game cục bộ:", e.message); }
+      try {
+        if (FB.fs) await col("gameConfigs").doc(gid).set(c);
+        if (FB.rtdb) await FB.rtdb.ref("game_bank/gameConfigs/" + gid).set(c);
+      } catch (e) { console.warn("Lưu cấu hình game cục bộ:", e.message); }
     }
     DB.gameConfigs[gid] = c; saveCache(); DB.emit();
   };

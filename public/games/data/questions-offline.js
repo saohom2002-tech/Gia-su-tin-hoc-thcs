@@ -2,9 +2,9 @@
    Ngân hàng câu hỏi Tin học chuẩn SGK Kết nối tri thức (Lớp 3 - Lớp 9)
    Tổng số lượng: 1089 câu hỏi
    Tác giả: Ms Trúc
-   Xuất lúc: 2026-11-21T04:52:29.617Z */
+   Xuất lúc: 2026-11-21T11:09:42.445Z */
 window.OFFLINE_DATA = {
-  "exportedAt": "2026-11-21T04:52:29.630Z",
+  "exportedAt": "2026-11-21T11:09:42.445Z",
   "questions": [
     {
       "Id": "g3-b1-1",
@@ -21303,7 +21303,78 @@ window.OFFLINE_DATA = {
       ]
     }
   ],
-  "gameConfigs": {},
+  "gameConfigs": {
+    "olympia": {
+      "enabled": true,
+      "setId": "set_tin_all",
+      "updatedAt": 1795259382420
+    },
+    "dau-truong": {
+      "enabled": true,
+      "setId": "set_tin_all",
+      "updatedAt": 1795259382420
+    },
+    "keo-co": {
+      "enabled": true,
+      "setId": "set_tin_all",
+      "updatedAt": 1795259382420
+    },
+    "dua-xe": {
+      "enabled": true,
+      "setId": "set_tin_all",
+      "updatedAt": 1795259382420
+    },
+    "dua-vit": {
+      "enabled": true,
+      "setId": "set_tin_all",
+      "updatedAt": 1795259382420
+    },
+    "dua-thuyen-rong": {
+      "enabled": true,
+      "setId": "set_tin_all",
+      "updatedAt": 1795259382420
+    },
+    "nhay-bao-bo": {
+      "enabled": true,
+      "setId": "set_tin_all",
+      "updatedAt": 1795259382420
+    },
+    "xuc-xac": {
+      "enabled": true,
+      "setId": "set_tin_all",
+      "updatedAt": 1795259382420
+    },
+    "trieu-phu": {
+      "enabled": true,
+      "setId": "set_tin_all",
+      "updatedAt": 1795259382420
+    },
+    "lat-manh": {
+      "enabled": true,
+      "setId": "set_tin_all",
+      "updatedAt": 1795259382420
+    },
+    "o-chu": {
+      "enabled": true,
+      "setId": "set_tin_all",
+      "updatedAt": 1795259382420
+    },
+    "vong-quay": {
+      "enabled": true,
+      "setId": "set_tin_all",
+      "updatedAt": 1795259382420
+    },
+    "zombie": {
+      "enabled": true,
+      "setId": "set_tin_all",
+      "updatedAt": 1795259382420
+    },
+    "bong-bay": {
+      "enabled": true,
+      "setId": "set_tin_all",
+      "updatedAt": 1795259382420
+    }
+  },
   "settings": {
     "siteName": "GAME AND LEARN",
     "schoolName": "Trường THCS Tân Bình",
@@ -21381,5 +21452,1756 @@ window.OFFLINE_DATA = {
       }
     ]
   },
-  "presets": []
+  "presets": [
+    {
+      "id": "pre_olympia_k6",
+      "gameId": "olympia",
+      "name": "[Khối 6] Tin học 6 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 6",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_6"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_olympia_k7",
+      "gameId": "olympia",
+      "name": "[Khối 7] Tin học 7 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 7",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_7"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_olympia_k8",
+      "gameId": "olympia",
+      "name": "[Khối 8] Tin học 8 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 297 câu hỏi Tin học Khối 8",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_8"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_olympia_k9",
+      "gameId": "olympia",
+      "name": "[Khối 9] Tin học 9 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 301 câu hỏi Tin học Khối 9",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_9"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_olympia_kall",
+      "gameId": "olympia",
+      "name": "[Khối All] Toàn bộ 1.089 câu Tin học (Lớp 3 - 9)",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: Ngân hàng toàn trường đầy đủ 1.089 câu",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_all"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_dau-truong_k6",
+      "gameId": "dau-truong",
+      "name": "[Khối 6] Tin học 6 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 6",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_6"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_dau-truong_k7",
+      "gameId": "dau-truong",
+      "name": "[Khối 7] Tin học 7 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 7",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_7"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_dau-truong_k8",
+      "gameId": "dau-truong",
+      "name": "[Khối 8] Tin học 8 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 297 câu hỏi Tin học Khối 8",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_8"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_dau-truong_k9",
+      "gameId": "dau-truong",
+      "name": "[Khối 9] Tin học 9 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 301 câu hỏi Tin học Khối 9",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_9"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_dau-truong_kall",
+      "gameId": "dau-truong",
+      "name": "[Khối All] Toàn bộ 1.089 câu Tin học (Lớp 3 - 9)",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: Ngân hàng toàn trường đầy đủ 1.089 câu",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_all"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_keo-co_k6",
+      "gameId": "keo-co",
+      "name": "[Khối 6] Tin học 6 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 6",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_6"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_keo-co_k7",
+      "gameId": "keo-co",
+      "name": "[Khối 7] Tin học 7 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 7",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_7"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_keo-co_k8",
+      "gameId": "keo-co",
+      "name": "[Khối 8] Tin học 8 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 297 câu hỏi Tin học Khối 8",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_8"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_keo-co_k9",
+      "gameId": "keo-co",
+      "name": "[Khối 9] Tin học 9 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 301 câu hỏi Tin học Khối 9",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_9"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_keo-co_kall",
+      "gameId": "keo-co",
+      "name": "[Khối All] Toàn bộ 1.089 câu Tin học (Lớp 3 - 9)",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: Ngân hàng toàn trường đầy đủ 1.089 câu",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_all"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_dua-xe_k6",
+      "gameId": "dua-xe",
+      "name": "[Khối 6] Tin học 6 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 6",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_6"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_dua-xe_k7",
+      "gameId": "dua-xe",
+      "name": "[Khối 7] Tin học 7 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 7",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_7"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_dua-xe_k8",
+      "gameId": "dua-xe",
+      "name": "[Khối 8] Tin học 8 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 297 câu hỏi Tin học Khối 8",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_8"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_dua-xe_k9",
+      "gameId": "dua-xe",
+      "name": "[Khối 9] Tin học 9 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 301 câu hỏi Tin học Khối 9",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_9"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_dua-xe_kall",
+      "gameId": "dua-xe",
+      "name": "[Khối All] Toàn bộ 1.089 câu Tin học (Lớp 3 - 9)",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: Ngân hàng toàn trường đầy đủ 1.089 câu",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_all"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_dua-vit_k6",
+      "gameId": "dua-vit",
+      "name": "[Khối 6] Tin học 6 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 6",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_6"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_dua-vit_k7",
+      "gameId": "dua-vit",
+      "name": "[Khối 7] Tin học 7 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 7",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_7"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_dua-vit_k8",
+      "gameId": "dua-vit",
+      "name": "[Khối 8] Tin học 8 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 297 câu hỏi Tin học Khối 8",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_8"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_dua-vit_k9",
+      "gameId": "dua-vit",
+      "name": "[Khối 9] Tin học 9 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 301 câu hỏi Tin học Khối 9",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_9"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_dua-vit_kall",
+      "gameId": "dua-vit",
+      "name": "[Khối All] Toàn bộ 1.089 câu Tin học (Lớp 3 - 9)",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: Ngân hàng toàn trường đầy đủ 1.089 câu",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_all"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_dua-thuyen-rong_k6",
+      "gameId": "dua-thuyen-rong",
+      "name": "[Khối 6] Tin học 6 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 6",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_6"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_dua-thuyen-rong_k7",
+      "gameId": "dua-thuyen-rong",
+      "name": "[Khối 7] Tin học 7 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 7",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_7"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_dua-thuyen-rong_k8",
+      "gameId": "dua-thuyen-rong",
+      "name": "[Khối 8] Tin học 8 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 297 câu hỏi Tin học Khối 8",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_8"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_dua-thuyen-rong_k9",
+      "gameId": "dua-thuyen-rong",
+      "name": "[Khối 9] Tin học 9 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 301 câu hỏi Tin học Khối 9",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_9"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_dua-thuyen-rong_kall",
+      "gameId": "dua-thuyen-rong",
+      "name": "[Khối All] Toàn bộ 1.089 câu Tin học (Lớp 3 - 9)",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: Ngân hàng toàn trường đầy đủ 1.089 câu",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_all"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_nhay-bao-bo_k6",
+      "gameId": "nhay-bao-bo",
+      "name": "[Khối 6] Tin học 6 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 6",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_6"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_nhay-bao-bo_k7",
+      "gameId": "nhay-bao-bo",
+      "name": "[Khối 7] Tin học 7 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 7",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_7"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_nhay-bao-bo_k8",
+      "gameId": "nhay-bao-bo",
+      "name": "[Khối 8] Tin học 8 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 297 câu hỏi Tin học Khối 8",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_8"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_nhay-bao-bo_k9",
+      "gameId": "nhay-bao-bo",
+      "name": "[Khối 9] Tin học 9 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 301 câu hỏi Tin học Khối 9",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_9"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_nhay-bao-bo_kall",
+      "gameId": "nhay-bao-bo",
+      "name": "[Khối All] Toàn bộ 1.089 câu Tin học (Lớp 3 - 9)",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: Ngân hàng toàn trường đầy đủ 1.089 câu",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_all"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_xuc-xac_k6",
+      "gameId": "xuc-xac",
+      "name": "[Khối 6] Tin học 6 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 6",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_6"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_xuc-xac_k7",
+      "gameId": "xuc-xac",
+      "name": "[Khối 7] Tin học 7 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 7",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_7"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_xuc-xac_k8",
+      "gameId": "xuc-xac",
+      "name": "[Khối 8] Tin học 8 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 297 câu hỏi Tin học Khối 8",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_8"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_xuc-xac_k9",
+      "gameId": "xuc-xac",
+      "name": "[Khối 9] Tin học 9 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 301 câu hỏi Tin học Khối 9",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_9"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_xuc-xac_kall",
+      "gameId": "xuc-xac",
+      "name": "[Khối All] Toàn bộ 1.089 câu Tin học (Lớp 3 - 9)",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: Ngân hàng toàn trường đầy đủ 1.089 câu",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_all"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_trieu-phu_k6",
+      "gameId": "trieu-phu",
+      "name": "[Khối 6] Tin học 6 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 6",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_6"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_trieu-phu_k7",
+      "gameId": "trieu-phu",
+      "name": "[Khối 7] Tin học 7 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 7",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_7"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_trieu-phu_k8",
+      "gameId": "trieu-phu",
+      "name": "[Khối 8] Tin học 8 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 297 câu hỏi Tin học Khối 8",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_8"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_trieu-phu_k9",
+      "gameId": "trieu-phu",
+      "name": "[Khối 9] Tin học 9 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 301 câu hỏi Tin học Khối 9",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_9"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_trieu-phu_kall",
+      "gameId": "trieu-phu",
+      "name": "[Khối All] Toàn bộ 1.089 câu Tin học (Lớp 3 - 9)",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: Ngân hàng toàn trường đầy đủ 1.089 câu",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_all"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_lat-manh_k6",
+      "gameId": "lat-manh",
+      "name": "[Khối 6] Tin học 6 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 6",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_6"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_lat-manh_k7",
+      "gameId": "lat-manh",
+      "name": "[Khối 7] Tin học 7 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 7",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_7"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_lat-manh_k8",
+      "gameId": "lat-manh",
+      "name": "[Khối 8] Tin học 8 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 297 câu hỏi Tin học Khối 8",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_8"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_lat-manh_k9",
+      "gameId": "lat-manh",
+      "name": "[Khối 9] Tin học 9 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 301 câu hỏi Tin học Khối 9",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_9"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_lat-manh_kall",
+      "gameId": "lat-manh",
+      "name": "[Khối All] Toàn bộ 1.089 câu Tin học (Lớp 3 - 9)",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: Ngân hàng toàn trường đầy đủ 1.089 câu",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_all"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_o-chu_k6",
+      "gameId": "o-chu",
+      "name": "[Khối 6] Tin học 6 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 6",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_6"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_o-chu_k7",
+      "gameId": "o-chu",
+      "name": "[Khối 7] Tin học 7 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 7",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_7"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_o-chu_k8",
+      "gameId": "o-chu",
+      "name": "[Khối 8] Tin học 8 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 297 câu hỏi Tin học Khối 8",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_8"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_o-chu_k9",
+      "gameId": "o-chu",
+      "name": "[Khối 9] Tin học 9 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 301 câu hỏi Tin học Khối 9",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_9"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_o-chu_kall",
+      "gameId": "o-chu",
+      "name": "[Khối All] Toàn bộ 1.089 câu Tin học (Lớp 3 - 9)",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: Ngân hàng toàn trường đầy đủ 1.089 câu",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_all"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_vong-quay_k6",
+      "gameId": "vong-quay",
+      "name": "[Khối 6] Tin học 6 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 6",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_6"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_vong-quay_k7",
+      "gameId": "vong-quay",
+      "name": "[Khối 7] Tin học 7 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 7",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_7"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_vong-quay_k8",
+      "gameId": "vong-quay",
+      "name": "[Khối 8] Tin học 8 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 297 câu hỏi Tin học Khối 8",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_8"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_vong-quay_k9",
+      "gameId": "vong-quay",
+      "name": "[Khối 9] Tin học 9 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 301 câu hỏi Tin học Khối 9",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_9"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_vong-quay_kall",
+      "gameId": "vong-quay",
+      "name": "[Khối All] Toàn bộ 1.089 câu Tin học (Lớp 3 - 9)",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: Ngân hàng toàn trường đầy đủ 1.089 câu",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_all"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_zombie_k6",
+      "gameId": "zombie",
+      "name": "[Khối 6] Tin học 6 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 6",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_6"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_zombie_k7",
+      "gameId": "zombie",
+      "name": "[Khối 7] Tin học 7 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 7",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_7"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_zombie_k8",
+      "gameId": "zombie",
+      "name": "[Khối 8] Tin học 8 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 297 câu hỏi Tin học Khối 8",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_8"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_zombie_k9",
+      "gameId": "zombie",
+      "name": "[Khối 9] Tin học 9 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 301 câu hỏi Tin học Khối 9",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_9"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_zombie_kall",
+      "gameId": "zombie",
+      "name": "[Khối All] Toàn bộ 1.089 câu Tin học (Lớp 3 - 9)",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: Ngân hàng toàn trường đầy đủ 1.089 câu",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_all"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_bong-bay_k6",
+      "gameId": "bong-bay",
+      "name": "[Khối 6] Tin học 6 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 6",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_6"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_bong-bay_k7",
+      "gameId": "bong-bay",
+      "name": "[Khối 7] Tin học 7 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 160 câu hỏi Tin học Khối 7",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_7"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_bong-bay_k8",
+      "gameId": "bong-bay",
+      "name": "[Khối 8] Tin học 8 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 297 câu hỏi Tin học Khối 8",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_8"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_bong-bay_k9",
+      "gameId": "bong-bay",
+      "name": "[Khối 9] Tin học 9 — SGK Kết nối tri thức",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: 301 câu hỏi Tin học Khối 9",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_9"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    },
+    {
+      "id": "pre_bong-bay_kall",
+      "gameId": "bong-bay",
+      "name": "[Khối All] Toàn bộ 1.089 câu Tin học (Lớp 3 - 9)",
+      "note": "Cấu hình soạn sẵn của Ms Trúc: Ngân hàng toàn trường đầy đủ 1.089 câu",
+      "where": "cloud",
+      "by": "Ms Trúc",
+      "updatedAt": 1795259382420,
+      "createdAt": 1795259382420,
+      "cfg": {
+        "source": {
+          "kind": "set",
+          "setId": "set_tin_all"
+        },
+        "shuffleQ": true,
+        "shuffleA": true,
+        "explain": true,
+        "teamCount": 2,
+        "teamNames": [
+          "Đội Xanh",
+          "Đội Đỏ"
+        ],
+        "allowGuests": true
+      }
+    }
+  ]
 };

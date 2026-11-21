@@ -1066,7 +1066,15 @@
   A.sets = (view) => {
     const draw = () => {
       view.innerHTML = `<div class="page">${header("🧩", "Bộ đề & phân bổ cho game", "Gom câu hỏi thành bộ đề, rồi chọn bộ đề mặc định cho từng trò chơi.", "linear-gradient(135deg,#f472b6,#fb923c)")}
-        <div class="card" data-reveal style="margin-bottom:16px"><div class="card-h"><h3>🎮 Phân bổ câu hỏi cho từng game</h3><span class="muted">Bật/tắt game và chọn bộ đề mặc định (người chơi vẫn có thể đổi khi cấu hình).</span></div>
+        <div class="card" data-reveal style="margin-bottom:16px">
+          <div class="card-h">
+            <div>
+              <h3 style="margin:0">🎮 Phân bổ câu hỏi cho từng game</h3>
+              <span class="muted">Bật/tắt game và chọn bộ đề mặc định (người chơi vẫn có thể đổi khi vào game).</span>
+            </div>
+            <span class="grow"></span>
+            <button class="btn btn-sm btn-fun" id="sAssignAll" style="font-weight:700" title="Phân bổ toàn bộ 1.089 câu hỏi Tin học cho toàn bộ các trò chơi">⚡ Phân bổ 1.089 câu cho tất cả game</button>
+          </div>
           <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Trò chơi</th><th>Hiển thị</th><th>Bộ đề mặc định</th><th>Số câu dùng được</th></tr></thead><tbody>
           ${Games.list.map((g) => { const c = DB.gameCfg(g.id); const n = Quiz.flatten(c.setId ? DB.resolveSet(DB.findSet(c.setId)) : DB.bank(), g.types).length;
             return `<tr data-g="${g.id}"><td><b>${g.icon} ${esc(g.name)}</b><br><small class="muted">${g.types.join(" · ")}</small></td>
@@ -1086,6 +1094,23 @@
         $("[data-en]", tr).onchange = (e) => DB.saveGameConfig(gid, { enabled: e.target.checked }).then(() => { U.toast("Đã lưu", "ok"); App.buildDrawer(); }).catch(fail);
         $("[data-set]", tr).onchange = (e) => DB.saveGameConfig(gid, { setId: e.target.value }).then(() => { U.toast("Đã phân bổ bộ đề", "ok"); draw(); }).catch(fail);
       });
+      const sAssignAll = $("#sAssignAll", view);
+      if (sAssignAll) {
+        sAssignAll.onclick = async () => {
+          busy(sAssignAll, true);
+          try {
+            for (const g of Games.list) {
+              await DB.saveGameConfig(g.id, { enabled: true, setId: "set_tin_all" });
+            }
+            U.toast("Đã phân bổ toàn bộ 1.089 câu Tin học cho tất cả game!", "ok", 4000);
+            draw();
+          } catch (e) {
+            fail(e);
+          } finally {
+            busy(sAssignAll, false);
+          }
+        };
+      }
       $("#sAdd", view).onclick = () => A.editSet({}).then((ok) => ok && draw());
       $$(".set-card", view).forEach((c) => U.on(c, "click", "[data-a]", async (e, b) => {
         const s = DB.findSet(c.dataset.s);
