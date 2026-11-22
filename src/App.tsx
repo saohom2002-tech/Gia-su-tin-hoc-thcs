@@ -207,6 +207,18 @@ export default function App() {
     }, 120);
   };
 
+  const handleScrollToLessonTopics = () => {
+    if (step !== 'setup') {
+      setStep('setup');
+    }
+    setTimeout(() => {
+      const el = document.getElementById('lesson-selector-section');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 120);
+  };
+
   // Track previous step before entering print view
   const [stepBeforePrint, setStepBeforePrint] = useState<'setup' | 'result'>('setup');
   // Pending session restore across browser reloads
@@ -1509,6 +1521,7 @@ export default function App() {
         activeSection={step === 'setup' ? 'home' : step}
         onGoHome={() => setStep('setup')}
         onScrollToCustomExams={handleScrollToCustomExams}
+        onScrollToTopics={handleScrollToLessonTopics}
         onOpenScorebook={() => setIsScorebookModalOpen(true)}
         onOpenMistakes={() => setIsMistakeModalOpen(true)}
         onOpenHistory={() => setIsHistoryOpen(true)}
@@ -1913,7 +1926,7 @@ export default function App() {
             </div>
 
             {/* Step 1: Chọn Khối lớp & Bài học (Hỗ trợ chọn nhiều bài học) */}
-            <div id="lesson-selector-section">
+            <div id="lesson-selector-section" className="scroll-mt-20">
               <LessonSelector
                 selectedLessons={selectedLessons}
                 onToggleLesson={handleToggleLesson}

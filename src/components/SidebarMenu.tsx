@@ -3,6 +3,7 @@ import {
   GraduationCap,
   Home,
   BookOpen,
+  Layers,
   FileText,
   AlertCircle,
   Gamepad2,
@@ -37,6 +38,7 @@ export interface SidebarMenuProps {
   // Actions
   onGoHome: () => void;
   onScrollToCustomExams: () => void;
+  onScrollToTopics?: () => void;
   onOpenScorebook: () => void;
   onOpenMistakes: () => void;
   onOpenHistory: () => void;
@@ -64,6 +66,7 @@ export const SidebarMenu: React.FC<SidebarMenuProps> = ({
   activeSection = 'home',
   onGoHome,
   onScrollToCustomExams,
+  onScrollToTopics,
   onOpenScorebook,
   onOpenMistakes,
   onOpenHistory,
@@ -183,6 +186,24 @@ export const SidebarMenu: React.FC<SidebarMenuProps> = ({
               {!isCollapsed && customExamsCount > 0 && (
                 <span className="px-1.5 py-0.5 rounded-md bg-indigo-100 text-indigo-800 text-[10px] font-mono font-black shrink-0">
                   {customExamsCount}
+                </span>
+              )}
+            </button>
+
+            {/* Mục: Luyện tập theo Chủ đề */}
+            <button
+              type="button"
+              onClick={() => handleItemClick(onScrollToTopics || onGoHome)}
+              className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-700 hover:bg-emerald-50/80 hover:text-emerald-900 transition-all group cursor-pointer"
+              title="Luyện tập theo từng Chủ đề & Bài học SGK theo Khối lớp"
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <Layers className="w-5 h-5 text-emerald-600 shrink-0 group-hover:scale-110 transition-transform" />
+                {!isCollapsed && <span className="truncate">Luyện Tập Theo Chủ Đề</span>}
+              </div>
+              {!isCollapsed && (
+                <span className="px-1.5 py-0.5 rounded-md bg-emerald-100 text-emerald-800 text-[10px] font-mono font-black shrink-0">
+                  SGK
                 </span>
               )}
             </button>
