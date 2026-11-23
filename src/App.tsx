@@ -30,6 +30,7 @@ import { HistoryModal } from './components/HistoryModal';
 import { Dashboard } from './components/Dashboard';
 import { StudentProfileModal } from './components/StudentProfileModal';
 import { StudentProfileDisplay } from './components/StudentProfileDisplay';
+import { RolePortalHero } from './components/RolePortalHero';
 import { sound } from './utils/sound';
 import { isQuestionAnswerCorrect, getQuestionAnswerScore } from './utils/questionEvaluator';
 import { applyQuizShuffle } from './utils/quizShuffler';
@@ -1626,71 +1627,27 @@ export default function App() {
               </div>
             )}
 
-            {/* Hero Banner */}
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-700 text-white p-6 sm:p-10 shadow-xl shadow-sky-500/15 border-2 border-sky-400/50">
-              <div className="relative z-10 max-w-3xl space-y-3">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-xs font-bold shadow-2xs">
-                  <Sparkles className="w-3.5 h-3.5 text-yellow-300" />
-                  <span>Chương trình GDPT 2018 - Đầy đủ 2 Cấp: Tiểu học (Khối 3, 4, 5) & THCS (Khối 6, 7, 8, 9) (SGK Kết Nối Tri Thức)</span>
-                </div>
-                {/* Tiêu đề & Logo Trường THCS Tân Bình */}
-                <div className="flex items-center gap-3.5 sm:gap-5 pt-1">
-                  <div className="relative shrink-0">
-                    <img
-                      src={schoolLogo}
-                      alt="Logo Trường THCS Tân Bình"
-                      className="w-16 h-16 sm:w-20 sm:h-20 md:w-22 md:h-22 rounded-full object-contain bg-white p-1 shadow-xl border-2 border-white/90 ring-4 ring-white/20 transition-transform hover:scale-105"
-                    />
-                  </div>
-                  <div>
-                    <h1 className="text-3xl sm:text-5xl font-black tracking-tight font-['Be_Vietnam_Pro','Plus_Jakarta_Sans',sans-serif] leading-tight text-white drop-shadow-xs">
-                      GIA SƯ TIN HỌC
-                    </h1>
-                    <div className="flex flex-wrap items-center gap-2 mt-1.5 text-yellow-300 text-sm sm:text-base font-extrabold">
-                      <GraduationCap className="w-5 h-5 text-yellow-300 shrink-0" />
-                      <span>Tác giả: GV: Ms. Trúc Tin Học</span>
-                      <span className="hidden sm:inline text-white/50">•</span>
-                      <span className="inline-flex items-center text-white font-bold text-xs sm:text-sm bg-white/20 px-2.5 py-0.5 rounded-full border border-white/30 backdrop-blur-xs">
-                        Trường THCS Tân Bình
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Feature highlight badges */}
-                <div className="flex flex-wrap gap-2.5 pt-2 text-xs">
-                  <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/15 border border-white/25 font-bold backdrop-blur-xs">
-                    <CheckCircle className="w-3.5 h-3.5 text-emerald-300" />
-                    Đủ 2 Cấp: Tiểu học & THCS (Lớp 3 - 9)
-                  </span>
-                  <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/15 border border-white/25 font-bold backdrop-blur-xs">
-                    <Layers className="w-3.5 h-3.5 text-yellow-300" />
-                    Chọn nhiều bài cùng lúc
-                  </span>
-                  <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/15 border border-white/25 font-bold backdrop-blur-xs">
-                    <BrainCircuit className="w-3.5 h-3.5 text-cyan-200" />
-                    AI + API & Kho SGK Offline
-                  </span>
-                  <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/15 border border-white/25 font-bold backdrop-blur-xs">
-                    <Award className="w-3.5 h-3.5 text-amber-300" />
-                    In đề thi & Lời giải chi tiết
-                  </span>
-                </div>
-              </div>
-
-              {/* Decorative background glow */}
-              <div className="absolute right-0 top-0 -mr-16 -mt-16 w-80 h-80 rounded-full bg-cyan-300/25 blur-3xl pointer-events-none" />
-              <div className="absolute right-12 bottom-0 translate-y-1/4 w-64 h-64 rounded-full bg-sky-300/20 blur-2xl pointer-events-none" />
-            </div>
-
-            {/* MỤC: HỒ SƠ HỌC SINH (Nhấp vào thẻ để mở cửa sổ chỉnh sửa thông tin) */}
-            <div id="student-profile-section" className="py-1">
-              <StudentProfileDisplay
-                profile={studentProfile}
-                onOpenEdit={() => setIsProfileModalOpen(true)}
-                lastUpdatedMsg={lastUpdatedProfileMsg}
-              />
-            </div>
+            {/* CỔNG PHÂN VAI TRUNG TÂM (Lấy cảm hứng từ trường Thanh Bình - Tinh gọn, rõ ràng 3 phân vùng) */}
+            <RolePortalHero
+              studentProfile={studentProfile}
+              onOpenProfileModal={() => setIsProfileModalOpen(true)}
+              onScrollToTopics={handleScrollToLessonTopics}
+              onScrollToCustomExams={handleScrollToCustomExams}
+              onOpenScorebook={() => setIsScorebookModalOpen(true)}
+              onOpenHistory={() => setIsHistoryOpen(true)}
+              onOpenMistakes={() => setIsMistakeModalOpen(true)}
+              mistakesCount={mistakes.length}
+              onOpenEssay={() => setIsEssayModalOpen(true)}
+              onOpenAdminStudio={handleOpenAdminStudio}
+              isAdminLoggedIn={Boolean(adminSession && isAuthorizedAdmin(adminSession.email))}
+              adminEmail={adminSession?.email}
+              onAdminLogin={() => setIsAdminAuthModalOpen(true)}
+              onAdminLogout={() => {
+                sound.playClick();
+                saveAdminSession(null);
+                setAdminSession(null);
+              }}
+            />
 
             {/* SPECIAL BANNER: ÔN TẬP KIỂM TRA GIỮA KÌ 1 (TIN HỌC 5, TIN HỌC 8 & TIN HỌC 9) */}
             <div className="rounded-3xl border-2 border-sky-400/50 bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-600 p-5 sm:p-6 text-white shadow-xl shadow-blue-500/15 relative overflow-hidden">
