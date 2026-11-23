@@ -169,6 +169,7 @@ export default function App() {
   const [selectedGame, setSelectedGame] = useState<TBSGameItem | null>(null);
   const [isGameModalOpen, setIsGameModalOpen] = useState<boolean>(false);
   const [isGuideOpen, setIsGuideOpen] = useState<boolean>(false);
+  const [homeView, setHomeView] = useState<'overview' | 'topics' | 'exams'>('overview');
 
   // Sidebar state (Thanh Menu bên trái)
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(() => {
@@ -202,24 +203,14 @@ export default function App() {
     if (step !== 'setup') {
       setStep('setup');
     }
-    setTimeout(() => {
-      const el = document.getElementById('admin-exam-section');
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, 120);
+    setHomeView('exams');
   };
 
   const handleScrollToLessonTopics = () => {
     if (step !== 'setup') {
       setStep('setup');
     }
-    setTimeout(() => {
-      const el = document.getElementById('lesson-selector-section');
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 120);
+    setHomeView('topics');
   };
 
   // Track previous step before entering print view
@@ -1521,8 +1512,11 @@ export default function App() {
         onCloseMobile={() => setIsSidebarMobileOpen(false)}
         isCollapsed={isSidebarCollapsed}
         onToggleCollapse={toggleSidebarCollapse}
-        activeSection={step === 'setup' ? 'home' : step}
-        onGoHome={() => setStep('setup')}
+        activeSection={step === 'setup' ? homeView : step}
+        onGoHome={() => {
+          setStep('setup');
+          setHomeView('overview');
+        }}
         onScrollToCustomExams={handleScrollToCustomExams}
         onScrollToTopics={handleScrollToLessonTopics}
         onOpenScorebook={() => setIsScorebookModalOpen(true)}
@@ -1557,8 +1551,12 @@ export default function App() {
           onToggleSidebar={handleToggleSidebar}
           onOpenHistory={() => setIsHistoryOpen(true)}
           historyCount={history.length}
-          onGoHome={() => setStep('setup')}
+          onGoHome={() => {
+            setStep('setup');
+            setHomeView('overview');
+          }}
           isHome={step === 'setup'}
+          activeTab={homeView}
           soundEnabled={soundEnabled}
           onToggleSound={toggleSound}
           studentProfile={studentProfile}
@@ -1633,174 +1631,244 @@ export default function App() {
               </div>
             )}
 
-            {/* CỔNG PHÂN VAI TRUNG TÂM (Lấy cảm hứng từ trường Thanh Bình - Tinh gọn, rõ ràng 3 phân vùng) */}
-            <RolePortalHero
-              studentProfile={studentProfile}
-              onOpenProfileModal={() => setIsProfileModalOpen(true)}
-              onScrollToTopics={handleScrollToLessonTopics}
-              onScrollToCustomExams={handleScrollToCustomExams}
-              onOpenScorebook={() => setIsScorebookModalOpen(true)}
-              onOpenHistory={() => setIsHistoryOpen(true)}
-              onOpenMistakes={() => setIsMistakeModalOpen(true)}
-              mistakesCount={mistakes.length}
-              onOpenEssay={() => setIsEssayModalOpen(true)}
-              onOpenAdminStudio={handleOpenAdminStudio}
-              isAdminLoggedIn={Boolean(adminSession && isAuthorizedAdmin(adminSession.email))}
-              adminEmail={adminSession?.email}
-              onAdminLogin={() => setIsAdminAuthModalOpen(true)}
-              onAdminLogout={() => {
-                sound.playClick();
-                saveAdminSession(null);
-                setAdminSession(null);
-              }}
-            />
-
-            {/* Dashboard: Biểu đồ thống kê kết quả học tập - CHỈ HIỂN THỊ KHI GIÁO VIÊN ĐĂNG NHẬP */}
-            {Boolean(adminSession && isAuthorizedAdmin(adminSession.email)) && (
-              <div className="space-y-3">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-100 border border-sky-300 text-sky-900 text-xs font-black uppercase">
-                  <ShieldCheck className="w-3.5 h-3.5 text-sky-700" />
-                  <span>Khu vực Giáo viên: Thống kê kết quả học tập & Năng lực học sinh</span>
-                </div>
-                <Dashboard
-                  history={history}
-                  onSelectLessonToPractice={handleSelectLessonToPractice}
-                  onLoadDemoData={initDemoData}
+            {/* 1. MÀN HÌNH TỔNG QUAN: CHỈ HIỂN THỊ CỔNG PHÂN VAI (ROLE PORTAL) */}
+            {homeView === 'overview' && (
+              <div className="space-y-6">
+                <RolePortalHero
                   studentProfile={studentProfile}
-                  mistakesCount={mistakes.length}
-                  onOpenMistakes={() => setIsMistakeModalOpen(true)}
+                  onOpenProfileModal={() => setIsProfileModalOpen(true)}
+                  onScrollToTopics={handleScrollToLessonTopics}
+                  onScrollToCustomExams={handleScrollToCustomExams}
                   onOpenScorebook={() => setIsScorebookModalOpen(true)}
+                  onOpenHistory={() => setIsHistoryOpen(true)}
+                  onOpenMistakes={() => setIsMistakeModalOpen(true)}
+                  mistakesCount={mistakes.length}
+                  onOpenEssay={() => setIsEssayModalOpen(true)}
+                  onOpenAdminStudio={handleOpenAdminStudio}
+                  isAdminLoggedIn={Boolean(adminSession && isAuthorizedAdmin(adminSession.email))}
+                  adminEmail={adminSession?.email}
+                  onAdminLogin={() => setIsAdminAuthModalOpen(true)}
+                  onAdminLogout={() => {
+                    sound.playClick();
+                    saveAdminSession(null);
+                    setAdminSession(null);
+                  }}
                 />
+
+                {/* Dashboard: Biểu đồ thống kê kết quả học tập - CHỈ HIỂN THỊ KHI GIÁO VIÊN ĐĂNG NHẬP */}
+                {Boolean(adminSession && isAuthorizedAdmin(adminSession.email)) && (
+                  <div className="space-y-3">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-100 border border-sky-300 text-sky-900 text-xs font-black uppercase">
+                      <ShieldCheck className="w-3.5 h-3.5 text-sky-700" />
+                      <span>Khu vực Giáo viên: Thống kê kết quả học tập & Năng lực học sinh</span>
+                    </div>
+                    <Dashboard
+                      history={history}
+                      onSelectLessonToPractice={handleSelectLessonToPractice}
+                      onLoadDemoData={initDemoData}
+                      studentProfile={studentProfile}
+                      mistakesCount={mistakes.length}
+                      onOpenMistakes={() => setIsMistakeModalOpen(true)}
+                      onOpenScorebook={() => setIsScorebookModalOpen(true)}
+                    />
+                  </div>
+                )}
               </div>
             )}
 
-            {/* MỤC: QUẢN TRỊ ĐỀ ĐÃ TẠO & ĐỀ GIÁO VIÊN (ADMIN STUDIO) */}
-            <div id="admin-exam-section">
-              <AdminExamSection
-                customExams={customExams}
-                currentGradeFilter={currentGradeFilter}
-                onLaunchExam={handleLaunchCustomExam}
-                onPrintExam={handlePrintCustomExam}
-                onOpenAdminStudio={handleOpenAdminStudio}
-                onUpdateExam={handleUpdateCustomExam}
-                onDeleteExam={handleDeleteCustomExam}
-                onDuplicateExam={handleDuplicateCustomExam}
-                isAdmin={Boolean(adminSession && isAuthorizedAdmin(adminSession.email))}
-              />
-            </div>
-
-            {/* Step 1: Chọn Khối lớp & Bài học (Hỗ trợ chọn nhiều bài học) */}
-            <div id="lesson-selector-section" className="scroll-mt-20">
-              <LessonSelector
-                selectedLessons={selectedLessons}
-                onToggleLesson={handleToggleLesson}
-                onSelectAllInGrade={handleSelectAllInGrade}
-                onDeselectAll={handleDeselectAll}
-                currentGradeFilter={currentGradeFilter}
-                setCurrentGradeFilter={handleGradeFilterChange}
-                educationLevel={educationLevel}
-                setEducationLevel={setEducationLevel}
-                customLessonTitle={customLessonTitle}
-                setCustomLessonTitle={setCustomLessonTitle}
-                customSubject={customSubject}
-                setCustomSubject={setCustomSubject}
-                customGrade={customGrade}
-                setCustomGrade={setCustomGrade}
-                customNotes={customNotes}
-                setCustomNotes={setCustomNotes}
-                isCustomMode={isCustomMode}
-                setIsCustomMode={setIsCustomMode}
-                onManageTopicBank={handleManageTopicBank}
-                topicQuestionCounts={topicQuestionCounts}
-                isAdmin={Boolean(adminSession && isAuthorizedAdmin(adminSession.email))}
-              />
-            </div>
-
-            {/* Step 2: Chọn số câu hỏi */}
-            <QuestionCountSelector
-              count={questionCount}
-              onSelectCount={setQuestionCount}
-            />
-
-            {/* Step 3: Chọn cấp độ (3 cấp độ + Tổng hợp 3 cấp độ) */}
-            <DifficultySelector
-              difficulty={difficulty}
-              onSelectDifficulty={setDifficulty}
-              count={questionCount}
-            />
-
-            {/* Step 4: Chọn phương thức thi thử hay học tập & Tùy chọn trộn đề */}
-            <ModeSelector
-              mode={quizMode}
-              onSelectMode={setQuizMode}
-              shuffleQuestions={shuffleQuestions}
-              onToggleShuffleQuestions={setShuffleQuestions}
-              shuffleAnswers={shuffleAnswers}
-              onToggleShuffleAnswers={setShuffleAnswers}
-            />
-
-            {/* Step 5: Nguồn tạo câu hỏi & Tích hợp AI / API Key */}
-            <QuestionSourceSelector
-              sourcePreference={sourcePreference}
-              onSelectSourcePreference={handleSelectSourcePreference}
-              apiKey={customApiKey}
-              onSaveApiKey={handleSaveApiKey}
-            />
-
-            {/* Submit Action Block (Không còn dính nổi che màn hình, nút chính đã cố định trên Header) */}
-            <div className="pt-4 pb-6">
-              <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="text-xs sm:text-sm text-slate-600">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="font-bold text-slate-800">Cấu hình ôn tập hiện tại:</span>
+            {/* 2. MÀN HÌNH KHO ĐỀ THI */}
+            {homeView === 'exams' && (
+              <div className="space-y-6 animate-in fade-in slide-in-from-top-2">
+                <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl bg-sky-50 border border-sky-200 shadow-xs">
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        sound.playClick();
+                        setHomeView('overview');
+                      }}
+                      className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-sky-100 border border-sky-300 text-sky-900 text-xs font-black flex items-center gap-1.5 cursor-pointer shadow-xs transition-all active:scale-95"
+                    >
+                      <span>← Quay lại Tổng quan</span>
+                    </button>
+                    <span className="text-xs font-bold text-sky-950">Kho Đề Thi Chuẩn SGK</span>
                   </div>
-                  <span>Bạn đang chọn: </span>
-                  <strong className="text-indigo-700">
-                    {isCustomMode
-                      ? customLessonTitle || 'Bài học tự nhập'
-                      : selectedLessons.length === 0
-                      ? 'Chưa chọn bài nào'
-                      : selectedLessons.length === 1
-                      ? `${selectedLessons[0].title} (Khối ${currentGradeFilter})`
-                      : `${selectedLessons.length} bài học Khối ${currentGradeFilter}`}
-                  </strong>{' '}
-                  • <strong className="text-indigo-700">{questionCount} câu</strong> •{' '}
-                  <strong className="text-indigo-700">
-                    {difficulty === 'de'
-                      ? 'Cấp độ Dễ'
-                      : difficulty === 'trung_binh'
-                      ? 'Cấp độ Trung bình'
-                      : difficulty === 'kho'
-                      ? 'Cấp độ Khó'
-                      : 'Tổng hợp 3 cấp độ'}
-                  </strong>{' '}
-                  •{' '}
-                  <span className="inline-flex items-center gap-1 font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">
-                    {sourcePreference === 'ai' ? '🤖 AI Thông Minh' : '💾 Kho Offline'}
-                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      sound.playClick();
+                      setHomeView('topics');
+                    }}
+                    className="text-xs font-bold text-emerald-700 hover:text-emerald-800 hover:underline cursor-pointer flex items-center gap-1"
+                  >
+                    <span>Luyện tập theo Chủ đề SGK</span>
+                    <span>→</span>
+                  </button>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={handleStartGenerateQuiz}
-                  disabled={isGenerating || (!isCustomMode && selectedLessons.length === 0)}
-                  className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-black text-sm sm:text-base shadow-lg shadow-indigo-600/30 hover:shadow-indigo-600/40 transition-all flex items-center justify-center gap-2.5 active:scale-98 disabled:opacity-50 cursor-pointer"
-                >
-                  {isGenerating ? (
-                    <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                      <span>Đang tạo bộ câu hỏi...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Play className="w-5 h-5 fill-white" />
-                      <span>TẠO CÂU HỎI & BẮT ĐẦU ÔN TẬP</span>
-                    </>
-                  )}
-                </button>
+                <div id="admin-exam-section">
+                  <AdminExamSection
+                    customExams={customExams}
+                    currentGradeFilter={currentGradeFilter}
+                    onLaunchExam={handleLaunchCustomExam}
+                    onPrintExam={handlePrintCustomExam}
+                    onOpenAdminStudio={handleOpenAdminStudio}
+                    onUpdateExam={handleUpdateCustomExam}
+                    onDeleteExam={handleDeleteCustomExam}
+                    onDuplicateExam={handleDuplicateCustomExam}
+                    isAdmin={Boolean(adminSession && isAuthorizedAdmin(adminSession.email))}
+                  />
+                </div>
               </div>
-            </div>
+            )}
+
+            {/* 3. MÀN HÌNH LUYỆN TẬP THEO CHỦ ĐỀ & BÀI HỌC SGK */}
+            {homeView === 'topics' && (
+              <div className="space-y-6 animate-in fade-in slide-in-from-top-2">
+                <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 shadow-xs">
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        sound.playClick();
+                        setHomeView('overview');
+                      }}
+                      className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-emerald-100 border border-emerald-300 text-emerald-900 text-xs font-black flex items-center gap-1.5 cursor-pointer shadow-xs transition-all active:scale-95"
+                    >
+                      <span>← Quay lại Tổng quan</span>
+                    </button>
+                    <span className="text-xs font-bold text-emerald-950">Luyện Tập Theo Chủ Đề SGK</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      sound.playClick();
+                      setHomeView('exams');
+                    }}
+                    className="text-xs font-bold text-sky-700 hover:text-sky-800 hover:underline cursor-pointer flex items-center gap-1"
+                  >
+                    <span>Xem Kho đề thi chuẩn SGK</span>
+                    <span>→</span>
+                  </button>
+                </div>
+
+                {/* Step 1: Chọn Khối lớp & Bài học (Hỗ trợ chọn nhiều bài học) */}
+                <div id="lesson-selector-section" className="scroll-mt-20">
+                  <LessonSelector
+                    selectedLessons={selectedLessons}
+                    onToggleLesson={handleToggleLesson}
+                    onSelectAllInGrade={handleSelectAllInGrade}
+                    onDeselectAll={handleDeselectAll}
+                    currentGradeFilter={currentGradeFilter}
+                    setCurrentGradeFilter={handleGradeFilterChange}
+                    educationLevel={educationLevel}
+                    setEducationLevel={setEducationLevel}
+                    customLessonTitle={customLessonTitle}
+                    setCustomLessonTitle={setCustomLessonTitle}
+                    customSubject={customSubject}
+                    setCustomSubject={setCustomSubject}
+                    customGrade={customGrade}
+                    setCustomGrade={setCustomGrade}
+                    customNotes={customNotes}
+                    setCustomNotes={setCustomNotes}
+                    isCustomMode={isCustomMode}
+                    setIsCustomMode={setIsCustomMode}
+                    onManageTopicBank={handleManageTopicBank}
+                    topicQuestionCounts={topicQuestionCounts}
+                    isAdmin={Boolean(adminSession && isAuthorizedAdmin(adminSession.email))}
+                  />
+                </div>
+
+                {/* Step 2: Chọn số câu hỏi */}
+                <QuestionCountSelector
+                  count={questionCount}
+                  onSelectCount={setQuestionCount}
+                />
+
+                {/* Step 3: Chọn cấp độ (3 cấp độ + Tổng hợp 3 cấp độ) */}
+                <DifficultySelector
+                  difficulty={difficulty}
+                  onSelectDifficulty={setDifficulty}
+                  count={questionCount}
+                />
+
+                {/* Step 4: Chọn phương thức thi thử hay học tập & Tùy chọn trộn đề */}
+                <ModeSelector
+                  mode={quizMode}
+                  onSelectMode={setQuizMode}
+                  shuffleQuestions={shuffleQuestions}
+                  onToggleShuffleQuestions={setShuffleQuestions}
+                  shuffleAnswers={shuffleAnswers}
+                  onToggleShuffleAnswers={setShuffleAnswers}
+                />
+
+                {/* Step 5: Nguồn tạo câu hỏi & Tích hợp AI / API Key */}
+                <QuestionSourceSelector
+                  sourcePreference={sourcePreference}
+                  onSelectSourcePreference={handleSelectSourcePreference}
+                  apiKey={customApiKey}
+                  onSaveApiKey={handleSaveApiKey}
+                />
+
+                {/* Submit Action Block */}
+                <div className="pt-4 pb-6">
+                  <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="text-xs sm:text-sm text-slate-600">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="font-bold text-slate-800">Cấu hình ôn tập hiện tại:</span>
+                      </div>
+                      <span>Bạn đang chọn: </span>
+                      <strong className="text-indigo-700">
+                        {isCustomMode
+                          ? customLessonTitle || 'Bài học tự nhập'
+                          : selectedLessons.length === 0
+                          ? 'Chưa chọn bài nào'
+                          : selectedLessons.length === 1
+                          ? `${selectedLessons[0].title} (Khối ${currentGradeFilter})`
+                          : `${selectedLessons.length} bài học Khối ${currentGradeFilter}`}
+                      </strong>{' '}
+                      • <strong className="text-indigo-700">{questionCount} câu</strong> •{' '}
+                      <strong className="text-indigo-700">
+                        {difficulty === 'de'
+                          ? 'Cấp độ Dễ'
+                          : difficulty === 'trung_binh'
+                          ? 'Cấp độ Trung bình'
+                          : difficulty === 'kho'
+                          ? 'Cấp độ Khó'
+                          : 'Tổng hợp 3 cấp độ'}
+                      </strong>{' '}
+                      •{' '}
+                      <span className="inline-flex items-center gap-1 font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">
+                        {sourcePreference === 'ai' ? '🤖 AI Thông Minh' : '💾 Kho Offline'}
+                      </span>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        sound.playClick();
+                        handleStartGenerateQuiz();
+                      }}
+                      disabled={isGenerating || (!isCustomMode && selectedLessons.length === 0)}
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-sm shadow-lg shadow-emerald-600/30 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                    >
+                      {isGenerating ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>Đang chuẩn bị đề thi...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Play className="w-4 h-4 fill-white" />
+                          <span>BẮT ĐẦU ÔN TẬP NGAY</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
 

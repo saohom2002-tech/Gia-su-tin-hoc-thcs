@@ -53,6 +53,7 @@ interface HeaderProps {
   onScrollToTopics?: () => void;
   onScrollToCustomExams?: () => void;
   onOpenGuide?: () => void;
+  activeTab?: 'overview' | 'topics' | 'exams';
 
   onStartGenerateQuiz?: () => void;
   isGenerating?: boolean;
@@ -78,6 +79,7 @@ export const Header: React.FC<HeaderProps> = ({
   onScrollToTopics,
   onScrollToCustomExams,
   onOpenGuide,
+  activeTab = 'overview',
   onStartGenerateQuiz,
   isGenerating = false,
   canStartQuiz = true,
@@ -142,7 +144,7 @@ export const Header: React.FC<HeaderProps> = ({
               onGoHome();
             }}
             className={`px-3 py-2 rounded-xl flex items-center gap-1.5 transition-all cursor-pointer ${
-              isHome
+              isHome && activeTab === 'overview'
                 ? 'text-sky-700 border-b-2 border-sky-600 bg-sky-50/70 font-extrabold shadow-2xs'
                 : 'text-slate-600 hover:text-sky-700 hover:bg-sky-50'
             }`}
@@ -159,7 +161,11 @@ export const Header: React.FC<HeaderProps> = ({
               if (onScrollToTopics) onScrollToTopics();
               else onGoHome();
             }}
-            className="px-3 py-2 text-slate-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer"
+            className={`px-3 py-2 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer ${
+              isHome && activeTab === 'topics'
+                ? 'text-emerald-700 border-b-2 border-emerald-600 bg-emerald-50/70 font-extrabold shadow-2xs'
+                : 'text-slate-600 hover:text-emerald-700 hover:bg-emerald-50'
+            }`}
           >
             <Layers className="w-3.5 h-3.5 text-emerald-600" />
             <span>Chủ Đề SGK</span>
@@ -173,7 +179,11 @@ export const Header: React.FC<HeaderProps> = ({
               if (onScrollToCustomExams) onScrollToCustomExams();
               else onGoHome();
             }}
-            className="px-3 py-2 text-slate-600 hover:text-sky-700 hover:bg-sky-50 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer"
+            className={`px-3 py-2 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer ${
+              isHome && activeTab === 'exams'
+                ? 'text-sky-700 border-b-2 border-sky-600 bg-sky-50/70 font-extrabold shadow-2xs'
+                : 'text-slate-600 hover:text-sky-700 hover:bg-sky-50'
+            }`}
           >
             <BookOpen className="w-3.5 h-3.5 text-sky-600" />
             <span>Kho Đề Thi</span>

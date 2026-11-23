@@ -80,7 +80,7 @@ export const RolePortalHero: React.FC<RolePortalHeroProps> = ({
           </div>
 
           <div className="space-y-1">
-            <h1 className="text-2xl sm:text-4xl font-black text-slate-800 tracking-tight font-['Lexend'] bg-gradient-to-r from-sky-700 via-blue-700 to-indigo-700 bg-clip-text text-transparent">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-sky-800 tracking-tight leading-snug py-1 font-['Plus_Jakarta_Sans',sans-serif]">
               GIA SƯ TIN HỌC THCS & TIỂU HỌC
             </h1>
             <p className="text-xs sm:text-sm font-semibold text-slate-600 max-w-2xl mx-auto">
