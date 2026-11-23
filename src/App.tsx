@@ -40,6 +40,7 @@ import { ScorebookLeaderboardModal } from './components/ScorebookLeaderboardModa
 import { CertificateModal } from './components/CertificateModal';
 import { BgmMusicPlayer } from './components/BgmMusicPlayer';
 import { SidebarMenu } from './components/SidebarMenu';
+import { GuideModal } from './components/GuideModal';
 import {
   INITIAL_SCORE_RECORDS,
   DEFAULT_EXAM_BATCHES,
@@ -167,6 +168,7 @@ export default function App() {
 
   const [selectedGame, setSelectedGame] = useState<TBSGameItem | null>(null);
   const [isGameModalOpen, setIsGameModalOpen] = useState<boolean>(false);
+  const [isGuideOpen, setIsGuideOpen] = useState<boolean>(false);
 
   // Sidebar state (Thanh Menu bên trái)
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(() => {
@@ -1530,6 +1532,7 @@ export default function App() {
         onOpenEssayModal={() => setIsEssayModalOpen(true)}
         onOpenGrade5Game={() => handleLaunchMidtermExam(5, 'all')}
         onOpenProfileModal={() => setIsProfileModalOpen(true)}
+        onOpenGuide={() => setIsGuideOpen(true)}
         onSelectGame={(game) => {
           setSelectedGame(game);
           setIsGameModalOpen(true);
@@ -1549,7 +1552,7 @@ export default function App() {
           isSidebarCollapsed ? 'lg:pl-20' : 'lg:pl-64'
         }`}
       >
-        {/* Global Header với nút Menu Toggle & Bắt đầu ôn tập */}
+        {/* Global Header với các Tab điều hướng gom nhóm chuẩn TBS */}
         <Header
           onToggleSidebar={handleToggleSidebar}
           onOpenHistory={() => setIsHistoryOpen(true)}
@@ -1565,6 +1568,9 @@ export default function App() {
           onOpenScorebook={() => setIsScorebookModalOpen(true)}
           onOpenAdminStudio={handleOpenAdminStudio}
           isAdminLoggedIn={Boolean(adminSession && isAuthorizedAdmin(adminSession.email))}
+          onScrollToTopics={handleScrollToLessonTopics}
+          onScrollToCustomExams={handleScrollToCustomExams}
+          onOpenGuide={() => setIsGuideOpen(true)}
           onStartGenerateQuiz={handleStartGenerateQuiz}
           isGenerating={isGenerating}
           canStartQuiz={isCustomMode || selectedLessons.length > 0}
@@ -2206,6 +2212,15 @@ export default function App() {
           setIsGameModalOpen(false);
           setSelectedGame(null);
         }}
+      />
+
+      {/* Modal Hướng Dẫn Sử Dụng Hệ Thống */}
+      <GuideModal
+        isOpen={isGuideOpen}
+        onClose={() => setIsGuideOpen(false)}
+        onOpenGamesTab={() => window.open('/games/', '_blank')}
+        onScrollToTopics={handleScrollToLessonTopics}
+        onOpenProfile={() => setIsProfileModalOpen(true)}
       />
 
       {/* Trình phát nhạc nền không lời chuẩn Wayground / Lofi Focus */}

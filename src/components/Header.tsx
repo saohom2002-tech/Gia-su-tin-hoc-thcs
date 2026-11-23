@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   GraduationCap,
   History,
@@ -14,7 +14,12 @@ import {
   Play,
   Loader2,
   Menu,
-  PanelLeft
+  ChevronDown,
+  Gamepad2,
+  HelpCircle,
+  Layers,
+  Award,
+  AlertCircle
 } from 'lucide-react';
 import { sound } from '../utils/sound';
 import { StudentProfile } from '../types/quiz';
@@ -44,7 +49,11 @@ interface HeaderProps {
   isAdminLoggedIn?: boolean;
   onToggleSidebar?: () => void;
 
-  // Nút cố định trên thanh tiêu đề thay thế thanh trôi nổi ở dưới
+  // New navigation props inspired by TBS Thanh Binh
+  onScrollToTopics?: () => void;
+  onScrollToCustomExams?: () => void;
+  onOpenGuide?: () => void;
+
   onStartGenerateQuiz?: () => void;
   isGenerating?: boolean;
   canStartQuiz?: boolean;
@@ -66,16 +75,22 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenAdminStudio,
   isAdminLoggedIn = false,
   onToggleSidebar,
+  onScrollToTopics,
+  onScrollToCustomExams,
+  onOpenGuide,
   onStartGenerateQuiz,
   isGenerating = false,
   canStartQuiz = true,
   summaryInfo,
 }) => {
+  const [isLookupDropdownOpen, setIsLookupDropdownOpen] = useState(false);
+
   return (
     <header className="no-print sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b-2 border-sky-200/90 shadow-xs">
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2 sm:gap-3">
-        {/* Left Side: Nút Mở Menu & Logo */}
-        <div className="flex items-center gap-2">
+      <div className="max-w-7xl mx-auto px-3 sm:px-5 h-16 flex items-center justify-between gap-2 sm:gap-4">
+        
+        {/* 1. LEFT SIDE: Menu Hamburger + Logo + Tên Hệ Thống & Tác Giả */}
+        <div className="flex items-center gap-2 shrink-0">
           {onToggleSidebar && (
             <button
               type="button"
@@ -83,47 +98,226 @@ export const Header: React.FC<HeaderProps> = ({
                 sound.playClick();
                 onToggleSidebar();
               }}
-              className="p-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 border border-slate-200 lg:border-transparent transition-all cursor-pointer shrink-0"
-              title="Đóng / Mở thanh menu chính bên trái"
+              className="p-2 rounded-xl text-slate-600 hover:text-sky-700 hover:bg-sky-50 border border-slate-200 lg:border-transparent transition-all cursor-pointer shrink-0"
+              title="Đóng / Mở thanh menu bên trái"
               aria-label="Thanh menu chính"
             >
               <Menu className="w-5 h-5" />
             </button>
           )}
 
-          {/* Logo and Brand */}
+          {/* Logo and Brand Title (Phối màu & font chuẩn phong cách TBS) */}
           <button
             onClick={onGoHome}
-            className="flex items-center gap-2.5 sm:gap-3 text-left group transition-transform active:scale-95 shrink-0 cursor-pointer"
-            title="Về trang chọn bài học"
+            className="flex items-center gap-2.5 text-left group transition-transform active:scale-95 shrink-0 cursor-pointer"
+            title="Về trang chủ"
           >
-          <div className="relative shrink-0">
-            <img
-              src={schoolLogo}
-              alt="Logo Trường THCS Tân Bình"
-              className="w-10 h-10 rounded-full object-contain bg-white p-0.5 border-2 border-sky-300 shadow-md group-hover:scale-105 transition-transform"
-            />
-          </div>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className="font-extrabold text-sm sm:text-lg tracking-tight bg-gradient-to-r from-sky-600 via-blue-700 to-indigo-700 bg-clip-text text-transparent font-['Lexend']">
-                GIA SƯ TIN HỌC
-              </span>
-              <span className="hidden md:inline-block text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 border border-sky-300">
-                {studentProfile?.grade || 'Lớp 3 - 9'}
-              </span>
+            <div className="relative shrink-0">
+              <img
+                src={schoolLogo}
+                alt="Logo Trường THCS Tân Bình"
+                className="w-10 h-10 sm:w-11 sm:h-11 rounded-full object-contain bg-white p-0.5 border-2 border-sky-300 shadow-md group-hover:scale-105 transition-transform"
+              />
             </div>
-            <p className="text-[10px] sm:text-xs font-semibold text-sky-700 flex items-center gap-1">
-              <span>Tác giả:</span>
-              <strong className="text-slate-800 font-bold">GV: Ms. Trúc Tin Học</strong>
-            </p>
-          </div>
-        </button>
-      </div>
+            <div>
+              <div className="flex items-center gap-1.5 leading-tight">
+                <span className="font-black text-sm sm:text-base md:text-lg tracking-tight text-sky-800 font-['Lexend'] uppercase">
+                  HỆ THỐNG HỌC TẬP TÂN BÌNH
+                </span>
+              </div>
+              <p className="text-[11px] sm:text-xs font-bold text-rose-600 italic leading-tight mt-0.5">
+                GV: Ms. Trúc Tin Học
+              </p>
+            </div>
+          </button>
+        </div>
 
-        {/* NÚT CỐ ĐỊNH TRÊN THANH TIÊU ĐỀ: TẠO CÂU HỎI & BẮT ĐẦU ÔN TẬP (NẰM CHÍNH GIỮA / NỔI BẬT) */}
-        {isHome && onStartGenerateQuiz && (
-          <div className="flex items-center">
+        {/* 2. CENTER: CÁC TAB ĐIỀU HƯỚNG GOM NHÓM (Chuẩn như ảnh Trường Thanh Bình) */}
+        <nav className="hidden lg:flex items-center gap-1 xl:gap-2 text-xs font-black uppercase tracking-tight">
+          {/* Tab 1: Tổng Quan */}
+          <button
+            type="button"
+            onClick={() => {
+              sound.playClick();
+              onGoHome();
+            }}
+            className={`px-3 py-2 rounded-xl flex items-center gap-1.5 transition-all cursor-pointer ${
+              isHome
+                ? 'text-sky-700 border-b-2 border-sky-600 bg-sky-50/70 font-extrabold shadow-2xs'
+                : 'text-slate-600 hover:text-sky-700 hover:bg-sky-50'
+            }`}
+          >
+            <span>🏠</span>
+            <span>Tổng Quan</span>
+          </button>
+
+          {/* Tab 2: Chủ Đề SGK */}
+          <button
+            type="button"
+            onClick={() => {
+              sound.playClick();
+              if (onScrollToTopics) onScrollToTopics();
+              else onGoHome();
+            }}
+            className="px-3 py-2 text-slate-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer"
+          >
+            <Layers className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Chủ Đề SGK</span>
+          </button>
+
+          {/* Tab 3: Kho Đề Thi */}
+          <button
+            type="button"
+            onClick={() => {
+              sound.playClick();
+              if (onScrollToCustomExams) onScrollToCustomExams();
+              else onGoHome();
+            }}
+            className="px-3 py-2 text-slate-600 hover:text-sky-700 hover:bg-sky-50 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer"
+          >
+            <BookOpen className="w-3.5 h-3.5 text-sky-600" />
+            <span>Kho Đề Thi</span>
+          </button>
+
+          {/* Tab 4: Sân Chơi Game (Mở tab mới theo yêu cầu) */}
+          <button
+            type="button"
+            onClick={() => {
+              sound.playClick();
+              window.open('/games/', '_blank');
+            }}
+            className="px-3 py-2 text-purple-700 hover:bg-purple-50 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer group"
+            title="Mở tab Sân chơi Game tri thức (16 trò chơi trực tuyến)"
+          >
+            <Gamepad2 className="w-3.5 h-3.5 text-purple-600 group-hover:rotate-12 transition-transform" />
+            <span>Sân Chơi Game</span>
+            <span className="px-1.5 py-0.2 rounded-full bg-purple-200 text-purple-900 text-[9px] font-mono font-black">
+              16 Trò
+            </span>
+          </button>
+
+          {/* Tab 5: Gom Nhóm Tra Cứu Kết Quả (Dropdown Menu) */}
+          <div
+            className="relative"
+            onMouseEnter={() => setIsLookupDropdownOpen(true)}
+            onMouseLeave={() => setIsLookupDropdownOpen(false)}
+          >
+            <button
+              type="button"
+              onClick={() => setIsLookupDropdownOpen((prev) => !prev)}
+              className="px-3 py-2 text-amber-800 hover:bg-amber-50 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer"
+            >
+              <Trophy className="w-3.5 h-3.5 text-amber-600" />
+              <span>Tra Cứu ▾</span>
+              {mistakesCount > 0 && (
+                <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
+              )}
+            </button>
+
+            {isLookupDropdownOpen && (
+              <div className="absolute left-0 top-full mt-1 w-56 bg-white rounded-2xl shadow-xl border border-slate-200 p-2 z-50 animate-in fade-in slide-in-from-top-1">
+                {onOpenScorebook && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      sound.playClick();
+                      setIsLookupDropdownOpen(false);
+                      onOpenScorebook();
+                    }}
+                    className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-amber-50 text-xs font-bold text-amber-950 transition-colors cursor-pointer text-left"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Trophy className="w-4 h-4 text-amber-600" />
+                      <span>Bảng Vàng Vinh Danh</span>
+                    </div>
+                    <span className="text-xs text-amber-500">→</span>
+                  </button>
+                )}
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    sound.playClick();
+                    setIsLookupDropdownOpen(false);
+                    onOpenHistory();
+                  }}
+                  className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-sky-50 text-xs font-bold text-sky-950 transition-colors cursor-pointer text-left"
+                >
+                  <div className="flex items-center gap-2">
+                    <History className="w-4 h-4 text-sky-600" />
+                    <span>Lịch Sử & Giấy Khen</span>
+                  </div>
+                  {historyCount > 0 && (
+                    <span className="px-1.5 py-0.2 rounded-full bg-sky-100 text-sky-800 text-[10px]">
+                      {historyCount}
+                    </span>
+                  )}
+                </button>
+
+                {onOpenMistakes && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      sound.playClick();
+                      setIsLookupDropdownOpen(false);
+                      onOpenMistakes();
+                    }}
+                    className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-rose-50 text-xs font-bold text-rose-900 transition-colors cursor-pointer text-left"
+                  >
+                    <div className="flex items-center gap-2">
+                      <AlertCircle className="w-4 h-4 text-rose-600" />
+                      <span>Sổ Tay Câu Sai</span>
+                    </div>
+                    {mistakesCount > 0 && (
+                      <span className="px-1.5 py-0.2 rounded-full bg-rose-600 text-white text-[10px]">
+                        {mistakesCount}
+                      </span>
+                    )}
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Tab 6: Hướng Dẫn */}
+          {onOpenGuide && (
+            <button
+              type="button"
+              onClick={() => {
+                sound.playClick();
+                onOpenGuide();
+              }}
+              className="px-3 py-2 text-slate-600 hover:text-sky-700 hover:bg-sky-50 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer"
+            >
+              <HelpCircle className="w-3.5 h-3.5 text-sky-600" />
+              <span>Hướng Dẫn</span>
+            </button>
+          )}
+
+          {/* Tab 7: Dành Cho Giáo Viên */}
+          {onOpenAdminStudio && (
+            <button
+              type="button"
+              onClick={() => {
+                sound.playClick();
+                onOpenAdminStudio();
+              }}
+              className={`px-3 py-2 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer ${
+                isAdminLoggedIn
+                  ? 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-indigo-700 hover:bg-indigo-50'
+              }`}
+            >
+              <ShieldCheck className={`w-3.5 h-3.5 ${isAdminLoggedIn ? 'text-amber-300' : 'text-indigo-600'}`} />
+              <span>{isAdminLoggedIn ? 'Studio Ms. Trúc' : 'Giáo Viên'}</span>
+            </button>
+          )}
+        </nav>
+
+        {/* 3. RIGHT SIDE: Thẻ Hồ Sơ Học Sinh & Điều Khiển Âm Thanh */}
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* Quick Quiz Launch Button (Hiện gọn gàng khi ở trang chủ) */}
+          {isHome && onStartGenerateQuiz && (
             <button
               type="button"
               onClick={() => {
@@ -131,195 +325,65 @@ export const Header: React.FC<HeaderProps> = ({
                 onStartGenerateQuiz();
               }}
               disabled={isGenerating || !canStartQuiz}
-              className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-2xl bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-black text-xs sm:text-sm shadow-md shadow-indigo-600/30 hover:shadow-indigo-600/50 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer shrink-0 animate-pulse hover:animate-none border border-indigo-400/30"
-              title={summaryInfo ? `Bắt đầu: ${summaryInfo.lesson} (${summaryInfo.count} câu)` : 'Tạo câu hỏi & Bắt đầu ôn tập'}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-xs shadow-md shadow-emerald-600/25 transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
+              title="Bắt đầu tạo câu hỏi và làm bài ngay"
             >
               {isGenerating ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin text-white shrink-0" />
-                  <span className="whitespace-nowrap">Đang tạo câu hỏi...</span>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  <span className="hidden sm:inline">Đang tạo đề...</span>
                 </>
               ) : (
                 <>
-                  <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-white shrink-0" />
-                  <span className="hidden sm:inline whitespace-nowrap">TẠO CÂU HỎI & BẮT ĐẦU ÔN TẬP</span>
-                  <span className="sm:hidden whitespace-nowrap">BẮT ĐẦU ÔN TẬP</span>
-                  {summaryInfo && (
-                    <span className="hidden xl:inline-block px-1.5 py-0.5 rounded-md bg-white/20 text-[10px] font-bold text-cyan-200">
-                      {summaryInfo.count} câu
-                    </span>
-                  )}
+                  <Play className="w-3.5 h-3.5 fill-white" />
+                  <span>BẮT ĐẦU ÔN TẬP</span>
                 </>
               )}
             </button>
-          </div>
-        )}
+          )}
 
-        {/* Action Controls */}
-        <div className="flex items-center gap-1 sm:gap-2">
-          {/* Student Profile Quick Badge & Class Selector */}
+          {/* Student Profile Chip */}
           {studentProfile && onOpenProfileModal && (
             <button
               onClick={() => {
                 sound.playClick();
                 onOpenProfileModal();
               }}
-              className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-xl border border-indigo-200 bg-gradient-to-r from-indigo-50/80 to-blue-50/80 hover:from-indigo-100 hover:to-blue-100 text-slate-800 transition-all shadow-2xs group"
-              title="Nhấn để đổi tên học sinh hoặc chọn lớp"
+              className="flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 rounded-2xl border border-sky-200 bg-sky-50/70 hover:bg-sky-100/80 text-slate-800 transition-all shadow-2xs group cursor-pointer"
+              title="Nhấn để đổi tên học sinh, lớp hoặc avatar"
             >
               <StudentAvatar
                 avatarIdOrUrl={studentProfile.avatar}
                 name={studentProfile.fullName}
                 size="xs"
               />
-              <div className="text-left hidden lg:block max-w-[120px]">
-                <div className="text-xs font-bold text-slate-800 truncate leading-tight group-hover:text-indigo-700">
+              <div className="text-left hidden sm:block max-w-[110px]">
+                <div className="text-[11px] font-extrabold text-slate-800 truncate leading-tight group-hover:text-sky-700">
                   {studentProfile.fullName || 'Học sinh'}
                 </div>
-                <div className="text-[10px] font-bold text-indigo-600 leading-tight">
-                  Lớp: <span className="underline decoration-indigo-400">{studentProfile.className || '8A1'}</span>
+                <div className="text-[10px] font-bold text-sky-700 leading-tight">
+                  {studentProfile.className ? `Lớp ${studentProfile.className}` : 'Lớp 8A1'} • <span className="underline">Đổi ✏️</span>
                 </div>
               </div>
-              <span className="lg:hidden text-[11px] font-bold text-indigo-700">
-                {studentProfile.className || 'Lớp 8'}
-              </span>
             </button>
           )}
 
-          {!isHome && (
-            <button
-              onClick={() => {
-                sound.playClick();
-                onGoHome();
-              }}
-              className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-semibold text-slate-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg border border-slate-200 transition-colors"
-            >
-              <BookOpenCheck className="w-4 h-4 text-indigo-600" />
-              <span className="hidden md:inline">Đổi bài học</span>
-            </button>
-          )}
-
-          {/* Sound Toggle */}
+          {/* Sound Toggle Button */}
           <button
             onClick={onToggleSound}
-            className="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors border border-transparent hover:border-slate-200"
+            className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-colors border border-transparent hover:border-slate-200 cursor-pointer"
             title={soundEnabled ? 'Tắt âm thanh hiệu ứng' : 'Bật âm thanh hiệu ứng'}
             aria-label="Toggle Sound"
           >
             {soundEnabled ? (
-              <Volume2 className="w-4 h-4 text-indigo-600" />
+              <Volume2 className="w-4 h-4 text-sky-600" />
             ) : (
               <VolumeX className="w-4 h-4 text-slate-400" />
             )}
           </button>
-
-          {/* Sổ tay câu sai */}
-          {onOpenMistakes && (
-            <button
-              onClick={() => {
-                sound.playClick();
-                onOpenMistakes();
-              }}
-              className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-1.5 rounded-lg border border-rose-200 hover:border-rose-300 bg-rose-50/70 hover:bg-rose-100 text-rose-700 text-xs font-bold transition-all shadow-2xs"
-              title="Mở Sổ tay câu sai để ôn lại các kiến thức bị hổng"
-            >
-              <BookOpen className="w-3.5 h-3.5 text-rose-600" />
-              <span className="hidden xl:inline">Câu sai</span>
-              {mistakesCount > 0 && (
-                <span className="px-1.5 py-0.2 rounded-full bg-rose-600 text-white text-[10px] font-black">
-                  {mistakesCount}
-                </span>
-              )}
-            </button>
-          )}
-
-          {/* Bảng Vàng & Sổ Điểm */}
-          {onOpenScorebook && (
-            <button
-              onClick={() => {
-                sound.playClick();
-                onOpenScorebook();
-              }}
-              className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-1.5 rounded-lg border border-amber-300 hover:border-amber-400 bg-amber-50 hover:bg-amber-100/80 text-amber-900 text-xs font-bold transition-all shadow-2xs"
-              title="Mở Bảng Vàng Vinh Danh & Sổ Lưu Điểm Học Sinh"
-            >
-              <Trophy className="w-3.5 h-3.5 text-amber-600" />
-              <span className="hidden xl:inline">Bảng Vàng</span>
-            </button>
-          )}
-
-          {/* Admin Studio Trigger (Chỉ dành cho saohom2002@gmail.com) */}
-          {onOpenAdminStudio && (
-            <button
-              onClick={() => {
-                sound.playClick();
-                onOpenAdminStudio();
-              }}
-              className={`inline-flex items-center gap-1 px-2 sm:px-2.5 py-1.5 rounded-lg border text-xs font-bold transition-all shadow-2xs cursor-pointer ${
-                isAdminLoggedIn
-                  ? 'border-indigo-400 bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-indigo-500/20'
-                  : 'border-indigo-200 hover:border-indigo-400 bg-indigo-50/80 hover:bg-indigo-100/80 text-indigo-900'
-              }`}
-              title={isAdminLoggedIn ? 'Mở Admin Studio (Đã đăng nhập)' : 'Mở Studio Quản trị (Dành riêng cho saohom2002@gmail.com)'}
-            >
-              <ShieldCheck className={`w-3.5 h-3.5 ${isAdminLoggedIn ? 'text-amber-300 stroke-[2.5]' : 'text-indigo-600'}`} />
-              <span className="hidden md:inline">Studio Admin</span>
-              {isAdminLoggedIn ? (
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              ) : (
-                <span className="hidden sm:inline px-1 py-0.2 rounded-md bg-indigo-200 text-indigo-800 text-[9px] font-black uppercase">
-                  Admin
-                </span>
-              )}
-            </button>
-          )}
-
-          {/* History Modal Trigger */}
-          <button
-            onClick={() => {
-              sound.playClick();
-              onOpenHistory();
-            }}
-            className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-1.5 rounded-lg border border-slate-200 hover:border-indigo-300 bg-white hover:bg-indigo-50/50 text-slate-700 hover:text-indigo-700 text-xs font-medium transition-all shadow-xs"
-            title="Lịch sử làm bài"
-          >
-            <History className="w-3.5 h-3.5 text-slate-500" />
-            <span className="hidden 2xl:inline">Lịch sử</span>
-            {historyCount > 0 && (
-              <span className="w-4 h-4 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center">
-                {historyCount}
-              </span>
-            )}
-          </button>
         </div>
+
       </div>
-
-      {/* DẢI THÔNG TIN CỐ ĐỊNH PHỤ: BẠN ĐANG CHỌN (GẮN CỐ ĐỊNH NGAY DƯỚI HEADER) */}
-      {isHome && summaryInfo && (
-        <div className="bg-slate-900/95 text-slate-200 text-[11px] sm:text-xs py-1.5 px-4 border-t border-slate-800 flex items-center justify-between gap-3 overflow-x-auto whitespace-nowrap shadow-inner">
-          <div className="max-w-6xl mx-auto w-full flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2 truncate">
-              <span className="text-slate-400 shrink-0">Bạn đang chọn:</span>
-              <strong className="text-amber-300 font-bold truncate">
-                {summaryInfo.lesson}
-              </strong>
-              <span className="text-slate-500">•</span>
-              <strong className="text-indigo-300 shrink-0">{summaryInfo.count} câu</strong>
-              <span className="text-slate-500 hidden xs:inline">•</span>
-              <span className="text-slate-300 shrink-0 hidden xs:inline">{summaryInfo.difficulty}</span>
-              <span className="text-slate-500 hidden sm:inline">•</span>
-              <span className="inline-flex items-center gap-1 font-bold text-cyan-300 bg-white/10 px-2 py-0.5 rounded-md text-[10px] shrink-0 hidden sm:inline-flex">
-                {summaryInfo.source}
-              </span>
-            </div>
-
-            <div className="text-[10px] text-indigo-300 font-semibold shrink-0 hidden md:block">
-              👉 Nhấn nút <strong>"TẠO CÂU HỎI & BẮT ĐẦU ÔN TẬP"</strong> ở trên để làm bài
-            </div>
-          </div>
-        </div>
-      )}
     </header>
   );
 };
-

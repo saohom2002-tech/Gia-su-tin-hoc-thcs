@@ -20,7 +20,8 @@ import {
   Sparkles,
   User,
   Music,
-  ExternalLink
+  ExternalLink,
+  HelpCircle
 } from 'lucide-react';
 import { StudentProfile } from '../types/quiz';
 import { StudentAvatar } from './StudentAvatar';
@@ -46,6 +47,7 @@ export interface SidebarMenuProps {
   onOpenEssayModal: () => void;
   onOpenGrade5Game: () => void;
   onOpenProfileModal: () => void;
+  onOpenGuide?: () => void;
   onSelectGame?: (game: TBSGameItem) => void;
 
   // Data & Badges
@@ -74,6 +76,7 @@ export const SidebarMenu: React.FC<SidebarMenuProps> = ({
   onOpenEssayModal,
   onOpenGrade5Game,
   onOpenProfileModal,
+  onOpenGuide,
   onSelectGame,
   studentProfile,
   mistakesCount = 0,
@@ -237,113 +240,40 @@ export const SidebarMenu: React.FC<SidebarMenuProps> = ({
               {!isCollapsed && <span className="truncate">Luyện Tự Luận</span>}
             </button>
 
-            {/* Mục: Game học tập Khối 5 */}
+            {/* Mục: Sân chơi Game (16 trò chơi trực tuyến) - Mở trong tab riêng */}
             <button
               type="button"
-              onClick={() => handleItemClick(onOpenGrade5Game)}
-              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-700 hover:bg-emerald-50/80 hover:text-emerald-900 transition-all group cursor-pointer"
-              title="Khảo sát năng lực & Trò chơi học tập Khối 5"
+              onClick={() => {
+                sound.playClick();
+                window.open('/games/', '_blank');
+                onCloseMobile();
+              }}
+              className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-2xl text-xs sm:text-sm font-bold text-purple-900 bg-purple-50/80 hover:bg-purple-100 border border-purple-200/80 transition-all group cursor-pointer"
+              title="Mở Sân chơi Game tri thức (16 trò chơi trực tuyến) trong tab mới"
             >
-              <Gamepad2 className="w-5 h-5 text-emerald-600 shrink-0 group-hover:scale-110 transition-transform" />
-              {!isCollapsed && <span className="truncate">Game Học Tập Khối 5</span>}
-            </button>
-          </div>
-
-          {/* Nhóm: TRÒ CHƠI */}
-          <div className="space-y-1">
-            {!isCollapsed && (
-              <div className="px-3 text-[10px] font-black uppercase tracking-wider text-slate-500 mb-2 flex items-center justify-between">
-                <span>TRÒ CHƠI</span>
-                <span className="text-[9px] font-bold text-sky-700 bg-sky-100 px-1.5 py-0.5 rounded-full border border-sky-300">
-                  {SIDEBAR_GAMES.length}
+              <div className="flex items-center gap-3 min-w-0">
+                <Gamepad2 className="w-5 h-5 text-purple-600 shrink-0 group-hover:scale-110 transition-transform" />
+                {!isCollapsed && <span className="truncate">Sân Chơi Game</span>}
+              </div>
+              {!isCollapsed && (
+                <span className="px-1.5 py-0.5 rounded-md bg-purple-200 text-purple-800 text-[10px] font-mono font-black shrink-0">
+                  16 Trò
                 </span>
-              </div>
-            )}
+              )}
+            </button>
 
-            {SIDEBAR_GAMES.map((game) => (
+            {/* Mục: Hướng dẫn sử dụng */}
+            {onOpenGuide && (
               <button
-                key={game.id}
                 type="button"
-                onClick={() => {
-                  sound.playClick();
-                  if (onSelectGame) onSelectGame(game);
-                  onCloseMobile();
-                }}
-                className={`w-full flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-700 hover:bg-sky-50/80 hover:text-sky-950 transition-all group cursor-pointer ${
-                  game.isComingSoon ? 'opacity-75 hover:opacity-100' : ''
-                }`}
-                title={`${game.name}${game.description ? ` — ${game.description}` : ''}`}
+                onClick={() => handleItemClick(onOpenGuide)}
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl text-xs sm:text-sm font-bold text-sky-800 bg-sky-50/80 hover:bg-sky-100 border border-sky-200/80 transition-all group cursor-pointer"
+                title="Hướng dẫn sử dụng hệ thống cho Học sinh & Giáo viên"
               >
-                <div className="flex items-center gap-2.5 min-w-0">
-                  <div
-                    className={`w-8 h-8 rounded-xl bg-gradient-to-tr ${game.bgGradient} flex items-center justify-center text-base shrink-0 shadow-2xs border border-white/60 group-hover:scale-105 transition-transform`}
-                  >
-                    {game.icon}
-                  </div>
-                  {!isCollapsed && (
-                    <span className="truncate text-left text-xs font-bold text-slate-800 group-hover:text-sky-800">
-                      {game.shortName || game.name}
-                    </span>
-                  )}
-                </div>
-
-                {!isCollapsed && game.badge && (
-                  <span
-                    className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold shrink-0 ${
-                      game.badgeType === 'online'
-                        ? 'bg-emerald-100 text-emerald-700 border border-emerald-300/80'
-                        : game.badgeType === 'soon'
-                        ? 'bg-slate-100 text-slate-500 border border-slate-200'
-                        : 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                    }`}
-                  >
-                    {game.badge}
-                  </span>
-                )}
+                <HelpCircle className="w-5 h-5 text-sky-600 shrink-0 group-hover:scale-110 transition-transform" />
+                {!isCollapsed && <span className="truncate">Hướng Dẫn Sử Dụng</span>}
               </button>
-            ))}
-          </div>
-
-          {/* Nhóm: HOẠT ĐỘNG */}
-          <div className="space-y-1">
-            {!isCollapsed && (
-              <div className="px-3 text-[10px] font-black uppercase tracking-wider text-slate-500 mb-2">
-                HOẠT ĐỘNG
-              </div>
             )}
-
-            {SIDEBAR_ACTIVITIES.map((act) => (
-              <button
-                key={act.id}
-                type="button"
-                onClick={() => {
-                  sound.playClick();
-                  if (onSelectGame) onSelectGame(act);
-                  onCloseMobile();
-                }}
-                className="w-full flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-700 hover:bg-emerald-50/80 hover:text-emerald-950 transition-all group cursor-pointer"
-                title={`${act.name}${act.description ? ` — ${act.description}` : ''}`}
-              >
-                <div className="flex items-center gap-2.5 min-w-0">
-                  <div
-                    className={`w-8 h-8 rounded-xl bg-gradient-to-tr ${act.bgGradient} flex items-center justify-center text-base shrink-0 shadow-2xs border border-white/60 group-hover:scale-105 transition-transform`}
-                  >
-                    {act.icon}
-                  </div>
-                  {!isCollapsed && (
-                    <span className="truncate text-left text-xs font-bold text-slate-800 group-hover:text-emerald-800">
-                      {act.shortName || act.name}
-                    </span>
-                  )}
-                </div>
-
-                {!isCollapsed && act.badge && (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 shrink-0">
-                    {act.badge}
-                  </span>
-                )}
-              </button>
-            ))}
           </div>
 
           {/* Nhóm 2: Bảng Vàng & Vinh Danh */}
