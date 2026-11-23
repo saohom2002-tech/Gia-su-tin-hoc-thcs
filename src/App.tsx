@@ -1856,16 +1856,24 @@ export default function App() {
               <div className="absolute left-1/3 bottom-0 w-64 h-64 rounded-full bg-indigo-500/20 blur-2xl pointer-events-none" />
             </div>
 
-            {/* Dashboard: Biểu đồ thống kê kết quả học tập từ dữ liệu lịch sử */}
-            <Dashboard
-              history={history}
-              onSelectLessonToPractice={handleSelectLessonToPractice}
-              onLoadDemoData={initDemoData}
-              studentProfile={studentProfile}
-              mistakesCount={mistakes.length}
-              onOpenMistakes={() => setIsMistakeModalOpen(true)}
-              onOpenScorebook={() => setIsScorebookModalOpen(true)}
-            />
+            {/* Dashboard: Biểu đồ thống kê kết quả học tập - CHỈ HIỂN THỊ KHI GIÁO VIÊN ĐĂNG NHẬP */}
+            {Boolean(adminSession && isAuthorizedAdmin(adminSession.email)) && (
+              <div className="space-y-3">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-100 border border-sky-300 text-sky-900 text-xs font-black uppercase">
+                  <ShieldCheck className="w-3.5 h-3.5 text-sky-700" />
+                  <span>Khu vực Giáo viên: Thống kê kết quả học tập & Năng lực học sinh</span>
+                </div>
+                <Dashboard
+                  history={history}
+                  onSelectLessonToPractice={handleSelectLessonToPractice}
+                  onLoadDemoData={initDemoData}
+                  studentProfile={studentProfile}
+                  mistakesCount={mistakes.length}
+                  onOpenMistakes={() => setIsMistakeModalOpen(true)}
+                  onOpenScorebook={() => setIsScorebookModalOpen(true)}
+                />
+              </div>
+            )}
 
             {/* MỤC: QUẢN TRỊ ĐỀ ĐÃ TẠO & ĐỀ GIÁO VIÊN (ADMIN STUDIO) */}
             <div id="admin-exam-section">
