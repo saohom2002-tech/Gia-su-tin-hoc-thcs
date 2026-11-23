@@ -422,9 +422,24 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     <>
       {/* Interactive Modal (Screen view only) */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-950/75 backdrop-blur-sm animate-in fade-in overflow-y-auto no-print">
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-5xl w-full my-auto flex flex-col overflow-hidden animate-in zoom-in-95">
+        <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-5xl w-full my-auto flex flex-col overflow-hidden animate-in zoom-in-95 relative">
+          
+          {/* Nút Đóng Cố Định Góc Phải Trên Cùng */}
+          <button
+            type="button"
+            onClick={() => {
+              sound.playClick();
+              onClose();
+            }}
+            className="absolute top-3 right-3 sm:top-3.5 sm:right-4 w-9 h-9 rounded-full bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white flex items-center justify-center transition-all cursor-pointer shadow-lg z-30 border border-slate-700 hover:border-rose-500 hover:scale-105 active:scale-95"
+            title="Đóng cửa sổ"
+            aria-label="Đóng cửa sổ"
+          >
+            <X className="w-5 h-5" />
+          </button>
+
           {/* Top Controls Bar */}
-          <div className="p-3.5 sm:px-6 bg-slate-900 text-white flex flex-wrap items-center justify-between gap-3 border-b border-slate-800">
+          <div className="p-3.5 sm:px-6 pr-14 sm:pr-16 bg-slate-900 text-white flex flex-wrap items-center justify-between gap-3 border-b border-slate-800">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center shadow-xs">
                 <Medal className="w-5 h-5" />
@@ -566,18 +581,6 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                   </button>
                 </div>
               )}
-
-              {/* Close */}
-              <button
-                type="button"
-                onClick={() => {
-                  sound.playClick();
-                  onClose();
-                }}
-                className="w-8 h-8 rounded-full hover:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-white transition-colors cursor-pointer ml-1"
-              >
-                <X className="w-5 h-5" />
-              </button>
             </div>
           </div>
 

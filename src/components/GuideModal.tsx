@@ -71,8 +71,9 @@ export const GuideModal: React.FC<GuideModalProps> = ({
               sound.playClick();
               onClose();
             }}
-            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
-            title="Đóng"
+            className="w-9 h-9 rounded-full bg-white/20 hover:bg-rose-500 text-white flex items-center justify-center transition-colors cursor-pointer shrink-0 border border-white/30"
+            title="Đóng cửa sổ"
+            aria-label="Đóng cửa sổ"
           >
             <X className="w-5 h-5" />
           </button>

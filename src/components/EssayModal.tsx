@@ -70,8 +70,13 @@ export const EssayModal: React.FC<EssayModalProps> = ({ isOpen, onClose, initial
               <span>In tài liệu</span>
             </button>
             <button
-              onClick={onClose}
-              className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
+              onClick={() => {
+                sound.playClick();
+                onClose();
+              }}
+              className="w-9 h-9 rounded-full bg-slate-100 hover:bg-rose-50 text-slate-500 hover:text-rose-600 flex items-center justify-center transition-colors cursor-pointer border border-slate-200 shadow-2xs shrink-0"
+              title="Đóng cửa sổ"
+              aria-label="Đóng cửa sổ"
             >
               <X className="w-5 h-5" />
             </button>

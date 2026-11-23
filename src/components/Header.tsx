@@ -88,11 +88,11 @@ export const Header: React.FC<HeaderProps> = ({
   const [isLookupDropdownOpen, setIsLookupDropdownOpen] = useState(false);
 
   return (
-    <header className="no-print sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b-2 border-sky-200/90 shadow-xs">
-      <div className="max-w-7xl mx-auto px-3 sm:px-5 h-16 flex items-center justify-between gap-2 sm:gap-4">
+    <header className="no-print sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b-2 border-sky-200/90 shadow-xs w-full">
+      <div className="w-full px-2 sm:px-4 md:px-6 h-16 flex items-center justify-between gap-1.5 sm:gap-3">
         
         {/* 1. LEFT SIDE: Menu Hamburger + Logo + Tên Hệ Thống & Tác Giả */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
           {onToggleSidebar && (
             <button
               type="button"
@@ -100,7 +100,7 @@ export const Header: React.FC<HeaderProps> = ({
                 sound.playClick();
                 onToggleSidebar();
               }}
-              className="p-2 rounded-xl text-slate-600 hover:text-sky-700 hover:bg-sky-50 border border-slate-200 lg:border-transparent transition-all cursor-pointer shrink-0"
+              className="p-1.5 sm:p-2 rounded-xl text-slate-600 hover:text-sky-700 hover:bg-sky-50 border border-slate-200 lg:border-transparent transition-all cursor-pointer shrink-0"
               title="Đóng / Mở thanh menu bên trái"
               aria-label="Thanh menu chính"
             >
@@ -108,34 +108,34 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
-          {/* Logo and Brand Title (Phối màu & font chuẩn phong cách TBS) */}
+          {/* Logo and Brand Title */}
           <button
             onClick={onGoHome}
-            className="flex items-center gap-2.5 text-left group transition-transform active:scale-95 shrink-0 cursor-pointer"
+            className="flex items-center gap-2 text-left group transition-transform active:scale-95 shrink-0 cursor-pointer"
             title="Về trang chủ"
           >
             <div className="relative shrink-0">
               <img
                 src={schoolLogo}
                 alt="Logo Trường THCS Tân Bình"
-                className="w-10 h-10 sm:w-11 sm:h-11 rounded-full object-contain bg-white p-0.5 border-2 border-sky-300 shadow-md group-hover:scale-105 transition-transform"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-contain bg-white p-0.5 border-2 border-sky-300 shadow-md group-hover:scale-105 transition-transform"
               />
             </div>
-            <div>
+            <div className="hidden xs:block">
               <div className="flex items-center gap-1.5 leading-tight">
-                <span className="font-black text-sm sm:text-base md:text-lg tracking-tight text-sky-800 font-['Lexend'] uppercase">
+                <span className="font-black text-xs sm:text-sm md:text-base tracking-tight text-sky-800 font-['Lexend'] uppercase whitespace-nowrap">
                   HỆ THỐNG HỌC TẬP TÂN BÌNH
                 </span>
               </div>
-              <p className="text-[11px] sm:text-xs font-bold text-rose-600 italic leading-tight mt-0.5">
+              <p className="text-[10px] sm:text-xs font-bold text-rose-600 italic leading-tight mt-0.5 whitespace-nowrap">
                 GV: Ms. Trúc Tin Học
               </p>
             </div>
           </button>
         </div>
 
-        {/* 2. CENTER: CÁC TAB ĐIỀU HƯỚNG GOM NHÓM (Chuẩn như ảnh Trường Thanh Bình) */}
-        <nav className="hidden lg:flex items-center gap-1 xl:gap-2 text-xs font-black uppercase tracking-tight">
+        {/* 2. CENTER: CÁC TAB ĐIỀU HƯỚNG GOM NHÓM DÀN ĐỀU, KHÔNG XUỐNG DÒNG */}
+        <nav className="hidden lg:flex items-center justify-center flex-1 min-w-0 gap-1 xl:gap-2 text-xs font-black uppercase tracking-tight px-1 overflow-x-auto no-scrollbar">
           {/* Tab 1: Tổng Quan */}
           <button
             type="button"
@@ -143,7 +143,7 @@ export const Header: React.FC<HeaderProps> = ({
               sound.playClick();
               onGoHome();
             }}
-            className={`px-3 py-2 rounded-xl flex items-center gap-1.5 transition-all cursor-pointer ${
+            className={`px-2.5 xl:px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0 ${
               isHome && activeTab === 'overview'
                 ? 'text-sky-700 border-b-2 border-sky-600 bg-sky-50/70 font-extrabold shadow-2xs'
                 : 'text-slate-600 hover:text-sky-700 hover:bg-sky-50'
@@ -161,7 +161,7 @@ export const Header: React.FC<HeaderProps> = ({
               if (onScrollToTopics) onScrollToTopics();
               else onGoHome();
             }}
-            className={`px-3 py-2 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer ${
+            className={`px-2.5 xl:px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
               isHome && activeTab === 'topics'
                 ? 'text-emerald-700 border-b-2 border-emerald-600 bg-emerald-50/70 font-extrabold shadow-2xs'
                 : 'text-slate-600 hover:text-emerald-700 hover:bg-emerald-50'
@@ -179,7 +179,7 @@ export const Header: React.FC<HeaderProps> = ({
               if (onScrollToCustomExams) onScrollToCustomExams();
               else onGoHome();
             }}
-            className={`px-3 py-2 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer ${
+            className={`px-2.5 xl:px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
               isHome && activeTab === 'exams'
                 ? 'text-sky-700 border-b-2 border-sky-600 bg-sky-50/70 font-extrabold shadow-2xs'
                 : 'text-slate-600 hover:text-sky-700 hover:bg-sky-50'
@@ -196,7 +196,7 @@ export const Header: React.FC<HeaderProps> = ({
               sound.playClick();
               window.open('/games/', '_blank');
             }}
-            className="px-3 py-2 text-purple-700 hover:bg-purple-50 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer group"
+            className="px-2.5 xl:px-3 py-1.5 text-purple-700 hover:bg-purple-50 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer group whitespace-nowrap shrink-0"
             title="Mở tab Sân chơi Game tri thức (16 trò chơi trực tuyến)"
           >
             <Gamepad2 className="w-3.5 h-3.5 text-purple-600 group-hover:rotate-12 transition-transform" />
@@ -208,14 +208,14 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Tab 5: Gom Nhóm Tra Cứu Kết Quả (Dropdown Menu) */}
           <div
-            className="relative"
+            className="relative shrink-0"
             onMouseEnter={() => setIsLookupDropdownOpen(true)}
             onMouseLeave={() => setIsLookupDropdownOpen(false)}
           >
             <button
               type="button"
               onClick={() => setIsLookupDropdownOpen((prev) => !prev)}
-              className="px-3 py-2 text-amber-800 hover:bg-amber-50 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="px-2.5 xl:px-3 py-1.5 text-amber-800 hover:bg-amber-50 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
               <Trophy className="w-3.5 h-3.5 text-amber-600" />
               <span>Tra Cứu ▾</span>
@@ -297,7 +297,7 @@ export const Header: React.FC<HeaderProps> = ({
                 sound.playClick();
                 onOpenGuide();
               }}
-              className="px-3 py-2 text-slate-600 hover:text-sky-700 hover:bg-sky-50 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="px-2.5 xl:px-3 py-1.5 text-slate-600 hover:text-sky-700 hover:bg-sky-50 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
               <HelpCircle className="w-3.5 h-3.5 text-sky-600" />
               <span>Hướng Dẫn</span>
@@ -312,7 +312,7 @@ export const Header: React.FC<HeaderProps> = ({
                 sound.playClick();
                 onOpenAdminStudio();
               }}
-              className={`px-3 py-2 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer ${
+              className={`px-2.5 xl:px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
                 isAdminLoggedIn
                   ? 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow-xs'
                   : 'text-slate-600 hover:text-indigo-700 hover:bg-indigo-50'
@@ -325,8 +325,8 @@ export const Header: React.FC<HeaderProps> = ({
         </nav>
 
         {/* 3. RIGHT SIDE: Thẻ Hồ Sơ Học Sinh & Điều Khiển Âm Thanh */}
-        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-          {/* Quick Quiz Launch Button (Hiện gọn gàng khi ở trang chủ) */}
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+          {/* Quick Quiz Launch Button */}
           {isHome && onStartGenerateQuiz && (
             <button
               type="button"
@@ -335,13 +335,13 @@ export const Header: React.FC<HeaderProps> = ({
                 onStartGenerateQuiz();
               }}
               disabled={isGenerating || !canStartQuiz}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-xs shadow-md shadow-emerald-600/25 transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-xs shadow-md shadow-emerald-600/25 transition-all active:scale-95 disabled:opacity-50 cursor-pointer whitespace-nowrap shrink-0"
               title="Bắt đầu tạo câu hỏi và làm bài ngay"
             >
               {isGenerating ? (
                 <>
                   <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  <span className="hidden sm:inline">Đang tạo đề...</span>
+                  <span className="hidden sm:inline">Đang tạo...</span>
                 </>
               ) : (
                 <>
@@ -359,7 +359,7 @@ export const Header: React.FC<HeaderProps> = ({
                 sound.playClick();
                 onOpenProfileModal();
               }}
-              className="flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 rounded-2xl border border-sky-200 bg-sky-50/70 hover:bg-sky-100/80 text-slate-800 transition-all shadow-2xs group cursor-pointer"
+              className="flex items-center gap-1.5 px-2 py-1.5 sm:px-2.5 sm:py-1.5 rounded-2xl border border-sky-200 bg-sky-50/70 hover:bg-sky-100/80 text-slate-800 transition-all shadow-2xs group cursor-pointer shrink-0"
               title="Nhấn để đổi tên học sinh, lớp hoặc avatar"
             >
               <StudentAvatar
@@ -367,7 +367,7 @@ export const Header: React.FC<HeaderProps> = ({
                 name={studentProfile.fullName}
                 size="xs"
               />
-              <div className="text-left hidden sm:block max-w-[110px]">
+              <div className="text-left hidden xl:block max-w-[100px]">
                 <div className="text-[11px] font-extrabold text-slate-800 truncate leading-tight group-hover:text-sky-700">
                   {studentProfile.fullName || 'Học sinh'}
                 </div>
@@ -381,7 +381,7 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Sound Toggle Button */}
           <button
             onClick={onToggleSound}
-            className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-colors border border-transparent hover:border-slate-200 cursor-pointer"
+            className="p-1.5 sm:p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-colors border border-transparent hover:border-slate-200 cursor-pointer shrink-0"
             title={soundEnabled ? 'Tắt âm thanh hiệu ứng' : 'Bật âm thanh hiệu ứng'}
             aria-label="Toggle Sound"
           >
