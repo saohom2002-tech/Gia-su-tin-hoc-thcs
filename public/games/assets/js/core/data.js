@@ -235,8 +235,153 @@
     DB.settings.adminEmail = "tranthithanhtruc1980@gmail.com";
     DB.settings.schoolAddress = "873 Cách Mạng Tháng 8, Phường Tân Sơn Nhất, TP.HCM";
     DB.settings.schoolWebsite = "https://thcstanbinh.hcm.edu.vn";
+
+    // Hợp nhất câu hỏi & bộ đề từ Kho đề thi chuẩn và Luyện tập theo chủ đề
+    await DB.mergeSyncedQuestions();
+
+    // Thiết lập lắng nghe Realtime Database để tự động cập nhật ngay khi giáo viên lưu đề mới
+    if (FB.available && FB.rtdb && !DB._rtdbListening) {
+      DB._rtdbListening = true;
+      try {
+        FB.rtdb.ref("game_bank/custom_sets").on("value", () => {
+          DB.mergeSyncedQuestions().then(() => DB.emit());
+        });
+      } catch (e) {}
+    }
+
     DB.usingDemo = !DB.questions.length;
     DB.loaded = true; DB.emit();
+  };
+
+  /* ---------- Hợp nhất đề thi & câu hỏi từ Cổng Gia Sư (Portal) ---------- */
+  DB.mergeSyncedQuestions = async () => {
+    try {
+      const qMap = new Map();
+      (DB.questions || []).forEach((q) => {
+        const id = q._doc || docId(q.Id);
+        qMap.set(id, q);
+      });
+
+      const setMap = new Map();
+      (DB.sets || []).forEach((s) => {
+        if (s && s.id) setMap.set(s.id, s);
+      });
+
+      // 1. Đọc từ LocalStorage (ontap_game_synced_questions & ontap_game_synced_sets)
+      try {
+        const rawSq = localStorage.getItem("ontap_game_synced_questions");
+        if (rawSq) {
+          const parsed = JSON.parse(rawSq);
+          if (parsed && typeof parsed === "object") {
+            Object.values(parsed).forEach((q) => {
+              if (q && q.Id && !isMathQuestion(q)) {
+                const id = docId(q.Id);
+                qMap.set(id, Object.assign({ _doc: id }, q));
+              }
+            });
+          }
+        }
+        const rawSs = localStorage.getItem("ontap_game_synced_sets");
+        if (rawSs) {
+          const parsedSets = JSON.parse(rawSs);
+          if (parsedSets && typeof parsedSets === "object") {
+            Object.values(parsedSets).forEach((s) => {
+              if (s && s.id) setMap.set(s.id, s);
+            });
+          }
+        }
+      } catch (le) {
+        console.warn("Lỗi đọc synced questions từ LocalStorage:", le);
+      }
+
+      // 2. Đọc trực tiếp từ ontap_admin_custom_exams nếu có đề chưa được convert
+      try {
+        const rawExams = localStorage.getItem("ontap_admin_custom_exams");
+        if (rawExams) {
+          const exams = JSON.parse(rawExams);
+          if (Array.isArray(exams)) {
+            const LET = ["A", "B", "C", "D", "E", "F"];
+            exams.forEach((ex) => {
+              if (!ex || ex.isTrashed || !Array.isArray(ex.questions)) return;
+              const qIds = [];
+              ex.questions.forEach((q) => {
+                if (!q || !q.text) return;
+                const qid = "q_" + (q.id || U.uid());
+                qIds.push(qid);
+                const opts = {};
+                (q.options || []).forEach((opt, idx) => {
+                  if (idx < LET.length) {
+                    opts[LET[idx]] = String(opt || "").replace(/^[A-Fa-f][\.\)\:\s]\s*/, "").trim();
+                  }
+                });
+                let ans = "A";
+                if (typeof q.correctAnswer === "number") ans = LET[q.correctAnswer] || "A";
+                else if (typeof q.correctAnswer === "string") {
+                  const t = q.correctAnswer.trim().toUpperCase();
+                  ans = /^[0-5]$/.test(t) ? (LET[parseInt(t, 10)] || "A") : t.charAt(0);
+                }
+                const gq = {
+                  _doc: qid,
+                  Id: qid,
+                  Type: q.type === "true-false" ? "TF" : (q.type === "short-answer" ? "SA" : "MC"),
+                  Level: q.difficulty === "de" ? "Nhận biết" : (q.difficulty === "kho" ? "Vận dụng" : "Thông hiểu"),
+                  Grade: String(ex.gradeNumber || q.grade || "7"),
+                  Subject: "Tin học",
+                  Chapter: ex.title || "Kho Đề Chuẩn",
+                  Topic: q.lessonTitle || ex.title || "Ôn tập",
+                  Question: q.text,
+                  Options: opts,
+                  CorrectAnswer: ans,
+                  Explain: q.explanation || ""
+                };
+                qMap.set(qid, gq);
+              });
+
+              setMap.set("set_exam_" + ex.id, {
+                id: "set_exam_" + ex.id,
+                name: "Đề: " + ex.title + " (Khối " + (ex.gradeNumber || 7) + " · " + qIds.length + " câu)",
+                grade: String(ex.gradeNumber || 7),
+                subject: "Tin học",
+                desc: "Đề thi chuẩn từ Cổng Gia Sư",
+                questionIds: qIds
+              });
+            });
+          }
+        }
+      } catch (ee) {
+        console.warn("Lỗi phân tích ontap_admin_custom_exams:", ee);
+      }
+
+      // 3. Nếu có RTDB, đọc thêm game_bank/custom_questions và game_bank/custom_sets
+      if (FB.available && FB.rtdb) {
+        try {
+          const snapQ = await withTimeout(FB.rtdb.ref("game_bank/custom_questions").once("value"), 3500);
+          if (snapQ && snapQ.exists()) {
+            const data = snapQ.val() || {};
+            Object.values(data).forEach((q) => {
+              if (q && q.Id && !isMathQuestion(q)) {
+                const id = docId(q.Id);
+                qMap.set(id, Object.assign({ _doc: id }, q));
+              }
+            });
+          }
+          const snapS = await withTimeout(FB.rtdb.ref("game_bank/custom_sets").once("value"), 3500);
+          if (snapS && snapS.exists()) {
+            const setsData = snapS.val() || {};
+            Object.values(setsData).forEach((s) => {
+              if (s && s.id) setMap.set(s.id, s);
+            });
+          }
+        } catch (re) {
+          console.warn("Lỗi đọc custom_questions từ RTDB:", re.message);
+        }
+      }
+
+      DB.questions = Array.from(qMap.values()).sort(natural);
+      DB.sets = Array.from(setMap.values());
+    } catch (err) {
+      console.warn("Lỗi DB.mergeSyncedQuestions:", err);
+    }
   };
 
   /* Câu hỏi dùng để chơi (nếu ngân hàng trống => câu mẫu) */

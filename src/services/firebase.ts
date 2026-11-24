@@ -585,6 +585,13 @@ export async function saveCustomExamToFirebase(exam: CustomExam): Promise<boolea
     const examRef = ref(db, `${CUSTOM_EXAMS_REF_PATH}/${cleanExam.id}`);
     await set(examRef, cleanExam);
 
+    // Tự động đồng bộ đề thi này sang Ngân hàng câu hỏi của Sân Chơi Game (16 Trò)
+    try {
+      await syncSingleExamToGameBank(cleanExam);
+    } catch (e) {
+      console.warn('Lỗi tự động đồng bộ đề thi sang Game Bank:', e);
+    }
+
     // Nếu đây là Ngân hàng câu hỏi của Chủ đề / Bài học SGK (id bắt đầu bằng 'topic-bank-'),
     // tự động cập nhật trực tiếp vào BUILT_IN_QUESTIONS và node curriculum_bank trên Firebase
     if (cleanExam.id.startsWith('topic-bank-')) {
@@ -750,6 +757,14 @@ export async function saveCurriculumTopicQuestionsToFirebase(
       questions: cleanQuestions,
       updatedAt: Date.now(),
     });
+
+    // Tự động đồng bộ câu hỏi của bài học này sang Ngân hàng câu hỏi của Sân Chơi Game (16 Trò)
+    try {
+      await syncTopicQuestionsToGameBank(lessonId, lessonTitle, gradeNumber, cleanQuestions);
+    } catch (e) {
+      console.warn('Lỗi tự động đồng bộ bài học sang Game Bank:', e);
+    }
+
     return true;
   } catch (err) {
     console.error('Lỗi lưu ngân hàng câu hỏi chủ đề lên Firebase:', err);
@@ -805,3 +820,329 @@ export function subscribeToCurriculumBank(
 
   return unsubscribe;
 }
+
+// ============================================================================
+// ĐỒNG BỘ CÂU HỎI TỰ ĐỘNG SANG SÂN CHƠI GAME (16 TRÒ CHƠI) - GAME BANK BRIDGE
+// ============================================================================
+export const GAME_BANK_SYNCED_QUESTIONS_KEY = 'ontap_game_synced_questions';
+export const GAME_BANK_SYNCED_SETS_KEY = 'ontap_game_synced_sets';
+
+export interface GameQuestionPayload {
+  Id: string;
+  Type: 'MC' | 'TF' | 'SA';
+  Level: string;
+  Grade: string;
+  Subject: string;
+  Chapter: string;
+  Topic: string;
+  Question: string;
+  Explain: string;
+  Options?: Record<string, string>;
+  CorrectAnswer: string;
+  examId?: string;
+  sourceExamTitle?: string;
+  updatedAt?: number;
+}
+
+export interface GameSetPayload {
+  id: string;
+  name: string;
+  grade?: string;
+  subject?: string;
+  desc?: string;
+  questionIds: string[];
+  updatedAt?: number;
+}
+
+/**
+ * Chuyển đổi định dạng câu hỏi từ Cổng Gia Sư (Portal) sang định dạng của Sân Chơi Game (16 Trò)
+ */
+export function convertPortalQuestionToGame(
+  q: Question,
+  meta: {
+    grade?: number | string;
+    chapter?: string;
+    topic?: string;
+    examTitle?: string;
+    examId?: string;
+  }
+): GameQuestionPayload | null {
+  if (!q || !q.text) return null;
+
+  const rawType = (q.type || 'multiple-choice').toLowerCase();
+  let type: 'MC' | 'TF' | 'SA' = 'MC';
+  if (rawType.includes('true-false') || rawType === 'tf') {
+    type = 'TF';
+  } else if (rawType.includes('short') || rawType === 'sa') {
+    type = 'SA';
+  } else if (rawType.includes('essay')) {
+    type = 'SA';
+  }
+
+  // Phân loại cấp độ
+  let level = 'Thông hiểu';
+  if (q.difficulty === 'de') level = 'Nhận biết';
+  else if (q.difficulty === 'kho') level = 'Vận dụng';
+  else if (q.difficulty === 'trung_binh') level = 'Thông hiểu';
+
+  const grade = String(q.grade || meta.grade || '7');
+  const subject = q.subject || 'Tin học';
+  const chapter = meta.chapter || meta.examTitle || `Khối ${grade}`;
+  const topic = q.lessonTitle || meta.topic || meta.examTitle || 'Ôn tập';
+
+  const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'];
+  const tfKeys = ['a', 'b', 'c', 'd'];
+
+  let optionsObj: Record<string, string> | undefined = undefined;
+  let correctAnswerStr = 'A';
+
+  if (type === 'MC') {
+    optionsObj = {};
+    const rawOpts = Array.isArray(q.options) ? q.options : [];
+    rawOpts.forEach((optStr, idx) => {
+      if (idx < LETTERS.length) {
+        const key = LETTERS[idx];
+        const cleanOpt = String(optStr || '').replace(/^[A-Fa-f][\.\)\:\s]\s*/, '').trim();
+        optionsObj![key] = cleanOpt;
+      }
+    });
+
+    if (typeof q.correctAnswer === 'number') {
+      correctAnswerStr = LETTERS[q.correctAnswer] || 'A';
+    } else if (typeof q.correctAnswer === 'string') {
+      const trimmed = q.correctAnswer.trim().toUpperCase();
+      if (/^[0-5]$/.test(trimmed)) {
+        correctAnswerStr = LETTERS[parseInt(trimmed, 10)] || 'A';
+      } else if (LETTERS.includes(trimmed.charAt(0))) {
+        correctAnswerStr = trimmed.charAt(0);
+      } else {
+        const matchIdx = rawOpts.findIndex((o) => String(o).trim().toLowerCase() === trimmed.toLowerCase());
+        correctAnswerStr = matchIdx >= 0 && LETTERS[matchIdx] ? LETTERS[matchIdx] : 'A';
+      }
+    } else if (Array.isArray(q.correctAnswer) && q.correctAnswer.length > 0) {
+      const first = q.correctAnswer[0];
+      if (typeof first === 'number') correctAnswerStr = LETTERS[first] || 'A';
+      else if (typeof first === 'string') {
+        const trimmed = first.trim().toUpperCase();
+        correctAnswerStr = /^[0-5]$/.test(trimmed) ? (LETTERS[parseInt(trimmed, 10)] || 'A') : trimmed.charAt(0);
+      }
+    }
+  } else if (type === 'TF') {
+    optionsObj = {};
+    const rawOpts = Array.isArray(q.options) ? q.options : [];
+    rawOpts.forEach((optStr, idx) => {
+      if (idx < tfKeys.length) {
+        const key = tfKeys[idx];
+        const cleanOpt = String(optStr || '').replace(/^[a-d][\.\)\:\s]\s*/, '').trim();
+        optionsObj![key] = cleanOpt;
+      }
+    });
+
+    if (Array.isArray(q.trueFalseAnswers)) {
+      correctAnswerStr = q.trueFalseAnswers.map((tf) => (tf ? 'Đ' : 'S')).join('');
+    } else if (typeof q.correctAnswer === 'string') {
+      correctAnswerStr = q.correctAnswer;
+    } else {
+      correctAnswerStr = 'ĐSĐS';
+    }
+  } else {
+    correctAnswerStr = String(q.correctAnswer ?? '').trim();
+  }
+
+  const cleanId = String(q.id || `q_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`);
+
+  return {
+    Id: cleanId,
+    Type: type,
+    Level: level,
+    Grade: grade,
+    Subject: subject,
+    Chapter: chapter,
+    Topic: topic,
+    Question: q.text,
+    Explain: q.explanation || '',
+    Options: optionsObj,
+    CorrectAnswer: correctAnswerStr,
+    examId: meta.examId,
+    sourceExamTitle: meta.examTitle,
+    updatedAt: Date.now(),
+  };
+}
+
+/**
+ * Đồng bộ câu hỏi của 1 đề thi sang Game Bank (cả RTDB và localStorage)
+ */
+export async function syncSingleExamToGameBank(exam: CustomExam): Promise<boolean> {
+  if (!exam || !exam.id) return false;
+
+  let localQuestions: Record<string, GameQuestionPayload> = {};
+  let localSets: Record<string, GameSetPayload> = {};
+  try {
+    const qRaw = localStorage.getItem(GAME_BANK_SYNCED_QUESTIONS_KEY);
+    if (qRaw) localQuestions = JSON.parse(qRaw) || {};
+    const sRaw = localStorage.getItem(GAME_BANK_SYNCED_SETS_KEY);
+    if (sRaw) localSets = JSON.parse(sRaw) || {};
+  } catch {}
+
+  const setId = `set_exam_${exam.id}`;
+
+  if (exam.isTrashed) {
+    delete localSets[setId];
+    Object.keys(localQuestions).forEach((qid) => {
+      if (localQuestions[qid].examId === exam.id) {
+        delete localQuestions[qid];
+      }
+    });
+    localStorage.setItem(GAME_BANK_SYNCED_QUESTIONS_KEY, JSON.stringify(localQuestions));
+    localStorage.setItem(GAME_BANK_SYNCED_SETS_KEY, JSON.stringify(localSets));
+
+    try {
+      await remove(ref(db, `game_bank/custom_sets/${exam.id}`));
+      const snap = await get(ref(db, `game_bank/custom_questions`));
+      if (snap.exists()) {
+        const val = snap.val();
+        for (const k of Object.keys(val)) {
+          if (val[k]?.examId === exam.id) {
+            await remove(ref(db, `game_bank/custom_questions/${k}`));
+          }
+        }
+      }
+    } catch {}
+    return true;
+  }
+
+  const qIds: string[] = [];
+  const examQuestions = exam.questions || [];
+  examQuestions.forEach((q) => {
+    const converted = convertPortalQuestionToGame(q, {
+      grade: exam.gradeNumber,
+      examTitle: exam.title,
+      examId: exam.id,
+      topic: q.lessonTitle || exam.title,
+    });
+    if (converted) {
+      qIds.push(converted.Id);
+      localQuestions[converted.Id] = converted;
+    }
+  });
+
+  const setPayload: GameSetPayload = {
+    id: setId,
+    name: `Đề: ${exam.title} (Khối ${exam.gradeNumber || 7} · ${qIds.length} câu)`,
+    grade: String(exam.gradeNumber || 7),
+    subject: 'Tin học',
+    desc: `Đề thi từ Kho Đề Chuẩn (${exam.title})`,
+    questionIds: qIds,
+    updatedAt: Date.now(),
+  };
+
+  localSets[setId] = setPayload;
+  localStorage.setItem(GAME_BANK_SYNCED_QUESTIONS_KEY, JSON.stringify(localQuestions));
+  localStorage.setItem(GAME_BANK_SYNCED_SETS_KEY, JSON.stringify(localSets));
+
+  try {
+    await set(ref(db, `game_bank/custom_sets/${exam.id}`), sanitizeForFirebase(setPayload));
+    for (const qid of qIds) {
+      if (localQuestions[qid]) {
+        await set(ref(db, `game_bank/custom_questions/${qid}`), sanitizeForFirebase(localQuestions[qid]));
+      }
+    }
+  } catch (err) {
+    console.warn('Lưu game_bank lên RTDB thất bại, đã lưu cục bộ:', err);
+  }
+
+  return true;
+}
+
+/**
+ * Đồng bộ câu hỏi của 1 bài học SGK sang Game Bank
+ */
+export async function syncTopicQuestionsToGameBank(
+  lessonId: string,
+  lessonTitle: string,
+  gradeNumber: number,
+  questions: Question[]
+): Promise<boolean> {
+  let localQuestions: Record<string, GameQuestionPayload> = {};
+  let localSets: Record<string, GameSetPayload> = {};
+  try {
+    const qRaw = localStorage.getItem(GAME_BANK_SYNCED_QUESTIONS_KEY);
+    if (qRaw) localQuestions = JSON.parse(qRaw) || {};
+    const sRaw = localStorage.getItem(GAME_BANK_SYNCED_SETS_KEY);
+    if (sRaw) localSets = JSON.parse(sRaw) || {};
+  } catch {}
+
+  const setId = `set_topic_${lessonId}`;
+  const qIds: string[] = [];
+
+  questions.forEach((q) => {
+    const converted = convertPortalQuestionToGame(q, {
+      grade: gradeNumber,
+      chapter: `Khối ${gradeNumber} - SGK Kết Nối Tri Thức`,
+      topic: lessonTitle,
+      examId: `topic_${lessonId}`,
+      examTitle: lessonTitle,
+    });
+    if (converted) {
+      qIds.push(converted.Id);
+      localQuestions[converted.Id] = converted;
+    }
+  });
+
+  const setPayload: GameSetPayload = {
+    id: setId,
+    name: `Bài: ${lessonTitle} (${qIds.length} câu)`,
+    grade: String(gradeNumber),
+    subject: 'Tin học',
+    desc: `Ngân hàng câu hỏi SGK theo bài: ${lessonTitle}`,
+    questionIds: qIds,
+    updatedAt: Date.now(),
+  };
+
+  localSets[setId] = setPayload;
+  localStorage.setItem(GAME_BANK_SYNCED_QUESTIONS_KEY, JSON.stringify(localQuestions));
+  localStorage.setItem(GAME_BANK_SYNCED_SETS_KEY, JSON.stringify(localSets));
+
+  try {
+    await set(ref(db, `game_bank/custom_sets/topic_${lessonId}`), sanitizeForFirebase(setPayload));
+    for (const qid of qIds) {
+      if (localQuestions[qid]) {
+        await set(ref(db, `game_bank/custom_questions/${qid}`), sanitizeForFirebase(localQuestions[qid]));
+      }
+    }
+  } catch (err) {
+    console.warn('Lưu topic game_bank lên RTDB:', err);
+  }
+
+  return true;
+}
+
+/**
+ * Đồng bộ toàn bộ Kho Đề Thi Chuẩn và Luyện Tập Theo Chủ Đề sang Sân Chơi Game (16 Trò)
+ */
+export async function syncAllExamsAndTopicsToGameBank(): Promise<{ questionCount: number; setCount: number }> {
+  const allExams = getLocalCustomExams().filter((e) => !e.isTrashed);
+  const topicOverrides = getLocalCurriculumBankOverrides();
+
+  let totalQuestions = 0;
+  let totalSets = 0;
+
+  for (const exam of allExams) {
+    if (exam.questions && exam.questions.length > 0) {
+      await syncSingleExamToGameBank(exam);
+      totalQuestions += exam.questions.length;
+      totalSets++;
+    }
+  }
+
+  for (const [lessonId, qList] of Object.entries(topicOverrides)) {
+    if (Array.isArray(qList) && qList.length > 0) {
+      await syncTopicQuestionsToGameBank(lessonId, `Bài ${lessonId}`, 7, qList);
+      totalQuestions += qList.length;
+      totalSets++;
+    }
+  }
+
+  return { questionCount: totalQuestions, setCount: totalSets };
+}
+

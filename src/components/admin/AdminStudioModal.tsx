@@ -10,6 +10,7 @@ import {
   deleteCustomExamFromFirebase,
   moveCustomExamToTrash,
   restoreCustomExamFromTrash,
+  syncAllExamsAndTopicsToGameBank,
   ADMIN_EMAIL,
 } from '../../services/firebase';
 import {
@@ -63,7 +64,8 @@ import {
   FileUp,
   FileText,
   Eye,
-  Shuffle
+  Shuffle,
+  Gamepad2
 } from 'lucide-react';
 
 interface AdminStudioModalProps {
@@ -167,6 +169,24 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
     setTimeout(() => {
       setStatusMessage('');
     }, 3500);
+  };
+
+  const [isSyncingToGame, setIsSyncingToGame] = useState(false);
+
+  const handleSyncToGameBank = async () => {
+    sound.playClick();
+    setIsSyncingToGame(true);
+    try {
+      const res = await syncAllExamsAndTopicsToGameBank();
+      sound.playCorrect();
+      flashMessage(
+        `🎮 Đã đồng bộ thành công ${res.questionCount} câu hỏi (${res.setCount} bộ đề) sang Sân Chơi Game (16 Trò)! Các trò chơi đều có thể sử dụng câu hỏi này ngay lập tức.`
+      );
+    } catch (err: any) {
+      flashMessage(`⚠️ Lỗi khi đồng bộ: ${err?.message || 'Vui lòng thử lại sau.'}`);
+    } finally {
+      setIsSyncingToGame(false);
+    }
   };
 
   // Selected exam object
@@ -1281,6 +1301,19 @@ Yêu cầu chất lượng:
 
                 {/* Actions */}
                 <div className="flex items-center gap-2 shrink-0">
+                  {/* Sync to Games */}
+                  <button
+                    onClick={handleSyncToGameBank}
+                    disabled={isSyncingToGame}
+                    title="Đồng bộ toàn bộ câu hỏi từ Kho đề thi và Chủ đề SGK sang 16 trò chơi trong Sân Chơi Game"
+                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-purple-200 hover:border-purple-300 bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold transition-colors shadow-2xs cursor-pointer disabled:opacity-50"
+                  >
+                    <Gamepad2 className={`w-3.5 h-3.5 text-purple-600 ${isSyncingToGame ? 'animate-spin' : ''}`} />
+                    <span className="hidden sm:inline">
+                      {isSyncingToGame ? 'Đang đồng bộ...' : 'Đồng bộ sang 16 Game'}
+                    </span>
+                  </button>
+
                   {/* Import JSON */}
                   <label className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200 hover:border-slate-300 bg-white text-slate-700 text-xs font-bold cursor-pointer transition-colors shadow-2xs">
                     <Upload className="w-3.5 h-3.5 text-indigo-600" />
