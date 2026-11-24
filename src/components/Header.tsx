@@ -206,7 +206,23 @@ export const Header: React.FC<HeaderProps> = ({
             </span>
           </button>
 
-          {/* Tab 5: Gom Nhóm Tra Cứu Kết Quả (Dropdown Menu) */}
+          {/* Tab 5: AI BOOKS (Liên kết tới https://ai-books-thpt.leira.com.vn/) */}
+          <a
+            href="https://ai-books-thpt.leira.com.vn/"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => sound.playClick()}
+            className="px-2.5 xl:px-3 py-1.5 text-blue-700 hover:bg-blue-50 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer group whitespace-nowrap shrink-0"
+            title="Mở nền tảng AI BOOKS - Sách điện tử & Nền tảng học tập THPT"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-blue-600 group-hover:scale-110 transition-transform" />
+            <span>AI BOOKS</span>
+            <span className="px-1.5 py-0.2 rounded-full bg-blue-100 text-blue-800 text-[9px] font-mono font-black">
+              THPT ↗
+            </span>
+          </a>
+
+          {/* Tab 6: Gom Nhóm Tra Cứu Kết Quả (Dropdown Menu) */}
           <div
             className="relative shrink-0"
             onMouseEnter={() => setIsLookupDropdownOpen(true)}

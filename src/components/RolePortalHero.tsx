@@ -194,14 +194,31 @@ export const RolePortalHero: React.FC<RolePortalHeroProps> = ({
 
                 <a
                   href="/games/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-full flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-2xl bg-gradient-to-r from-purple-50 to-pink-50 hover:from-purple-100 hover:to-pink-100 text-purple-900 font-bold text-xs sm:text-sm border border-purple-200/80 shadow-xs transition-all cursor-pointer active:scale-98"
                 >
                   <div className="flex items-center gap-2">
                     <Gamepad2 className="w-4 h-4 text-purple-600" />
-                    <span>Sân Chơi Game (14 Trò)</span>
+                    <span>Sân Chơi Game (16 Trò)</span>
                   </div>
                   <span className="text-[10px] font-black uppercase px-1.5 py-0.5 rounded bg-purple-200 text-purple-800">
                     Hot
+                  </span>
+                </a>
+
+                <a
+                  href="https://ai-books-thpt.leira.com.vn/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 text-blue-900 font-bold text-xs sm:text-sm border border-blue-200/80 shadow-xs transition-all cursor-pointer active:scale-98"
+                >
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-blue-600" />
+                    <span>AI BOOKS</span>
+                  </div>
+                  <span className="text-[10px] font-black uppercase px-1.5 py-0.5 rounded bg-blue-200 text-blue-800">
+                    THPT ↗
                   </span>
                 </a>
               </div>
