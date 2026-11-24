@@ -19,7 +19,9 @@ import {
   HelpCircle,
   Layers,
   Award,
-  AlertCircle
+  AlertCircle,
+  Link2,
+  School
 } from 'lucide-react';
 import { sound } from '../utils/sound';
 import { StudentProfile } from '../types/quiz';
@@ -86,6 +88,7 @@ export const Header: React.FC<HeaderProps> = ({
   summaryInfo,
 }) => {
   const [isLookupDropdownOpen, setIsLookupDropdownOpen] = useState(false);
+  const [isLinksDropdownOpen, setIsLinksDropdownOpen] = useState(false);
 
   return (
     <header className="no-print sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b-2 border-sky-200/90 shadow-xs w-full">
@@ -135,7 +138,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* 2. CENTER: CÁC TAB ĐIỀU HƯỚNG GOM NHÓM DÀN ĐỀU, KHÔNG XUỐNG DÒNG */}
-        <nav className="hidden lg:flex items-center justify-center flex-1 min-w-0 gap-1 xl:gap-2 text-xs font-black uppercase tracking-tight px-1 overflow-x-auto no-scrollbar">
+        <nav className="hidden lg:flex items-center justify-center flex-1 min-w-0 gap-1 xl:gap-2 text-[13px] xl:text-sm font-extrabold uppercase tracking-tight px-1 overflow-x-auto no-scrollbar">
           {/* Tab 1: Tổng Quan */}
           <button
             type="button"
@@ -145,7 +148,7 @@ export const Header: React.FC<HeaderProps> = ({
             }}
             className={`px-2.5 xl:px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0 ${
               isHome && activeTab === 'overview'
-                ? 'text-sky-700 border-b-2 border-sky-600 bg-sky-50/70 font-extrabold shadow-2xs'
+                ? 'text-sky-700 border-b-2 border-sky-600 bg-sky-50/70 font-black shadow-2xs'
                 : 'text-slate-600 hover:text-sky-700 hover:bg-sky-50'
             }`}
           >
@@ -163,11 +166,11 @@ export const Header: React.FC<HeaderProps> = ({
             }}
             className={`px-2.5 xl:px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
               isHome && activeTab === 'topics'
-                ? 'text-emerald-700 border-b-2 border-emerald-600 bg-emerald-50/70 font-extrabold shadow-2xs'
+                ? 'text-emerald-700 border-b-2 border-emerald-600 bg-emerald-50/70 font-black shadow-2xs'
                 : 'text-slate-600 hover:text-emerald-700 hover:bg-emerald-50'
             }`}
           >
-            <Layers className="w-3.5 h-3.5 text-emerald-600" />
+            <Layers className="w-4 h-4 text-emerald-600" />
             <span>Chủ Đề SGK</span>
           </button>
 
@@ -181,11 +184,11 @@ export const Header: React.FC<HeaderProps> = ({
             }}
             className={`px-2.5 xl:px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
               isHome && activeTab === 'exams'
-                ? 'text-sky-700 border-b-2 border-sky-600 bg-sky-50/70 font-extrabold shadow-2xs'
+                ? 'text-sky-700 border-b-2 border-sky-600 bg-sky-50/70 font-black shadow-2xs'
                 : 'text-slate-600 hover:text-sky-700 hover:bg-sky-50'
             }`}
           >
-            <BookOpen className="w-3.5 h-3.5 text-sky-600" />
+            <BookOpen className="w-4 h-4 text-sky-600" />
             <span>Kho Đề Thi</span>
           </button>
 
@@ -199,14 +202,14 @@ export const Header: React.FC<HeaderProps> = ({
             className="px-2.5 xl:px-3 py-1.5 text-purple-700 hover:bg-purple-50 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer group whitespace-nowrap shrink-0"
             title="Mở tab Sân chơi Game tri thức (16 trò chơi trực tuyến)"
           >
-            <Gamepad2 className="w-3.5 h-3.5 text-purple-600 group-hover:rotate-12 transition-transform" />
+            <Gamepad2 className="w-4 h-4 text-purple-600 group-hover:rotate-12 transition-transform" />
             <span>Sân Chơi Game</span>
-            <span className="px-1.5 py-0.2 rounded-full bg-purple-200 text-purple-900 text-[9px] font-mono font-black">
+            <span className="px-1.5 py-0.2 rounded-full bg-purple-200 text-purple-900 text-[10px] font-mono font-black">
               16 Trò
             </span>
           </button>
 
-          {/* Tab 5: AI BOOKS (Liên kết tới https://ai-books-thpt.leira.com.vn/) */}
+          {/* Tab 5: AI BOOKS */}
           <a
             href="https://ai-books-thpt.leira.com.vn/"
             target="_blank"
@@ -215,14 +218,115 @@ export const Header: React.FC<HeaderProps> = ({
             className="px-2.5 xl:px-3 py-1.5 text-blue-700 hover:bg-blue-50 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer group whitespace-nowrap shrink-0"
             title="Mở nền tảng AI BOOKS - Sách điện tử & Nền tảng học tập THPT"
           >
-            <Sparkles className="w-3.5 h-3.5 text-blue-600 group-hover:scale-110 transition-transform" />
+            <Sparkles className="w-4 h-4 text-blue-600 group-hover:scale-110 transition-transform" />
             <span>AI BOOKS</span>
-            <span className="px-1.5 py-0.2 rounded-full bg-blue-100 text-blue-800 text-[9px] font-mono font-black">
+            <span className="px-1.5 py-0.2 rounded-full bg-blue-100 text-blue-800 text-[10px] font-mono font-black">
               THPT ↗
             </span>
           </a>
 
-          {/* Tab 6: Gom Nhóm Tra Cứu Kết Quả (Dropdown Menu) */}
+          {/* Tab 6: Liên Kết (Dropdown Menu) */}
+          <div
+            className="relative shrink-0"
+            onMouseEnter={() => setIsLinksDropdownOpen(true)}
+            onMouseLeave={() => setIsLinksDropdownOpen(false)}
+          >
+            <button
+              type="button"
+              onClick={() => setIsLinksDropdownOpen((prev) => !prev)}
+              className="px-2.5 xl:px-3 py-1.5 text-slate-700 hover:text-blue-700 hover:bg-blue-50 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+              title="Danh mục các trang liên kết & tài nguyên ngoài"
+            >
+              <Link2 className="w-4 h-4 text-blue-600" />
+              <span>Liên Kết ▾</span>
+            </button>
+
+            {isLinksDropdownOpen && (
+              <div className="absolute left-0 top-full mt-1 w-64 bg-white rounded-2xl shadow-xl border border-slate-200 p-2 z-50 animate-in fade-in slide-in-from-top-1">
+                <a
+                  href="https://ai-books-thpt.leira.com.vn/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setIsLinksDropdownOpen(false)}
+                  className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-blue-50 text-xs font-bold text-blue-950 transition-colors cursor-pointer text-left"
+                >
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-blue-600" />
+                    <span>AI BOOKS (THPT)</span>
+                  </div>
+                  <span className="text-[10px] font-mono font-black text-blue-600 bg-blue-100 px-1.5 py-0.5 rounded">
+                    ↗
+                  </span>
+                </a>
+
+                <a
+                  href="https://thcstanbinh.hcm.edu.vn"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setIsLinksDropdownOpen(false)}
+                  className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-sky-50 text-xs font-bold text-sky-950 transition-colors cursor-pointer text-left"
+                >
+                  <div className="flex items-center gap-2">
+                    <School className="w-4 h-4 text-sky-600" />
+                    <span>Trường THCS Tân Bình</span>
+                  </div>
+                  <span className="text-[10px] font-mono font-black text-sky-600 bg-sky-100 px-1.5 py-0.5 rounded">
+                    ↗
+                  </span>
+                </a>
+
+                <a
+                  href="https://zalo.me/0908959627"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setIsLinksDropdownOpen(false)}
+                  className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-emerald-50 text-xs font-bold text-emerald-950 transition-colors cursor-pointer text-left"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="w-4 h-4 text-center text-xs">💬</span>
+                    <span>Liên Hệ Zalo Ms. Trúc</span>
+                  </div>
+                  <span className="text-[10px] font-mono font-black text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded">
+                    0908...
+                  </span>
+                </a>
+
+                <a
+                  href="https://drive.google.com/drive/folders/1MnvzQAzv62Xiw9ziU2jH5T37ObFmADg4?lfhs=2"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setIsLinksDropdownOpen(false)}
+                  className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-amber-50 text-xs font-bold text-amber-950 transition-colors cursor-pointer text-left"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="w-4 h-4 text-center text-xs">📁</span>
+                    <span>Google Drive Tài Liệu</span>
+                  </div>
+                  <span className="text-[10px] font-mono font-black text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded">
+                    Drive
+                  </span>
+                </a>
+
+                <a
+                  href="https://docs.google.com/spreadsheets/d/1sw7iAQZw2cD7USR3O5tY6P6MvOqbWBvhuBORvr0dxNo/edit?gid=0#gid=0"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setIsLinksDropdownOpen(false)}
+                  className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-green-50 text-xs font-bold text-green-950 transition-colors cursor-pointer text-left"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="w-4 h-4 text-center text-xs">📊</span>
+                    <span>Google Sheet Đề Gốc</span>
+                  </div>
+                  <span className="text-[10px] font-mono font-black text-green-700 bg-green-100 px-1.5 py-0.5 rounded">
+                    Sheet
+                  </span>
+                </a>
+              </div>
+            )}
+          </div>
+
+          {/* Tab 7: Gom Nhóm Tra Cứu Kết Quả (Dropdown Menu) */}
           <div
             className="relative shrink-0"
             onMouseEnter={() => setIsLookupDropdownOpen(true)}
@@ -233,7 +337,7 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={() => setIsLookupDropdownOpen((prev) => !prev)}
               className="px-2.5 xl:px-3 py-1.5 text-amber-800 hover:bg-amber-50 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
-              <Trophy className="w-3.5 h-3.5 text-amber-600" />
+              <Trophy className="w-4 h-4 text-amber-600" />
               <span>Tra Cứu ▾</span>
               {mistakesCount > 0 && (
                 <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
@@ -305,7 +409,7 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </div>
 
-          {/* Tab 6: Hướng Dẫn */}
+          {/* Tab 8: Hướng Dẫn */}
           {onOpenGuide && (
             <button
               type="button"
@@ -315,12 +419,12 @@ export const Header: React.FC<HeaderProps> = ({
               }}
               className="px-2.5 xl:px-3 py-1.5 text-slate-600 hover:text-sky-700 hover:bg-sky-50 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
-              <HelpCircle className="w-3.5 h-3.5 text-sky-600" />
+              <HelpCircle className="w-4 h-4 text-sky-600" />
               <span>Hướng Dẫn</span>
             </button>
           )}
 
-          {/* Tab 7: Dành Cho Giáo Viên */}
+          {/* Tab 9: Dành Cho Giáo Viên */}
           {onOpenAdminStudio && (
             <button
               type="button"
@@ -334,7 +438,7 @@ export const Header: React.FC<HeaderProps> = ({
                   : 'text-slate-600 hover:text-indigo-700 hover:bg-indigo-50'
               }`}
             >
-              <ShieldCheck className={`w-3.5 h-3.5 ${isAdminLoggedIn ? 'text-amber-300' : 'text-indigo-600'}`} />
+              <ShieldCheck className={`w-4 h-4 ${isAdminLoggedIn ? 'text-amber-300' : 'text-indigo-600'}`} />
               <span>{isAdminLoggedIn ? 'Studio Ms. Trúc' : 'Giáo Viên'}</span>
             </button>
           )}
