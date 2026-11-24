@@ -429,10 +429,10 @@ export const DEFAULT_DIRECTORY_LINKS: DirectoryLinkItem[] = [
   },
   {
     id: 'link_sheet',
-    title: 'Google Sheet Ngân Hàng Đề',
-    url: 'https://docs.google.com/spreadsheets/d/1sw7iAQZw2cD7USR3O5tY6P6MvOqbWBvhuBORvr0dxNo/edit?gid=0#gid=0',
+    title: 'Google Sheet Ngân Hàng Đề & Kiểm Tra',
+    url: 'https://docs.google.com/spreadsheets/d/1qWm7blCrhgALmzaP-mAyQGzZeHbpNi6W/edit?gid=1848601356#gid=1848601356',
     icon: 'sheet',
-    desc: 'Bảng tính quản lý đề thi gốc môn Tin học các khối',
+    desc: 'Bảng tính Google Sheet quản lý ngân hàng câu hỏi và kiểm tra',
   },
   {
     id: 'link_games',

@@ -1,10 +1,10 @@
 import { StudentScoreRecord, CustomExam } from '../types/quiz';
 
-export const GOOGLE_SHEET_ID = '1sw7iAQZw2cD7USR3O5tY6P6MvOqbWBvhuBORvr0dxNo';
-export const GOOGLE_SHEET_URL = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit?gid=0#gid=0`;
-export const GOOGLE_SHEET_EXAMS_URL = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit?gid=2130695117#gid=2130695117`;
-export const GOOGLE_SHEET_QUESTIONS_URL = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit?gid=383399013#gid=383399013`;
-export const GOOGLE_SHEET_SUMMARY_URL = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit?gid=679088154#gid=679088154`;
+export const GOOGLE_SHEET_ID = '1qWm7blCrhgALmzaP-mAyQGzZeHbpNi6W';
+export const GOOGLE_SHEET_URL = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit?gid=1848601356#gid=1848601356`;
+export const GOOGLE_SHEET_EXAMS_URL = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit?gid=1848601356#gid=1848601356`;
+export const GOOGLE_SHEET_QUESTIONS_URL = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit?gid=1848601356#gid=1848601356`;
+export const GOOGLE_SHEET_SUMMARY_URL = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit?gid=1848601356#gid=1848601356`;
 
 /**
  * Xuất dữ liệu bảng điểm sang định dạng CSV tương thích 100% với Google Sheets (UTF-8 with BOM)
