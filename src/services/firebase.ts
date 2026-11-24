@@ -398,6 +398,7 @@ export interface DirectoryLinkItem {
   url: string;
   icon?: string;
   desc?: string;
+  requiresAdmin?: boolean;
 }
 
 export const DEFAULT_DIRECTORY_LINKS: DirectoryLinkItem[] = [
@@ -434,7 +435,8 @@ export const DEFAULT_DIRECTORY_LINKS: DirectoryLinkItem[] = [
     title: 'Google Sheet Ngân Hàng Đề & Kiểm Tra',
     url: 'https://docs.google.com/spreadsheets/d/1ipE8zMDB04jt5gqRH7mGlKbj1kr9p5hUnknxDKtSyHo/edit?gid=1848601356#gid=1848601356',
     icon: 'sheet',
-    desc: 'Bảng tính Google Sheet quản lý ngân hàng câu hỏi và kiểm tra',
+    desc: 'Bảng tính Google Sheet quản lý ngân hàng câu hỏi và kiểm tra (Bảo mật - Chỉ dành cho Giáo viên)',
+    requiresAdmin: true,
   },
   {
     id: 'link_games',

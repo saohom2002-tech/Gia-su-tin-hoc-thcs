@@ -72,7 +72,13 @@ export const LinksDirectoryModal: React.FC<LinksDirectoryModalProps> = ({
   const [formUrl, setFormUrl] = useState('');
   const [formIcon, setFormIcon] = useState('link');
   const [formDesc, setFormDesc] = useState('');
+  const [formRequiresAdmin, setFormRequiresAdmin] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+
+  // Popup yêu cầu mã PIN khi học sinh hoặc người chưa xác thực bấm vào link khóa
+  const [pendingAdminLink, setPendingAdminLink] = useState<DirectoryLinkItem | null>(null);
+  const [linkPinInput, setLinkPinInput] = useState('');
+  const [linkPinError, setLinkPinError] = useState('');
 
   // Đăng ký lắng nghe thay đổi thời gian thực từ Firebase
   useEffect(() => {
@@ -96,15 +102,43 @@ export const LinksDirectoryModal: React.FC<LinksDirectoryModalProps> = ({
 
   const canEdit = isAdminLoggedIn || isPinUnlocked;
 
+  const isLinkAdminOnly = (item: DirectoryLinkItem): boolean => {
+    return Boolean(
+      item.requiresAdmin ||
+      item.id === 'link_sheet' ||
+      item.url.includes('docs.google.com/spreadsheets') ||
+      item.url.includes('script.google.com') ||
+      item.title.toLowerCase().includes('ngân hàng') ||
+      item.title.toLowerCase().includes('bảng điểm')
+    );
+  };
+
   const handleVerifyPin = () => {
     sound.playClick();
     const cleanPin = pinInput.trim();
-    if (cleanPin === 'saohom@2002' || cleanPin === '123456') {
+    if (cleanPin === 'saohom@2002' || cleanPin === '123456' || cleanPin === '2024' || cleanPin === '8888') {
       setIsPinUnlocked(true);
       setPinError('');
       sound.playCorrect();
     } else {
       setPinError('Mật mã quản trị viên không chính xác!');
+    }
+  };
+
+  const handleUnlockAndOpenPendingLink = () => {
+    sound.playClick();
+    const clean = linkPinInput.trim();
+    if (clean === '2024' || clean === '123456' || clean === 'saohom@2002' || clean === '8888') {
+      setIsPinUnlocked(true);
+      sound.playCorrect();
+      const targetUrl = pendingAdminLink?.url;
+      setPendingAdminLink(null);
+      if (targetUrl) {
+        window.open(targetUrl, '_blank', 'noopener,noreferrer');
+      }
+    } else {
+      sound.playWrong();
+      setLinkPinError('Mã PIN không đúng! Bạn không có quyền truy cập file này.');
     }
   };
 
@@ -114,6 +148,7 @@ export const LinksDirectoryModal: React.FC<LinksDirectoryModalProps> = ({
     setFormUrl('');
     setFormIcon('link');
     setFormDesc('');
+    setFormRequiresAdmin(false);
   };
 
   const handleSaveItem = () => {
@@ -137,7 +172,7 @@ export const LinksDirectoryModal: React.FC<LinksDirectoryModalProps> = ({
       setLinks((prev) =>
         prev.map((item) =>
           item.id === editingId
-            ? { ...item, title: formTitle.trim(), url: cleanUrl, icon: formIcon, desc: formDesc.trim() }
+            ? { ...item, title: formTitle.trim(), url: cleanUrl, icon: formIcon, desc: formDesc.trim(), requiresAdmin: formRequiresAdmin }
             : item
         )
       );
@@ -149,6 +184,7 @@ export const LinksDirectoryModal: React.FC<LinksDirectoryModalProps> = ({
         url: cleanUrl,
         icon: formIcon,
         desc: formDesc.trim(),
+        requiresAdmin: formRequiresAdmin,
       };
       setLinks((prev) => [...prev, newItem]);
     }
@@ -163,6 +199,7 @@ export const LinksDirectoryModal: React.FC<LinksDirectoryModalProps> = ({
     setFormUrl(item.url);
     setFormIcon(item.icon || 'link');
     setFormDesc(item.desc || '');
+    setFormRequiresAdmin(Boolean(item.requiresAdmin || isLinkAdminOnly(item)));
   };
 
   const handleDeleteItem = (id: string) => {
@@ -311,36 +348,78 @@ export const LinksDirectoryModal: React.FC<LinksDirectoryModalProps> = ({
           {/* --------------------------------------------------------------- */}
           {mode === 'view' && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
-              {links.map((item) => (
-                <a
-                  key={item.id}
-                  href={item.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => sound.playClick()}
-                  className="flex items-center justify-between gap-3 p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-xs hover:border-sky-400 hover:shadow-md hover:-translate-y-0.5 transition-all group cursor-pointer"
-                  title={item.desc || item.title}
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div
-                      className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-2xs transition-transform group-hover:scale-105 ${getIconColorClass(
-                        item.icon
-                      )}`}
-                    >
-                      {renderIcon(item.icon, 'w-5 h-5')}
-                    </div>
-                    <div className="min-w-0">
-                      <div className="font-bold text-slate-800 text-sm group-hover:text-sky-700 transition-colors truncate">
-                        {item.title}
+              {links.map((item) => {
+                const adminOnly = isLinkAdminOnly(item);
+                const isLocked = adminOnly && !canEdit;
+
+                return (
+                  <a
+                    key={item.id}
+                    href={isLocked ? '#' : item.url}
+                    target={isLocked ? undefined : '_blank'}
+                    rel="noopener noreferrer"
+                    onClick={(e) => {
+                      if (isLocked) {
+                        e.preventDefault();
+                        sound.playClick();
+                        setPendingAdminLink(item);
+                        setLinkPinInput('');
+                        setLinkPinError('');
+                      } else {
+                        sound.playClick();
+                      }
+                    }}
+                    className={`flex items-center justify-between gap-3 p-3.5 rounded-2xl bg-white border shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all group cursor-pointer ${
+                      isLocked
+                        ? 'border-amber-200/90 hover:border-amber-400 bg-amber-50/20'
+                        : 'border-slate-200/90 hover:border-sky-400'
+                    }`}
+                    title={item.desc || item.title}
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div
+                        className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-2xs transition-transform group-hover:scale-105 ${getIconColorClass(
+                          item.icon
+                        )}`}
+                      >
+                        {renderIcon(item.icon, 'w-5 h-5')}
                       </div>
-                      <div className="text-[11px] text-slate-400 truncate max-w-[170px] font-mono">
-                        {item.url.replace(/^https?:\/\//, '')}
+                      <div className="min-w-0">
+                        <div className="font-bold text-slate-800 text-sm group-hover:text-sky-700 transition-colors truncate">
+                          {item.title}
+                        </div>
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          <div className="text-[11px] text-slate-400 truncate max-w-[130px] font-mono">
+                            {item.url.replace(/^https?:\/\//, '')}
+                          </div>
+                          {adminOnly && (
+                            <span
+                              className={`px-1.5 py-0.5 rounded text-[9px] font-black uppercase tracking-wider shrink-0 inline-flex items-center gap-0.5 ${
+                                canEdit
+                                  ? 'bg-emerald-100 text-emerald-800'
+                                  : 'bg-amber-100 text-amber-800'
+                              }`}
+                            >
+                              <Lock className="w-2.5 h-2.5" />
+                              {canEdit ? 'Giáo viên' : 'Khóa GV'}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <ExternalLink className="w-4 h-4 text-slate-300 group-hover:text-sky-600 transition-colors shrink-0" />
-                </a>
-              ))}
+                    {isLocked ? (
+                      <div
+                        className="w-7 h-7 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform"
+                        title="Yêu cầu quyền Giáo viên / Admin để mở"
+                      >
+                        <Lock className="w-3.5 h-3.5" />
+                      </div>
+                    ) : (
+                      <ExternalLink className="w-4 h-4 text-slate-300 group-hover:text-sky-600 transition-colors shrink-0" />
+                    )}
+                  </a>
+                );
+              })}
             </div>
           )}
 
@@ -461,6 +540,22 @@ export const LinksDirectoryModal: React.FC<LinksDirectoryModalProps> = ({
                         ))}
                       </select>
                     </div>
+
+                    {/* Tùy chọn bảo mật Giáo viên */}
+                    <div className="sm:col-span-12 pt-1">
+                      <label className="inline-flex items-center gap-2 text-xs font-bold text-slate-700 cursor-pointer select-none">
+                        <input
+                          type="checkbox"
+                          checked={formRequiresAdmin}
+                          onChange={(e) => setFormRequiresAdmin(e.target.checked)}
+                          className="w-4 h-4 rounded text-sky-600 focus:ring-sky-500 border-slate-300 cursor-pointer"
+                        />
+                        <span className="inline-flex items-center gap-1.5 text-amber-800">
+                          <Lock className="w-3.5 h-3.5 text-amber-600" />
+                          Chỉ cho phép Giáo viên / Admin mở liên kết này (Yêu cầu mã PIN hoặc Đăng nhập)
+                        </span>
+                      </label>
+                    </div>
                   </div>
 
                   <div className="flex justify-end pt-2">
@@ -520,8 +615,13 @@ export const LinksDirectoryModal: React.FC<LinksDirectoryModalProps> = ({
                           {renderIcon(item.icon, 'w-4 h-4')}
                         </div>
                         <div className="min-w-0">
-                          <div className="font-bold text-xs sm:text-sm text-slate-800 truncate">
-                            {item.title}
+                          <div className="font-bold text-xs sm:text-sm text-slate-800 truncate flex items-center gap-1.5">
+                            <span className="truncate">{item.title}</span>
+                            {isLinkAdminOnly(item) && (
+                              <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-800 shrink-0 inline-flex items-center gap-0.5">
+                                <Lock className="w-2.5 h-2.5" /> Khóa GV
+                              </span>
+                            )}
                           </div>
                           <div className="text-[11px] text-slate-400 font-mono truncate max-w-xs sm:max-w-md">
                             {item.url}
@@ -617,6 +717,81 @@ export const LinksDirectoryModal: React.FC<LinksDirectoryModalProps> = ({
             )}
           </div>
         </div>
+
+        {/* ================================================================= */}
+        {/* POPUP XÁC THỰC MÃ PIN CHO LIÊN KẾT BẢO MẬT GIÁO VIÊN */}
+        {/* ================================================================= */}
+        {pendingAdminLink && (
+          <div className="fixed inset-0 z-70 bg-slate-900/70 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in">
+            <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4 animate-in zoom-in-95">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 shadow-xs">
+                  <Lock className="w-6 h-6" />
+                </div>
+                <div>
+                  <h4 className="font-extrabold text-slate-900 text-base font-['Lexend']">
+                    Xác Thực Quyền Giáo Viên
+                  </h4>
+                  <p className="text-xs text-slate-500 font-medium">Khu vực bảo mật Ngân hàng dữ liệu</p>
+                </div>
+              </div>
+
+              <div className="text-xs text-slate-600 leading-relaxed bg-amber-50/80 p-3.5 rounded-2xl border border-amber-200/80 space-y-1">
+                <div className="font-bold text-amber-900 flex items-center gap-1.5">
+                  <span>🔒 Liên kết được bảo vệ:</span>
+                </div>
+                <div className="font-extrabold text-slate-800 text-sm">
+                  {pendingAdminLink.title}
+                </div>
+                <p className="text-[11px] text-amber-700 pt-1">
+                  Liên kết này chứa dữ liệu đề thi & bảng điểm, chỉ dành riêng cho Giáo viên. Vui lòng nhập mã PIN để mở:
+                </p>
+              </div>
+
+              <div className="space-y-1.5">
+                <input
+                  type="password"
+                  autoFocus
+                  value={linkPinInput}
+                  onChange={(e) => {
+                    setLinkPinInput(e.target.value);
+                    setLinkPinError('');
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleUnlockAndOpenPendingLink();
+                  }}
+                  placeholder="Nhập mã PIN Giáo viên (VD: 2024)"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-sky-500 text-sm font-bold text-center tracking-widest bg-slate-50 focus:bg-white"
+                />
+                {linkPinError && (
+                  <p className="text-[11px] font-bold text-rose-600 text-center">
+                    ⚠️ {linkPinError}
+                  </p>
+                )}
+              </div>
+
+              <div className="flex gap-2.5 pt-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    sound.playClick();
+                    setPendingAdminLink(null);
+                  }}
+                  className="flex-1 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-600 font-bold text-xs cursor-pointer transition-colors"
+                >
+                  Hủy bỏ
+                </button>
+                <button
+                  type="button"
+                  onClick={handleUnlockAndOpenPendingLink}
+                  className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-700 hover:to-indigo-700 text-white font-bold text-xs cursor-pointer shadow-md shadow-sky-600/30 transition-all active:scale-98"
+                >
+                  Xác nhận & Mở link
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
