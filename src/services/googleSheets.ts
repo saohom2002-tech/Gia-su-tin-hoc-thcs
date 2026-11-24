@@ -62,13 +62,15 @@ export function exportScoresToGoogleSheetCSV(scores: StudentScoreRecord[]): void
   URL.revokeObjectURL(url);
 }
 
-let globalWebhookUrl = '';
+export const DEFAULT_GSHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbzZiybQE8mMsdrWr44T-4_Sy7H9W9fkTpHtZyPyOOjkHEsl2bq5zkMuQ6Wr_QiSJ9LSbw/exec';
+
+let globalWebhookUrl = DEFAULT_GSHEET_WEBHOOK_URL;
 try {
-  globalWebhookUrl = localStorage.getItem('ontap_gsheet_webhook_url') || '';
+  globalWebhookUrl = localStorage.getItem('ontap_gsheet_webhook_url') || DEFAULT_GSHEET_WEBHOOK_URL;
 } catch {}
 
 export function setGlobalWebhookUrl(url: string): void {
-  globalWebhookUrl = url.trim();
+  globalWebhookUrl = (url || DEFAULT_GSHEET_WEBHOOK_URL).trim();
   try {
     localStorage.setItem('ontap_gsheet_webhook_url', globalWebhookUrl);
   } catch {}
@@ -77,8 +79,10 @@ export function setGlobalWebhookUrl(url: string): void {
 export function getGlobalWebhookUrl(): string {
   if (!globalWebhookUrl) {
     try {
-      globalWebhookUrl = localStorage.getItem('ontap_gsheet_webhook_url') || '';
-    } catch {}
+      globalWebhookUrl = localStorage.getItem('ontap_gsheet_webhook_url') || DEFAULT_GSHEET_WEBHOOK_URL;
+    } catch {
+      globalWebhookUrl = DEFAULT_GSHEET_WEBHOOK_URL;
+    }
   }
   return globalWebhookUrl;
 }

@@ -336,6 +336,8 @@ export async function syncBatchScoresToFirebase(scores: StudentScoreRecord[]): P
 // ============================================================================
 const SYSTEM_CONFIG_REF_PATH = 'system_config';
 
+export const DEFAULT_GSHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbzZiybQE8mMsdrWr44T-4_Sy7H9W9fkTpHtZyPyOOjkHEsl2bq5zkMuQ6Wr_QiSJ9LSbw/exec';
+
 /**
  * Đăng ký lắng nghe thay đổi Webhook URL của Google Sheets từ Firebase
  */
@@ -351,13 +353,13 @@ export function subscribeToGSheetWebhookUrl(onUpdate: (url: string) => void): ()
         } catch {}
         onUpdate(val.trim());
       } else {
-        const local = localStorage.getItem('ontap_gsheet_webhook_url') || '';
+        const local = localStorage.getItem('ontap_gsheet_webhook_url') || DEFAULT_GSHEET_WEBHOOK_URL;
         onUpdate(local);
       }
     },
     (err) => {
       console.warn('Lỗi đọc Webhook URL từ Firebase, dùng localStorage:', err);
-      const local = localStorage.getItem('ontap_gsheet_webhook_url') || '';
+      const local = localStorage.getItem('ontap_gsheet_webhook_url') || DEFAULT_GSHEET_WEBHOOK_URL;
       onUpdate(local);
     }
   );

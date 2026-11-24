@@ -23,6 +23,7 @@ window.APP_CONFIG = {
 
   /* Dữ liệu gốc Google Sheet & Thư mục Google Drive */
   googleSheetId: "1ipE8zMDB04jt5gqRH7mGlKbj1kr9p5hUnknxDKtSyHo",
+  googleSheetWebhookUrl: "https://script.google.com/macros/s/AKfycbzZiybQE8mMsdrWr44T-4_Sy7H9W9fkTpHtZyPyOOjkHEsl2bq5zkMuQ6Wr_QiSJ9LSbw/exec",
   googleDriveFolderId: "1aQkLtziVjBZz35sMBLF83XAaWYPf_UjV",
 
   firebase: {
