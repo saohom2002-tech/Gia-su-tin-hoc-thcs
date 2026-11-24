@@ -430,7 +430,7 @@ export const DEFAULT_DIRECTORY_LINKS: DirectoryLinkItem[] = [
   {
     id: 'link_sheet',
     title: 'Google Sheet Ngân Hàng Đề & Kiểm Tra',
-    url: 'https://docs.google.com/spreadsheets/d/1qWm7blCrhgALmzaP-mAyQGzZeHbpNi6W/edit?gid=1848601356#gid=1848601356',
+    url: 'https://docs.google.com/spreadsheets/d/1ipE8zMDB04jt5gqRH7mGlKbj1kr9p5hUnknxDKtSyHo/edit?gid=1848601356#gid=1848601356',
     icon: 'sheet',
     desc: 'Bảng tính Google Sheet quản lý ngân hàng câu hỏi và kiểm tra',
   },

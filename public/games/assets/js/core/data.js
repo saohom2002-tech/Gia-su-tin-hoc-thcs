@@ -17,7 +17,7 @@
     schoolName: (window.APP_CONFIG && window.APP_CONFIG.schoolName) || "Trường THCS Tân Bình",
     schoolAddress: (window.APP_CONFIG && window.APP_CONFIG.schoolAddress) || "873 Cách Mạng Tháng 8, Phường Tân Sơn Nhất, TP.HCM",
     schoolWebsite: (window.APP_CONFIG && window.APP_CONFIG.schoolWebsite) || "https://thcstanbinh.hcm.edu.vn",
-    googleSheetId: (window.APP_CONFIG && window.APP_CONFIG.googleSheetId) || "1qWm7blCrhgALmzaP-mAyQGzZeHbpNi6W",
+    googleSheetId: (window.APP_CONFIG && window.APP_CONFIG.googleSheetId) || "1ipE8zMDB04jt5gqRH7mGlKbj1kr9p5hUnknxDKtSyHo",
     googleDriveFolderId: (window.APP_CONFIG && window.APP_CONFIG.googleDriveFolderId) || "1aQkLtziVjBZz35sMBLF83XAaWYPf_UjV",
     creatorEmails: [],
     classes: [
@@ -73,7 +73,7 @@
       { id: "ql_contact", title: "Liên Hệ Ms Trúc", desc: "Quản trị hệ thống · Hotline/Zalo: 0908.959.627", url: "https://zalo.me/0908959627", icon: "📞", color: "#16a34a", badge: "0908.959.627", external: true },
       { id: "ql_aibooks", title: "AI BOOKS (THPT)", desc: "Sách điện tử & Nền tảng học tập thông minh THPT", url: "https://ai-books-thpt.leira.com.vn/", icon: "📚", color: "#4f46e5", badge: "AI Books", external: true },
       { id: "ql_school", title: "Trường THCS Tân Bình", desc: "Hệ thống học tập & khảo sát trực tuyến", url: "#/", icon: "🏫", color: "#0a58ca", badge: "THCS Tân Bình", external: false },
-      { id: "ql_sheet", title: "Google Sheet Đề Gốc", desc: "Ngân hàng câu hỏi Tin học & Kiểm tra của Ms Trúc", url: "https://docs.google.com/spreadsheets/d/1qWm7blCrhgALmzaP-mAyQGzZeHbpNi6W/edit?gid=1848601356#gid=1848601356", icon: "📊", color: "#10b981", badge: "Sheet gốc", external: true },
+      { id: "ql_sheet", title: "Google Sheet Đề Gốc", desc: "Ngân hàng câu hỏi Tin học & Kiểm tra của Ms Trúc", url: "https://docs.google.com/spreadsheets/d/1ipE8zMDB04jt5gqRH7mGlKbj1kr9p5hUnknxDKtSyHo/edit?gid=1848601356#gid=1848601356", icon: "📊", color: "#10b981", badge: "Sheet gốc", external: true },
       { id: "ql_drive", title: "Google Drive Tài Liệu", desc: "Thư mục hình ảnh và tư liệu minh họa", url: "https://drive.google.com/drive/folders/1MnvzQAzv62Xiw9ziU2jH5T37ObFmADg4?lfhs=2", icon: "📁", color: "#0284c7", badge: "Drive gốc", external: true },
       { id: "ql_host", title: "Mở Phòng Thi Đấu", desc: "Tổ chức thi trực tuyến bằng mã PIN", url: "#/host", icon: "📡", color: "#0d6efd", badge: "Host phòng", external: false },
       { id: "ql_join", title: "Vào Phòng Bằng PIN", desc: "Học sinh nhập PIN vào làm bài thi", url: "#/join", icon: "🔢", color: "#f59e0b", badge: "Thí sinh", external: false },

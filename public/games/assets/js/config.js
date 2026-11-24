@@ -22,7 +22,7 @@ window.APP_CONFIG = {
   adminEmail: "tranthithanhtruc1980@gmail.com",
 
   /* Dữ liệu gốc Google Sheet & Thư mục Google Drive */
-  googleSheetId: "1qWm7blCrhgALmzaP-mAyQGzZeHbpNi6W",
+  googleSheetId: "1ipE8zMDB04jt5gqRH7mGlKbj1kr9p5hUnknxDKtSyHo",
   googleDriveFolderId: "1aQkLtziVjBZz35sMBLF83XAaWYPf_UjV",
 
   firebase: {
