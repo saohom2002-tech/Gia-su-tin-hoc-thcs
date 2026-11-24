@@ -21,7 +21,8 @@ import {
   User,
   Music,
   ExternalLink,
-  HelpCircle
+  HelpCircle,
+  Link2
 } from 'lucide-react';
 import { StudentProfile } from '../types/quiz';
 import { StudentAvatar } from './StudentAvatar';
@@ -48,6 +49,7 @@ export interface SidebarMenuProps {
   onOpenGrade5Game: () => void;
   onOpenProfileModal: () => void;
   onOpenGuide?: () => void;
+  onOpenLinksDirectory?: () => void;
   onSelectGame?: (game: TBSGameItem) => void;
 
   // Data & Badges
@@ -77,6 +79,7 @@ export const SidebarMenu: React.FC<SidebarMenuProps> = ({
   onOpenGrade5Game,
   onOpenProfileModal,
   onOpenGuide,
+  onOpenLinksDirectory,
   onSelectGame,
   studentProfile,
   mistakesCount = 0,
@@ -284,6 +287,26 @@ export const SidebarMenu: React.FC<SidebarMenuProps> = ({
                 </span>
               )}
             </a>
+
+            {/* Mục: Danh Bạ Liên Kết */}
+            {onOpenLinksDirectory && (
+              <button
+                type="button"
+                onClick={() => handleItemClick(onOpenLinksDirectory)}
+                className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-2xl text-xs sm:text-sm font-bold text-sky-900 bg-sky-50/70 hover:bg-sky-100 border border-sky-200/80 transition-all group cursor-pointer"
+                title="Mở bảng Danh Bạ Liên Kết các công cụ & tiện ích học tập trực tuyến"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <Link2 className="w-5 h-5 text-sky-600 shrink-0 group-hover:scale-110 transition-transform" />
+                  {!isCollapsed && <span className="truncate">Danh Bạ Liên Kết</span>}
+                </div>
+                {!isCollapsed && (
+                  <span className="px-1.5 py-0.5 rounded-md bg-sky-200 text-sky-800 text-[10px] font-mono font-black shrink-0">
+                    Mới
+                  </span>
+                )}
+              </button>
+            )}
 
             {/* Mục: Hướng dẫn sử dụng */}
             {onOpenGuide && (

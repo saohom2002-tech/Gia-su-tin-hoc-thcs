@@ -388,6 +388,127 @@ export async function saveGSheetWebhookUrlToFirebase(url: string): Promise<boole
 }
 
 // ============================================================================
+// DANH BẠ LIÊN KẾT HỆ THỐNG (SYSTEM DIRECTORY LINKS)
+// ============================================================================
+export interface DirectoryLinkItem {
+  id: string;
+  title: string;
+  url: string;
+  icon?: string;
+  desc?: string;
+}
+
+export const DEFAULT_DIRECTORY_LINKS: DirectoryLinkItem[] = [
+  {
+    id: 'link_aibooks',
+    title: 'AI BOOKS',
+    url: 'https://ai-books-thpt.leira.com.vn/',
+    icon: 'sparkles',
+    desc: 'Sách điện tử & Nền tảng học tập thông minh THPT',
+  },
+  {
+    id: 'link_school',
+    title: 'Trường THCS Tân Bình',
+    url: 'https://thcstanbinh.hcm.edu.vn',
+    icon: 'school',
+    desc: 'Cổng thông tin điện tử Trường THCS Tân Bình',
+  },
+  {
+    id: 'link_zalo',
+    title: 'Liên Hệ Zalo Ms. Trúc',
+    url: 'https://zalo.me/0908959627',
+    icon: 'chat',
+    desc: 'Hotline / Zalo hỗ trợ phụ huynh & học sinh: 0908.959.627',
+  },
+  {
+    id: 'link_drive',
+    title: 'Google Drive Tài Liệu Tin Học',
+    url: 'https://drive.google.com/drive/folders/1MnvzQAzv62Xiw9ziU2jH5T37ObFmADg4?lfhs=2',
+    icon: 'drive',
+    desc: 'Kho lưu trữ tư liệu, sơ đồ và tệp hình ảnh môn Tin học',
+  },
+  {
+    id: 'link_sheet',
+    title: 'Google Sheet Ngân Hàng Đề',
+    url: 'https://docs.google.com/spreadsheets/d/1sw7iAQZw2cD7USR3O5tY6P6MvOqbWBvhuBORvr0dxNo/edit?gid=0#gid=0',
+    icon: 'sheet',
+    desc: 'Bảng tính quản lý đề thi gốc môn Tin học các khối',
+  },
+  {
+    id: 'link_games',
+    title: 'Sân Chơi Game (16 Trò)',
+    url: '/games/',
+    icon: 'game',
+    desc: 'Đấu trường game học tập tương tác trực tuyến',
+  },
+];
+
+const DIRECTORY_LINKS_KEY = 'ontap_directory_links';
+const DIRECTORY_LINKS_REF = 'system_directory_links';
+
+export function getStoredDirectoryLinks(): DirectoryLinkItem[] {
+  try {
+    const raw = localStorage.getItem(DIRECTORY_LINKS_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch {}
+  return DEFAULT_DIRECTORY_LINKS;
+}
+
+export function saveStoredDirectoryLinks(links: DirectoryLinkItem[]): void {
+  try {
+    localStorage.setItem(DIRECTORY_LINKS_KEY, JSON.stringify(links));
+  } catch {}
+}
+
+export async function saveDirectoryLinksToFirebase(links: DirectoryLinkItem[]): Promise<boolean> {
+  saveStoredDirectoryLinks(links);
+  try {
+    const linkRef = ref(db, DIRECTORY_LINKS_REF);
+    await set(linkRef, links);
+    return true;
+  } catch (err) {
+    console.error('Lỗi lưu danh bạ liên kết lên Firebase:', err);
+    return false;
+  }
+}
+
+export function subscribeToDirectoryLinks(
+  onUpdate: (links: DirectoryLinkItem[]) => void
+): () => void {
+  const local = getStoredDirectoryLinks();
+  onUpdate(local);
+
+  const linkRef = ref(db, DIRECTORY_LINKS_REF);
+  const unsubscribe = onValue(
+    linkRef,
+    (snapshot) => {
+      if (snapshot.exists()) {
+        const val = snapshot.val();
+        const links: DirectoryLinkItem[] = Array.isArray(val)
+          ? val
+          : val && typeof val === 'object'
+          ? Object.values(val)
+          : [];
+        if (links.length > 0) {
+          saveStoredDirectoryLinks(links);
+          onUpdate(links);
+          return;
+        }
+      }
+      onUpdate(getStoredDirectoryLinks());
+    },
+    (err) => {
+      console.warn('Lỗi đọc danh bạ liên kết từ Firebase:', err);
+      onUpdate(getStoredDirectoryLinks());
+    }
+  );
+  return unsubscribe;
+}
+
+// ============================================================================
 // ADMIN CUSTOM EXAMS & PRACTICE TESTS (ĐỀ THI & ĐỀ ÔN TẬP TỪ ADMIN)
 // ============================================================================
 const CUSTOM_EXAMS_REF_PATH = 'admin_custom_exams';

@@ -55,6 +55,7 @@ interface HeaderProps {
   onScrollToTopics?: () => void;
   onScrollToCustomExams?: () => void;
   onOpenGuide?: () => void;
+  onOpenLinksDirectory?: () => void;
   activeTab?: 'overview' | 'topics' | 'exams';
 
   onStartGenerateQuiz?: () => void;
@@ -81,6 +82,7 @@ export const Header: React.FC<HeaderProps> = ({
   onScrollToTopics,
   onScrollToCustomExams,
   onOpenGuide,
+  onOpenLinksDirectory,
   activeTab = 'overview',
   onStartGenerateQuiz,
   isGenerating = false,
@@ -225,106 +227,19 @@ export const Header: React.FC<HeaderProps> = ({
             </span>
           </a>
 
-          {/* Tab 6: Liên Kết (Dropdown Menu) */}
-          <div
-            className="relative shrink-0"
-            onMouseEnter={() => setIsLinksDropdownOpen(true)}
-            onMouseLeave={() => setIsLinksDropdownOpen(false)}
+          {/* Tab 6: Liên Kết (Mở bảng Danh Bạ Liên Kết) */}
+          <button
+            type="button"
+            onClick={() => {
+              sound.playClick();
+              if (onOpenLinksDirectory) onOpenLinksDirectory();
+            }}
+            className="px-2.5 xl:px-3 py-1.5 text-slate-700 hover:text-blue-700 hover:bg-blue-50 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+            title="Mở bảng Danh bạ liên kết các công cụ & tiện ích học tập trực tuyến"
           >
-            <button
-              type="button"
-              onClick={() => setIsLinksDropdownOpen((prev) => !prev)}
-              className="px-2.5 xl:px-3 py-1.5 text-slate-700 hover:text-blue-700 hover:bg-blue-50 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0"
-              title="Danh mục các trang liên kết & tài nguyên ngoài"
-            >
-              <Link2 className="w-4 h-4 text-blue-600" />
-              <span>Liên Kết ▾</span>
-            </button>
-
-            {isLinksDropdownOpen && (
-              <div className="absolute left-0 top-full mt-1 w-64 bg-white rounded-2xl shadow-xl border border-slate-200 p-2 z-50 animate-in fade-in slide-in-from-top-1">
-                <a
-                  href="https://ai-books-thpt.leira.com.vn/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setIsLinksDropdownOpen(false)}
-                  className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-blue-50 text-xs font-bold text-blue-950 transition-colors cursor-pointer text-left"
-                >
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-blue-600" />
-                    <span>AI BOOKS (THPT)</span>
-                  </div>
-                  <span className="text-[10px] font-mono font-black text-blue-600 bg-blue-100 px-1.5 py-0.5 rounded">
-                    ↗
-                  </span>
-                </a>
-
-                <a
-                  href="https://thcstanbinh.hcm.edu.vn"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setIsLinksDropdownOpen(false)}
-                  className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-sky-50 text-xs font-bold text-sky-950 transition-colors cursor-pointer text-left"
-                >
-                  <div className="flex items-center gap-2">
-                    <School className="w-4 h-4 text-sky-600" />
-                    <span>Trường THCS Tân Bình</span>
-                  </div>
-                  <span className="text-[10px] font-mono font-black text-sky-600 bg-sky-100 px-1.5 py-0.5 rounded">
-                    ↗
-                  </span>
-                </a>
-
-                <a
-                  href="https://zalo.me/0908959627"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setIsLinksDropdownOpen(false)}
-                  className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-emerald-50 text-xs font-bold text-emerald-950 transition-colors cursor-pointer text-left"
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="w-4 h-4 text-center text-xs">💬</span>
-                    <span>Liên Hệ Zalo Ms. Trúc</span>
-                  </div>
-                  <span className="text-[10px] font-mono font-black text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded">
-                    0908...
-                  </span>
-                </a>
-
-                <a
-                  href="https://drive.google.com/drive/folders/1MnvzQAzv62Xiw9ziU2jH5T37ObFmADg4?lfhs=2"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setIsLinksDropdownOpen(false)}
-                  className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-amber-50 text-xs font-bold text-amber-950 transition-colors cursor-pointer text-left"
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="w-4 h-4 text-center text-xs">📁</span>
-                    <span>Google Drive Tài Liệu</span>
-                  </div>
-                  <span className="text-[10px] font-mono font-black text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded">
-                    Drive
-                  </span>
-                </a>
-
-                <a
-                  href="https://docs.google.com/spreadsheets/d/1sw7iAQZw2cD7USR3O5tY6P6MvOqbWBvhuBORvr0dxNo/edit?gid=0#gid=0"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setIsLinksDropdownOpen(false)}
-                  className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-green-50 text-xs font-bold text-green-950 transition-colors cursor-pointer text-left"
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="w-4 h-4 text-center text-xs">📊</span>
-                    <span>Google Sheet Đề Gốc</span>
-                  </div>
-                  <span className="text-[10px] font-mono font-black text-green-700 bg-green-100 px-1.5 py-0.5 rounded">
-                    Sheet
-                  </span>
-                </a>
-              </div>
-            )}
-          </div>
+            <Link2 className="w-4 h-4 text-blue-600" />
+            <span>Liên Kết</span>
+          </button>
 
           {/* Tab 7: Gom Nhóm Tra Cứu Kết Quả (Dropdown Menu) */}
           <div

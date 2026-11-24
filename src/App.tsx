@@ -41,6 +41,7 @@ import { CertificateModal } from './components/CertificateModal';
 import { BgmMusicPlayer } from './components/BgmMusicPlayer';
 import { SidebarMenu } from './components/SidebarMenu';
 import { GuideModal } from './components/GuideModal';
+import { LinksDirectoryModal } from './components/LinksDirectoryModal';
 import {
   INITIAL_SCORE_RECORDS,
   DEFAULT_EXAM_BATCHES,
@@ -241,6 +242,7 @@ export default function App() {
   const [isScorebookModalOpen, setIsScorebookModalOpen] = useState<boolean>(false);
   const [activeCertificates, setActiveCertificates] = useState<CertificateData[]>([]);
   const [isCertificateModalOpen, setIsCertificateModalOpen] = useState<boolean>(false);
+  const [isLinksModalOpen, setIsLinksModalOpen] = useState<boolean>(false);
 
   // Admin Studio state (Chỉ dành riêng cho saohom2002@gmail.com)
   const [adminSession, setAdminSession] = useState<AdminSession | null>(() => getStoredAdminSession());
@@ -1527,6 +1529,7 @@ export default function App() {
         onOpenGrade5Game={() => handleLaunchMidtermExam(5, 'all')}
         onOpenProfileModal={() => setIsProfileModalOpen(true)}
         onOpenGuide={() => setIsGuideOpen(true)}
+        onOpenLinksDirectory={() => setIsLinksModalOpen(true)}
         onSelectGame={(game) => {
           setSelectedGame(game);
           setIsGameModalOpen(true);
@@ -1569,6 +1572,7 @@ export default function App() {
           onScrollToTopics={handleScrollToLessonTopics}
           onScrollToCustomExams={handleScrollToCustomExams}
           onOpenGuide={() => setIsGuideOpen(true)}
+          onOpenLinksDirectory={() => setIsLinksModalOpen(true)}
           onStartGenerateQuiz={handleStartGenerateQuiz}
           isGenerating={isGenerating}
           canStartQuiz={isCustomMode || selectedLessons.length > 0}
@@ -2082,6 +2086,13 @@ export default function App() {
         onOpenGamesTab={() => window.open('/games/', '_blank')}
         onScrollToTopics={handleScrollToLessonTopics}
         onOpenProfile={() => setIsProfileModalOpen(true)}
+      />
+
+      {/* Modal Danh Bạ Liên Kết & Quản Lý Liên Kết Hệ Thống */}
+      <LinksDirectoryModal
+        isOpen={isLinksModalOpen}
+        onClose={() => setIsLinksModalOpen(false)}
+        isAdminLoggedIn={Boolean(adminSession && isAuthorizedAdmin(adminSession.email))}
       />
 
       {/* Trình phát nhạc nền không lời chuẩn Wayground / Lofi Focus */}
