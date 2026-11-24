@@ -25,6 +25,7 @@ import {
   changeTeacherPassword,
   signOutAdmin,
 } from '../../services/firebase';
+import { TeacherManagementModal } from './TeacherManagementModal';
 import { sound } from '../../utils/sound';
 
 interface AdminAuthModalProps {
@@ -59,6 +60,7 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({
   // Đổi passcode thông thường khi đã đăng nhập
   const [newPasscode, setNewPasscode] = useState('');
   const [confirmPasscode, setConfirmPasscode] = useState('');
+  const [isTeacherManagementOpen, setIsTeacherManagementOpen] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -459,19 +461,32 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({
                       type="button"
                       onClick={() => {
                         sound.playClick();
+                        setIsTeacherManagementOpen(true);
+                      }}
+                      className="flex-1 py-2.5 px-2 rounded-xl border border-indigo-200 hover:border-indigo-300 text-indigo-700 text-xs font-bold hover:bg-indigo-50/50 flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                      title="Quản lý danh sách giáo viên được cấp quyền"
+                    >
+                      <Users className="w-3.5 h-3.5 text-indigo-600" />
+                      <span>Quản lý GV</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        sound.playClick();
                         setTab('change_passcode');
                       }}
-                      className="flex-1 py-2.5 px-3 rounded-xl border border-slate-200 hover:border-indigo-300 text-slate-700 text-xs font-bold hover:bg-indigo-50/50 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                      className="flex-1 py-2.5 px-2 rounded-xl border border-slate-200 hover:border-indigo-300 text-slate-700 text-xs font-bold hover:bg-indigo-50/50 flex items-center justify-center gap-1 transition-colors cursor-pointer"
                     >
                       <KeyRound className="w-3.5 h-3.5 text-indigo-600" />
-                      <span>Đổi mật khẩu</span>
+                      <span>Đổi MK</span>
                     </button>
 
                     <button
                       type="button"
                       onClick={handleSignOut}
                       disabled={isLoading}
-                      className="flex-1 py-2.5 px-3 rounded-xl border border-rose-200 hover:border-rose-300 text-rose-700 text-xs font-bold hover:bg-rose-50 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                      className="flex-1 py-2.5 px-2 rounded-xl border border-rose-200 hover:border-rose-300 text-rose-700 text-xs font-bold hover:bg-rose-50 flex items-center justify-center gap-1 transition-colors cursor-pointer"
                     >
                       <LogOut className="w-3.5 h-3.5 text-rose-600" />
                       <span>Đăng xuất</span>
@@ -624,6 +639,13 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({
             </div>
           )}
         </div>
+
+        {/* Modal: Quản Lý Tài Khoản Giáo Viên */}
+        <TeacherManagementModal
+          isOpen={isTeacherManagementOpen}
+          onClose={() => setIsTeacherManagementOpen(false)}
+          currentAdminEmail={adminSession?.email}
+        />
       </div>
     </div>
   );

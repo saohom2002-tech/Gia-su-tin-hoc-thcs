@@ -19,6 +19,7 @@ import {
   exportExamsToGoogleSheetCSV,
 } from '../../services/googleSheets';
 import { QuestionEditorModal } from './QuestionEditorModal';
+import { TeacherManagementModal } from './TeacherManagementModal';
 import { BUILT_IN_QUESTIONS } from '../../data/questionBank';
 import { DEFAULT_CUSTOM_EXAMS } from '../../data/defaultCustomExams';
 import { generateFallbackQuestions, CURRICULUM_LESSONS } from '../../data/curriculum';
@@ -66,7 +67,8 @@ import {
   FileText,
   Eye,
   Shuffle,
-  Gamepad2
+  Gamepad2,
+  Users
 } from 'lucide-react';
 
 interface AdminStudioModalProps {
@@ -173,6 +175,7 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
   };
 
   const [isSyncingToGame, setIsSyncingToGame] = useState(false);
+  const [isTeacherManagementOpen, setIsTeacherManagementOpen] = useState(false);
 
   const handleSyncToGameBank = async () => {
     sound.playClick();
@@ -1223,6 +1226,19 @@ Yêu cầu chất lượng:
             >
               <Download className="w-3.5 h-3.5" />
               <span>Xuất CSV</span>
+            </button>
+
+            {/* Nút Quản Lý Giáo Viên */}
+            <button
+              onClick={() => {
+                sound.playClick();
+                setIsTeacherManagementOpen(true);
+              }}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-500/25 hover:bg-cyan-500/35 border border-cyan-400/50 text-xs font-bold text-cyan-200 transition-colors cursor-pointer shadow-xs"
+              title="Quản lý danh sách tài khoản Giáo viên được phép chỉnh sửa câu hỏi"
+            >
+              <Users className="w-3.5 h-3.5 text-cyan-300" />
+              <span className="hidden sm:inline">Quản Lý Giáo Viên</span>
             </button>
 
             {/* User badge */}
@@ -3304,6 +3320,13 @@ Yêu cầu chất lượng:
           questionToEdit={editingQuestion}
           onSaveQuestion={handleSaveQuestion}
           examGradeNumber={currentExam?.gradeNumber || 8}
+        />
+
+        {/* Modal: Quản Lý Tài Khoản Giáo Viên */}
+        <TeacherManagementModal
+          isOpen={isTeacherManagementOpen}
+          onClose={() => setIsTeacherManagementOpen(false)}
+          currentAdminEmail={adminSession?.email}
         />
       </div>
     </div>

@@ -201,28 +201,13 @@ export function signInTeacherWithEmail(
   }
 
   const teachers = getStoredTeacherAccounts();
-  let teacher = teachers.find((t) => t.email.toLowerCase() === cleanEmail);
+  const teacher = teachers.find((t) => t.email.toLowerCase() === cleanEmail);
 
-  // Nếu giáo viên mới chưa có trong danh sách nhưng nhập đúng mật khẩu khởi tạo 1234
+  // CHỈ NHỮNG TÀI KHOẢN ĐƯỢC ADMIN TẠO MỚI MỚI ĐƯỢC PHÉP ĐĂNG NHẬP
   if (!teacher) {
-    if (cleanPasscode === '1234' || cleanPasscode === 'saohom@2002') {
-      const newTeacher: TeacherAccount = {
-        email: cleanEmail,
-        name: cleanEmail.split('@')[0],
-        passcode: cleanPasscode,
-        mustChangePassword: true,
-        createdAt: Date.now(),
-      };
-      saveTeacherAccounts([...teachers, newTeacher]);
-      return {
-        success: true,
-        requireChangePassword: true,
-        email: cleanEmail,
-      };
-    }
     return {
       success: false,
-      error: 'Email hoặc mật khẩu không chính xác! (Mật khẩu mặc định khởi tạo là 1234)',
+      error: `Tài khoản "${cleanEmail}" chưa được Quản trị viên (Ms. Trúc) cấp quyền! Chỉ những tài khoản được Admin tạo mới trong danh sách mới có quyền đăng nhập.`,
     };
   }
 
@@ -309,6 +294,77 @@ export async function changeTeacherPassword(
 }
 
 /**
+ * Thêm tài khoản Giáo viên mới (chỉ Admin thực hiện)
+ */
+export async function addTeacherAccount(
+  email: string,
+  name: string
+): Promise<{ success: boolean; error?: string }> {
+  const cleanEmail = email.trim().toLowerCase();
+  const cleanName = name.trim() || cleanEmail.split('@')[0];
+
+  if (!cleanEmail || !cleanEmail.includes('@')) {
+    return { success: false, error: 'Địa chỉ Email Gmail không hợp lệ!' };
+  }
+
+  const teachers = getStoredTeacherAccounts();
+  if (teachers.some((t) => t.email.toLowerCase() === cleanEmail)) {
+    return { success: false, error: `Tài khoản "${cleanEmail}" đã có trong danh sách Giáo viên!` };
+  }
+
+  const newAccount: TeacherAccount = {
+    email: cleanEmail,
+    name: cleanName,
+    passcode: '1234',
+    mustChangePassword: true,
+    createdAt: Date.now(),
+  };
+
+  const updated = [...teachers, newAccount];
+  await saveTeacherAccounts(updated);
+  return { success: true };
+}
+
+/**
+ * Đặt lại mật khẩu tài khoản Giáo viên về mặc định 1234 (khi giáo viên quên mật khẩu)
+ */
+export async function resetTeacherPasswordToDefault(
+  email: string
+): Promise<{ success: boolean; error?: string }> {
+  const cleanEmail = email.trim().toLowerCase();
+  const teachers = getStoredTeacherAccounts();
+  const existingIdx = teachers.findIndex((t) => t.email.toLowerCase() === cleanEmail);
+
+  if (existingIdx < 0) {
+    return { success: false, error: 'Không tìm thấy tài khoản giáo viên này!' };
+  }
+
+  const updated = teachers.map((t, idx) =>
+    idx === existingIdx ? { ...t, passcode: '1234', mustChangePassword: true } : t
+  );
+
+  await saveTeacherAccounts(updated);
+  return { success: true };
+}
+
+/**
+ * Xóa / Thu hồi quyền Giáo viên (không thể xóa tài khoản Quản trị trưởng)
+ */
+export async function removeTeacherAccount(
+  email: string
+): Promise<{ success: boolean; error?: string }> {
+  const cleanEmail = email.trim().toLowerCase();
+  if (cleanEmail === ADMIN_EMAIL.toLowerCase()) {
+    return { success: false, error: 'Không thể xóa tài khoản Quản trị trưởng (Ms. Trúc)!' };
+  }
+
+  const teachers = getStoredTeacherAccounts();
+  const updated = teachers.filter((t) => t.email.toLowerCase() !== cleanEmail);
+  await saveTeacherAccounts(updated);
+  return { success: true };
+}
+
+/**
  * Đăng nhập Admin bằng Google Popup
  */
 export async function signInAdminWithGoogle(): Promise<{
@@ -323,16 +379,12 @@ export async function signInAdminWithGoogle(): Promise<{
     const user = result.user;
 
     if (!isAuthorizedAdmin(user.email)) {
-      // Tự động cấp quyền giáo viên cho tài khoản Google này
-      const teachers = getStoredTeacherAccounts();
-      const newTeacher: TeacherAccount = {
-        email: user.email!.toLowerCase(),
-        name: user.displayName || user.email!.split('@')[0],
-        passcode: '1234',
-        mustChangePassword: false,
-        createdAt: Date.now(),
+      await signOut(auth);
+      clearAdminSession();
+      return {
+        success: false,
+        error: `Tài khoản Google "${user.email}" chưa được Quản trị viên (Ms. Trúc) cấp quyền! Chỉ tài khoản được Admin tạo mới trong danh sách mới có quyền truy cập.`,
       };
-      await saveTeacherAccounts([...teachers, newTeacher]);
     }
 
     const session: AdminSession = {
