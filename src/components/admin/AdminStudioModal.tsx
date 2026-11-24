@@ -12,6 +12,7 @@ import {
   restoreCustomExamFromTrash,
   syncAllExamsAndTopicsToGameBank,
   ADMIN_EMAIL,
+  isAuthorizedAdmin,
 } from '../../services/firebase';
 import {
   GOOGLE_SHEET_EXAMS_URL,
@@ -272,8 +273,8 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
 
   if (!isOpen) return null;
 
-  // Nếu chưa đăng nhập hoặc không phải admin saohom2002@gmail.com
-  if (!adminSession || adminSession.email.trim().toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+  // Nếu chưa đăng nhập hoặc không phải giáo viên / admin
+  if (!adminSession || !isAuthorizedAdmin(adminSession.email)) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
         <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-slate-200 text-center space-y-4">
@@ -281,11 +282,9 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
             🛡️
           </div>
           <div>
-            <h3 className="text-xl font-black text-slate-900">Yêu cầu Quyền Quản trị viên</h3>
+            <h3 className="text-xl font-black text-slate-900 font-['Lexend']">Yêu cầu Quyền Giáo Viên</h3>
             <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-              Khu vực Studio tạo đề & quản trị câu hỏi chỉ dành riêng cho Admin có email:
-              <br />
-              <strong className="text-indigo-700 text-sm font-black">{ADMIN_EMAIL}</strong>
+              Khu vực Studio tạo đề & quản trị câu hỏi chỉ dành riêng cho Giáo viên / Quản trị viên đã đăng nhập.
             </p>
           </div>
           <div className="flex gap-2.5 pt-2">
@@ -1165,7 +1164,7 @@ Yêu cầu chất lượng:
                 </h2>
                 <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-black uppercase">
                   <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-                  Admin: {ADMIN_EMAIL}
+                  GV: {adminSession?.email || ADMIN_EMAIL}
                 </span>
               </div>
               <p className="text-[11px] text-indigo-200">

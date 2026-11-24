@@ -13,16 +13,17 @@ import {
   Eye,
   EyeOff,
   UserCheck,
-  GraduationCap
+  GraduationCap,
+  Users
 } from 'lucide-react';
 import {
   ADMIN_EMAIL,
   AdminSession,
   getStoredAdminSession,
   signInAdminWithGoogle,
-  signInAdminWithPasscode,
+  signInTeacherWithEmail,
+  changeTeacherPassword,
   signOutAdmin,
-  changeAdminPasscode,
 } from '../../services/firebase';
 import { sound } from '../../utils/sound';
 
@@ -41,27 +42,129 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({
   adminSession,
   setAdminSession,
 }) => {
-  const [tab, setTab] = useState<'login' | 'change_passcode'>('login');
-  const [loginMethod, setLoginMethod] = useState<'google' | 'passcode'>('google');
-  const [passcode, setPasscode] = useState('');
+  const [tab, setTab] = useState<'login' | 'change_passcode' | 'first_time_change_password'>('login');
+  const [loginMethod, setLoginMethod] = useState<'email' | 'google'>('email');
+  
+  // Đăng nhập email & mật khẩu
+  const [emailInput, setEmailInput] = useState('tranthithanhtruc1980@gmail.com');
+  const [passcodeInput, setPasscodeInput] = useState('1234');
   const [showPasscode, setShowPasscode] = useState(false);
+  
+  // Trạng thái đổi mật khẩu lần đầu
+  const [pendingChangeEmail, setPendingChangeEmail] = useState('');
+  const [firstTimeNewPass, setFirstTimeNewPass] = useState('');
+  const [firstTimeConfirmPass, setFirstTimeConfirmPass] = useState('');
+  const [showFirstTimePass, setShowFirstTimePass] = useState(false);
+
+  // Đổi passcode thông thường khi đã đăng nhập
+  const [newPasscode, setNewPasscode] = useState('');
+  const [confirmPasscode, setConfirmPasscode] = useState('');
+
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-
-  // Đổi passcode
-  const [newPasscode, setNewPasscode] = useState('');
-  const [confirmPasscode, setConfirmPasscode] = useState('');
 
   useEffect(() => {
     if (isOpen) {
       setErrorMessage('');
       setSuccessMessage('');
-      setPasscode('');
+      if (!adminSession) {
+        setTab('login');
+      }
     }
-  }, [isOpen]);
+  }, [isOpen, adminSession]);
 
   if (!isOpen) return null;
+
+  // Xử lý đăng nhập Giáo viên bằng Email & Mật khẩu
+  const handleTeacherEmailLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    sound.playClick();
+
+    if (!emailInput.trim()) {
+      setErrorMessage('Vui lòng nhập địa chỉ Email Gmail của Giáo viên!');
+      return;
+    }
+    if (!passcodeInput.trim()) {
+      setErrorMessage('Vui lòng nhập mật khẩu (Mặc định lần đầu là 1234)!');
+      return;
+    }
+
+    setIsLoading(true);
+    setErrorMessage('');
+    setSuccessMessage('');
+
+    setTimeout(() => {
+      const res = signInTeacherWithEmail(emailInput, passcodeInput);
+      setIsLoading(false);
+
+      if (res.requireChangePassword && res.email) {
+        sound.playCorrect();
+        setPendingChangeEmail(res.email);
+        setTab('first_time_change_password');
+        setFirstTimeNewPass('');
+        setFirstTimeConfirmPass('');
+        setSuccessMessage('Mật khẩu 1234 chính xác! Vui lòng thiết lập mật khẩu mới để bảo mật tài khoản.');
+        return;
+      }
+
+      if (res.success && res.session) {
+        sound.playCorrect();
+        setAdminSession(res.session);
+        setSuccessMessage('Đăng nhập Giáo viên thành công!');
+        setTimeout(() => {
+          onSuccessOpenStudio();
+        }, 700);
+      } else {
+        sound.playWrong();
+        setErrorMessage(res.error || 'Email hoặc mật khẩu không chính xác!');
+      }
+    }, 300);
+  };
+
+  // Xử lý đổi mật khẩu lần đầu bắt buộc
+  const handleFirstTimePasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    sound.playClick();
+
+    if (!firstTimeNewPass.trim() || firstTimeNewPass.length < 4) {
+      setErrorMessage('Mật khẩu mới phải có ít nhất 4 ký tự!');
+      return;
+    }
+    if (firstTimeNewPass.trim() === '1234') {
+      setErrorMessage('Vui lòng đặt mật khẩu mới khác mật khẩu mặc định 1234!');
+      return;
+    }
+    if (firstTimeNewPass !== firstTimeConfirmPass) {
+      setErrorMessage('Xác nhận mật khẩu mới không khớp!');
+      return;
+    }
+
+    setIsLoading(true);
+    setErrorMessage('');
+    setSuccessMessage('');
+
+    try {
+      const res = await changeTeacherPassword(pendingChangeEmail, firstTimeNewPass);
+      setIsLoading(false);
+
+      if (res.success && res.session) {
+        sound.playCorrect();
+        setAdminSession(res.session);
+        setSuccessMessage('🎉 Đã thiết lập mật khẩu mới thành công! Đang chuyển vào Admin Studio...');
+        setTimeout(() => {
+          onSuccessOpenStudio();
+        }, 900);
+      } else {
+        sound.playWrong();
+        setErrorMessage(res.error || 'Không thể lưu mật khẩu mới. Vui lòng thử lại!');
+      }
+    } catch (err: any) {
+      setIsLoading(false);
+      sound.playWrong();
+      setErrorMessage(err.message || 'Lỗi lưu mật khẩu mới.');
+    }
+  };
 
   // Xử lý đăng nhập Google
   const handleGoogleSignIn = async () => {
@@ -81,10 +184,7 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({
         }, 800);
       } else {
         sound.playWrong();
-        setErrorMessage(
-          res.error ||
-            `Tài khoản không hợp lệ. Chỉ có tài khoản ${ADMIN_EMAIL} mới có quyền truy cập Studio!`
-        );
+        setErrorMessage(res.error || 'Đăng nhập Google thất bại.');
       }
     } catch (err: any) {
       sound.playWrong();
@@ -94,49 +194,19 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({
     }
   };
 
-  // Xử lý đăng nhập bằng mã bảo vệ
-  const handlePasscodeSignIn = (e: React.FormEvent) => {
-    e.preventDefault();
-    sound.playClick();
-    if (!passcode.trim()) {
-      setErrorMessage('Vui lòng nhập mật mã quản trị viên!');
-      return;
-    }
-
-    setIsLoading(true);
-    setErrorMessage('');
-    setSuccessMessage('');
-
-    setTimeout(() => {
-      const res = signInAdminWithPasscode(passcode);
-      if (res.success && res.session) {
-        sound.playCorrect();
-        setAdminSession(res.session);
-        setSuccessMessage('Xác thực quản trị viên thành công!');
-        setTimeout(() => {
-          onSuccessOpenStudio();
-        }, 700);
-      } else {
-        sound.playWrong();
-        setErrorMessage(res.error || 'Mật mã quản trị viên không chính xác!');
-      }
-      setIsLoading(false);
-    }, 400);
-  };
-
   // Xử lý đăng xuất
   const handleSignOut = async () => {
     sound.playClick();
     setIsLoading(true);
     await signOutAdmin();
     setAdminSession(null);
-    setPasscode('');
+    setPasscodeInput('1234');
     setSuccessMessage('Đã đăng xuất khỏi tài khoản Quản trị viên.');
     setIsLoading(false);
   };
 
-  // Xử lý đổi mật mã
-  const handleChangePasscode = (e: React.FormEvent) => {
+  // Xử lý đổi mật mã thông thường khi đã đăng nhập
+  const handleChangePasscode = async (e: React.FormEvent) => {
     e.preventDefault();
     sound.playClick();
     if (newPasscode.length < 4) {
@@ -148,16 +218,22 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({
       return;
     }
 
-    const ok = changeAdminPasscode(newPasscode);
-    if (ok) {
+    if (!adminSession?.email) return;
+
+    setIsLoading(true);
+    const res = await changeTeacherPassword(adminSession.email, newPasscode);
+    setIsLoading(false);
+
+    if (res.success && res.session) {
       sound.playCorrect();
-      setSuccessMessage('Đã đổi mật mã quản trị viên thành công!');
+      setAdminSession(res.session);
+      setSuccessMessage('Đã đổi mật khẩu Giáo viên thành công!');
       setNewPasscode('');
       setConfirmPasscode('');
       setTab('login');
     } else {
       sound.playWrong();
-      setErrorMessage('Không thể lưu mật mã mới. Vui lòng thử lại.');
+      setErrorMessage(res.error || 'Không thể lưu mật mã mới. Vui lòng thử lại.');
     }
   };
 
@@ -171,7 +247,7 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({
               sound.playClick();
               onClose();
             }}
-            className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+            className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
             title="Đóng"
           >
             <X className="w-5 h-5" />
@@ -186,11 +262,15 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({
                 <Sparkles className="w-3 h-3" />
                 Admin Studio Security
               </div>
-              <h2 className="text-xl font-black mt-1">Xác thực Quản trị viên</h2>
+              <h2 className="text-xl font-black mt-1 font-['Lexend']">
+                {tab === 'first_time_change_password' ? 'Thiết Lập Mật Khẩu' : 'Xác Thực Giáo Viên'}
+              </h2>
             </div>
           </div>
           <p className="text-xs text-indigo-100 mt-2 leading-relaxed">
-            Khu vực quản trị dành riêng cho Giáo viên / Admin: <strong className="text-amber-300 font-bold">{ADMIN_EMAIL}</strong>
+            {tab === 'first_time_change_password'
+              ? 'Tạo mật khẩu riêng cho tài khoản Giáo viên lần đầu đăng nhập.'
+              : 'Khu vực quản trị dành cho Giáo viên để cập nhật câu hỏi & đề thi.'}
           </p>
         </div>
 
@@ -198,7 +278,7 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({
         <div className="p-6">
           {/* Notifications */}
           {errorMessage && (
-            <div className="mb-4 p-3 rounded-2xl bg-rose-50 border border-rose-200 flex items-start gap-2.5 text-rose-800 text-xs animate-shake">
+            <div className="mb-4 p-3 rounded-2xl bg-rose-50 border border-rose-200 flex items-start gap-2.5 text-rose-800 text-xs">
               <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
               <div className="font-medium leading-relaxed">{errorMessage}</div>
             </div>
@@ -211,8 +291,78 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({
             </div>
           )}
 
-          {/* Nếu ĐÃ ĐĂNG NHẬP */}
-          {adminSession ? (
+          {/* MÀN HÌNH 1: ĐỔI MẬT KHẨU BẮT BUỘC KHI ĐĂNG NHẬP BẰNG 1234 */}
+          {tab === 'first_time_change_password' ? (
+            <form onSubmit={handleFirstTimePasswordSubmit} className="space-y-4">
+              <div className="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200 space-y-1">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-amber-900">
+                  <Lock className="w-3.5 h-3.5 text-amber-700" />
+                  <span>Bảo mật tài khoản Giáo viên:</span>
+                </div>
+                <div className="font-mono text-xs font-bold text-slate-800">
+                  {pendingChangeEmail}
+                </div>
+                <p className="text-[11px] text-amber-800 pt-1 leading-relaxed">
+                  Bạn đang sử dụng <strong>mật khẩu mặc định 1234</strong>. Để bảo vệ dữ liệu đề thi và điểm số, vui lòng đặt <strong>mật khẩu mới</strong> (tối thiểu 4 ký tự):
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  Mật khẩu mới của bạn: <span className="text-rose-500">*</span>
+                </label>
+                <div className="relative">
+                  <input
+                    type={showFirstTimePass ? 'text' : 'password'}
+                    value={firstTimeNewPass}
+                    onChange={(e) => setFirstTimeNewPass(e.target.value)}
+                    placeholder="Nhập mật khẩu mới (VD: 8888, truc@2024)..."
+                    className="w-full pl-3 pr-10 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 font-mono"
+                    autoFocus
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowFirstTimePass(!showFirstTimePass)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer"
+                  >
+                    {showFirstTimePass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  Xác nhận lại mật khẩu mới: <span className="text-rose-500">*</span>
+                </label>
+                <input
+                  type={showFirstTimePass ? 'text' : 'password'}
+                  value={firstTimeConfirmPass}
+                  onChange={(e) => setFirstTimeConfirmPass(e.target.value)}
+                  placeholder="Nhập lại chính xác mật khẩu mới..."
+                  className="w-full px-3 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 font-mono"
+                />
+              </div>
+
+              <div className="flex gap-2.5 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setTab('login')}
+                  className="py-2.5 px-4 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100 text-xs font-bold cursor-pointer"
+                >
+                  Quay lại
+                </button>
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs shadow-md shadow-emerald-600/30 transition-all cursor-pointer flex items-center justify-center gap-1.5 active:scale-98 disabled:opacity-50"
+                >
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>{isLoading ? 'Đang lưu...' : 'Lưu Mật Khẩu & Mở Studio'}</span>
+                </button>
+              </div>
+            </form>
+          ) : adminSession ? (
+            /* MÀN HÌNH 2: NẾU ĐÃ ĐĂNG NHẬP */
             <div className="space-y-4">
               <div className="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-100 flex items-center gap-3.5">
                 {adminSession.photoURL ? (
@@ -223,23 +373,23 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({
                   />
                 ) : (
                   <div className="w-13 h-13 rounded-2xl bg-gradient-to-tr from-indigo-600 to-blue-500 text-white font-black text-xl flex items-center justify-center shadow-md">
-                    👑
+                    🎓
                   </div>
                 )}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5">
                     <span className="font-bold text-sm text-slate-900 truncate">
-                      {adminSession.displayName || 'Quản trị viên'}
+                      {adminSession.displayName || 'Giáo viên'}
                     </span>
                     <span className="px-2 py-0.5 text-[10px] font-extrabold rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
                       Đã xác thực
                     </span>
                   </div>
-                  <p className="text-xs font-semibold text-indigo-700 truncate mt-0.5">
+                  <p className="text-xs font-semibold text-indigo-700 truncate mt-0.5 font-mono">
                     {adminSession.email}
                   </p>
                   <p className="text-[11px] text-slate-500 mt-0.5">
-                    Phương thức: {adminSession.authType === 'google' ? 'Tài khoản Google' : 'Mật mã bí mật'}
+                    Quyền hạn: Biên soạn đề thi & Cập nhật câu hỏi
                   </p>
                 </div>
               </div>
@@ -247,29 +397,29 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({
               {tab === 'change_passcode' ? (
                 <form onSubmit={handleChangePasscode} className="space-y-3 pt-2">
                   <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
-                    Đổi Mật mã bảo vệ Quản trị viên
+                    Đổi Mật Khẩu Giáo Viên
                   </h4>
                   <div>
                     <label className="block text-xs font-medium text-slate-600 mb-1">
-                      Mật mã mới (ít nhất 4 ký tự)
+                      Mật khẩu mới (ít nhất 4 ký tự)
                     </label>
                     <input
                       type="password"
                       value={newPasscode}
                       onChange={(e) => setNewPasscode(e.target.value)}
-                      placeholder="Nhập mật mã mới..."
+                      placeholder="Nhập mật khẩu mới..."
                       className="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
                     />
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-slate-600 mb-1">
-                      Xác nhận mật mã mới
+                      Xác nhận mật khẩu mới
                     </label>
                     <input
                       type="password"
                       value={confirmPasscode}
                       onChange={(e) => setConfirmPasscode(e.target.value)}
-                      placeholder="Nhập lại mật mã mới..."
+                      placeholder="Nhập lại mật khẩu mới..."
                       className="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
                     />
                   </div>
@@ -277,15 +427,16 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({
                     <button
                       type="button"
                       onClick={() => setTab('login')}
-                      className="flex-1 py-2 text-xs font-bold rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-100"
+                      className="flex-1 py-2 text-xs font-bold rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-100 cursor-pointer"
                     >
                       Hủy
                     </button>
                     <button
                       type="submit"
-                      className="flex-1 py-2 text-xs font-bold rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 shadow-md shadow-indigo-600/20"
+                      disabled={isLoading}
+                      className="flex-1 py-2 text-xs font-bold rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 shadow-md shadow-indigo-600/20 cursor-pointer disabled:opacity-50"
                     >
-                      Lưu mật mã mới
+                      {isLoading ? 'Đang lưu...' : 'Lưu mật khẩu mới'}
                     </button>
                   </div>
                 </form>
@@ -310,10 +461,10 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({
                         sound.playClick();
                         setTab('change_passcode');
                       }}
-                      className="flex-1 py-2.5 px-3 rounded-xl border border-slate-200 hover:border-indigo-300 text-slate-700 text-xs font-bold hover:bg-indigo-50/50 flex items-center justify-center gap-1.5 transition-colors"
+                      className="flex-1 py-2.5 px-3 rounded-xl border border-slate-200 hover:border-indigo-300 text-slate-700 text-xs font-bold hover:bg-indigo-50/50 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                     >
                       <KeyRound className="w-3.5 h-3.5 text-indigo-600" />
-                      <span>Đổi mật mã</span>
+                      <span>Đổi mật khẩu</span>
                     </button>
 
                     <button
@@ -330,7 +481,7 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({
               )}
             </div>
           ) : (
-            /* CHƯA ĐĂNG NHẬP */
+            /* MÀN HÌNH 3: CHƯA ĐĂNG NHẬP */
             <div className="space-y-4">
               {/* Method tabs */}
               <div className="flex p-1 bg-slate-100 rounded-2xl border border-slate-200">
@@ -338,10 +489,25 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({
                   type="button"
                   onClick={() => {
                     sound.playClick();
+                    setLoginMethod('email');
+                    setErrorMessage('');
+                  }}
+                  className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
+                    loginMethod === 'email'
+                      ? 'bg-white text-indigo-700 shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  Tài khoản Gmail & Mật khẩu
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    sound.playClick();
                     setLoginMethod('google');
                     setErrorMessage('');
                   }}
-                  className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${
+                  className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
                     loginMethod === 'google'
                       ? 'bg-white text-indigo-700 shadow-xs'
                       : 'text-slate-600 hover:text-slate-900'
@@ -349,28 +515,76 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({
                 >
                   Đăng nhập Google
                 </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    sound.playClick();
-                    setLoginMethod('passcode');
-                    setErrorMessage('');
-                  }}
-                  className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${
-                    loginMethod === 'passcode'
-                      ? 'bg-white text-indigo-700 shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  Mật mã Quản trị viên
-                </button>
               </div>
 
-              {loginMethod === 'google' ? (
+              {loginMethod === 'email' ? (
+                <form onSubmit={handleTeacherEmailLogin} className="space-y-3.5 pt-1">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      Địa chỉ Gmail Giáo viên: <span className="text-rose-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="email"
+                        value={emailInput}
+                        onChange={(e) => setEmailInput(e.target.value)}
+                        placeholder="VD: tranthithanhtruc1980@gmail.com"
+                        className="w-full pl-9 pr-3 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 font-medium"
+                        required
+                        autoFocus
+                      />
+                      <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      Mật khẩu: <span className="text-rose-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showPasscode ? 'text' : 'password'}
+                        value={passcodeInput}
+                        onChange={(e) => setPasscodeInput(e.target.value)}
+                        placeholder="Nhập mật khẩu (Mặc định: 1234)..."
+                        className="w-full pl-9 pr-10 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 font-mono font-bold"
+                        required
+                      />
+                      <KeyRound className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                      <button
+                        type="button"
+                        onClick={() => setShowPasscode(!showPasscode)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer"
+                      >
+                        {showPasscode ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Hộp gợi ý mật khẩu mặc định */}
+                  <div className="p-3 rounded-2xl bg-amber-50/80 border border-amber-200 text-left space-y-1">
+                    <div className="flex items-center gap-1.5 text-xs font-bold text-amber-900">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                      <span>Hướng dẫn cho Giáo viên đăng nhập lần đầu:</span>
+                    </div>
+                    <p className="text-[11px] text-amber-800 leading-relaxed">
+                      Nhập Gmail của bạn và mật khẩu mặc định là <strong className="text-amber-950 font-black">1234</strong>. Hệ thống sẽ lập tức chuyển sang màn hình yêu cầu bạn <strong>đổi mật khẩu mới</strong> để hoàn tất bảo mật.
+                    </p>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-extrabold text-sm shadow-md shadow-indigo-600/30 flex items-center justify-center gap-2 transition-transform active:scale-98 cursor-pointer disabled:opacity-50"
+                  >
+                    <GraduationCap className="w-5 h-5" />
+                    <span>{isLoading ? 'Đang xác thực...' : 'ĐĂNG NHẬP GIÁO VIÊN'}</span>
+                  </button>
+                </form>
+              ) : (
                 <div className="space-y-3 pt-2 text-center">
                   <p className="text-xs text-slate-600 leading-relaxed">
-                    Nhấn nút bên dưới để chọn tài khoản Google của bạn. Hệ thống sẽ tự động cấp quyền truy cập nếu tài khoản là{' '}
-                    <strong className="text-indigo-700 font-bold">{ADMIN_EMAIL}</strong>.
+                    Nhấn nút bên dưới để chọn tài khoản Google của bạn. Hệ thống sẽ tự động cấp quyền truy cập Giáo viên:
                   </p>
 
                   <button
@@ -400,62 +614,12 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({
                     <span>{isLoading ? 'Đang xác thực Google...' : 'Đăng nhập với Google'}</span>
                   </button>
 
-                  <div className="p-3 rounded-xl bg-amber-50/70 border border-amber-200 text-left">
-                    <p className="text-[11px] text-amber-900 leading-relaxed flex items-start gap-1.5">
-                      <Lock className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
-                      <span>
-                        Nếu trình duyệt chặn cửa sổ pop-up của Google hoặc bạn chưa bật Google Sign-In trên Firebase Console, vui lòng chuyển sang tab <strong>"Mật mã Quản trị viên"</strong> để đăng nhập ngay tức thì.
-                      </span>
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-left">
+                    <p className="text-[11px] text-slate-600 leading-relaxed">
+                      💡 Khuyên dùng: Bạn có thể chuyển sang tab <strong>"Tài khoản Gmail & Mật khẩu"</strong> để đăng nhập bằng mật khẩu mặc định 1234 mà không cần bật popup trình duyệt.
                     </p>
                   </div>
                 </div>
-              ) : (
-                <form onSubmit={handlePasscodeSignIn} className="space-y-3 pt-2">
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      Email Quản trị viên (Cố định)
-                    </label>
-                    <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-100 border border-slate-300 text-slate-700 text-xs font-semibold">
-                      <Mail className="w-4 h-4 text-indigo-600 shrink-0" />
-                      <span>{ADMIN_EMAIL}</span>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      Mật mã quản trị viên (Admin Passcode)
-                    </label>
-                    <div className="relative">
-                      <input
-                        type={showPasscode ? 'text' : 'password'}
-                        value={passcode}
-                        onChange={(e) => setPasscode(e.target.value)}
-                        placeholder="Nhập mã bảo vệ quản trị viên..."
-                        className="w-full pl-3 pr-10 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 font-mono"
-                        autoFocus
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPasscode(!showPasscode)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1"
-                      >
-                        {showPasscode ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                      </button>
-                    </div>
-                    <p className="text-[11px] text-slate-500 mt-1 italic">
-                      Gợi ý: Mật mã khởi tạo mặc định là <strong className="text-indigo-700 font-bold">saohom@2002</strong> (có thể đổi sau khi vào Studio).
-                    </p>
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={isLoading}
-                    className="w-full py-3 px-4 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-md shadow-indigo-600/30 flex items-center justify-center gap-2 transition-transform active:scale-98 cursor-pointer disabled:opacity-50"
-                  >
-                    <KeyRound className="w-4 h-4" />
-                    <span>{isLoading ? 'Đang kiểm tra...' : 'Xác thực & Vào Studio'}</span>
-                  </button>
-                </form>
               )}
             </div>
           )}

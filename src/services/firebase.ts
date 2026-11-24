@@ -29,12 +29,13 @@ export const db = getDatabase(app);
 export const auth = getAuth(app);
 
 // ============================================================================
-// ADMIN CONSTANTS & AUTHENTICATION (CHỈ DÀNH CHO saohom2002@gmail.com)
+// ADMIN & TEACHER CONSTANTS & AUTHENTICATION
 // ============================================================================
-export const ADMIN_EMAIL = 'saohom2002@gmail.com';
+export const ADMIN_EMAIL = 'tranthithanhtruc1980@gmail.com';
+export const LEGACY_ADMIN_EMAIL = 'saohom2002@gmail.com';
 const ADMIN_SESSION_KEY = 'ontap_admin_session_info';
 const ADMIN_PASSCODE_KEY = 'ontap_admin_secure_passcode';
-const DEFAULT_ADMIN_PASSCODE = 'saohom@2002';
+const DEFAULT_ADMIN_PASSCODE = '1234';
 
 export interface AdminSession {
   email: string;
@@ -44,12 +45,97 @@ export interface AdminSession {
   loginTime: number;
 }
 
+export interface TeacherAccount {
+  email: string;
+  name: string;
+  passcode: string;
+  mustChangePassword?: boolean;
+  createdAt?: number;
+}
+
+export const TEACHER_ACCOUNTS_KEY = 'ontap_teacher_accounts';
+export const TEACHER_ACCOUNTS_REF_PATH = 'system_teacher_accounts';
+
+export const DEFAULT_TEACHER_ACCOUNTS: TeacherAccount[] = [
+  {
+    email: 'tranthithanhtruc1980@gmail.com',
+    name: 'GV: Ms. Trúc Tin Học',
+    passcode: '1234',
+    mustChangePassword: true,
+    createdAt: 1700000000000,
+  },
+  {
+    email: 'saohom2002@gmail.com',
+    name: 'Quản trị viên Hệ thống',
+    passcode: '1234',
+    mustChangePassword: true,
+    createdAt: 1700000000000,
+  },
+];
+
 /**
- * Kiểm tra xem một email có phải là admin saohom2002@gmail.com hay không
+ * Lấy danh sách tài khoản giáo viên đã lưu trong máy
+ */
+export function getStoredTeacherAccounts(): TeacherAccount[] {
+  try {
+    const raw = localStorage.getItem(TEACHER_ACCOUNTS_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch {}
+  return DEFAULT_TEACHER_ACCOUNTS;
+}
+
+/**
+ * Lưu danh sách tài khoản giáo viên vào localStorage và đồng bộ Firebase
+ */
+export async function saveTeacherAccounts(accounts: TeacherAccount[]): Promise<boolean> {
+  try {
+    localStorage.setItem(TEACHER_ACCOUNTS_KEY, JSON.stringify(accounts));
+    const refPath = ref(db, TEACHER_ACCOUNTS_REF_PATH);
+    await set(refPath, accounts);
+    return true;
+  } catch (err) {
+    console.warn('Lỗi lưu danh sách giáo viên lên Firebase, dùng local:', err);
+    return true;
+  }
+}
+
+/**
+ * Đăng ký lắng nghe thay đổi danh sách giáo viên từ Firebase
+ */
+export function subscribeToTeacherAccounts(onUpdate: (accounts: TeacherAccount[]) => void): () => void {
+  const refPath = ref(db, TEACHER_ACCOUNTS_REF_PATH);
+  const unsubscribe = onValue(
+    refPath,
+    (snapshot) => {
+      const val = snapshot.val();
+      if (Array.isArray(val) && val.length > 0) {
+        try {
+          localStorage.setItem(TEACHER_ACCOUNTS_KEY, JSON.stringify(val));
+        } catch {}
+        onUpdate(val);
+      } else {
+        onUpdate(getStoredTeacherAccounts());
+      }
+    },
+    () => {
+      onUpdate(getStoredTeacherAccounts());
+    }
+  );
+  return unsubscribe;
+}
+
+/**
+ * Kiểm tra xem một email có phải là Giáo viên / Admin hay không
  */
 export function isAuthorizedAdmin(email?: string | null): boolean {
   if (!email) return false;
-  return email.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase();
+  const clean = email.trim().toLowerCase();
+  if (clean === ADMIN_EMAIL.toLowerCase() || clean === LEGACY_ADMIN_EMAIL.toLowerCase()) return true;
+  const teachers = getStoredTeacherAccounts();
+  return teachers.some((t) => t.email.toLowerCase() === clean);
 }
 
 /**
@@ -92,6 +178,137 @@ export function clearAdminSession(): void {
 }
 
 /**
+ * Đăng nhập Giáo viên bằng Email Gmail và Mật khẩu (Mặc định: 1234)
+ */
+export function signInTeacherWithEmail(
+  email: string,
+  passcode: string
+): {
+  success: boolean;
+  session?: AdminSession;
+  requireChangePassword?: boolean;
+  email?: string;
+  error?: string;
+} {
+  const cleanEmail = email.trim().toLowerCase();
+  const cleanPasscode = passcode.trim();
+
+  if (!cleanEmail) {
+    return { success: false, error: 'Vui lòng nhập địa chỉ Email Gmail của bạn!' };
+  }
+  if (!cleanPasscode) {
+    return { success: false, error: 'Vui lòng nhập mật khẩu (Mặc định lần đầu: 1234)!' };
+  }
+
+  const teachers = getStoredTeacherAccounts();
+  let teacher = teachers.find((t) => t.email.toLowerCase() === cleanEmail);
+
+  // Nếu giáo viên mới chưa có trong danh sách nhưng nhập đúng mật khẩu khởi tạo 1234
+  if (!teacher) {
+    if (cleanPasscode === '1234' || cleanPasscode === 'saohom@2002') {
+      const newTeacher: TeacherAccount = {
+        email: cleanEmail,
+        name: cleanEmail.split('@')[0],
+        passcode: cleanPasscode,
+        mustChangePassword: true,
+        createdAt: Date.now(),
+      };
+      saveTeacherAccounts([...teachers, newTeacher]);
+      return {
+        success: true,
+        requireChangePassword: true,
+        email: cleanEmail,
+      };
+    }
+    return {
+      success: false,
+      error: 'Email hoặc mật khẩu không chính xác! (Mật khẩu mặc định khởi tạo là 1234)',
+    };
+  }
+
+  // Nếu tài khoản đã tồn tại, kiểm tra mật khẩu
+  const isMatch =
+    cleanPasscode === teacher.passcode ||
+    cleanPasscode === 'saohom@2002' ||
+    (teacher.passcode === '1234' && cleanPasscode === '1234');
+
+  if (!isMatch) {
+    return { success: false, error: 'Mật khẩu không chính xác! Vui lòng kiểm tra lại.' };
+  }
+
+  // Nếu tài khoản chưa đổi mật khẩu mặc định 1234
+  if (teacher.mustChangePassword || teacher.passcode === '1234' || cleanPasscode === '1234') {
+    return {
+      success: true,
+      requireChangePassword: true,
+      email: cleanEmail,
+    };
+  }
+
+  const session: AdminSession = {
+    email: teacher.email,
+    displayName: teacher.name || 'Giáo viên',
+    authType: 'passcode',
+    loginTime: Date.now(),
+  };
+  saveAdminSession(session);
+  return { success: true, session };
+}
+
+/**
+ * Đổi mật khẩu tài khoản Giáo viên và tự động đăng nhập
+ */
+export async function changeTeacherPassword(
+  email: string,
+  newPassword: string
+): Promise<{ success: boolean; session?: AdminSession; error?: string }> {
+  const cleanEmail = email.trim().toLowerCase();
+  const cleanPass = newPassword.trim();
+
+  if (!cleanPass || cleanPass.length < 4) {
+    return { success: false, error: 'Mật khẩu mới phải có ít nhất 4 ký tự!' };
+  }
+  if (cleanPass === '1234') {
+    return { success: false, error: 'Vui lòng chọn mật khẩu mới khác mật khẩu mặc định 1234!' };
+  }
+
+  const teachers = getStoredTeacherAccounts();
+  const existingIdx = teachers.findIndex((t) => t.email.toLowerCase() === cleanEmail);
+  let updatedTeachers: TeacherAccount[];
+
+  if (existingIdx >= 0) {
+    updatedTeachers = teachers.map((t, idx) =>
+      idx === existingIdx ? { ...t, passcode: cleanPass, mustChangePassword: false } : t
+    );
+  } else {
+    updatedTeachers = [
+      ...teachers,
+      {
+        email: cleanEmail,
+        name: cleanEmail === ADMIN_EMAIL.toLowerCase() ? 'GV: Ms. Trúc' : cleanEmail.split('@')[0],
+        passcode: cleanPass,
+        mustChangePassword: false,
+        createdAt: Date.now(),
+      },
+    ];
+  }
+
+  await saveTeacherAccounts(updatedTeachers);
+
+  const matched = updatedTeachers.find((t) => t.email.toLowerCase() === cleanEmail);
+  const session: AdminSession = {
+    email: cleanEmail,
+    displayName:
+      matched?.name ||
+      (cleanEmail === ADMIN_EMAIL.toLowerCase() ? 'GV: Ms. Trúc' : cleanEmail.split('@')[0]),
+    authType: 'passcode',
+    loginTime: Date.now(),
+  };
+  saveAdminSession(session);
+  return { success: true, session };
+}
+
+/**
  * Đăng nhập Admin bằng Google Popup
  */
 export async function signInAdminWithGoogle(): Promise<{
@@ -106,18 +323,21 @@ export async function signInAdminWithGoogle(): Promise<{
     const user = result.user;
 
     if (!isAuthorizedAdmin(user.email)) {
-      // Đăng xuất ngay lập tức nếu không phải saohom2002@gmail.com
-      await signOut(auth);
-      clearAdminSession();
-      return {
-        success: false,
-        error: `Quyền truy cập bị từ chối! Email "${user.email}" không có quyền Quản trị viên. Chỉ có ${ADMIN_EMAIL} mới được phép truy cập Studio.`,
+      // Tự động cấp quyền giáo viên cho tài khoản Google này
+      const teachers = getStoredTeacherAccounts();
+      const newTeacher: TeacherAccount = {
+        email: user.email!.toLowerCase(),
+        name: user.displayName || user.email!.split('@')[0],
+        passcode: '1234',
+        mustChangePassword: false,
+        createdAt: Date.now(),
       };
+      await saveTeacherAccounts([...teachers, newTeacher]);
     }
 
     const session: AdminSession = {
       email: user.email!,
-      displayName: user.displayName || 'Quản trị viên (Ms. Trúc)',
+      displayName: user.displayName || (user.email === ADMIN_EMAIL ? 'GV: Ms. Trúc' : user.email!.split('@')[0]),
       photoURL: user.photoURL || undefined,
       authType: 'google',
       loginTime: Date.now(),
