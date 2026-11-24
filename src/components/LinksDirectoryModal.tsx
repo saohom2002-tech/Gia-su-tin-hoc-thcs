@@ -80,6 +80,11 @@ export const LinksDirectoryModal: React.FC<LinksDirectoryModalProps> = ({
   const [linkPinInput, setLinkPinInput] = useState('');
   const [linkPinError, setLinkPinError] = useState('');
 
+  // Popup yêu cầu mã PIN khi bấm vào nút "Quản Lý Liên Kết"
+  const [showManageAuthModal, setShowManageAuthModal] = useState(false);
+  const [managePinInput, setManagePinInput] = useState('');
+  const [managePinError, setManagePinError] = useState('');
+
   // Đăng ký lắng nghe thay đổi thời gian thực từ Firebase
   useEffect(() => {
     if (!isOpen) return;
@@ -139,6 +144,20 @@ export const LinksDirectoryModal: React.FC<LinksDirectoryModalProps> = ({
     } else {
       sound.playWrong();
       setLinkPinError('Mã PIN không đúng! Bạn không có quyền truy cập file này.');
+    }
+  };
+
+  const handleVerifyManagePin = () => {
+    sound.playClick();
+    const clean = managePinInput.trim();
+    if (clean === '2024' || clean === '123456' || clean === 'saohom@2002' || clean === '8888') {
+      setIsPinUnlocked(true);
+      sound.playCorrect();
+      setShowManageAuthModal(false);
+      setMode('edit');
+    } else {
+      sound.playWrong();
+      setManagePinError('Mã PIN không chính xác! Chỉ Giáo viên / Admin mới có quyền quản lý liên kết.');
     }
   };
 
@@ -302,12 +321,26 @@ export const LinksDirectoryModal: React.FC<LinksDirectoryModalProps> = ({
                 type="button"
                 onClick={() => {
                   sound.playClick();
-                  setMode('edit');
+                  if (canEdit) {
+                    setMode('edit');
+                  } else {
+                    setShowManageAuthModal(true);
+                    setManagePinInput('');
+                    setManagePinError('');
+                  }
                 }}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-bold transition-colors cursor-pointer shadow-2xs"
-                title="Mở giao diện quản lý liên kết cho giáo viên"
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer shadow-2xs ${
+                  canEdit
+                    ? 'border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-900'
+                    : 'border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-900'
+                }`}
+                title={canEdit ? 'Mở giao diện quản lý liên kết' : 'Yêu cầu quyền Giáo viên / Admin để mở'}
               >
-                <Lock className="w-3.5 h-3.5 text-amber-700" />
+                {canEdit ? (
+                  <Unlock className="w-3.5 h-3.5 text-emerald-700" />
+                ) : (
+                  <Lock className="w-3.5 h-3.5 text-amber-700" />
+                )}
                 <span>Quản Lý Liên Kết</span>
               </button>
             ) : (
@@ -427,56 +460,22 @@ export const LinksDirectoryModal: React.FC<LinksDirectoryModalProps> = ({
           {/* EDIT MODE: CẬP NHẬT DANH BẠ LIÊN KẾT (TƯƠNG TỰ HÌNH 2) */}
           {/* --------------------------------------------------------------- */}
           {mode === 'edit' && (
-            <div className="space-y-5">
-              
-              {/* 1. KHU VỰC XÁC THỰC GIÁO VIÊN / ADMIN */}
-              <div className="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-                <div className="flex items-center gap-2.5">
-                  <span className="text-amber-800 font-bold text-xs sm:text-sm flex items-center gap-1.5 shrink-0">
-                    🔑 Mã xác thực Giáo viên / Admin:
-                  </span>
-                  {canEdit && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold">
+            canEdit ? (
+              <div className="space-y-5">
+                {/* 1. KHU VỰC THÔNG BÁO QUYỀN GIÁO VIÊN / ADMIN */}
+                <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-2.5">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold">
                       <Check className="w-3.5 h-3.5" />
-                      <span>Đã mở quyền quản trị</span>
+                      <span>Đã xác thực quyền Giáo viên / Quản trị viên</span>
                     </span>
-                  )}
+                  </div>
+                  <span className="text-xs text-slate-500 font-medium italic">
+                    Toàn quyền thêm, sửa, đổi vị trí và xóa liên kết
+                  </span>
                 </div>
 
-                {!canEdit ? (
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="password"
-                      value={pinInput}
-                      onChange={(e) => {
-                        setPinInput(e.target.value);
-                        setPinError('');
-                      }}
-                      onKeyDown={(e) => e.key === 'Enter' && handleVerifyPin()}
-                      placeholder="Nhập PIN giáo viên"
-                      className="px-3 py-1.5 text-xs rounded-xl border border-amber-300 bg-white focus:outline-hidden focus:ring-2 focus:ring-amber-500 font-medium"
-                    />
-                    <button
-                      type="button"
-                      onClick={handleVerifyPin}
-                      className="px-3.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs transition-colors cursor-pointer"
-                    >
-                      Xác thực
-                    </button>
-                  </div>
-                ) : (
-                  <span className="text-xs text-slate-500 font-medium italic">
-                    Chế độ chỉnh sửa trực tiếp đã sẵn sàng
-                  </span>
-                )}
-              </div>
-
-              {pinError && (
-                <div className="text-xs text-rose-600 font-bold px-1">{pinError}</div>
-              )}
-
-              {/* 2. FORM THÊM MỚI HOẶC CHỈNH SỬA LIÊN KẾT */}
-              {canEdit ? (
+                {/* 2. FORM THÊM MỚI HOẶC CHỈNH SỬA LIÊN KẾT */}
                 <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/90 shadow-xs space-y-3">
                   <div className="flex items-center justify-between">
                     <h4 className="font-extrabold text-xs sm:text-sm text-sky-900 uppercase tracking-tight flex items-center gap-1.5">
@@ -569,20 +568,14 @@ export const LinksDirectoryModal: React.FC<LinksDirectoryModalProps> = ({
                     </button>
                   </div>
                 </div>
-              ) : (
-                <div className="p-4 rounded-2xl bg-white border border-slate-200 text-center text-xs text-slate-500">
-                  🔒 Vui lòng nhập mã PIN quản trị viên ở trên để thêm hoặc sửa các liên kết trong danh bạ.
-                </div>
-              )}
 
-              {/* 3. DANH SÁCH LIÊN KẾT HIỆN CÓ */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/90 shadow-xs space-y-3">
-                <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                  <h4 className="font-extrabold text-xs sm:text-sm text-slate-800 uppercase tracking-tight">
-                    📋 Danh Sách Liên Kết Hiện Có ( {links.length} )
-                  </h4>
+                {/* 3. DANH SÁCH LIÊN KẾT HIỆN CÓ */}
+                <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/90 shadow-xs space-y-3">
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                    <h4 className="font-extrabold text-xs sm:text-sm text-slate-800 uppercase tracking-tight">
+                      📋 Danh Sách Liên Kết Hiện Có ( {links.length} )
+                    </h4>
 
-                  {canEdit && (
                     <button
                       type="button"
                       onClick={handleRestoreDefault}
@@ -592,45 +585,43 @@ export const LinksDirectoryModal: React.FC<LinksDirectoryModalProps> = ({
                       <RotateCcw className="w-3.5 h-3.5" />
                       <span>Khôi phục mặc định</span>
                     </button>
-                  )}
-                </div>
+                  </div>
 
-                {/* Danh sách các hàng */}
-                <div className="divide-y divide-slate-100">
-                  {links.map((item, idx) => (
-                    <div
-                      key={item.id}
-                      className="py-2.5 flex items-center justify-between gap-3 hover:bg-slate-50 px-2 rounded-xl transition-colors"
-                    >
-                      {/* Vị trí & Thông tin */}
-                      <div className="flex items-center gap-3 min-w-0">
-                        <span className="w-6 text-center text-xs font-bold text-slate-400 font-mono shrink-0">
-                          {idx + 1}
-                        </span>
-                        <div
-                          className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${getIconColorClass(
-                            item.icon
-                          )}`}
-                        >
-                          {renderIcon(item.icon, 'w-4 h-4')}
-                        </div>
-                        <div className="min-w-0">
-                          <div className="font-bold text-xs sm:text-sm text-slate-800 truncate flex items-center gap-1.5">
-                            <span className="truncate">{item.title}</span>
-                            {isLinkAdminOnly(item) && (
-                              <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-800 shrink-0 inline-flex items-center gap-0.5">
-                                <Lock className="w-2.5 h-2.5" /> Khóa GV
-                              </span>
-                            )}
+                  {/* Danh sách các hàng */}
+                  <div className="divide-y divide-slate-100">
+                    {links.map((item, idx) => (
+                      <div
+                        key={item.id}
+                        className="py-2.5 flex items-center justify-between gap-3 hover:bg-slate-50 px-2 rounded-xl transition-colors"
+                      >
+                        {/* Vị trí & Thông tin */}
+                        <div className="flex items-center gap-3 min-w-0">
+                          <span className="w-6 text-center text-xs font-bold text-slate-400 font-mono shrink-0">
+                            {idx + 1}
+                          </span>
+                          <div
+                            className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${getIconColorClass(
+                              item.icon
+                            )}`}
+                          >
+                            {renderIcon(item.icon, 'w-4 h-4')}
                           </div>
-                          <div className="text-[11px] text-slate-400 font-mono truncate max-w-xs sm:max-w-md">
-                            {item.url}
+                          <div className="min-w-0">
+                            <div className="font-bold text-xs sm:text-sm text-slate-800 truncate flex items-center gap-1.5">
+                              <span className="truncate">{item.title}</span>
+                              {isLinkAdminOnly(item) && (
+                                <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-800 shrink-0 inline-flex items-center gap-0.5">
+                                  <Lock className="w-2.5 h-2.5" /> Khóa GV
+                                </span>
+                              )}
+                            </div>
+                            <div className="text-[11px] text-slate-400 font-mono truncate max-w-xs sm:max-w-md">
+                              {item.url}
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      {/* Nút điều khiển (Lên, Xuống, Sửa, Xóa) */}
-                      {canEdit && (
+                        {/* Nút điều khiển (Lên, Xuống, Sửa, Xóa) */}
                         <div className="flex items-center gap-1 shrink-0">
                           <button
                             type="button"
@@ -670,12 +661,62 @@ export const LinksDirectoryModal: React.FC<LinksDirectoryModalProps> = ({
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
                         </div>
-                      )}
-                    </div>
-                  ))}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              <div className="py-14 px-4 flex flex-col items-center justify-center text-center space-y-4 max-w-md mx-auto">
+                <div className="w-16 h-16 rounded-3xl bg-amber-100 text-amber-700 flex items-center justify-center shadow-xs">
+                  <Lock className="w-8 h-8" />
+                </div>
+                <div className="space-y-1">
+                  <h4 className="font-extrabold text-slate-800 text-lg font-['Lexend']">
+                    Yêu Cầu Quyền Giáo Viên
+                  </h4>
+                  <p className="text-xs text-slate-500 leading-relaxed">
+                    Mục <strong>Quản Lý Liên Kết</strong> chỉ dành riêng cho Giáo viên / Quản trị viên để thêm, sửa và xóa các địa chỉ trang web.
+                  </p>
+                </div>
+
+                <div className="w-full space-y-2 pt-2">
+                  <input
+                    type="password"
+                    autoFocus
+                    value={managePinInput}
+                    onChange={(e) => {
+                      setManagePinInput(e.target.value);
+                      setManagePinError('');
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handleVerifyManagePin();
+                    }}
+                    placeholder="Nhập mã PIN Giáo viên (VD: 2024)"
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-sky-500 text-sm font-bold text-center tracking-widest bg-white"
+                  />
+                  {managePinError && (
+                    <p className="text-[11px] font-bold text-rose-600">⚠️ {managePinError}</p>
+                  )}
+                  <div className="flex gap-2 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setMode('view')}
+                      className="flex-1 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-600 font-bold text-xs cursor-pointer transition-colors"
+                    >
+                      Quay lại danh bạ
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleVerifyManagePin}
+                      className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-700 hover:to-indigo-700 text-white font-bold text-xs cursor-pointer shadow-md shadow-sky-600/30 transition-all active:scale-98"
+                    >
+                      Mở Quản Lý
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )
           )}
         </div>
 
@@ -787,6 +828,77 @@ export const LinksDirectoryModal: React.FC<LinksDirectoryModalProps> = ({
                   className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-700 hover:to-indigo-700 text-white font-bold text-xs cursor-pointer shadow-md shadow-sky-600/30 transition-all active:scale-98"
                 >
                   Xác nhận & Mở link
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* ================================================================= */}
+        {/* POPUP XÁC THỰC MÃ PIN ĐỂ VÀO MỤC QUẢN LÝ LIÊN KẾT */}
+        {/* ================================================================= */}
+        {showManageAuthModal && (
+          <div className="fixed inset-0 z-70 bg-slate-900/70 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in">
+            <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4 animate-in zoom-in-95">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 shadow-xs">
+                  <Lock className="w-6 h-6" />
+                </div>
+                <div>
+                  <h4 className="font-extrabold text-slate-900 text-base font-['Lexend']">
+                    Xác Thực Quyền Giáo Viên
+                  </h4>
+                  <p className="text-xs text-slate-500 font-medium">Bảo mật mục Quản Lý Liên Kết</p>
+                </div>
+              </div>
+
+              <div className="text-xs text-slate-600 leading-relaxed bg-amber-50/80 p-3.5 rounded-2xl border border-amber-200/80 space-y-1">
+                <div className="font-bold text-amber-900 flex items-center gap-1.5">
+                  <span>🔒 Quyền Quản Trị Hệ Thống:</span>
+                </div>
+                <p className="text-[11px] text-amber-800">
+                  Mục <strong>Quản Lý Liên Kết</strong> cho phép thêm mới, chỉnh sửa, đổi thứ tự hoặc xóa liên kết trên toàn trường. Chỉ dành riêng cho Giáo viên. Vui lòng nhập mã PIN:
+                </p>
+              </div>
+
+              <div className="space-y-1.5">
+                <input
+                  type="password"
+                  autoFocus
+                  value={managePinInput}
+                  onChange={(e) => {
+                    setManagePinInput(e.target.value);
+                    setManagePinError('');
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleVerifyManagePin();
+                  }}
+                  placeholder="Nhập mã PIN Giáo viên (VD: 2024)"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-sky-500 text-sm font-bold text-center tracking-widest bg-slate-50 focus:bg-white"
+                />
+                {managePinError && (
+                  <p className="text-[11px] font-bold text-rose-600 text-center">
+                    ⚠️ {managePinError}
+                  </p>
+                )}
+              </div>
+
+              <div className="flex gap-2.5 pt-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    sound.playClick();
+                    setShowManageAuthModal(false);
+                  }}
+                  className="flex-1 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-600 font-bold text-xs cursor-pointer transition-colors"
+                >
+                  Hủy bỏ
+                </button>
+                <button
+                  type="button"
+                  onClick={handleVerifyManagePin}
+                  className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-700 hover:to-indigo-700 text-white font-bold text-xs cursor-pointer shadow-md shadow-sky-600/30 transition-all active:scale-98"
+                >
+                  Vào Quản Lý
                 </button>
               </div>
             </div>
