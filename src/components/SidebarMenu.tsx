@@ -265,29 +265,6 @@ export const SidebarMenu: React.FC<SidebarMenuProps> = ({
               )}
             </button>
 
-            {/* Mục: AI BOOKS (Liên kết tới https://ai-books-thpt.leira.com.vn/) */}
-            <a
-              href="https://ai-books-thpt.leira.com.vn/"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => {
-                sound.playClick();
-                onCloseMobile();
-              }}
-              className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-2xl text-xs sm:text-sm font-bold text-blue-900 bg-blue-50/80 hover:bg-blue-100 border border-blue-200/80 transition-all group cursor-pointer"
-              title="Mở nền tảng AI BOOKS - Sách điện tử & Nền tảng học tập THPT trong tab mới"
-            >
-              <div className="flex items-center gap-3 min-w-0">
-                <Sparkles className="w-5 h-5 text-blue-600 shrink-0 group-hover:scale-110 transition-transform" />
-                {!isCollapsed && <span className="truncate">AI BOOKS</span>}
-              </div>
-              {!isCollapsed && (
-                <span className="px-1.5 py-0.5 rounded-md bg-blue-200 text-blue-800 text-[10px] font-mono font-black shrink-0">
-                  THPT ↗
-                </span>
-              )}
-            </a>
-
             {/* Mục: Danh Bạ Liên Kết */}
             {onOpenLinksDirectory && (
               <button
