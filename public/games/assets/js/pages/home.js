@@ -98,7 +98,7 @@
           <div class="grow">
             <span class="eyebrow">Tiện ích nhanh</span>
             <h2>🔗 Liên kết nhanh & Tài nguyên</h2>
-            <p>Truy cập tức thì Google Sheet gốc, Google Drive, phòng thi trực tuyến và các tiện ích học tập của Thầy Hùng TBS.</p>
+            <p>Truy cập nhanh phòng thi trực tuyến, bảng vàng vinh danh và các tiện ích học tập trực tuyến của Trường THCS Tân Bình.</p>
           </div>
           ${FB.isAdmin ? `
             <div class="row" style="gap:8px">

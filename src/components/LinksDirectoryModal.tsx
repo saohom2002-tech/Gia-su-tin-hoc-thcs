@@ -111,10 +111,16 @@ export const LinksDirectoryModal: React.FC<LinksDirectoryModalProps> = ({
     return Boolean(
       item.requiresAdmin ||
       item.id === 'link_sheet' ||
+      item.id === 'link_drive' ||
       item.url.includes('docs.google.com/spreadsheets') ||
+      item.url.includes('drive.google.com') ||
       item.url.includes('script.google.com') ||
       item.title.toLowerCase().includes('ngân hàng') ||
-      item.title.toLowerCase().includes('bảng điểm')
+      item.title.toLowerCase().includes('bảng điểm') ||
+      item.title.toLowerCase().includes('google sheet') ||
+      item.title.toLowerCase().includes('google drive') ||
+      item.title.toLowerCase().includes('đề gốc') ||
+      item.title.toLowerCase().includes('tài liệu tin học')
     );
   };
 
@@ -381,7 +387,9 @@ export const LinksDirectoryModal: React.FC<LinksDirectoryModalProps> = ({
           {/* --------------------------------------------------------------- */}
           {mode === 'view' && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
-              {links.map((item) => {
+              {links
+                .filter((item) => canEdit || !isLinkAdminOnly(item))
+                .map((item) => {
                 const adminOnly = isLinkAdminOnly(item);
                 const isLocked = adminOnly && !canEdit;
 

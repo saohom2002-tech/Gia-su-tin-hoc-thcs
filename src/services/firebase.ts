@@ -700,7 +700,8 @@ export const DEFAULT_DIRECTORY_LINKS: DirectoryLinkItem[] = [
     title: 'Google Drive Tài Liệu Tin Học',
     url: 'https://drive.google.com/drive/folders/1MnvzQAzv62Xiw9ziU2jH5T37ObFmADg4?lfhs=2',
     icon: 'drive',
-    desc: 'Kho lưu trữ tư liệu, sơ đồ và tệp hình ảnh môn Tin học',
+    desc: 'Kho lưu trữ tư liệu, sơ đồ và tệp hình ảnh môn Tin học (Bảo mật - Chỉ dành cho Giáo viên)',
+    requiresAdmin: true,
   },
   {
     id: 'link_sheet',
