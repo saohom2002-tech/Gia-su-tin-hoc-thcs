@@ -261,17 +261,20 @@
     function quizMode() {
       const set = S.meta.settings || {};
       shell(`<div class="pl-q"></div>`);
-      let curQi = -1, myRes = null, sentAt = 0;
+      let curQi = -1, curTurn = -1, myRes = null, sentAt = 0;
       S.offs.push(Room.watch(S.pin, "state", (s) => {
         if (!s) return;
         const body = $(".pl-q", view); if (!body) return;
-        if (s.phase === "question" && s.qi !== curQi) {
-          curQi = s.qi; myRes = null;
+        const turnId = (s.turn != null) ? s.turn : s.qi;
+        if (s.phase === "question" && (s.turn != null ? s.turn !== curTurn : s.qi !== curQi)) {
+          curTurn = (s.turn != null) ? s.turn : s.qi;
+          curQi = s.qi;
+          myRes = null;
           const it = S.qs[s.qi]; if (!it) return;
           const wait = Math.max(0, s.startAt - Room.now());
           body.innerHTML = `<div class="pl-wait">${s.roundName ? `<div class="pl-round">${esc(s.roundName)}</div>` : ""}<div class="pl-big bob">🤔</div><h2>Câu hỏi${s.value ? ` · ${s.value} điểm` : ""}</h2><p>Nhìn lên màn chiếu…</p></div>`;
           S.timers.after(wait, () => {
-            if (curQi !== s.qi) return;
+            if ((s.turn != null ? curTurn !== s.turn : curQi !== s.qi)) return;
             body.innerHTML = `<div class="pl-tbar"><i></i></div><div class="pl-qq"></div>`;
             const bar = $(".pl-tbar i", body); bar.style.transition = `width ${s.dur}s linear`; requestAnimationFrame(() => (bar.style.width = "0%"));
             S.ctrl && S.ctrl.destroy();
@@ -280,18 +283,18 @@
               const streak = res.ok ? (S.me.streak || 0) + 1 : 0;
               const pts = res.points > 0 ? Math.round(res.points * (500 + 500 * speed)) + (res.ok && streak >= 2 ? Math.min(250, (streak - 1) * 50) : 0) : 0;
               myRes = { ok: res.ok, pts, partial: res.points };
-              Room.answer(S.pin, s.qi, S.pid, { given: res.given == null ? "" : res.given, ok: res.ok, points: pts, ms });
+              Room.answer(S.pin, turnId, S.pid, { given: res.given == null ? "" : res.given, ok: res.ok, points: pts, ms });
               Room.updatePlayer(S.pin, S.pid, { score: (S.me.score || 0) + pts, correct: (S.me.correct || 0) + (res.ok ? 1 : 0), wrong: (S.me.wrong || 0) + (res.ok ? 0 : 1), streak });
               body.insertAdjacentHTML("beforeend", `<div class="pl-sent">✅ Đã khoá đáp án — chờ công bố…</div>`);
             } });
           });
-        } else if (s.phase === "reveal" && s.qi === curQi) {
+        } else if (s.phase === "reveal" && (s.turn != null ? s.turn === curTurn : s.qi === curQi)) {
           if (S.ctrl) try { S.ctrl.reveal(); } catch (e) { }
           const r = myRes;
           body.insertAdjacentHTML("afterbegin", `<div class="pl-verdict ${r ? (r.ok ? "ok" : r.pts ? "part" : "bad") : "none"}">${r ? (r.ok ? `🎉 Chính xác! <b>+${r.pts}</b>` : r.pts ? `👍 Đúng một phần <b>+${r.pts}</b>` : "😢 Chưa đúng") : "⏰ Hết giờ — bạn chưa trả lời"}</div>`);
           const sent = $(".pl-sent", body); if (sent) sent.remove();
           r && r.ok ? U.Sound.correct() : U.Sound.wrong();
-          if (set.explain && S.qs[s.qi].explain) { body.insertAdjacentHTML("beforeend", `<details class="fb-ex" open><summary>💡 Lời giải</summary><div>${Quiz.rich(S.qs[s.qi].explain)}</div></details>`); Quiz.typeset(body); }
+          if (set.explain && S.qs[s.qi] && S.qs[s.qi].explain) { body.insertAdjacentHTML("beforeend", `<details class="fb-ex" open><summary>💡 Lời giải</summary><div>${Quiz.rich(S.qs[s.qi].explain)}</div></details>`); Quiz.typeset(body); }
         } else if (s.phase === "board") {
           FB.rtdb.ref(`rooms/${S.pin}/players`).get().then((snap) => {
             const ps = Object.entries(snap.val() || {}).sort((a, b) => (b[1].score || 0) - (a[1].score || 0));

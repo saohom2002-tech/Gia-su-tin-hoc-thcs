@@ -318,7 +318,9 @@
       }
       function showQuestion(seg, idx, value) {
         gi++; answers = {}; const it = Q[idx], dur = cfg.qtime, startAt = Room.now() + 2200;
-        Room.setState(pin, { phase: "question", qi: idx, startAt, dur, roundName: seg.r.name, value });
+        const turn = gi;
+        try { if (FB.rtdb) FB.rtdb.ref(`rooms/${pin}/answers/${turn}`).remove(); } catch (e) { }
+        Room.setState(pin, { phase: "question", qi: idx, turn, startAt, dur, roundName: seg.r.name, value });
         main.innerHTML = `<div class="lq-intro"><span class="lq-n">${seg.r.icon} ${esc(seg.r.name)}</span><div class="lq-type">${Quiz.TYPES[it.type]} · ${value} điểm</div><div class="lq-bar"><i></i></div></div>`;
         ctx.timers.after(2200, () => {
           if (over) return;
@@ -332,16 +334,16 @@
             <div class="lq-act"><button class="btn btn-lg btn-white" data-a="skip">⏭ Xem đáp án</button></div></div>`;
           Quiz.typeset(main);
           const tr = $(".tr", main), tb = $(".lq-timer b", main);
-          $("[data-a=skip]", main).onclick = () => reveal(it, idx);
-          tick = ctx.timers.every(200, () => { const left = Math.max(0, dur - (Room.now() - startAt) / 1000); tb.textContent = Math.ceil(left); tr.style.strokeDashoffset = (1 - left / dur) * 119.4; if (left <= 0) reveal(it, idx); });
-          offAns && offAns(); offAns = Room.watchAnswers(pin, idx, (a) => { answers = a || {}; const e = $(".lq-ans b", main); if (e) e.textContent = Object.keys(answers).length + "/" + online(); if (Object.keys(answers).length >= online() && online() > 0) ctx.timers.after(500, () => reveal(it, idx)); });
+          $("[data-a=skip]", main).onclick = () => reveal(it, idx, turn);
+          tick = ctx.timers.every(200, () => { const left = Math.max(0, dur - (Room.now() - startAt) / 1000); tb.textContent = Math.ceil(left); tr.style.strokeDashoffset = (1 - left / dur) * 119.4; if (left <= 0) reveal(it, idx, turn); });
+          offAns && offAns(); offAns = Room.watchAnswers(pin, turn, (a) => { answers = a || {}; const e = $(".lq-ans b", main); if (e) e.textContent = Object.keys(answers).length + "/" + online(); if (Object.keys(answers).length >= online() && online() > 0) ctx.timers.after(500, () => reveal(it, idx, turn)); });
           U.Sound.go();
         });
       }
-      let revealedIdx = -1;
-      function reveal(it, idx) {
-        if (revealedIdx === idx || over) return; revealedIdx = idx; tick && ctx.timers.stop(tick); offAns && offAns(); offAns = null;
-        Room.setState(pin, { phase: "reveal", qi: idx }); U.Sound.coin();
+      let revealedTurn = -1;
+      function reveal(it, idx, turn) {
+        if (revealedTurn === turn || over) return; revealedTurn = turn; tick && ctx.timers.stop(tick); offAns && offAns(); offAns = null;
+        Room.setState(pin, { phase: "reveal", qi: idx, turn }); U.Sound.coin();
         const lq = $(".lq-q", main), A = Object.values(answers); if (!lq) return; lq.classList.add("revealed");
         if (it.type === "MC") $$(".lq-opt", main).forEach((el) => { const n = A.filter((a) => a.given === el.dataset.k).length; el.classList.add(el.dataset.k === it.answer ? "right" : "wrong"); $(".lq-cnt", el).innerHTML = `${n}`; });
         else if (it.type === "TF") $$(".lq-tfr", main).forEach((el) => { const i = +el.dataset.i; el.classList.add("show"); $(".lq-tfa", el).innerHTML = `<span class="${it.answer[i] ? "t" : "f"}">${it.answer[i] ? "ĐÚNG" : "SAI"}</span>`; });
@@ -350,7 +352,7 @@
         $("[data-a=board]", main).onclick = board;
       }
       function board() {
-        Room.setState(pin, { phase: "board", qi: gi });
+        Room.setState(pin, { phase: "board", qi: gi, turn: gi });
         const R = ranked(), top = R.slice(0, 8);
         main.innerHTML = `<div class="lq-board"><h2>🏆 Bảng xếp hạng</h2><div class="lq-list">${top.map((p, i) => { const was = prevRank[p.pid], up = was != null && was > i; return `<div class="lq-row ${i < 3 ? "top" + (i + 1) : ""}" style="--i:${i}"><span class="lq-rk">${i + 1}</span><span class="lq-av">${p.avatar || "🙂"}</span><b>${esc(p.name)}</b>${(p.streak || 0) >= 2 ? `<span class="lq-streak">🔥${p.streak}</span>` : ""}${up ? `<span class="lq-up">▲</span>` : ""}<span class="lq-sc">${U.fmtNum(p.score || 0)}</span></div>`; }).join("")}</div>
           <div class="lq-act"><button class="btn btn-xl btn-fun btn-3d" data-a="next">Tiếp theo ▸</button></div></div>`;

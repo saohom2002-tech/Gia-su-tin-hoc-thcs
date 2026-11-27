@@ -37,10 +37,11 @@
         qi++; if (qi >= N) return podium();
         answers = {};
         const it = Q[qi], dur = cfg.qtime, startAt = Room.now() + 2500;
+        try { if (FB.rtdb) FB.rtdb.ref(`rooms/${pin}/answers/${qi}`).remove(); } catch (e) { }
         $(".lq-prog", hud).innerHTML = `Câu <b>${qi + 1}</b>/${N}`;
         // màn giới thiệu câu
         main.innerHTML = `<div class="lq-intro"><span class="lq-n">Câu ${qi + 1}</span><div class="lq-type">${Quiz.TYPES[it.type]}</div><div class="lq-bar"><i></i></div></div>`;
-        Room.setState(pin, { phase: "question", qi, startAt, dur });
+        Room.setState(pin, { phase: "question", qi, turn: qi, startAt, dur });
         ctx.timers.after(2500, () => {
           if (over) return;
           let body = "";
@@ -71,7 +72,7 @@
         if (revealed === qi || over) return; revealed = qi;
         tick && ctx.timers.stop(tick); offAns && offAns(); offAns = null;
         const it = Q[qi], A = Object.values(answers);
-        Room.setState(pin, { phase: "reveal", qi });
+        Room.setState(pin, { phase: "reveal", qi, turn: qi });
         U.Sound.coin();
         const lq = $(".lq-q", main); if (!lq) return;
         lq.classList.add("revealed");
