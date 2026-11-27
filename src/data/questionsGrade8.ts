@@ -197,6 +197,66 @@ export const QUESTIONS_GRADE_8: Record<string, Question[]> = {
       "difficulty": "kho",
       "explanation": "SGK Tin học 8 KNTT (Trang 8-9): Từ máy tính khổng lồ chiếm trọn căn phòng (ENIAC), máy tính đã thu nhỏ thành laptop, điện thoại thông minh, tốc độ tính toán gấp hàng triệu lần.",
       "hint": "Nhỏ hơn, nhanh hơn, rẻ hơn, thông minh hơn."
+    },
+    {
+      "id": "g8-b1-mcq-15",
+      "type": "multiple_choice",
+      "question": "Máy tính điện tử thế hệ thứ năm (từ thập niên 1990 đến nay) gắn liền với bước đột phá công nghệ nào?",
+      "options": [
+        "Mạng toàn cầu Internet, điện toán đám mây và Trí tuệ nhân tạo (AI)",
+        "Đèn điện tử chân không",
+        "Bóng bán dẫn rời rạc",
+        "Chỉ dùng thẻ đục lỗ bằng bìa cứng"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 8 KNTT (Trang 8): Thế hệ thứ 5 phát triển vượt bậc với Internet, AI, siêu máy tính và thiết bị di động.",
+      "hint": "Trí tuệ nhân tạo và mạng Internet toàn cầu."
+    },
+    {
+      "id": "g8-b1-mcq-16",
+      "type": "multiple_choice",
+      "question": "Nhà bác học Blaise Pascal đã sáng chế ra chiếc máy tính cơ học Pascaline vào thế kỉ XVII nhằm mục đích ban đầu là gì?",
+      "options": [
+        "Giúp cha mình thực hiện các phép tính cộng, trừ thuế má một cách nhanh chóng và chính xác",
+        "Để dự báo thời tiết trên toàn cầu",
+        "Để chơi cờ vua tự động",
+        "Để soạn thảo các bức thư văn bản"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Pascaline là cỗ máy tính cơ học dùng bánh răng kim loại hỗ trợ công việc tính thuế của người cha.",
+      "hint": "Hỗ trợ tính toán cộng trừ thu thuế."
+    },
+    {
+      "id": "g8-b1-mcq-17",
+      "type": "multiple_choice",
+      "question": "Đặc trưng công nghệ nổi bật phân biệt thế hệ máy tính thứ nhất (dùng đèn điện tử chân không) và thế hệ thứ hai là gì?",
+      "options": [
+        "Thế hệ thứ hai sử dụng bóng bán dẫn (transistor), giúp máy tính nhỏ gọn hơn, chạy nhanh hơn và ít tỏa nhiệt hơn",
+        "Thế hệ thứ hai dùng động cơ hơi nước",
+        "Thế hệ thứ hai chỉ chạy bằng pin con thỏ",
+        "Không có điểm nào khác biệt"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Sự xuất hiện của Transistor (bóng bán dẫn) đã thu nhỏ kích thước máy tính hàng trăm lần so với đèn chân không.",
+      "hint": "Sử dụng bóng bán dẫn (transistor)."
+    },
+    {
+      "id": "g8-b1-mcq-18",
+      "type": "multiple_choice",
+      "question": "Cụm từ 'Mạch tích hợp cỡ rất lớn' (VLSI - Very Large Scale Integration) là thành phần cấu tạo chính của thế hệ máy tính thứ mấy?",
+      "options": [
+        "Thế hệ thứ tư (từ những năm 1970 với bộ vi xử lí Microprocessor)",
+        "Thế hệ thứ nhất",
+        "Thế hệ thứ hai",
+        "Thế hệ trước công nguyên"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Vi mạch VLSI chứa hàng triệu bóng bán dẫn trên một chip nhỏ, mở đầu cho kỷ nguyên máy tính cá nhân (PC).",
+      "hint": "Thế hệ thứ tư với bộ vi xử lí CPU."
     }
   ],
   "tin8-bai-2": [
@@ -449,6 +509,96 @@ export const QUESTIONS_GRADE_8: Record<string, Question[]> = {
       "difficulty": "trung_binh",
       "explanation": "SGK Tin học 8 KNTT (Trang 12): Tên miền sai lệch kí tự, thiếu giao thức HTTPS an toàn là dấu hiệu cảnh báo trang web lừa đảo.",
       "hint": "Tên miền sai chính tả và thiếu biểu tượng ổ khóa HTTPS."
+    },
+    {
+      "id": "g8-b2-mcq-12",
+      "type": "multiple_choice",
+      "question": "Thông tin số (Digital Information) có đặc điểm nổi bật nào sau đây?",
+      "options": [
+        "Dễ dàng sao chép, lan truyền nhanh chóng trên không gian mạng và khó bị hao mòn theo thời gian",
+        "Chỉ tồn tại duy nhất trên giấy in",
+        "Không thể chuyển đổi sang các dạng khác",
+        "Sẽ tự động biến mất sau 1 tuần"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 8 KNTT (Trang 12): Thông tin số dễ nhân bản, truyền đi với tốc độ ánh sáng và được bảo toàn qua các thế hệ thiết bị số.",
+      "hint": "Dễ nhân bản và lan truyền tức thì."
+    },
+    {
+      "id": "g8-b2-mcq-13",
+      "type": "multiple_choice",
+      "question": "Tính chất 'Khó bị xóa bỏ hoàn toàn' của thông tin trên mạng Internet nhắc nhở người dùng điều gì?",
+      "options": [
+        "Cần thận trọng và cân nhắc kĩ lưỡng trước khi đăng tải bất kì thông tin cá nhân, hình ảnh hoặc phát ngôn nào lên mạng",
+        "Cần mua thêm ổ cứng dung lượng lớn",
+        "Không nên dùng mạng Internet nữa",
+        "Nên xóa toàn bộ ảnh trong máy tính"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Một khi đã đưa lên mạng, thông tin có thể bị tải về, chụp màn hình hoặc lưu trên các máy chủ lưu trữ vĩnh viễn.",
+      "hint": "Cân nhắc thận trọng trước khi chia sẻ lên mạng."
+    },
+    {
+      "id": "g8-b2-mcq-14",
+      "type": "multiple_choice",
+      "question": "Dấu chân kỹ thuật số (Digital Footprint) của một người trên Internet là gì?",
+      "options": [
+        "Toàn bộ dấu vết dữ liệu, lịch sử truy cập, bài đăng, bình luận mà người đó để lại khi tham gia các hoạt động trực tuyến",
+        "Kích thước bàn chân đo bằng thước điện tử",
+        "Dấu vân tay để mở khóa màn hình",
+        "Tốc độ gõ phím của người đó"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Digital Footprint là vết tích số tồn tại trên không gian mạng đại diện cho danh tính số của mỗi cá nhân.",
+      "hint": "Dấu vết lịch sử hoạt động trên mạng."
+    },
+    {
+      "id": "g8-b2-mcq-15",
+      "type": "multiple_choice",
+      "question": "Để bảo vệ thông tin số cá nhân không bị kẻ xấu lợi dụng trên mạng, em nên làm gì?",
+      "options": [
+        "Kích hoạt xác thực 2 bước (2FA), đặt mật khẩu mạnh và không chia sẻ mã OTP cho bất kì ai",
+        "Đặt mật khẩu là số điện thoại hoặc ngày sinh nhật để dễ nhớ",
+        "Dùng chung một mật khẩu đơn giản cho tất cả các tài khoản",
+        "Gửi mật khẩu qua tin nhắn cho bạn bè giữ hộ"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Bảo mật hai lớp và giữ kín OTP là nguyên tắc vàng bảo vệ tài khoản số.",
+      "hint": "Xác thực 2 lớp (2FA) và bảo mật mã OTP."
+    },
+    {
+      "id": "g8-b2-mcq-16",
+      "type": "multiple_choice",
+      "question": "Trong môi trường số, thông tin sai lệch hoặc tin giả có thể gây ra những hậu quả nghiêm trọng nào?",
+      "options": [
+        "Làm hoang mang dư luận xã hội, tổn hại uy tín cá nhân, gây thiệt hại kinh tế và mất trật tự an ninh",
+        "Làm tăng tốc độ đường truyền cáp quang",
+        "Giúp người dùng máy tính thư giãn",
+        "Không gây ra hậu quả nào"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Tin giả lan truyền theo cấp số nhân trong môi trường số và gây tổn thương sâu sắc cho xã hội.",
+      "hint": "Gây hoang mang xã hội và thiệt hại uy tín cá nhân."
+    },
+    {
+      "id": "g8-b2-mcq-17",
+      "type": "multiple_choice",
+      "question": "Hành vi tải một video hoặc bức ảnh nhạy cảm của người khác về máy rồi tiếp tục phát tán lên mạng xã hội là hành vi gì?",
+      "options": [
+        "Hành vi vi phạm pháp luật nghiêm trọng về quyền bảo vệ đời tư cá nhân và danh dự nhân phẩm",
+        "Hành động chia sẻ thông tin hữu ích",
+        "Hành vi giúp bạn bè trở nên nổi tiếng",
+        "Chỉ là trò đùa vô hại"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Phát tán hình ảnh đời tư xúc phạm nhân phẩm người khác là hành vi bị xử phạt nặng theo Luật An ninh mạng.",
+      "hint": "Vi phạm pháp luật về quyền riêng tư và danh dự."
     }
   ],
   "tin8-bai-3": [
@@ -690,6 +840,111 @@ export const QUESTIONS_GRADE_8: Record<string, Question[]> = {
       "difficulty": "de",
       "explanation": "SGK Tin học 8 KNTT (Trang 16): Cơ quan y tế chính thống của chính phủ và các tổ chức quốc tế là nguồn tin chuẩn xác nhất.",
       "hint": "Nguồn tin từ cổng thông tin Bộ Y tế hoặc WHO."
+    },
+    {
+      "id": "g8-b3-mcq-11",
+      "type": "multiple_choice",
+      "question": "Khi tìm kiếm thông tin số phục vụ bài thuyết trình, tiêu chí quan trọng hàng đầu để đánh giá độ tin cậy của nguồn tin là gì?",
+      "options": [
+        "Tác giả là chuyên gia có uy tín, cơ quan xuất bản chính thống và thời gian cập nhật thông tin gần nhất",
+        "Trang web có nhiều hình ảnh hoạt hình bắt mắt",
+        "Bài viết nhận được nhiều lượt thả tim trên mạng xã hội",
+        "Độ dài của bài viết càng dài càng tốt"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "SGK Tin học 8 KNTT (Trang 16): Nguồn gốc tác giả, tổ chức phát hành và tính cập nhật là tiêu chuẩn vàng đánh giá thông tin số.",
+      "hint": "Tác giả uy tín, cơ quan chính thống và thời gian cập nhật."
+    },
+    {
+      "id": "g8-b3-mcq-12",
+      "type": "multiple_choice",
+      "question": "Để tìm kiếm các tài liệu học tập ở định dạng tệp PDF trên Google, em nên dùng cú pháp nâng cao nào?",
+      "options": [
+        "từ khóa filetype:pdf",
+        "từ khóa format:word",
+        "từ khóa save:pdf",
+        "từ khóa download:all"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Toán tử 'filetype:pdf' lọc chính xác các tệp tài liệu đuôi PDF từ Google.",
+      "hint": "Toán tử filetype:pdf."
+    },
+    {
+      "id": "g8-b3-mcq-13",
+      "type": "multiple_choice",
+      "question": "Khi muốn tìm kiếm thông tin chỉ xuất hiện trên một trang web cụ thể (ví dụ trang web của Bộ Giáo dục và Đào tạo moe.gov.vn), em dùng cú pháp nào?",
+      "options": [
+        "từ khóa site:moe.gov.vn",
+        "từ khóa in:moe.gov.vn",
+        "từ khóa at:moe.gov.vn",
+        "từ khóa link:moe.gov.vn"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Toán tử 'site:<tên miền>' giới hạn phạm vi tìm kiếm trong tên miền đó.",
+      "hint": "Toán tử site:domain."
+    },
+    {
+      "id": "g8-b3-mcq-14",
+      "type": "multiple_choice",
+      "question": "Thao tác trích dẫn nguồn tài liệu chuẩn mực khi sử dụng bài viết từ Internet vào bài báo cáo khoa học gồm những mục nào?",
+      "options": [
+        "Tên tác giả, Tiêu đề bài viết, Tên website, Đường link URL truy cập và Ngày truy cập",
+        "Chỉ ghi chữ 'Nguồn: Internet'",
+        "Chỉ ghi tên Google",
+        "Không cần ghi gì cả"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Trích dẫn đầy đủ giúp người đọc kiểm chứng tính xác thực và thể hiện sự tôn trọng bản quyền.",
+      "hint": "Tác giả, tiêu đề, link URL và ngày truy cập."
+    },
+    {
+      "id": "g8-b3-mcq-15",
+      "type": "multiple_choice",
+      "question": "Bách khoa toàn thư mở Wikipedia có đặc điểm gì mà người khai thác thông tin cần lưu ý?",
+      "options": [
+        "Mọi người đều có thể chỉnh sửa nội dung, do đó cần đối chiếu kiểm tra lại các tài liệu tham khảo gốc được chú thích cuối bài",
+        "Mọi thông tin trên đó đều được chứng nhận bởi Liên Hợp Quốc là tuyệt đối đúng 100%",
+        "Chỉ có học sinh cấp 2 mới được đọc",
+        "Không bao giờ có thông tin bằng tiếng Việt"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Wikipedia là nguồn tham khảo mở hữu ích nhưng cần kiểm chứng qua các nguồn trích dẫn gốc.",
+      "hint": "Cần kiểm chứng đối chiếu với nguồn gốc tham khảo."
+    },
+    {
+      "id": "g8-b3-mcq-16",
+      "type": "multiple_choice",
+      "question": "Phương pháp 'Đối chiếu chéo thông tin' (Cross-checking) có nghĩa là gì?",
+      "options": [
+        "So sánh cùng một mẩu tin trên nhiều nguồn báo chí và trang tin tức uy tín khác nhau để xác minh tính chính xác",
+        "Đọc đi đọc lại một bài viết 10 lần",
+        "Vẽ hai đường chéo lên màn hình",
+        "Nhờ bạn cùng bàn đọc hộ"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Kiểm tra chéo giữa nhiều nguồn độc lập giúp nhận diện sự thật khách quan.",
+      "hint": "So sánh thông tin trên nhiều nguồn độc lập khác nhau."
+    },
+    {
+      "id": "g8-b3-mcq-17",
+      "type": "multiple_choice",
+      "question": "Khai thác thông tin số có trách nhiệm bao gồm hành động nào sau đây?",
+      "options": [
+        "Sử dụng thông tin đúng mục đích học tập, không vi phạm bản quyền và chia sẻ kiến thức tích cực cho cộng đồng",
+        "Tải phim lậu về bán lấy tiền",
+        "Sao chép bài luận của người khác nhận là của mình",
+        "Hack mật khẩu máy tính bạn bè để lấy tài liệu"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Khai thác có trách nhiệm là tuân thủ chuẩn mực đạo đức, pháp luật và phục vụ mục tiêu tiến bộ.",
+      "hint": "Đúng mục đích, tôn trọng bản quyền và lan tỏa điều tích cực."
     }
   ],
   "tin8-bai-4": [
@@ -901,6 +1156,141 @@ export const QUESTIONS_GRADE_8: Record<string, Question[]> = {
       "difficulty": "de",
       "explanation": "SGK Tin học 8 KNTT (Trang 21): Giúp đỡ nạn nhân, lưu bằng chứng và báo cho người lớn (thầy cô, phụ huynh) là trách nhiệm đạo đức.",
       "hint": "Lưu bằng chứng và báo ngay cho thầy cô, phụ huynh."
+    },
+    {
+      "id": "g8-b4-mcq-9",
+      "type": "multiple_choice",
+      "question": "Quyền tác giả (Copyright) đối với một phần mềm hoặc tài liệu số phát sinh từ thời điểm nào?",
+      "options": [
+        "Từ thời điểm tác phẩm được sáng tạo và thể hiện dưới một hình thức vật chất nhất định, không bắt buộc phải đăng kí",
+        "Chỉ khi tác giả nộp 1 tỷ đồng tiền lệ phí",
+        "Chỉ khi phần mềm đã bán được 1 triệu bản",
+        "Khi tác phẩm đã được dịch ra 10 thứ tiếng"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "SGK Tin học 8 KNTT (Trang 20): Luật Sở hữu trí tuệ quy định quyền tác giả tự động phát sinh khi tác phẩm được định hình.",
+      "hint": "Tự động phát sinh khi tác phẩm được sáng tạo và định hình."
+    },
+    {
+      "id": "g8-b4-mcq-10",
+      "type": "multiple_choice",
+      "question": "Hành vi ĐẠO VĂN (Plagiarism) trong môi trường số là hành vi nào?",
+      "options": [
+        "Sao chép ý tưởng, câu chữ hoặc đoạn mã nguồn của người khác và biến nó thành tác phẩm của mình mà không trích dẫn tác giả gốc",
+        "Gõ văn bản với tốc độ cao",
+        "Đọc truyện tranh trực tuyến",
+        "In văn bản ra máy in laser"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Đạo văn là hành vi gian lận học thuật và vi phạm đạo đức nghiêm trọng.",
+      "hint": "Chiếm đoạt câu chữ, ý tưởng của người khác không trích dẫn."
+    },
+    {
+      "id": "g8-b4-mcq-11",
+      "type": "multiple_choice",
+      "question": "Giấy phép bản quyền Creative Commons (kí hiệu CC) thường cho phép điều gì?",
+      "options": [
+        "Cho phép công chúng tái sử dụng và chia sẻ tác phẩm theo các điều kiện cụ thể (như ghi công tác giả, phi thương mại)",
+        "Cấm tuyệt đối không ai được xem tác phẩm",
+        "Bắt buộc người xem phải trả tiền mặt",
+        "Tác phẩm thuộc sở hữu bí mật của quân đội"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Creative Commons cung cấp các giấy phép linh hoạt giúp tác giả chia sẻ tác phẩm miễn phí hợp pháp.",
+      "hint": "Cho phép chia sẻ và sử dụng với điều kiện ghi nhận tác giả."
+    },
+    {
+      "id": "g8-b4-mcq-12",
+      "type": "multiple_choice",
+      "question": "Văn hóa ứng xử khi giao tiếp qua email hoặc tin nhắn công việc đòi hỏi điều gì?",
+      "options": [
+        "Có lời chào hỏi lễ phép, trình bày nội dung gãy gọn, ngữ pháp chuẩn mực và có lời cảm ơn/chữ kí cuối thư",
+        "Viết hoa toàn bộ các chữ cái trong bài (VIẾT NHƯ THẾ NÀY)",
+        "Dùng từ ngữ thô tục chửi thề",
+        "Không ghi tiêu đề thư và gửi thư lúc 2 giờ sáng giục trả lời ngay"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Viết toàn chữ hoa trên mạng được coi là hành vi 'hét vào mặt người khác', cần tránh.",
+      "hint": "Chào hỏi lịch sự, câu từ chuẩn mực và có chữ ký cuối thư."
+    },
+    {
+      "id": "g8-b4-mcq-13",
+      "type": "multiple_choice",
+      "question": "Phần mềm độc hại (Malware) bao gồm những loại nào sau đây?",
+      "options": [
+        "Virus, Worm (sâu máy tính), Trojan Horse (ngựa thành Troy) và Spyware (phần mềm gián điệp)",
+        "Phần mềm Microsoft Word và Excel",
+        "Trình duyệt Google Chrome",
+        "Phần mềm nghe nhạc Spotify"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin 8 KNTT: Malware là các chương trình nguy hại xâm nhập phá hoại hoặc đánh cắp dữ liệu máy tính.",
+      "hint": "Virus, sâu máy tính, trojan và gián điệp mạng."
+    },
+    {
+      "id": "g8-b4-mcq-14",
+      "type": "multiple_choice",
+      "question": "Mục đích nguy hiểm của hình thức tấn công lừa đảo 'Phishing' trên mạng là gì?",
+      "options": [
+        "Giả mạo các website ngân hàng, mạng xã hội để lừa nạn nhân tự nhập mật khẩu và thông tin tài chính cá nhân",
+        "Tặng tiền miễn phí cho người dùng",
+        "Dọn dẹp rác trên ổ cứng",
+        "Tăng dung lượng pin điện thoại"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Phishing giăng bẫy website giả mạo đánh lừa lòng tin để lấy trộm tài khoản.",
+      "hint": "Giả mạo website uy tín để lừa mật khẩu người dùng."
+    },
+    {
+      "id": "g8-b4-mcq-15",
+      "type": "multiple_choice",
+      "question": "Tại sao việc dùng phần mềm bẻ khóa (Crack) lại tiếp tay cho tội phạm mạng?",
+      "options": [
+        "Vì các tệp crack thường được hacker chèn sẵn mã độc backdoor để chiếm quyền kiểm soát máy tính của người dùng",
+        "Vì phần mềm crack luôn làm màn hình sáng hơn",
+        "Vì máy tính sẽ không thể kết nối tai nghe",
+        "Không có mối liên hệ nào"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Không ai cung cấp công cụ crack miễn phí vô tư; hacker dùng chúng làm cổng hậu cấy virus tống tiền.",
+      "hint": "Hacker cài sẵn mã độc và backdoor trong các tệp crack."
+    },
+    {
+      "id": "g8-b4-mcq-16",
+      "type": "multiple_choice",
+      "question": "Hành động nào sau đây thể hiện văn hóa số văn minh khi nhận xét về bài thuyết trình của bạn cùng lớp?",
+      "options": [
+        "Nhận xét chân thành, chỉ ra điểm mạnh để khen ngợi và góp ý điểm cần khắc phục bằng lời lẽ lịch sự, mang tính xây dựng",
+        "Chế giễu ngoại hình và giọng nói của bạn",
+        "Cắt ghép ảnh bạn đang nói thành ảnh chế meme bôi bác",
+        "Bỏ về giữa buổi thuyết trình"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Văn hóa phản hồi tích cực xây dựng tình bạn và cùng nhau tiến bộ trong học tập.",
+      "hint": "Góp ý chân thành, lịch sự và mang tính xây dựng."
+    },
+    {
+      "id": "g8-b4-mcq-17",
+      "type": "multiple_choice",
+      "question": "Quy định của pháp luật về việc chia sẻ thông tin đời tư cá nhân của người khác mà không có sự đồng ý nhằm bảo vệ quyền gì?",
+      "options": [
+        "Bảo vệ quyền bí mật đời tư cá nhân, danh dự và nhân phẩm của công dân được Hiến pháp quy định",
+        "Bảo vệ doanh số bán hàng của các công ty công nghệ",
+        "Bảo vệ các nhà mạng viễn thông",
+        "Bảo vệ người xem video"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Quyền bất khả xâm phạm về đời sống riêng tư là quyền cơ bản của con người.",
+      "hint": "Bảo vệ bí mật đời tư và nhân phẩm công dân."
     }
   ],
   "tin8-bai-5": [
@@ -1376,6 +1766,126 @@ export const QUESTIONS_GRADE_8: Record<string, Question[]> = {
       "difficulty": "de",
       "explanation": "SGK Tin học 8 KNTT (Trang 26, 28): A-Z: tăng dần; Z-A: giảm dần; Filter: lọc; Clear: hiển thị lại tất cả.",
       "hint": "A to Z là tăng dần từ nhỏ đến lớn."
+    },
+    {
+      "id": "g8-b6-mcq-10",
+      "type": "multiple_choice",
+      "question": "Tính năng SẮP XẾP DỮ LIỆU (Sort) trong phần mềm bảng tính có tác dụng gì?",
+      "options": [
+        "Hoán đổi vị trí các hàng để giá trị trong cột được sắp xếp theo thứ tự tăng dần (A-Z, nhỏ đến lớn) hoặc giảm dần (Z-A, lớn đến nhỏ)",
+        "Xóa các hàng có điểm thấp",
+        "Đổi màu các ô tính",
+        "Nhân đôi số lượng bảng tính"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 8 KNTT (Trang 28): Sắp xếp dữ liệu giúp bố trí dữ liệu theo thứ tự ưu tiên quan sát.",
+      "hint": "Thay đổi vị trí các hàng theo thứ tự tăng dần hoặc giảm dần."
+    },
+    {
+      "id": "g8-b6-mcq-11",
+      "type": "multiple_choice",
+      "question": "Biểu tượng chiếc Phễu (Filter) trong nhóm lệnh Sort & Filter (thẻ Data hoặc Home) dùng để làm gì?",
+      "options": [
+        "Bật chế độ LỌC DỮ LIỆU, chỉ hiển thị các hàng thỏa mãn tiêu chuẩn được chọn và ẩn đi các hàng còn lại",
+        "Lọc sạch virus trong máy tính",
+        "Rót nước vào thùng máy",
+        "Tính tổng điểm học sinh"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Lọc dữ liệu giúp người dùng trích xuất nhanh các thông tin cần thiết từ bảng dữ liệu lớn.",
+      "hint": "Lọc các hàng thỏa mãn điều kiện nhất định."
+    },
+    {
+      "id": "g8-b6-mcq-12",
+      "type": "multiple_choice",
+      "question": "Sau khi lọc dữ liệu trong bảng tính, các hàng không thỏa mãn điều kiện lọc sẽ ra sao?",
+      "options": [
+        "Chỉ tạm thời bị ẨN ĐI chứ KHÔNG HỀ BỊ XÓA khỏi bảng tính",
+        "Bị xóa vĩnh viễn khỏi tệp",
+        "Chuyển sang một sheet mới",
+        "Biến thành số 0"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Lọc dữ liệu chỉ ẩn hàng hiển thị, khi hủy bỏ lọc (Clear Filter) toàn bộ dữ liệu sẽ hiện lại đầy đủ.",
+      "hint": "Tạm thời bị ẩn đi, không bị xóa."
+    },
+    {
+      "id": "g8-b6-mcq-13",
+      "type": "multiple_choice",
+      "question": "Khi muốn sắp xếp bảng điểm học sinh theo nhiều tiêu chí (Ví dụ: ưu tiên Điểm trung bình giảm dần, nếu trùng điểm thì xếp theo Họ tên A-Z), em dùng công cụ nào?",
+      "options": [
+        "Mở hộp thoại Custom Sort và sử dụng nút 'Add Level' để thêm tiêu chuẩn sắp xếp thứ hai",
+        "Chỉ có thể xếp theo một cột duy nhất",
+        "Xếp thủ công bằng tay",
+        "Dùng hàm SUM"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Custom Sort cho phép thêm nhiều tầng điều kiện (Add Level) phân cấp sắp xếp.",
+      "hint": "Custom Sort -> Add Level."
+    },
+    {
+      "id": "g8-b6-mcq-14",
+      "type": "multiple_choice",
+      "question": "Để hiển thị lại TOÀN BỘ dữ liệu ban đầu sau khi lọc, em bấm vào nút lệnh nào?",
+      "options": [
+        "Nút Clear (trong nhóm Sort & Filter của thẻ Data)",
+        "Nút Delete",
+        "Nút Cut",
+        "Nút New Slide"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Clear Filter xóa bỏ các bộ lọc đang áp dụng và khôi phục hiển thị đầy đủ.",
+      "hint": "Nút Clear trong thẻ Data."
+    },
+    {
+      "id": "g8-b6-mcq-15",
+      "type": "multiple_choice",
+      "question": "Để lọc ra top 5 học sinh có điểm thi cao nhất trong lớp từ cột Điểm thi, em dùng tính năng lọc nào của cột số?",
+      "options": [
+        "Number Filters -> Top 10... (rồi chỉnh số lượng thành 5)",
+        "Text Filters -> Contains",
+        "Sort A to Z",
+        "Find and Replace"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Tính năng Top 10 trong Number Filters cho phép lọc linh hoạt top n phần tử cao nhất hoặc thấp nhất.",
+      "hint": "Number Filters -> Top 10."
+    },
+    {
+      "id": "g8-b6-mcq-16",
+      "type": "multiple_choice",
+      "question": "Nếu trong cột chứa cả số và chữ, khi sắp xếp tăng dần theo chuẩn của Excel, thứ tự ưu tiên mặc định sẽ là gì?",
+      "options": [
+        "Các giá trị Số được xếp trước, sau đó mới đến các chuỗi Kí tự (chữ cái)",
+        "Chuỗi chữ cái xếp trước, số xếp sau",
+        "Ngẫu nhiên không theo quy tắc",
+        "Máy tính sẽ báo lỗi ngay"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Thứ tự sắp xếp tăng dần mặc định: Số -> Văn bản (A-Z) -> Giá trị logic -> Lỗi -> Ô trống xếp cuối cùng.",
+      "hint": "Số đứng trước, văn bản đứng sau."
+    },
+    {
+      "id": "g8-b6-mcq-17",
+      "type": "multiple_choice",
+      "question": "Tại sao trước khi sắp xếp dữ liệu, người dùng cần đảm bảo đã chọn toàn bộ bảng (hoặc để con trỏ trong bảng) mà không chọn riêng 1 cột duy nhất?",
+      "options": [
+        "Để tránh làm xáo trộn mất khớp dữ liệu giữa các cột (ví dụ điểm của bạn này bị gán nhầm cho tên bạn khác)",
+        "Để máy tính không bị quá tải",
+        "Để đổi màu toàn bộ bảng",
+        "Để tự động lưu tệp"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Nếu chỉ chọn 1 cột rồi ép sắp xếp (Continue with current selection), thông tin hàng ngang của bảng sẽ bị xáo trộn sai lệch hoàn toàn.",
+      "hint": "Tránh xáo trộn dữ liệu hàng ngang giữa các cột."
     }
   ],
   "tin8-bai-7": [
@@ -1575,6 +2085,141 @@ export const QUESTIONS_GRADE_8: Record<string, Question[]> = {
       "difficulty": "de",
       "explanation": "SGK Tin học 8 KNTT (Trang 33): Legend (chú giải) hiển thị mẫu màu hoặc kí hiệu kèm tên chuỗi dữ liệu để người xem phân biệt.",
       "hint": "Legend là phần chú giải kí hiệu màu sắc."
+    },
+    {
+      "id": "g8-b7-mcq-9",
+      "type": "multiple_choice",
+      "question": "Trực quan hóa dữ liệu (Data Visualization) bằng biểu đồ đem lại lợi ích nổi bật gì?",
+      "options": [
+        "Giúp người xem dễ dàng nhận biết xu hướng biến động, so sánh tương quan giữa các đại lượng một cách nhanh chóng và sinh động",
+        "Làm tăng kích thước tệp bảng tính lên 100 lần",
+        "Thay thế hoàn toàn bảng số liệu gốc",
+        "Tự động gửi email cho giáo viên"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 8 KNTT (Trang 32): Biểu đồ là phương tiện trực quan trực tiếp phản ánh bức tranh tổng thể của dữ liệu.",
+      "hint": "Dễ quan sát xu hướng và so sánh tương quan số liệu."
+    },
+    {
+      "id": "g8-b7-mcq-10",
+      "type": "multiple_choice",
+      "question": "Loại BIỂU ĐỒ CỘT (Column Chart / Bar Chart) thích hợp nhất cho mục đích nào sau đây?",
+      "options": [
+        "So sánh số liệu giữa các đối tượng khác nhau (ví dụ: so sánh số học sinh giỏi của 4 khối lớp 6, 7, 8, 9)",
+        "Biểu diễn tỉ lệ phần trăm các thành phần trong một tổng thể 100%",
+        "Chỉ dùng để vẽ bản đồ thế giới",
+        "Chỉ dùng cho văn bản không có số"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Biểu đồ cột có ưu thế vượt trội trong việc so sánh độ lớn giữa các đối tượng độc lập.",
+      "hint": "So sánh độ lớn số liệu giữa các đối tượng."
+    },
+    {
+      "id": "g8-b7-mcq-11",
+      "type": "multiple_choice",
+      "question": "Loại BIỂU ĐỒ TRÒN (Pie Chart) là lựa chọn tối ưu nhất khi muốn biểu diễn điều gì?",
+      "options": [
+        "Tỉ lệ phần trăm cơ cấu đóng góp của từng thành phần so với tổng thể toàn bộ (100%)",
+        "Tốc độ tăng trưởng liên tục qua các năm",
+        "Nhiệt độ thay đổi trong 24 giờ",
+        "Khoảng cách giữa các hành tinh"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Hình tròn tượng trưng cho 100% tổng thể, các miếng bánh (lát cắt) thể hiện thị phần/tỉ trọng từng phần.",
+      "hint": "Tỉ lệ phần trăm so với tổng thể 100%."
+    },
+    {
+      "id": "g8-b7-mcq-12",
+      "type": "multiple_choice",
+      "question": "Loại BIỂU ĐỒ ĐƯỜNG (Line Chart) thích hợp nhất để minh họa thông tin nào sau đây?",
+      "options": [
+        "Xu hướng tăng, giảm hoặc biến động liên tục của một đại lượng theo thời gian (ví dụ: nhiệt độ các tháng trong năm)",
+        "So sánh sĩ số hai lớp học",
+        "Tỉ lệ học lực của một lớp",
+        "Danh sách học sinh vắng mặt"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Đường gấp khúc nối các điểm dữ liệu thể hiện rõ nét chiều hướng đi lên, đi xuống hoặc đi ngang theo tiến trình thời gian.",
+      "hint": "Xu hướng biến động liên tục theo thời gian."
+    },
+    {
+      "id": "g8-b7-mcq-13",
+      "type": "multiple_choice",
+      "question": "Để tạo một biểu đồ mới trong bảng tính Excel, người dùng chọn vùng dữ liệu rồi vào thẻ nào?",
+      "options": [
+        "Thẻ Insert -> Nhóm lệnh Charts",
+        "Thẻ Home -> Clipboard",
+        "Thẻ View -> Show",
+        "Thẻ Review -> Comments"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Thẻ Insert chứa nhóm Charts với đầy đủ các dạng biểu đồ: Column, Line, Pie, Bar...",
+      "hint": "Thẻ Insert -> nhóm lệnh Charts."
+    },
+    {
+      "id": "g8-b7-mcq-14",
+      "type": "multiple_choice",
+      "question": "Thành phần Tiêu đề biểu đồ (Chart Title) có ý nghĩa gì?",
+      "options": [
+        "Cho người xem biết biểu đồ này đang thể hiện nội dung thông tin về vấn đề gì",
+        "Hiển thị tên người đang dùng máy tính",
+        "Hiển thị địa chỉ tệp trên ổ cứng",
+        "Hiển thị số seri máy tính"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Chart Title tóm lược nội dung thông điệp cốt lõi của biểu đồ số liệu.",
+      "hint": "Nói rõ nội dung chủ đề mà biểu đồ thể hiện."
+    },
+    {
+      "id": "g8-b7-mcq-15",
+      "type": "multiple_choice",
+      "question": "Thành phần Chú giải (Legend) trong biểu đồ có chức năng gì?",
+      "options": [
+        "Giải thích ý nghĩa màu sắc hoặc kí hiệu đại diện cho từng chuỗi dữ liệu (ví dụ: màu xanh là Lớp 8A1, màu đỏ là Lớp 8A2)",
+        "Đổi phông chữ của bảng tính",
+        "Tắt biểu đồ",
+        "In biểu đồ"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Legend là bảng chú dẫn màu sắc/hoa văn đại diện cho từng chuỗi số liệu.",
+      "hint": "Giải thích màu sắc đại diện cho các đối tượng số liệu."
+    },
+    {
+      "id": "g8-b7-mcq-16",
+      "type": "multiple_choice",
+      "question": "Khi số liệu trong bảng dữ liệu gốc thay đổi, hình vẽ của biểu đồ tương ứng sẽ như thế nào?",
+      "options": [
+        "Tự động cập nhật thay đổi hình dạng ngay lập tức theo số liệu mới mà không cần vẽ lại biểu đồ",
+        "Giữ nguyên hình vẽ cũ không bao giờ đổi",
+        "Biểu đồ sẽ tự động bị xóa mất",
+        "Báo lỗi phần mềm"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Biểu đồ trong bảng tính liên kết động (Dynamic Link) với dữ liệu gốc trong ô tính.",
+      "hint": "Tự động cập nhật tức thì theo số liệu mới."
+    },
+    {
+      "id": "g8-b7-mcq-17",
+      "type": "multiple_choice",
+      "question": "Nút dấu cộng màu xanh (+) ở góc trên bên phải khi chọn biểu đồ (Chart Elements) dùng để làm gì?",
+      "options": [
+        "Bật hoặc tắt các thành phần của biểu đồ như Tiêu đề, Chú giải, Nhãn dữ liệu (Data Labels), Đường lưới (Gridlines)",
+        "Tăng âm lượng loa",
+        "Phóng to cửa sổ",
+        "Xóa biểu đồ"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Nút Chart Elements cho phép tùy biến hiển thị nhanh các yếu tố cấu thành biểu đồ.",
+      "hint": "Tùy biến hiển thị các thành phần biểu đồ."
     }
   ],
   "tin8-bai-8a": [
@@ -1772,6 +2417,156 @@ export const QUESTIONS_GRADE_8: Record<string, Question[]> = {
       "difficulty": "kho",
       "explanation": "SGK Tin học 8 KNTT (Trang 41): Nhóm Adjust trong tab Picture Format chứa Corrections, Color và Artistic Effects.",
       "hint": "Picture Format là dải lệnh định dạng ảnh."
+    },
+    {
+      "id": "g8-b8a-mcq-7",
+      "type": "multiple_choice",
+      "question": "Danh sách dạng liệt kê (Bullets & Numbering) trong phần mềm soạn thảo văn bản gồm những loại nào?",
+      "options": [
+        "Danh sách không có thứ tự (dùng kí hiệu Bullets như chấm tròn, dấu hoa thị...) và Danh sách có thứ tự (dùng Numbering như 1, 2, 3... hoặc a, b, c...)",
+        "Chỉ có danh sách bằng số La Mã",
+        "Chỉ có danh sách bằng chữ cái tiếng Nga",
+        "Không phân loại"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 8 KNTT (Trang 38): Bullets dùng khi thứ tự không quan trọng; Numbering dùng khi thứ tự các mục có tính trình tự, thứ bậc.",
+      "hint": "Danh sách dấu đầu dòng (Bullets) và danh sách thứ tự (Numbering)."
+    },
+    {
+      "id": "g8-b8a-mcq-8",
+      "type": "multiple_choice",
+      "question": "Trường hợp nào sau đây NÊN sử dụng danh sách có thứ tự (Numbering)?",
+      "options": [
+        "Các bước thực hiện một quy trình (Ví dụ: Bước 1: Khởi động máy, Bước 2: Mở trình duyệt, Bước 3: Đăng nhập...)",
+        "Liệt kê danh sách các món đồ mang đi dã ngoại",
+        "Liệt kê các sở thích cá nhân",
+        "Liệt kê tên các loại hoa"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Các quy trình từng bước đòi hỏi tuần tự trước sau bắt buộc dùng danh sách đánh số.",
+      "hint": "Các bước theo quy trình tuần tự."
+    },
+    {
+      "id": "g8-b8a-mcq-9",
+      "type": "multiple_choice",
+      "question": "Khi chèn hình ảnh vào văn bản, chế độ bố trí văn bản bao quanh hình ảnh (Wrap Text) dạng 'Square' có đặc điểm gì?",
+      "options": [
+        "Đoạn văn bản sẽ chảy bao quanh sát quanh 4 cạnh của khung viền bức ảnh theo dạng hình vuông/chữ nhật",
+        "Bức ảnh nằm đè lên trên che khuất chữ",
+        "Bức ảnh chìm xuống phía sau chữ làm mờ chữ",
+        "Hình ảnh bị đẩy ra trang giấy cuối cùng"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Chế độ Square giúp văn bản bao quanh ảnh gọn gàng, tăng tính thẩm mỹ cho trang báo.",
+      "hint": "Văn bản chảy đều bao quanh khung hình chữ nhật của ảnh."
+    },
+    {
+      "id": "g8-b8a-mcq-10",
+      "type": "multiple_choice",
+      "question": "Chế độ bố trí Wrap Text 'Behind Text' thường được sử dụng cho mục đích nào?",
+      "options": [
+        "Đặt hình ảnh chìm xuống phía sau văn bản làm hình nền mờ (Watermark)",
+        "Che hoàn toàn văn bản",
+        "Đẩy văn bản sang trang mới",
+        "Làm mất bức ảnh"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Behind Text đưa đối tượng đồ họa ra lớp dưới cùng làm nền cho chữ hiển thị bên trên.",
+      "hint": "Đặt ảnh chìm phía dưới chữ làm hình nền."
+    },
+    {
+      "id": "g8-b8a-mcq-11",
+      "type": "multiple_choice",
+      "question": "Để giảm bớt khoảng cách thụt lề đầu dòng của danh sách liệt kê, em dùng nút lệnh nào trên thẻ Home?",
+      "options": [
+        "Nút Decrease Indent",
+        "Nút Increase Indent",
+        "Nút Line Spacing",
+        "Nút Shading"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Decrease Indent (mũi tên sang trái) giảm thụt dòng; Increase Indent (mũi tên sang phải) tăng khoảng cách thụt dòng.",
+      "hint": "Nút Decrease Indent (mũi tên sang trái)."
+    },
+    {
+      "id": "g8-b8a-mcq-12",
+      "type": "multiple_choice",
+      "question": "Để thay đổi biểu tượng dấu đầu dòng (Bullet) thành hình ngôi sao hoặc dấu tích kiểm, em thực hiện thao tác nào?",
+      "options": [
+        "Bấm vào mũi tên nhỏ bên cạnh nút Bullets -> Chọn 'Define New Bullet...' và chọn biểu tượng mong muốn",
+        "Gõ chữ 'ngôi sao' vào bàn phím",
+        "Dùng bút mực vẽ lên màn hình",
+        "Không thể đổi biểu tượng dấu đầu dòng"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Define New Bullet cho phép tùy biến biểu tượng dấu đầu dòng từ thư viện ký tự Symbol.",
+      "hint": "Mũi tên bên cạnh nút Bullets -> Define New Bullet."
+    },
+    {
+      "id": "g8-b8a-mcq-13",
+      "type": "multiple_choice",
+      "question": "Khi đang gõ một danh sách liệt kê, thao tác nào giúp kết thúc danh sách và quay trở lại kiểu gõ văn bản thông thường?",
+      "options": [
+        "Nhấn phím Enter hai lần liên tiếp (hoặc bấm nút Bullets một lần nữa để tắt)",
+        "Bấm phím Esc",
+        "Tắt máy tính",
+        "Bấm tổ hợp phím Ctrl + P"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Nhấn Enter liên tiếp tại dòng trống sẽ tự động hủy kích hoạt danh sách liệt kê.",
+      "hint": "Nhấn phím Enter hai lần liên tiếp."
+    },
+    {
+      "id": "g8-b8a-mcq-14",
+      "type": "multiple_choice",
+      "question": "Tính năng Caption (chú thích hình ảnh) trong thẻ References có tác dụng gì trong văn bản?",
+      "options": [
+        "Đánh số tự động và ghi lời giải thích ngắn gọn bên dưới bức tranh (ví dụ: Hình 1. Sơ đồ mạng máy tính)",
+        "Xóa hình ảnh",
+        "Phóng to kích thước ảnh",
+        "Đổi màu sắc của ảnh"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Caption gán nhãn khoa học tự động cho các hình ảnh và bảng biểu trong tài liệu dài.",
+      "hint": "Đánh số thứ tự và chú thích tên bức tranh."
+    },
+    {
+      "id": "g8-b8a-mcq-15",
+      "type": "multiple_choice",
+      "question": "Chế độ 'In Line with Text' khi chèn ảnh vào văn bản xử lí hình ảnh giống như đối tượng nào?",
+      "options": [
+        "Xử lí hình ảnh như một kí tự chữ viết bình thường nằm trên dòng văn bản",
+        "Xử lí hình ảnh như một trang giấy mới",
+        "Hình ảnh trôi nổi tự do trên màn hình",
+        "Hình ảnh bị khóa không thể chỉnh sửa"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "In Line with Text xem ảnh như một chữ cái lớn nằm trên dòng và di chuyển cùng dòng chữ.",
+      "hint": "Xem ảnh như một kí tự nằm trên dòng văn bản."
+    },
+    {
+      "id": "g8-b8a-mcq-16",
+      "type": "multiple_choice",
+      "question": "Để căn chỉnh cho bức ảnh nằm chính giữa chiều ngang của trang giấy, em chọn bức ảnh rồi thực hiện lệnh nào?",
+      "options": [
+        "Chọn ảnh và bấm nút Center (Ctrl + E) trên thẻ Home",
+        "Kéo ảnh bằng tay ra mép ngoài",
+        "Nhấn phím cách 50 lần",
+        "Nhấn phím Tab 10 lần"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Khi ở chế độ In Line with Text, bức ảnh có thể căn giữa trang chuẩn xác bằng lệnh Center (Ctrl + E).",
+      "hint": "Căn giữa Center (Ctrl + E)."
     }
   ],
   "tin8-bai-9a": [
@@ -1969,6 +2764,156 @@ export const QUESTIONS_GRADE_8: Record<string, Question[]> = {
       "difficulty": "de",
       "explanation": "SGK Tin học 8 KNTT (Trang 44): Nút Date & Time cho phép chèn ngày giờ theo nhiều định dạng chuẩn.",
       "hint": "Date & Time là ngày và giờ."
+    },
+    {
+      "id": "g8-b9a-mcq-7",
+      "type": "multiple_choice",
+      "question": "Đầu trang (Header) và Chân trang (Footer) trong văn bản có đặc điểm chung là gì?",
+      "options": [
+        "Là những thông tin lặp lại ở mép trên cùng (Header) và mép dưới cùng (Footer) của tất cả các trang văn bản trong tài liệu",
+        "Chỉ xuất hiện duy nhất ở trang cuối cùng",
+        "Chỉ xuất hiện khi máy tính tắt mạng",
+        "Chỉ in ra khi in màu"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 8 KNTT (Trang 42): Header/Footer tự động hiển thị đồng bộ xuyên suốt toàn bộ tài liệu.",
+      "hint": "Lặp lại ở lề trên và lề dưới của mọi trang giấy."
+    },
+    {
+      "id": "g8-b9a-mcq-8",
+      "type": "multiple_choice",
+      "question": "Thông tin nào sau đây THƯỜNG ĐƯỢC ĐẶT ở khu vực Chân trang (Footer)?",
+      "options": [
+        "Số trang tự động (Page Number), ngày tháng hoặc tên tác giả bài báo cáo",
+        "Toàn bộ nội dung bài văn dài 10 trang",
+        "Một video clip ca nhạc",
+        "Tiêu đề chính cỡ chữ 30"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Chân trang là vị trí kinh điển đặt số trang, bản quyền, thông tin người soạn.",
+      "hint": "Số trang (Page Number) và thông tin tác giả."
+    },
+    {
+      "id": "g8-b9a-mcq-9",
+      "type": "multiple_choice",
+      "question": "Để chèn Số trang tự động vào tài liệu, em thực hiện qua lệnh nào trong thẻ Insert?",
+      "options": [
+        "Insert -> Page Number",
+        "Insert -> Table",
+        "Insert -> Bookmark",
+        "Insert -> Equation"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Lệnh Page Number cung cấp các tùy chọn đặt số trang ở đầu trang (Top of Page) hoặc đáy trang (Bottom of Page).",
+      "hint": "Insert -> Page Number."
+    },
+    {
+      "id": "g8-b9a-mcq-10",
+      "type": "multiple_choice",
+      "question": "Tùy chọn 'Different First Page' trong thẻ Header & Footer Tools có tác dụng hữu ích gì?",
+      "options": [
+        "Làm cho trang đầu tiên (thường là trang bìa) KHÔNG hiển thị tiêu đề đầu trang và số trang giống các trang sau",
+        "Xóa toàn bộ trang đầu tiên",
+        "Nhân đôi số trang lên gấp 2",
+        "Làm cho trang đầu tiên in ngược"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Trang bìa báo cáo không nên có số trang và đầu trang; Different First Page giúp tùy biến riêng trang này.",
+      "hint": "Bỏ số trang và tiêu đề trên trang bìa đầu tiên."
+    },
+    {
+      "id": "g8-b9a-mcq-11",
+      "type": "multiple_choice",
+      "question": "Cách nhanh nhất để mở khu vực chỉnh sửa Đầu trang (Header) trên một trang văn bản là gì?",
+      "options": [
+        "Nháy đúp chuột vào mép lề trên cùng của trang giấy",
+        "Bấm phím tắt Ctrl + S",
+        "Tắt máy tính và khởi động lại",
+        "Nhấn phím F1"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Nháy đúp chuột trực tiếp vào vùng lề trên (hoặc lề dưới) sẽ mở chế độ soạn thảo Header/Footer tức thì.",
+      "hint": "Nháy đúp chuột vào mép lề trên của trang."
+    },
+    {
+      "id": "g8-b9a-mcq-12",
+      "type": "multiple_choice",
+      "question": "Để THOÁT KHỎI chế độ chỉnh sửa Header và Footer quay về soạn thảo thân văn bản, em thực hiện thao tác nào?",
+      "options": [
+        "Nhấn nút 'Close Header and Footer' trên thanh dải lệnh (hoặc nháy đúp chuột vào vùng thân trang giấy / nhấn phím Esc)",
+        "Tắt tệp không lưu",
+        "Bấm phím Backspace 10 lần",
+        "Rút dây nguồn máy tính"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Nút Close Header and Footer hoặc phím Esc hoặc nháy đúp vào thân trang sẽ đóng vùng đầu trang.",
+      "hint": "Nút Close Header and Footer hoặc nhấn phím Esc."
+    },
+    {
+      "id": "g8-b9a-mcq-13",
+      "type": "multiple_choice",
+      "question": "Tại sao người soạn thảo KHÔNG NÊN gõ số trang bằng tay (ví dụ gõ số 1) vào vùng Footer của từng trang?",
+      "options": [
+        "Vì số đó sẽ bị lặp lại là '1' trên TẤT CẢ các trang còn lại trong tài liệu thay vì tự động tăng dần 1, 2, 3...",
+        "Vì máy in sẽ từ chối in ra giấy",
+        "Vì tệp sẽ bị đổi tên",
+        "Không có lí do gì"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Header/Footer lặp lại cùng một nội dung chữ tĩnh; phải dùng trường trường số trang tự động (Page Number) để số tự nhảy.",
+      "hint": "Số sẽ bị lặp lại cố định trên mọi trang giấy."
+    },
+    {
+      "id": "g8-b9a-mcq-14",
+      "type": "multiple_choice",
+      "question": "Để định dạng kiểu hiển thị số trang là số La Mã (i, ii, iii...) hoặc bắt đầu từ một số khác 1 (Start at), em vào mục nào?",
+      "options": [
+        "Page Number -> Format Page Numbers...",
+        "Page Number -> Remove Page Numbers",
+        "Font -> Change Case",
+        "Paragraph -> Line Spacing"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Format Page Numbers cho phép chọn định dạng Number format và chỉ định số bắt đầu (Start at).",
+      "hint": "Lệnh Format Page Numbers."
+    },
+    {
+      "id": "g8-b9a-mcq-15",
+      "type": "multiple_choice",
+      "question": "Tính năng 'Different Odd & Even Pages' trong Header & Footer có ứng dụng gì khi in sách hai mặt?",
+      "options": [
+        "Thiết lập đầu trang và chân trang riêng biệt cho các trang Chẵn và các trang Lẻ (ví dụ số trang lệch về mép ngoài khi đóng gáy)",
+        "Xóa toàn bộ các trang chẵn",
+        "Đổi màu tất cả các trang lẻ thành màu đen",
+        "In ngược văn bản"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "In sách hai mặt cần số trang và tiêu đề chương lệch đối xứng giữa trang chẵn và trang lẻ.",
+      "hint": "Thiết lập đầu trang/chân trang khác nhau cho trang chẵn và trang lẻ."
+    },
+    {
+      "id": "g8-b9a-mcq-16",
+      "type": "multiple_choice",
+      "question": "Việc bổ sung Header ghi tên trường học và Footer ghi số trang có vai trò gì đối với tài liệu học tập?",
+      "options": [
+        "Làm cho tài liệu trở nên chuyên nghiệp, khoa học, dễ tra cứu và không bị lẫn lộn các trang khi bị rơi rời",
+        "Làm tăng trọng lượng của trang giấy in",
+        "Làm cho chữ chạy nhanh hơn",
+        "Để bảo vệ máy tính khỏi sét đánh"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Tài liệu chuyên nghiệp luôn có thông tin định danh và đánh số trang chuẩn mực.",
+      "hint": "Chuyên nghiệp, khoa học và dễ dàng tra cứu."
     }
   ],
   "tin8-bai-10a": [
@@ -2166,6 +3111,156 @@ export const QUESTIONS_GRADE_8: Record<string, Question[]> = {
       "difficulty": "de",
       "explanation": "SGK Tin học 8 KNTT (Trang 50): Ảnh PNG trong suốt không bị viền trắng thừa, rất thẩm mĩ khi đặt lên nền slide có màu.",
       "hint": "Ảnh định dạng PNG có nền trong suốt."
+    },
+    {
+      "id": "g8-b10a-mcq-7",
+      "type": "multiple_choice",
+      "question": "Trang mẫu (Slide Master) trong phần mềm trình chiếu PowerPoint có vai trò trung tâm là gì?",
+      "options": [
+        "Là trang chiếu đặc biệt điều khiển định dạng chung (phông chữ, màu sắc, logo, hình nền) cho TOÀN BỘ các trang chiếu trong bài thuyết trình",
+        "Chỉ là trang chiếu đầu tiên hiển thị cho khán giả xem",
+        "Là một phần mềm độc lập để chỉnh sửa video",
+        "Dùng để tắt máy chiếu tự động"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "SGK Tin học 8 KNTT (Trang 46): Chỉnh sửa trên Slide Master sẽ tự động áp dụng đồng bộ xuống tất cả các trang chiếu con.",
+      "hint": "Điều khiển định dạng chung đồng bộ cho mọi trang chiếu."
+    },
+    {
+      "id": "g8-b10a-mcq-8",
+      "type": "multiple_choice",
+      "question": "Để mở chế độ chỉnh sửa Trang mẫu (Slide Master), em vào thẻ nào trên thanh Ribbon?",
+      "options": [
+        "Thẻ View -> Chọn Slide Master",
+        "Thẻ Home -> Layout",
+        "Thẻ Insert -> Header & Footer",
+        "Thẻ Review -> Translate"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Trong thẻ View, nhóm Master Views chứa lệnh Slide Master, Handout Master và Notes Master.",
+      "hint": "Thẻ View -> Slide Master."
+    },
+    {
+      "id": "g8-b10a-mcq-9",
+      "type": "multiple_choice",
+      "question": "Nếu muốn chèn LOGO TRƯỜNG THCS TÂN BÌNH xuất hiện ở góc trên bên phải của TẤT CẢ các trang chiếu trong bài, thao tác tối ưu nhất là gì?",
+      "options": [
+        "Chèn ảnh logo vào trang Slide Master ở trên cùng trong chế độ xem Slide Master",
+        "Chèn ảnh logo thủ công từng trang một vào tất cả 50 trang chiếu",
+        "Vẽ hình logo bằng tay",
+        "Dán logo vào ngoài vỏ màn hình"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Chèn logo trên Slide Master chỉ cần làm một lần duy nhất, logo sẽ tự động hiện trên toàn bộ các slide con.",
+      "hint": "Chèn vào trang Slide Master mẹ một lần duy nhất."
+    },
+    {
+      "id": "g8-b10a-mcq-10",
+      "type": "multiple_choice",
+      "question": "Để THOÁT KHỎI chế độ chỉnh sửa Slide Master và quay lại làm việc với các trang chiếu thông thường, em bấm nút nào?",
+      "options": [
+        "Nút 'Close Master View' trên thẻ Slide Master",
+        "Nút New Slide",
+        "Nút Delete",
+        "Phím Print Screen"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Nút có dấu chéo đỏ Close Master View sẽ đóng giao diện quản lí master slide.",
+      "hint": "Nút Close Master View."
+    },
+    {
+      "id": "g8-b10a-mcq-11",
+      "type": "multiple_choice",
+      "question": "Tính năng chèn Ngày tháng (Date & Time) và Số trang chiếu (Slide Number) vào bài thuyết trình được thực hiện qua hộp thoại nào?",
+      "options": [
+        "Hộp thoại Header and Footer (trong thẻ Insert)",
+        "Hộp thoại Font",
+        "Hộp thoại Paragraph",
+        "Hộp thoại Print"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Thẻ Insert -> Header and Footer mở hộp thoại kích hoạt Slide number và ngày tháng cho các slide.",
+      "hint": "Hộp thoại Header and Footer."
+    },
+    {
+      "id": "g8-b10a-mcq-12",
+      "type": "multiple_choice",
+      "question": "Tùy chọn 'Don't show on title slide' trong hộp thoại Header and Footer của bài trình chiếu có tác dụng gì?",
+      "options": [
+        "Không hiển thị số trang và chân trang trên trang chiếu TIÊU ĐỀ đầu tiên",
+        "Xóa toàn bộ trang tiêu đề",
+        "Làm cho bài thuyết trình không thể trình chiếu",
+        "Tắt màn hình"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Trang đầu tiên là trang tiêu đề mở đầu bài giảng, không cần hiện số slide và chân trang.",
+      "hint": "Không hiển thị số trang trên slide tiêu đề mở đầu."
+    },
+    {
+      "id": "g8-b10a-mcq-13",
+      "type": "multiple_choice",
+      "question": "Trong chế độ Slide Master, nếu người dùng đổi màu phông chữ của tiêu đề trang mẹ từ đen sang xanh đậm, điều gì sẽ xảy ra?",
+      "options": [
+        "Tiêu đề của tất cả các slide trong bài sử dụng layout đó đều tự động đổi sang màu xanh đậm",
+        "Chỉ đổi màu cho 1 trang duy nhất",
+        "Không có trang nào đổi màu",
+        "Chương trình sẽ báo lỗi"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Định dạng từ trang Master sẽ kế thừa (inherit) xuống tất cả các slide con trong bài thuyết trình.",
+      "hint": "Tất cả các slide con đều tự động đổi theo."
+    },
+    {
+      "id": "g8-b10a-mcq-14",
+      "type": "multiple_choice",
+      "question": "Ưu điểm lớn nhất của việc sử dụng Slide Master thay vì định dạng từng slide thủ công là gì?",
+      "options": [
+        "Đảm bảo tính nhất quán, đồng bộ thẩm mỹ tuyệt đối và tiết kiệm rất nhiều thời gian, công sức chỉnh sửa",
+        "Làm tăng số lượng trang chiếu",
+        "Tự động dịch sang tiếng nước ngoài",
+        "Làm máy tính chạy nhanh hơn"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Tiết kiệm thời gian và đảm bảo tính đồng bộ là hai giá trị cốt lõi của Slide Master.",
+      "hint": "Tính đồng bộ nhất quán và tiết kiệm thời gian chỉnh sửa."
+    },
+    {
+      "id": "g8-b10a-mcq-15",
+      "type": "multiple_choice",
+      "question": "Người dùng có thể tạo thêm các bố cục (Layout) tùy chỉnh mới trong Slide Master bằng nút lệnh nào?",
+      "options": [
+        "Nút Insert Layout",
+        "Nút Delete Layout",
+        "Nút Rename",
+        "Nút Hide Slide"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Insert Layout trên thẻ Slide Master cho phép tạo thêm các kiểu bố cục riêng theo nhu cầu thiết kế.",
+      "hint": "Nút Insert Layout."
+    },
+    {
+      "id": "g8-b10a-mcq-16",
+      "type": "multiple_choice",
+      "question": "Khi muốn tạo một khung giữ chỗ để người dùng sau này có thể chèn ảnh hoặc bảng vào layout mới, trong Slide Master em dùng lệnh nào?",
+      "options": [
+        "Nút Insert Placeholder",
+        "Nút Shape",
+        "Nút SmartArt",
+        "Nút WordArt"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Insert Placeholder tạo các ô giữ chỗ sẵn: Text, Picture, Chart, Table, Media...",
+      "hint": "Lệnh Insert Placeholder."
     }
   ],
   "tin8-bai-11a": [
@@ -2363,6 +3458,156 @@ export const QUESTIONS_GRADE_8: Record<string, Question[]> = {
       "difficulty": "de",
       "explanation": "SGK Tin học 8 KNTT (Trang 53): Từ khóa Education hoặc School giúp lọc ra các mẫu trang chiếu chuyên biệt cho giáo dục.",
       "hint": "Education là giáo dục trong tiếng Anh."
+    },
+    {
+      "id": "g8-b11a-mcq-7",
+      "type": "multiple_choice",
+      "question": "Bản mẫu (Template) trong phần mềm trình chiếu là gì?",
+      "options": [
+        "Tệp bài trình chiếu được thiết kế sẵn cấu trúc, phối màu, kiểu phông chữ và bố cục chuyên nghiệp theo từng chủ đề (học tập, kinh doanh, y tế...)",
+        "Một loại máy in màu",
+        "Một bức ảnh vẽ tranh phong cảnh",
+        "Một đoạn mã lập trình hệ thống"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 8 KNTT (Trang 50): Template giúp người dùng tạo nhanh bài thuyết trình đẹp mắt mà không cần thiết kế lại từ đầu.",
+      "hint": "Mẫu bài trình chiếu thiết kế sẵn chuyên nghiệp."
+    },
+    {
+      "id": "g8-b11a-mcq-8",
+      "type": "multiple_choice",
+      "question": "Để tìm kiếm và sử dụng các bản mẫu Template trực tuyến có sẵn khi tạo bài thuyết trình mới, em vào đâu?",
+      "options": [
+        "Vào menu File -> New -> Nhập từ khóa tìm kiếm (như 'Education', 'School') vào ô Search for online templates",
+        "Vào File -> Print",
+        "Vào File -> Close",
+        "Vào Recycle Bin"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Màn hình File -> New cung cấp hàng ngàn mẫu template miễn phí trên thư viện trực tuyến của Microsoft/Google.",
+      "hint": "Menu File -> New -> tìm kiếm mẫu online."
+    },
+    {
+      "id": "g8-b11a-mcq-9",
+      "type": "multiple_choice",
+      "question": "Lợi ích nổi bật khi sử dụng bản mẫu (Template) có sẵn để làm bài thuyết trình dự án học tập là gì?",
+      "options": [
+        "Tiết kiệm tối đa thời gian thiết kế hình thức, chỉ cần tập trung vào việc nghiên cứu và hoàn thiện nội dung kiến thức",
+        "Học sinh không cần phải chuẩn bị kiến thức bài học nữa",
+        "Máy tính sẽ tự động thuyết trình thay học sinh",
+        "Tất cả học sinh đều được điểm 10 tự động"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Template chuẩn bị sẵn phần thiết kế mỹ thuật, giúp học sinh giải phóng thời gian tập trung vào chất lượng nội dung.",
+      "hint": "Tiết kiệm thời gian thiết kế, tập trung vào nội dung."
+    },
+    {
+      "id": "g8-b11a-mcq-10",
+      "type": "multiple_choice",
+      "question": "Sau khi chọn một bản mẫu Template, người dùng có thể chỉnh sửa lại những thành phần nào trong bài?",
+      "options": [
+        "Hoàn toàn có thể chỉnh sửa nội dung văn bản, thay thế hình ảnh, đổi màu sắc và thêm bớt các trang chiếu tùy ý",
+        "Không được phép sửa bất kì thứ gì",
+        "Chỉ được sửa chữ cái đầu tiên",
+        "Chỉ được xóa trang chứ không được thêm"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Template là mẫu khởi đầu, người dùng có toàn quyền tùy biến theo ý đồ báo cáo của mình.",
+      "hint": "Tự do thay thế chữ, hình ảnh, màu sắc theo nhu cầu."
+    },
+    {
+      "id": "g8-b11a-mcq-11",
+      "type": "multiple_choice",
+      "question": "Định dạng tệp bản mẫu của PowerPoint để lưu lại dùng nhiều lần có phần mở rộng (đuôi tệp) là gì?",
+      "options": [
+        ".potx (PowerPoint Template)",
+        ".pptx (bài trình chiếu thông thường)",
+        ".docx",
+        ".xlsx"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Đuôi .potx là định dạng mẫu Template, khi mở ra sẽ tự động tạo một bài thuyết trình mới dựa trên khuôn mẫu đó.",
+      "hint": "Đuôi tệp .potx."
+    },
+    {
+      "id": "g8-b11a-mcq-12",
+      "type": "multiple_choice",
+      "question": "Khi chọn bản mẫu Template cho bài thuyết trình môn Tin học hoặc Khoa học tự nhiên, tiêu chí nào nên được ưu tiên?",
+      "options": [
+        "Phong cách hiện đại, thanh lịch, màu sắc trang nhã và bố cục rõ ràng, phù hợp với chủ đề công nghệ khoa học",
+        "Dùng bản mẫu thiệp cưới đầy hoa lá sến súa",
+        "Dùng bản mẫu hoạt hình hài hước gây cười",
+        "Dùng bản mẫu có chữ màu đỏ nền vàng chói mắt"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Tính phù hợp ngữ cảnh (Context Appropriateness) là nguyên tắc thiết kế quan trọng.",
+      "hint": "Phù hợp chủ đề khoa học công nghệ, rõ ràng và trang nhã."
+    },
+    {
+      "id": "g8-b11a-mcq-13",
+      "type": "multiple_choice",
+      "question": "Bản mẫu 'Blank Presentation' (Bài trình chiếu trống) có đặc điểm gì?",
+      "options": [
+        "Trang chiếu màu trắng tinh, chưa có bất kì định dạng màu sắc hay hình nền nào, cho phép người dùng tự do thiết kế từ con số 0",
+        "Một bài có sẵn 100 trang ảnh hoạt hình",
+        "Một video hướng dẫn học tập",
+        "Một bài kiểm tra có sẵn đáp án"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Blank Presentation dành cho người muốn tự tay xây dựng phong cách riêng từ đầu.",
+      "hint": "Trang trắng tinh để tự thiết kế từ đầu."
+    },
+    {
+      "id": "g8-b11a-mcq-14",
+      "type": "multiple_choice",
+      "question": "Để áp dụng một chủ đề mẫu thiết kế (Theme) khác vào bài trình chiếu đang soạn thảo, em vào thẻ nào?",
+      "options": [
+        "Thẻ Design -> Nhóm Themes",
+        "Thẻ Insert",
+        "Thẻ Animations",
+        "Thẻ Review"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Thẻ Design hiển thị toàn bộ bộ sưu tập Themes và các biến thể phối màu (Variants).",
+      "hint": "Thẻ Design -> nhóm Themes."
+    },
+    {
+      "id": "g8-b11a-mcq-15",
+      "type": "multiple_choice",
+      "question": "Mục 'Variants' bên cạnh nhóm Themes trong thẻ Design cho phép người dùng làm gì?",
+      "options": [
+        "Đổi các bảng màu (Colors), phông chữ (Fonts) và kiểu hiệu ứng nền khác nhau của cùng một Theme đang chọn",
+        "Xóa toàn bộ các slide",
+        "Chèn video từ YouTube",
+        "In bài giảng ra giấy"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Variants cung cấp các biến thể màu sắc khác nhau để cá nhân hóa theme đã chọn.",
+      "hint": "Đổi bảng màu và biến thể của Theme."
+    },
+    {
+      "id": "g8-b11a-mcq-16",
+      "type": "multiple_choice",
+      "question": "Hành vi sao chép nguyên văn toàn bộ nội dung của một bài thuyết trình có sẵn trên mạng của người khác rồi chỉ đổi tên tác giả thành tên mình là vi phạm gì?",
+      "options": [
+        "Vi phạm đạo đức học tập và vi phạm bản quyền sở hữu trí tuệ",
+        "Hành động sáng tạo đáng khen thưởng",
+        "Tiết kiệm điện cho nhà trường",
+        "Giúp bài thuyết trình đạt điểm tối đa"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Đây là hành vi đạo văn và gian lận học thuật, đi ngược lại mục tiêu giáo dục.",
+      "hint": "Vi phạm đạo đức học tập và bản quyền trí tuệ."
     }
   ],
   "tin8-bai-8b": [
@@ -2560,6 +3805,156 @@ export const QUESTIONS_GRADE_8: Record<string, Question[]> = {
       "difficulty": "de",
       "explanation": "SGK Tin học 8 KNTT (Trang 58): Thùng sơn (Bucket Fill) dùng để tô màu đồng nhất hoặc mẫu hoa văn vào vùng chọn.",
       "hint": "Biểu tượng thùng sơn đổ màu."
+    },
+    {
+      "id": "g8-b8b-mcq-7",
+      "type": "multiple_choice",
+      "question": "Phần mềm chỉnh sửa ảnh GIMP (hoặc Paint.NET, Photoshop) là phần mềm thuộc loại nào?",
+      "options": [
+        "Phần mềm đồ họa xử lí ảnh điểm (Raster/Bitmap Graphics Editor)",
+        "Hệ điều hành máy tính",
+        "Trình duyệt web",
+        "Phần mềm soạn thảo văn bản thuần túy"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 8 KNTT (Trang 54): GIMP là phần mềm xử lí đồ họa điểm ảnh (pixel) mã nguồn mở rất phổ biến.",
+      "hint": "Phần mềm xử lí đồ họa điểm ảnh (Raster/Bitmap)."
+    },
+    {
+      "id": "g8-b8b-mcq-8",
+      "type": "multiple_choice",
+      "question": "Điểm ảnh (Pixel) trong một bức ảnh kĩ thuật số là gì?",
+      "options": [
+        "Đơn vị nhỏ nhất cấu thành nên hình ảnh số, mỗi điểm ảnh mang một giá trị màu sắc xác định",
+        "Kích thước của màn hình máy tính",
+        "Dung lượng của ổ đĩa cứng",
+        "Số lượng chữ viết trên ảnh"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Ảnh số được tạo thành từ lưới các ô vuông mang màu gọi là Pixel (Picture Element).",
+      "hint": "Đơn vị nhỏ nhất cấu tạo nên ảnh số mang màu sắc xác định."
+    },
+    {
+      "id": "g8-b8b-mcq-9",
+      "type": "multiple_choice",
+      "question": "Khái niệm Lớp (Layer) trong phần mềm chỉnh sửa ảnh có ý nghĩa then chốt nào?",
+      "options": [
+        "Các tấm kính trong suốt xếp chồng lên nhau, mỗi lớp chứa các đối tượng riêng biệt giúp dễ dàng chỉnh sửa mà không làm hỏng các lớp khác",
+        "Là một trang sách",
+        "Là một lớp học sinh",
+        "Là một bộ phim hoạt hình"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Layer như các lớp kính trong suốt cho phép thao tác độc lập trên từng chi tiết đồ họa.",
+      "hint": "Các lớp kính trong suốt xếp chồng lên nhau để chỉnh sửa độc lập."
+    },
+    {
+      "id": "g8-b8b-mcq-10",
+      "type": "multiple_choice",
+      "question": "Công cụ chọn vùng hình chữ nhật (Rectangle Select Tool) dùng để làm gì?",
+      "options": [
+        "Khoanh chọn một vùng ảnh có hình dạng chữ nhật để tiến hành sao chép, cắt hoặc tô màu riêng cho vùng đó",
+        "Vẽ hình tròn",
+        "Xóa toàn bộ bức ảnh",
+        "In bức ảnh ra giấy"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Công cụ chọn vùng khoanh vùng giới hạn các thao tác xử lí tiếp theo.",
+      "hint": "Khoanh chọn vùng ảnh hình chữ nhật."
+    },
+    {
+      "id": "g8-b8b-mcq-11",
+      "type": "multiple_choice",
+      "question": "Công cụ Tẩy (Eraser Tool) trong phần mềm chỉnh sửa ảnh có chức năng gì?",
+      "options": [
+        "Xóa các chi tiết hình ảnh trên lớp đang chọn và làm lộ ra lớp nằm phía dưới (hoặc tạo vùng trong suốt)",
+        "Tô thêm màu cho bức ảnh",
+        "Phóng to bức ảnh",
+        "Lưu bức ảnh sang ổ đĩa USB"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Eraser xóa pixel trên lớp hiện hành trở về trạng thái trong suốt hoặc màu nền.",
+      "hint": "Xóa chi tiết thừa trên lớp đang chọn."
+    },
+    {
+      "id": "g8-b8b-mcq-12",
+      "type": "multiple_choice",
+      "question": "Biểu tượng con mắt cạnh tên một Layer trong bảng quản lí lớp (Layers Panel) dùng để làm gì?",
+      "options": [
+        "Bật hoặc tắt chế độ HIỂN THỊ (Ẩn/Hiện) của lớp đó trên khung vẽ",
+        "Chụp ảnh màn hình",
+        "Kiểm tra thị lực người dùng",
+        "Xóa vĩnh viễn lớp đó"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Nhấp vào con mắt để ẩn/hiện tạm thời layer giúp quan sát đối chiếu dễ dàng.",
+      "hint": "Bật/tắt chế độ hiển thị (ẩn/hiện) của lớp."
+    },
+    {
+      "id": "g8-b8b-mcq-13",
+      "type": "multiple_choice",
+      "question": "Định dạng tệp dự án gốc của phần mềm GIMP lưu lại toàn bộ các lớp chỉnh sửa có đuôi tệp là gì?",
+      "options": [
+        ".xcf",
+        ".jpg",
+        ".png",
+        ".gif"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Tệp .xcf lưu đầy đủ cấu trúc các lớp Layer, đường path và kênh màu của dự án GIMP.",
+      "hint": "Đuôi tệp .xcf của GIMP."
+    },
+    {
+      "id": "g8-b8b-mcq-14",
+      "type": "multiple_choice",
+      "question": "Khi muốn xuất ảnh để gửi cho bạn bè xem trên điện thoại hoặc đăng lên mạng, ta nên xuất (Export) ra định dạng nào?",
+      "options": [
+        ".jpg hoặc .png",
+        ".xcf",
+        ".psd",
+        ".exe"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "JPG và PNG là hai định dạng ảnh nén thông dụng nhất được mọi thiết bị đọc được.",
+      "hint": "Định dạng ảnh phổ biến .jpg hoặc .png."
+    },
+    {
+      "id": "g8-b8b-mcq-15",
+      "type": "multiple_choice",
+      "question": "Công cụ Chọn vùng tự do (Lasso Tool / Free Select Tool) rất hữu ích trong trường hợp nào?",
+      "options": [
+        "Khoanh chọn một đối tượng có đường viền uốn lượn phức tạp (như hình người, con vật, chiếc lá...)",
+        "Chỉ chọn được hình vuông",
+        "Chỉ chọn được một điểm ảnh duy nhất",
+        "Tự động vẽ tranh biếm họa"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Lasso Tool cho phép rê chuột tự do bám sát theo biên hình thể tùy ý.",
+      "hint": "Chọn đối tượng có đường viền uốn lượn phức tạp."
+    },
+    {
+      "id": "g8-b8b-mcq-16",
+      "type": "multiple_choice",
+      "question": "Ưu điểm của phần mềm mã nguồn mở GIMP là gì?",
+      "options": [
+        "Hoàn toàn miễn phí, đa nền tảng (chạy trên Windows, macOS, Linux) và sở hữu đầy đủ tính năng chỉnh sửa ảnh mạnh mẽ",
+        "Bắt buộc người dùng trả phí 1 triệu đồng mỗi tháng",
+        "Chỉ dùng được cho máy tính siêu lớn",
+        "Không thể lưu ảnh"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "GIMP là giải pháp phần mềm đồ họa mã nguồn mở tự do hàng đầu thế giới.",
+      "hint": "Miễn phí, đa nền tảng và đầy đủ tính năng mạnh mẽ."
     }
   ],
   "tin8-bai-9b": [
@@ -2757,6 +4152,156 @@ export const QUESTIONS_GRADE_8: Record<string, Question[]> = {
       "difficulty": "kho",
       "explanation": "SGK Tin học 8 KNTT (Trang 62): Mục Fixed Aspect Ratio giúp cố định khung cắt theo đúng tỉ lệ chuẩn màn hình.",
       "hint": "Fixed Aspect Ratio cố định tỉ lệ khung hình."
+    },
+    {
+      "id": "g8-b9b-mcq-7",
+      "type": "multiple_choice",
+      "question": "Thao tác CẮT XÉN ẢNH (Crop) trong chỉnh sửa ảnh nhằm mục đích gì?",
+      "options": [
+        "Loại bỏ các phần thừa không mong muốn xung quanh mép ảnh và tập trung vào chủ thể chính của bức ảnh",
+        "Xóa toàn bộ màu sắc của bức ảnh",
+        "Nhân đôi bức ảnh thành hai bức riêng biệt",
+        "Làm cho bức ảnh bị tối đen"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 8 KNTT (Trang 58): Crop giúp định hình lại khung hình và bố cục của tác phẩm.",
+      "hint": "Loại bỏ phần viền thừa và làm nổi bật chủ thể chính."
+    },
+    {
+      "id": "g8-b9b-mcq-8",
+      "type": "multiple_choice",
+      "question": "Độ phân giải của hình ảnh (Image Resolution) thường được đo bằng đơn vị nào?",
+      "options": [
+        "DPI (Dots Per Inch) hoặc PPI (Pixels Per Inch)",
+        "Kg (Kilogram)",
+        "Km/h",
+        "Watt (Oát)"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "DPI/PPI biểu thị mật độ số điểm ảnh trên một inch chiều dài, quyết định độ sắc nét của ảnh.",
+      "hint": "Đơn vị PPI hoặc DPI."
+    },
+    {
+      "id": "g8-b9b-mcq-9",
+      "type": "multiple_choice",
+      "question": "Khi phóng to một bức ảnh chụp có kích thước quá nhỏ lên kích thước cực lớn, hiện tượng gì thường xảy ra?",
+      "options": [
+        "Hình ảnh bị mờ nhòe, vỡ hạt (hiển thị rõ các ô vuông điểm ảnh răng cưa)",
+        "Hình ảnh trở nên sắc nét hơn gấp 10 lần",
+        "Màu sắc của ảnh tự biến thành màu vàng",
+        "Máy tính tự động in ảnh ra giấy"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Ảnh raster khi phóng quá mức sẽ thiếu dữ liệu điểm ảnh dẫn đến vỡ hạt pixelated.",
+      "hint": "Ảnh bị vỡ hạt, mờ nhòe và răng cưa."
+    },
+    {
+      "id": "g8-b9b-mcq-10",
+      "type": "multiple_choice",
+      "question": "Tính năng 'Giữ nguyên tỉ lệ khung hình' (Lock Aspect Ratio - biểu tượng mắt xích khóa) khi thay đổi kích thước ảnh có ý nghĩa gì?",
+      "options": [
+        "Khi thay đổi chiều rộng, chiều cao sẽ tự động thay đổi theo tỉ lệ tương ứng để ảnh không bị méo mó, biến dạng",
+        "Khóa không cho người dùng sửa ảnh nữa",
+        "Làm cho bức ảnh biến thành hình vuông",
+        "Bảo vệ ảnh bằng mật khẩu"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Khóa tỉ lệ đảm bảo chiều rộng và chiều cao luôn co giãn đồng bộ theo đúng tỷ lệ ban đầu.",
+      "hint": "Giữ tỉ lệ đồng bộ giúp ảnh không bị méo mó."
+    },
+    {
+      "id": "g8-b9b-mcq-11",
+      "type": "multiple_choice",
+      "question": "Để XOAY bức ảnh chụp bị ngược góc 90 độ theo chiều kim đồng hồ, em dùng lệnh nào?",
+      "options": [
+        "Lệnh Rotate 90° clockwise (Image -> Transform -> Rotate...)",
+        "Lệnh Delete",
+        "Lệnh Flip Horizontally",
+        "Lệnh Crop"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Lệnh Rotate xoay ảnh theo các góc độ 90°, 180° hoặc góc tự do.",
+      "hint": "Lệnh Rotate (Xoay ảnh)."
+    },
+    {
+      "id": "g8-b9b-mcq-12",
+      "type": "multiple_choice",
+      "question": "Thao tác LẬT ẢNH (Flip) gồm hai chế độ lật cơ bản nào?",
+      "options": [
+        "Lật ngang theo trục dọc (Flip Horizontally - tạo ảnh gương phản chiếu) và Lật dọc theo trục ngang (Flip Vertically)",
+        "Lật tròn và lật chéo",
+        "Lật sang trái và lật ra đằng sau",
+        "Không có chế độ lật nào"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Flip Horizontally lật ngang (soi gương), Flip Vertically lật ngược từ trên xuống dưới.",
+      "hint": "Lật ngang (Horizontally) và lật dọc (Vertically)."
+    },
+    {
+      "id": "g8-b9b-mcq-13",
+      "type": "multiple_choice",
+      "question": "Quy tắc 1/3 (Rule of Thirds) trong bố cục nhiếp ảnh và cắt xén ảnh khuyên điều gì?",
+      "options": [
+        "Chia khung hình thành lưới 9 ô (bởi 2 đường dọc và 2 đường ngang) và đặt chủ thể chính tại các điểm giao cắt của các đường này",
+        "Cắt bỏ 2/3 bức tranh chỉ giữ lại 1/3 góc trái",
+        "Chụp ảnh chỉ được đứng cách xa 3 mét",
+        "Một bức ảnh chỉ được chụp 3 người"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Quy tắc 1/3 tạo sự cân bằng thị giác, giúp bức ảnh có chiều sâu và sức cuốn hút tự nhiên.",
+      "hint": "Đặt chủ thể tại các điểm giao cắt của lưới 9 ô."
+    },
+    {
+      "id": "g8-b9b-mcq-14",
+      "type": "multiple_choice",
+      "question": "Công cụ Scale Tool (biểu tượng thu phóng) trong hộp công cụ dùng để làm gì?",
+      "options": [
+        "Thu nhỏ hoặc phóng to kích thước của một lớp hình ảnh hoặc vùng chọn cụ thể",
+        "Đo nhiệt độ của bức ảnh",
+        "Làm mờ nền bức ảnh",
+        "Vẽ chữ lên ảnh"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Scale Tool cho phép kéo chuột co giãn kích thước đối tượng đồ họa.",
+      "hint": "Co giãn thu phóng kích thước đối tượng."
+    },
+    {
+      "id": "g8-b9b-mcq-15",
+      "type": "multiple_choice",
+      "question": "Kích thước tệp ảnh (dung lượng tính bằng KB, MB) phụ thuộc chủ yếu vào yếu tố nào?",
+      "options": [
+        "Độ phân giải (số lượng điểm ảnh Pixel) và mức độ nén định dạng ảnh",
+        "Thời tiết lúc chụp ảnh",
+        "Màu sắc của máy ảnh",
+        "Tên của tệp ảnh dài hay ngắn"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Càng nhiều pixel và nén ít thì dung lượng tệp ảnh càng lớn.",
+      "hint": "Độ phân giải điểm ảnh và định dạng nén ảnh."
+    },
+    {
+      "id": "g8-b9b-mcq-16",
+      "type": "multiple_choice",
+      "question": "Để giảm dung lượng ảnh cho trang web tải nhanh hơn mà mắt người hầu như không nhận ra sự khác biệt, ta nên làm gì?",
+      "options": [
+        "Nén ảnh sang định dạng JPEG với mức chất lượng (Quality) hợp lí khoảng 80-85%",
+        "Xóa bỏ nửa bức ảnh",
+        "Đổi ảnh thành màu đen trắng",
+        "Tăng kích thước ảnh lên gấp đôi"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Nén JPEG chất lượng 80% giảm dung lượng 70-80% mà chất lượng hiển thị vẫn rất tốt.",
+      "hint": "Nén JPEG ở mức chất lượng 80-85%."
     }
   ],
   "tin8-bai-10b": [
@@ -2954,6 +4499,156 @@ export const QUESTIONS_GRADE_8: Record<string, Question[]> = {
       "difficulty": "trung_binh",
       "explanation": "SGK Tin học 8 KNTT (Trang 68): Tạo bóng đổ (Drop Shadow) hoặc viền chữ giúp tách chữ khỏi phông nền phức tạp.",
       "hint": "Drop Shadow tạo bóng đổ nổi bật viền chữ."
+    },
+    {
+      "id": "g8-b10b-mcq-7",
+      "type": "multiple_choice",
+      "question": "Công cụ Text Tool (biểu tượng chữ 'A' hoặc chữ 'T') trong phần mềm chỉnh sửa ảnh dùng để làm gì?",
+      "options": [
+        "Chèn văn bản, chữ viết nghệ thuật lên bức ảnh và định dạng phông chữ, cỡ chữ, màu sắc",
+        "Cắt xén bức ảnh",
+        "Đổi màu toàn bộ bức ảnh",
+        "Xóa bỏ các điểm ảnh"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 8 KNTT (Trang 62): Text Tool cho phép viết thông điệp, tiêu đề trực tiếp lên bức tranh.",
+      "hint": "Chèn chữ viết và định dạng văn bản trên ảnh."
+    },
+    {
+      "id": "g8-b10b-mcq-8",
+      "type": "multiple_choice",
+      "question": "Khi gõ một dòng chữ bằng Text Tool trong phần mềm GIMP, phần mềm sẽ tự động làm gì?",
+      "options": [
+        "Tự động tạo ra một LỚP VĂN BẢN (Text Layer) RIÊNG BIỆT chứa dòng chữ đó",
+        "Dán chết chữ vào bức ảnh gốc không thể sửa lại được nữa",
+        "Làm tối toàn bộ bức tranh",
+        "Xóa bức ảnh cũ đi"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Tạo Text Layer độc lập giúp người dùng có thể sửa đổi nội dung chữ, đổi font hoặc di chuyển chữ bất kì lúc nào.",
+      "hint": "Tự động tạo một Text Layer (lớp văn bản) riêng biệt."
+    },
+    {
+      "id": "g8-b10b-mcq-9",
+      "type": "multiple_choice",
+      "question": "Bộ lọc hiệu ứng (Filters) trong phần mềm chỉnh sửa ảnh cung cấp những khả năng sáng tạo nào?",
+      "options": [
+        "Tạo hiệu ứng làm mờ (Blur), làm sắc nét (Sharpen), hiệu ứng đổ bóng (Drop Shadow), biến dạng ánh sáng nghệ thuật",
+        "Chỉ dùng để quét virus",
+        "Tự động tạo ra tiền",
+        "Điều khiển máy in"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Menu Filters chứa hàng trăm thuật toán hiệu ứng đồ họa kỳ ảo biến hóa bức ảnh.",
+      "hint": "Làm mờ, đổ bóng, sắc nét và hiệu ứng nghệ thuật."
+    },
+    {
+      "id": "g8-b10b-mcq-10",
+      "type": "multiple_choice",
+      "question": "Hiệu ứng ĐỔ BÓNG (Drop Shadow) thường được áp dụng cho văn bản trên ảnh nhằm mục đích gì?",
+      "options": [
+        "Tạo cảm giác chữ nổi khối 3D trên bề mặt và giúp chữ nổi bật, dễ đọc hơn khi nền ảnh có nhiều họa tiết rối mắt",
+        "Làm cho chữ biến mất",
+        "Làm cho chữ bị nhòe không đọc được",
+        "Tự động dịch sang tiếng Anh"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Bóng đổ tạo chiều sâu và độ tách biệt giữa chữ và phông nền phía sau.",
+      "hint": "Giúp chữ nổi khối 3D và dễ đọc trên nền phức tạp."
+    },
+    {
+      "id": "g8-b10b-mcq-11",
+      "type": "multiple_choice",
+      "question": "Hiệu ứng LÀM MỜ NỀN (Gaussian Blur) thường được áp dụng cho lớp nền ảnh chân dung nhằm mục đích gì?",
+      "options": [
+        "Làm nhòe mờ phông nền phía sau để làm nổi bật chủ thể chính ở phía trước (hiệu ứng xóa phông)",
+        "Làm hỏng bức ảnh",
+        "Xóa chủ thể chính đi",
+        "Tăng độ sáng của đèn pin"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Gaussian Blur là kỹ thuật xóa phông kinh điển tôn vinh nhân vật trung tâm.",
+      "hint": "Xóa mờ phông nền giúp nổi bật chủ thể phía trước."
+    },
+    {
+      "id": "g8-b10b-mcq-12",
+      "type": "multiple_choice",
+      "question": "Độ mờ đục (Opacity) của một Layer được điều chỉnh từ 0% đến 100% có ý nghĩa gì?",
+      "options": [
+        "Quy định mức độ trong suốt của lớp: 100% là nhìn rõ hoàn toàn đặc ruột, 0% là hoàn toàn trong suốt vô hình",
+        "Điều chỉnh âm lượng nhạc",
+        "Điều chỉnh độ dài video",
+        "Điều chỉnh độ dày của giấy in"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Opacity điều khiển độ trong suốt giúp hòa trộn nhiều lớp ảnh chồng lên nhau mượt mà.",
+      "hint": "Mức độ trong suốt (0% trong suốt - 100% đậm rõ)."
+    },
+    {
+      "id": "g8-b10b-mcq-13",
+      "type": "multiple_choice",
+      "question": "Để thay đổi màu sắc của dòng chữ, em bôi đen chữ và chọn ô màu nào trong bảng tùy chọn công cụ?",
+      "options": [
+        "Color box (hộp màu chữ) trong bảng Tool Options",
+        "Nút Delete",
+        "Nút Crop",
+        "Nút Save"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Bảng Tool Options của Text Tool có bảng chọn màu Color để phối màu chữ đa dạng.",
+      "hint": "Hộp chọn màu Color trong Tool Options."
+    },
+    {
+      "id": "g8-b10b-mcq-14",
+      "type": "multiple_choice",
+      "question": "Khi gõ tiếng Việt có dấu trong phần mềm chỉnh sửa ảnh bị lỗi ô vuông hoặc mất dấu, nguyên nhân phổ biến nhất là gì?",
+      "options": [
+        "Phông chữ đang chọn không hỗ trợ bảng mã tiếng Việt (Unicode) tương ứng của bộ gõ Unikey",
+        "Do máy tính bị mất mạng",
+        "Do bức ảnh có độ phân giải quá cao",
+        "Do bàn phím bị hết pin"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Cần chọn các phông chữ chuẩn Unicode quốc tế hỗ trợ tiếng Việt (như Arial, Roboto, Open Sans...).",
+      "hint": "Phông chữ không hỗ trợ bảng mã tiếng Việt Unicode."
+    },
+    {
+      "id": "g8-b10b-mcq-15",
+      "type": "multiple_choice",
+      "question": "Chế độ hòa trộn (Blend Mode) của các Layer cho phép điều gì?",
+      "options": [
+        "Xác định cách các điểm ảnh của lớp trên tương tác và hòa quyện màu sắc với các lớp nằm phía dưới (như Multiply, Screen, Overlay...)",
+        "Xóa toàn bộ các lớp",
+        "Tự động in ảnh thành 2 bản",
+        "Chuyển ảnh thành âm thanh"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Blend Mode là công cụ tạo hiệu ứng ánh sáng và màu sắc điện ảnh chuyên nghiệp.",
+      "hint": "Hòa quyện màu sắc giữa các lớp xếp chồng nhau."
+    },
+    {
+      "id": "g8-b10b-mcq-16",
+      "type": "multiple_choice",
+      "question": "Để tạo một tấm áp phích (poster) tuyên truyền an toàn giao thông, việc kết hợp chữ viết và hình ảnh cần tuân thủ điều gì?",
+      "options": [
+        "Thông điệp chữ ngắn gọn, phông chữ dễ đọc từ xa, màu sắc tương phản nổi bật và hình ảnh minh họa giàu cảm xúc",
+        "Gõ nguyên một điều luật giao thông dài 2000 chữ lên bức ảnh nhỏ xíu",
+        "Dùng phông chữ ngoằn ngoèo không đọc được chữ gì",
+        "Dùng chữ đen trên nền ảnh màu đen"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Poster cần tác động thị giác tức thì: ngắn gọn, tương phản mạnh, hình ảnh trực quan.",
+      "hint": "Thông điệp ngắn gọn, dễ đọc và tương phản tốt."
     }
   ],
   "tin8-bai-11b": [
@@ -3142,6 +4837,156 @@ export const QUESTIONS_GRADE_8: Record<string, Question[]> = {
       "difficulty": "trung_binh",
       "explanation": "SGK Tin học 8 KNTT (Trang 70): Sử dụng công cụ tách vùng chọn (Select Tool) để tách chủ thể khỏi hậu cảnh trước khi ghép sang tệp mới.",
       "hint": "Tạo vùng chọn chính xác để tách nền trước khi ghép."
+    },
+    {
+      "id": "g8-b11b-mcq-7",
+      "type": "multiple_choice",
+      "question": "Quy trình thiết kế một sản phẩm đồ họa số (như thiệp chúc mừng, poster, bìa sách) hoàn chỉnh gồm các bước chuẩn mực nào?",
+      "options": [
+        "Xác định ý tưởng & đối tượng -> Thu thập tư liệu ảnh -> Phác thảo bố cục -> Chỉnh sửa ảnh, thêm văn bản hiệu ứng -> Đánh giá & Xuất bản tệp",
+        "Mở phần mềm lên nhấp chuột linh tinh rồi tắt",
+        "Tải nguyên một ảnh của người khác trên mạng về nhận là của mình",
+        "In ra giấy trước rồi mới nghĩ ý tưởng"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 8 KNTT (Trang 66): Quy trình thiết kế bài bản từ mục tiêu, thu thập, dàn trang đến hoàn thiện xuất bản.",
+      "hint": "Xác định mục tiêu, thu thập tư liệu, thiết kế và xuất bản."
+    },
+    {
+      "id": "g8-b11b-mcq-8",
+      "type": "multiple_choice",
+      "question": "Định dạng ảnh nào sau đây hỗ trợ VÙNG TRONG SUỐT (Transparent Background), rất thích hợp để ghép logo hoặc hình nhân vật vào bức ảnh khác mà không bị lộ khung viền trắng?",
+      "options": [
+        "Định dạng PNG",
+        "Định dạng JPEG",
+        "Định dạng BMP",
+        "Định dạng MP3"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "PNG hỗ trợ kênh alpha (trong suốt), giúp lồng ghép đối tượng mượt mà vào mọi nền.",
+      "hint": "Định dạng ảnh trong suốt PNG."
+    },
+    {
+      "id": "g8-b11b-mcq-9",
+      "type": "multiple_choice",
+      "question": "Khi thiết kế một tấm thiệp chúc mừng ngày Nhà giáo Việt Nam 20/11, yếu tố trung tâm nào cần được làm nổi bật nhất?",
+      "options": [
+        "Lời tri ân chân thành tới thầy cô giáo kết hợp hình ảnh ý nghĩa (hoa, phấn trắng, bảng đen, mái trường) với màu sắc ấm áp",
+        "Số tài khoản ngân hàng của học sinh",
+        "Một bức ảnh chụp xe tải",
+        "Hình ảnh các nhân vật phim kinh dị"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Chủ đề 20/11 tôn vinh nét đẹp nhà giáo với thông điệp tôn sư trọng đạo thiêng liêng.",
+      "hint": "Thông điệp tri ân thầy cô giáo và hình ảnh ý nghĩa ngày 20/11."
+    },
+    {
+      "id": "g8-b11b-mcq-10",
+      "type": "multiple_choice",
+      "question": "Thao tác GỘP CÁC LỚP (Merge Down / Merge Visible Layers) trong phần mềm chỉnh sửa ảnh dùng để làm gì?",
+      "options": [
+        "Hợp nhất các lớp đã hoàn thiện thành một lớp duy nhất để giảm bớt độ phức tạp và dung lượng của tệp thiết kế",
+        "Xóa tất cả các lớp",
+        "Tách bức ảnh thành 100 mảnh vụn",
+        "In ảnh tự động"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Merge Layers gộp các lớp lại khi đã hoàn thành để quản lí bản vẽ gọn gàng.",
+      "hint": "Hợp nhất nhiều lớp thành một lớp duy nhất."
+    },
+    {
+      "id": "g8-b11b-mcq-11",
+      "type": "multiple_choice",
+      "question": "Trước khi gộp tất cả các lớp và xuất ảnh cuối cùng, lời khuyên QUAN TRỌNG NHẤT về an toàn dữ liệu là gì?",
+      "options": [
+        "Lưu lại một bản dự án gốc (đuôi .xcf hoặc .psd) có đầy đủ các layer độc lập để có thể mở ra chỉnh sửa lại sau này khi cần",
+        "Xóa sạch toàn bộ tệp dự án đi",
+        "Rút ngay dây nguồn máy tính",
+        "Tắt màn hình ngay lập tức"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "File gốc còn nguyên layer là tài sản quan trọng nhất cho việc bảo trì, cập nhật sản phẩm sau này.",
+      "hint": "Lưu lại bản dự án gốc còn nguyên các layer."
+    },
+    {
+      "id": "g8-b11b-mcq-12",
+      "type": "multiple_choice",
+      "question": "Công cụ Clone Stamp Tool (hoặc Healing Tool) trong chỉnh sửa ảnh có khả năng kì diệu nào?",
+      "options": [
+        "Sao chép vùng điểm ảnh mẫu từ vị trí đẹp để tẩy xóa các vết xước, đốm mụn hoặc xóa bỏ các chi tiết rác thừa trên ảnh",
+        "Tự động vẽ một con dấu đỏ",
+        "Tạo ra các tệp video",
+        "Gõ bàn phím tự động"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Clone Stamp/Healing lấy mẫu pixel xung quanh đè lên vết xước, xóa khuyết điểm cực tự nhiên.",
+      "hint": "Sao chép mẫu điểm ảnh để tẩy vết xước và chi tiết thừa."
+    },
+    {
+      "id": "g8-b11b-mcq-13",
+      "type": "multiple_choice",
+      "question": "Khi thiết kế một ấn phẩm để IN ẤN RA GIẤY (như poster khổ lớn), hệ màu nào sau đây thường được các nhà in sử dụng?",
+      "options": [
+        "Hệ màu CMYK (Cyan, Magenta, Yellow, Key/Black)",
+        "Hệ màu RGB (chuyên cho màn hình hiển thị)",
+        "Hệ màu đen trắng đơn sắc",
+        "Hệ màu âm thanh"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "RGB dành cho màn hình phát sáng; CMYK là 4 màu mực in vật lí chuẩn công nghiệp in ấn.",
+      "hint": "Hệ màu in ấn CMYK."
+    },
+    {
+      "id": "g8-b11b-mcq-14",
+      "type": "multiple_choice",
+      "question": "Tính năng Lịch sử hoàn tác (Undo History Panel) có tác dụng gì khi thực hành chỉnh sửa ảnh?",
+      "options": [
+        "Xem danh sách toàn bộ các thao tác vừa thực hiện và cho phép quay ngược lại bất kì bước nào trước đó nếu lỡ thao tác sai",
+        "Ghi lại nhật kí duyệt web",
+        "Tính toán điểm số môn học",
+        "Xóa lịch sử máy tính"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Undo History giải tỏa áp lực lo sợ làm sai, cho phép quay về bất kì bước nào an toàn.",
+      "hint": "Quay ngược lại các bước trước đó trong lịch sử thao tác."
+    },
+    {
+      "id": "g8-b11b-mcq-15",
+      "type": "multiple_choice",
+      "question": "Tiêu chí nào sau đây dùng để đánh giá một sản phẩm thiết kế đồ họa học đường đạt chuẩn chất lượng cao?",
+      "options": [
+        "Ý tưởng sáng tạo, bố cục cân đối hài hòa, thông điệp rõ ràng, màu sắc trang nhã và tôn trọng bản quyền hình ảnh",
+        "Chỉ cần ghép thật nhiều ảnh lộn xộn",
+        "Chữ càng bé càng tốt",
+        "Dung lượng tệp càng nặng càng tốt"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Sản phẩm chất lượng dung hòa giữa thẩm mỹ, thông điệp truyền thông và sự chuẩn mực đạo đức.",
+      "hint": "Sáng tạo, bố cục hài hòa, thông điệp rõ và chuẩn bản quyền."
+    },
+    {
+      "id": "g8-b11b-mcq-16",
+      "type": "multiple_choice",
+      "question": "Khi tải hình ảnh từ trên mạng Internet về để sử dụng làm nguyên liệu thiết kế sản phẩm dự thi, học sinh cần lưu ý điều gì?",
+      "options": [
+        "Chọn các nguồn ảnh miễn phí bản quyền (như Unsplash, Pixabay, Pexels) hoặc ảnh có giấy phép Creative Commons cho phép sử dụng",
+        "Cứ lấy ảnh tùy ý có đóng dấu mờ bản quyền của người khác",
+        "Chụp lén ảnh của người lạ",
+        "Không cần quan tâm đến bản quyền"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Tôn trọng bản quyền tác giả là văn hóa cốt lõi của người làm thiết kế đồ họa chân chính.",
+      "hint": "Chọn ảnh miễn phí bản quyền hoặc có giấy phép CC."
     }
   ],
   "tin8-bai-12": [
@@ -3353,6 +5198,141 @@ export const QUESTIONS_GRADE_8: Record<string, Question[]> = {
       "difficulty": "trung_binh",
       "explanation": "SGK Tin học 8 KNTT (Trang 74): Máy tính chỉ hiểu mã nhị phân 0 và 1, chương trình dịch là chiếc cầu nối phiên dịch từ mã nguồn sang mã máy.",
       "hint": "Chuyển đổi mã nguồn của lập trình viên thành mã máy."
+    },
+    {
+      "id": "g8-b12-mcq-9",
+      "type": "multiple_choice",
+      "question": "Thuật toán (Algorithm) là gì?",
+      "options": [
+        "Dãy các chỉ dẫn rõ ràng, tuần tự từng bước xác định các thao tác cần thực hiện để giải quyết một bài toán hoặc hoàn thành một nhiệm vụ cụ thể",
+        "Một bảng vi mạch điện tử",
+        "Một trò chơi điện tử trực tuyến",
+        "Một bức ảnh vẽ bằng máy tính"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 8 KNTT (Trang 70): Thuật toán là giải pháp từng bước giải quyết vấn đề từ đầu vào (Input) cho ra đầu ra (Output).",
+      "hint": "Dãy các thao tác từng bước giải quyết một bài toán xác định."
+    },
+    {
+      "id": "g8-b12-mcq-10",
+      "type": "multiple_choice",
+      "question": "Chương trình máy tính (Computer Program) là gì?",
+      "options": [
+        "Thuật toán được viết bằng một ngôn ngữ lập trình cụ thể để máy tính có thể hiểu và thực thi được",
+        "Một bộ phim phát sóng trên truyền hình",
+        "Một cuốn sách in bằng giấy",
+        "Dòng điện chạy qua dây dẫn"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Chương trình là sự cụ thể hóa thuật toán thành mã lệnh bằng ngôn ngữ lập trình (như Scratch, Python, C++...).",
+      "hint": "Thuật toán được diễn đạt bằng ngôn ngữ lập trình."
+    },
+    {
+      "id": "g8-b12-mcq-11",
+      "type": "multiple_choice",
+      "question": "Ba phương pháp cơ bản để mô tả thuật toán cho con người hiểu là gì?",
+      "options": [
+        "Liệt kê từng bước bằng ngôn ngữ tự nhiên, Vẽ sơ đồ khối (Flowchart) và Viết bằng mã giả (Pseudocode)",
+        "Gửi thư điện tử, gọi điện thoại và nhắn tin Zalo",
+        "Chỉ có thể giải thích bằng tiếng Anh",
+        "Vẽ tranh sơn dầu"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "SGK Tin 8 KNTT: Ngôn ngữ tự nhiên, sơ đồ khối và mã giả là 3 cách chuẩn mực diễn tả thuật toán.",
+      "hint": "Liệt kê bằng lời, sơ đồ khối và mã giả."
+    },
+    {
+      "id": "g8-b12-mcq-12",
+      "type": "multiple_choice",
+      "question": "Trong SƠ ĐỒ KHỐI (Flowchart), hình chữ nhật dùng để thể hiện thao tác nào?",
+      "options": [
+        "Thao tác tính toán, xử lí dữ liệu hoặc gán giá trị",
+        "Thao tác kiểm tra điều kiện rẽ nhánh (Đúng/Sai)",
+        "Thao tác bắt đầu hoặc kết thúc thuật toán",
+        "Thao tác nhập hoặc xuất dữ liệu"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Quy ước sơ đồ khối: Hình chữ nhật = Khối xử lí; Hình thoi = Khối điều kiện; Hình elip = Bắt đầu/Kết thúc; Hình bình hành = Vào/Ra.",
+      "hint": "Khối xử lí tính toán (hình chữ nhật)."
+    },
+    {
+      "id": "g8-b12-mcq-13",
+      "type": "multiple_choice",
+      "question": "Trong sơ đồ khối, hình THOI dùng để biểu diễn thành phần nào của thuật toán?",
+      "options": [
+        "Kiểm tra điều kiện rẽ nhánh (kết quả có hai nhánh: Đúng (True) hoặc Sai (False))",
+        "Điểm bắt đầu thuật toán",
+        "Phép gán tính toán giá trị",
+        "Điểm cắm nguồn điện"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Hình thoi luôn có 1 đường vào và 2 đường rẽ ra tương ứng Đúng hoặc Sai.",
+      "hint": "Khối kiểm tra điều kiện Đúng/Sai (hình thoi)."
+    },
+    {
+      "id": "g8-b12-mcq-14",
+      "type": "multiple_choice",
+      "question": "Trong sơ đồ khối, hình ELIP (hoặc hình chữ nhật bo tròn góc) biểu diễn điều gì?",
+      "options": [
+        "Điểm BẮT ĐẦU (Start) hoặc KẾT THÚC (End) của thuật toán",
+        "Phép chia lấy phần dư",
+        "Vòng lặp vô hạn",
+        "Lệnh in ra máy in"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Hình elip đánh dấu điểm xuất phát và đích đến kết thúc của luồng thuật toán.",
+      "hint": "Điểm Bắt đầu và Kết thúc thuật toán."
+    },
+    {
+      "id": "g8-b12-mcq-15",
+      "type": "multiple_choice",
+      "question": "Tính chất 'Xác định' (Definiteness) của một thuật toán có nghĩa là gì?",
+      "options": [
+        "Ở mỗi bước, các chỉ dẫn phải hoàn toàn rõ ràng, chính xác, không mập mờ gây hiểu lầm và chỉ dẫn đến đúng một hành động duy nhất",
+        "Thuật toán phải được viết bằng bút mực tím",
+        "Thuật toán chỉ chạy được vào ban ngày",
+        "Số bước phải chia hết cho 2"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Tính xác định đòi hỏi máy tính hoặc người thực hiện không bị nhầm lẫn ở bất kì bước nào.",
+      "hint": "Chỉ dẫn rõ ràng, chính xác, không mập mờ."
+    },
+    {
+      "id": "g8-b12-mcq-16",
+      "type": "multiple_choice",
+      "question": "Tính chất 'Dừng' (Finiteness) của thuật toán đòi hỏi điều gì?",
+      "options": [
+        "Thuật toán bắt buộc phải kết thúc sau một số lượng hữu hạn các bước thực hiện, không được lặp lại vô tận",
+        "Thuật toán phải dừng lại sau đúng 10 giây",
+        "Người dùng phải bấm phím tắt để dừng",
+        "Không bao giờ được kết thúc"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Thuật toán không thể chạy mãi mãi; tính hữu hạn đảm bảo sau hữu hạn bước luôn đưa ra kết quả.",
+      "hint": "Kết thúc sau số bước hữu hạn."
+    },
+    {
+      "id": "g8-b12-mcq-17",
+      "type": "multiple_choice",
+      "question": "Tại sao con người cần chuyển thuật toán thành chương trình máy tính?",
+      "options": [
+        "Vì máy tính không thể trực tiếp đọc hiểu tiếng Việt hay sơ đồ khối, nó chỉ thực thi được các lệnh viết bằng ngôn ngữ máy hoặc ngôn ngữ lập trình",
+        "Để làm cho thuật toán khó hiểu hơn",
+        "Để tăng dung lượng bộ nhớ",
+        "Để bán phần mềm kiếm tiền"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Ngôn ngữ lập trình là cầu nối phiên dịch thuật toán tư duy con người thành chỉ thị máy tính thi hành.",
+      "hint": "Máy tính chỉ hiểu và thi hành các lệnh ngôn ngữ lập trình."
     }
   ],
   "tin8-bai-13": [
@@ -3564,6 +5544,141 @@ export const QUESTIONS_GRADE_8: Record<string, Question[]> = {
       "difficulty": "de",
       "explanation": "SGK Tin học 8 KNTT (Trang 79): Xâu kí tự (String) được bao bọc trong cặp dấu nháy kép `\"...\"` hoặc nháy đơn `'...'`.",
       "hint": "Xâu kí tự đặt trong cặp dấu nháy."
+    },
+    {
+      "id": "g8-b13-mcq-9",
+      "type": "multiple_choice",
+      "question": "Khái niệm BIẾN (Variable) trong ngôn ngữ lập trình là gì?",
+      "options": [
+        "Một ô nhớ được đặt tên trong bộ nhớ máy tính dùng để lưu trữ dữ liệu, và giá trị của nó có thể thay đổi trong quá trình chạy chương trình",
+        "Một đại lượng cố định không bao giờ đổi",
+        "Tên của màn hình máy tính",
+        "Một loại cáp kết nối"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 8 KNTT (Trang 74): Biến như một chiếc hộp mang tên đại diện cho vùng nhớ lưu trữ dữ liệu biến thiên.",
+      "hint": "Vùng nhớ được đặt tên lưu trữ giá trị có thể thay đổi."
+    },
+    {
+      "id": "g8-b13-mcq-10",
+      "type": "multiple_choice",
+      "question": "Khái niệm HẰNG (Constant) trong lập trình khác với Biến ở điểm cơ bản nào?",
+      "options": [
+        "Hằng là đại lượng có giá trị CỐ ĐỊNH KHÔNG ĐỔI trong suốt toàn bộ quá trình thực thi chương trình (Ví dụ: số Pi = 3.1416)",
+        "Hằng có giá trị thay đổi liên tục mỗi giây",
+        "Hằng chỉ dùng để lưu tên người",
+        "Hằng không tốn bộ nhớ"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Giá trị của hằng số được ấn định lúc khai báo và không được phép gán lại giá trị mới.",
+      "hint": "Giá trị cố định không đổi suốt chương trình (như số Pi)."
+    },
+    {
+      "id": "g8-b13-mcq-11",
+      "type": "multiple_choice",
+      "question": "Quy tắc đặt tên biến trong các ngôn ngữ lập trình phổ biến (như Python, C++, Pascal) quy định điều gì?",
+      "options": [
+        "Tên biến không bắt đầu bằng chữ số, không chứa dấu cách, không trùng với từ khóa của ngôn ngữ lập trình",
+        "Tên biến phải bắt đầu bằng một chữ số",
+        "Tên biến phải có dấu tiếng Việt có dấu",
+        "Tên biến phải chứa dấu @"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Quy tắc định danh chuẩn: chỉ gồm chữ cái, số, gạch dưới; không bắt đầu bằng số; không chứa khoảng trắng; không trùng từ khóa.",
+      "hint": "Không bắt đầu bằng số, không có dấu cách, không trùng từ khóa."
+    },
+    {
+      "id": "g8-b13-mcq-12",
+      "type": "multiple_choice",
+      "question": "Các kiểu dữ liệu cơ bản phổ biến trong lập trình bao gồm những kiểu nào?",
+      "options": [
+        "Kiểu Số nguyên (Integer), Kiểu Số thực (Float/Real), Kiểu Chuỗi kí tự (String) và Kiểu Logic (Boolean Đúng/Sai)",
+        "Kiểu Âm thanh và Kiểu Video",
+        "Kiểu Bút chì và Kiểu Thước kẻ",
+        "Chỉ có duy nhất một kiểu số"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Bốn kiểu dữ liệu nguyên thủy cơ sở: Integer (số nguyên), Float (số thực), String (chuỗi văn bản), Boolean (logic True/False).",
+      "hint": "Số nguyên, số thực, chuỗi văn bản và logic Boolean."
+    },
+    {
+      "id": "g8-b13-mcq-13",
+      "type": "multiple_choice",
+      "question": "Giá trị của kiểu dữ liệu Logic (Boolean) chỉ có thể nhận một trong hai trạng thái nào?",
+      "options": [
+        "Đúng (True) hoặc Sai (False)",
+        "Lớn hoặc Bé",
+        "Cao hoặc Thấp",
+        "Trắng hoặc Đen"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Đại số Boole chỉ có 2 chân trị: True (1) hoặc False (0).",
+      "hint": "True (Đúng) hoặc False (Sai)."
+    },
+    {
+      "id": "g8-b13-mcq-14",
+      "type": "multiple_choice",
+      "question": "Phép toán GÁN (Assignment) giá trị cho một biến thường sử dụng toán tử kí hiệu nào?",
+      "options": [
+        "Dấu '=' (trong Python/C) hoặc ':=' (trong Pascal)",
+        "Dấu hỏi chấm (?)",
+        "Dấu cộng (+)",
+        "Dấu thăng (#)"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Toán tử gán (ví dụ x = 5) đưa giá trị của biểu thức bên phải vào ô nhớ của biến bên trái.",
+      "hint": "Dấu bằng (=) hoặc dấu gán (:=)."
+    },
+    {
+      "id": "g8-b13-mcq-15",
+      "type": "multiple_choice",
+      "question": "Cho đoạn lệnh: x = 5; x = x + 3. Sau khi thực hiện xong, giá trị hiện tại của biến x trong bộ nhớ là bao nhiêu?",
+      "options": [
+        "8",
+        "5",
+        "3",
+        "53"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Lấy giá trị cũ của x (5) cộng thêm 3 được 8, sau đó gán đè lại vào biến x -> x = 8.",
+      "hint": "5 + 3 = 8."
+    },
+    {
+      "id": "g8-b13-mcq-16",
+      "type": "multiple_choice",
+      "question": "Biểu thức toán học 15 % 4 (phép chia lấy phần dư Modulo) sẽ trả về kết quả là bao nhiêu?",
+      "options": [
+        "3 (vì 15 chia cho 4 được 3 dư 3)",
+        "3.75",
+        "4",
+        "0"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Toán tử % chia lấy phần dư: 15 / 4 = 3 dư 3 -> 15 % 4 = 3.",
+      "hint": "15 chia 4 dư 3."
+    },
+    {
+      "id": "g8-b13-mcq-17",
+      "type": "multiple_choice",
+      "question": "Tên biến nào sau đây là HỢP LỆ theo quy tắc đặt tên trong ngôn ngữ lập trình?",
+      "options": [
+        "diem_tin_hoc",
+        "12diem",
+        "diem thi",
+        "for"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "'12diem' sai vì bắt đầu bằng số; 'diem thi' sai vì chứa dấu cách; 'for' sai vì là từ khóa ngôn ngữ.",
+      "hint": "diem_tin_hoc (dùng gạch dưới nối các chữ)."
     }
   ],
   "tin8-bai-14": [
@@ -3761,6 +5876,156 @@ export const QUESTIONS_GRADE_8: Record<string, Question[]> = {
       "difficulty": "de",
       "explanation": "SGK Tin học 8 KNTT (Trang 83): Hình thoi điều kiện luôn có 2 nhánh rẽ: Đúng (Yes/True) và Sai (No/False).",
       "hint": "Hai ngã rẽ: Đúng hoặc Sai."
+    },
+    {
+      "id": "g8-b14-mcq-7",
+      "type": "multiple_choice",
+      "question": "Ba cấu trúc điều khiển cơ bản trong khoa học lập trình cấu trúc là gì?",
+      "options": [
+        "Cấu trúc Tuần tự (Sequence), Cấu trúc Rẽ nhánh (Selection) và Cấu trúc Lặp (Iteration/Loop)",
+        "Cấu trúc Thẳng đứng, Cấu trúc Nằm ngang và Cấu trúc Chéo",
+        "Cấu trúc Hình vuông, Cấu trúc Hình tam giác và Cấu trúc Hình tròn",
+        "Cấu trúc Mở, Cấu trúc Đóng và Cấu trúc Khóa"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 8 KNTT (Trang 78): Mọi thuật toán phức tạp trên thế giới đều xây dựng từ 3 cấu trúc nền tảng: Tuần tự, Rẽ nhánh và Lặp.",
+      "hint": "Tuần tự, Rẽ nhánh và Lặp."
+    },
+    {
+      "id": "g8-b14-mcq-8",
+      "type": "multiple_choice",
+      "question": "Cấu trúc RẼ NHÁNH DẠNG ĐỦ (If... Else...) hoạt động theo nguyên tắc nào?",
+      "options": [
+        "NẾU điều kiện Đúng thì thực hiện Câu lệnh 1, NGƯỢC LẠI (điều kiện Sai) thì thực hiện Câu lệnh 2",
+        "Thực hiện cả Câu lệnh 1 và Câu lệnh 2 cùng lúc",
+        "Bỏ qua cả hai câu lệnh",
+        "Chỉ thực hiện khi máy tính tắt"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Cú pháp rẽ nhánh dạng đủ: Nếu Đúng làm việc A, Sai làm việc B.",
+      "hint": "Nếu Đúng làm việc 1, ngược lại Sai làm việc 2."
+    },
+    {
+      "id": "g8-b14-mcq-9",
+      "type": "multiple_choice",
+      "question": "Cấu trúc LẶP VỚI SỐ LẦN BIẾT TRƯỚC (Vòng lặp For) được sử dụng khi nào?",
+      "options": [
+        "Khi người lập trình đã xác định chính xác số lần cần lặp lại của một hành động (Ví dụ: lặp lại đúng 10 lần, hoặc duyệt qua từng học sinh trong danh sách 40 bạn)",
+        "Khi hoàn toàn không biết khi nào hành động mới kết thúc",
+        "Chỉ dùng khi máy tính hết pin",
+        "Không bao giờ dùng trong thực tế"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Biết trước số lần lặp dùng vòng lặp For; chưa biết trước số lần lặp dùng While.",
+      "hint": "Biết chính xác số lần cần lặp lại công việc."
+    },
+    {
+      "id": "g8-b14-mcq-10",
+      "type": "multiple_choice",
+      "question": "Cấu trúc LẶP VỚI SỐ LẦN CHƯA BIẾT TRƯỚC (Vòng lặp While) hoạt động như thế nào?",
+      "options": [
+        "Chừng nào điều kiện lặp còn ĐÚNG thì còn tiếp tục thực hiện khối lệnh; khi điều kiện trở thành SAI thì vòng lặp kết thúc",
+        "Luôn luôn lặp đúng 5 lần rồi dừng",
+        "Chỉ chạy khi điều kiện sai ngay từ đầu",
+        "Tự động dừng sau 1 giây"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "While lặp kiểm tra điều kiện trước mỗi vòng; dừng lại khi điều kiện sai.",
+      "hint": "Lặp lại chừng nào điều kiện còn Đúng, dừng khi Sai."
+    },
+    {
+      "id": "g8-b14-mcq-11",
+      "type": "multiple_choice",
+      "question": "Tình huống đời sống nào sau đây là một ví dụ sinh động về cấu trúc LẶP CHƯA BIẾT TRƯỚC?",
+      "options": [
+        "Bơm bánh xe đạp cho đến khi lốp căng cứng thì dừng lại",
+        "Chạy quanh sân trường đúng 3 vòng theo hiệu lệnh của thầy thể dục",
+        "Viết lại 5 lần bài chính tả",
+        "Đọc 2 trang sách"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Người bơm không biết trước sẽ nhấn cần bơm bao nhiêu lần, chỉ biết dừng khi lốp đã đủ căng.",
+      "hint": "Bơm bánh xe cho đến khi lốp căng thì dừng."
+    },
+    {
+      "id": "g8-b14-mcq-12",
+      "type": "multiple_choice",
+      "question": "Vòng lặp vô hạn (Infinite Loop) là lỗi xảy ra khi nào?",
+      "options": [
+        "Điều kiện dừng lặp KHÔNG BAO GIỜ xảy ra (luôn luôn Đúng), khiến chương trình bị treo và lặp mãi mãi không dừng",
+        "Khi máy tính bị mất điện",
+        "Khi số lần lặp bằng 0",
+        "Khi người dùng nhấn phím cách"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Điều kiện lặp không bao giờ False khiến chương trình chạy liên tục gây đơ treo ứng dụng.",
+      "hint": "Điều kiện lặp luôn luôn Đúng, không bao giờ dừng được."
+    },
+    {
+      "id": "g8-b14-mcq-13",
+      "type": "multiple_choice",
+      "question": "Để tính tổng các số từ 1 đến 100 trong chương trình, cấu trúc điều khiển nào là lựa chọn tối ưu nhất?",
+      "options": [
+        "Cấu trúc Lặp (vòng lặp lặp 100 lần cộng dồn từng số vào biến tổng)",
+        "Gõ tay 100 câu lệnh cộng lần lượt",
+        "Dùng cấu trúc rẽ nhánh If... Else",
+        "Không thể tính được"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Vòng lặp For từ 1 đến 100 cộng dồn s = s + i là giải pháp chuẩn tắc và ngắn gọn nhất.",
+      "hint": "Cấu trúc lặp 100 lần cộng dồn."
+    },
+    {
+      "id": "g8-b14-mcq-14",
+      "type": "multiple_choice",
+      "question": "Trong cấu trúc rẽ nhánh dạng thiếu (If... Then...), nếu điều kiện kiểm tra là SAI thì chương trình sẽ làm gì?",
+      "options": [
+        "Bỏ qua câu lệnh bên trong khối If và tiếp tục thực hiện câu lệnh kế tiếp phía sau",
+        "Dừng toàn bộ chương trình ngay lập tức",
+        "Xóa chương trình",
+        "Báo lỗi cú pháp"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Rẽ nhánh dạng thiếu: Nếu Đúng thì làm, Sai thì bỏ qua đi tiếp.",
+      "hint": "Bỏ qua câu lệnh đó và chuyển sang câu lệnh tiếp theo."
+    },
+    {
+      "id": "g8-b14-mcq-15",
+      "type": "multiple_choice",
+      "question": "Cấu trúc tuần tự (Sequence) quy định thứ tự thi hành các câu lệnh như thế nào?",
+      "options": [
+        "Các câu lệnh được thực hiện lần lượt từng câu một, từ trên xuống dưới theo đúng trình tự xuất hiện trong mã nguồn",
+        "Thực hiện từ dưới lên trên",
+        "Thực hiện câu lệnh ngẫu nhiên",
+        "Thực hiện tất cả các lệnh đồng thời"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Nguyên lí cơ bản: máy tính thi hành tuần tự từ lệnh trên xuống lệnh dưới.",
+      "hint": "Thực hiện lần lượt từ trên xuống dưới theo thứ tự."
+    },
+    {
+      "id": "g8-b14-mcq-16",
+      "type": "multiple_choice",
+      "question": "Khi lồng một vòng lặp bên trong một vòng lặp khác, cấu trúc đó được gọi là gì?",
+      "options": [
+        "Vòng lặp lồng nhau (Nested Loops)",
+        "Vòng lặp song song",
+        "Vòng lặp ngược",
+        "Vòng lặp gãy"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Vòng lặp lồng nhau thường dùng để xử lí ma trận, bảng 2 chiều hàng và cột.",
+      "hint": "Vòng lặp lồng nhau (Nested Loops)."
     }
   ],
   "tin8-bai-15": [
@@ -3949,6 +6214,156 @@ export const QUESTIONS_GRADE_8: Record<string, Question[]> = {
       "difficulty": "kho",
       "explanation": "SGK Tin học 8 KNTT (Trang 88): Cần thử nghiệm với dữ liệu biên, dữ liệu không hợp lệ để đảm bảo chương trình không bị sập.",
       "hint": "Thử các trường hợp đặc biệt và dữ liệu ngoại lệ."
+    },
+    {
+      "id": "g8-b15-mcq-7",
+      "type": "multiple_choice",
+      "question": "Gỡ lỗi (Debugging) trong lập trình là quá trình gì?",
+      "options": [
+        "Phát hiện, xác định nguyên nhân và sửa chữa các lỗi (bugs) trong chương trình để chương trình chạy đúng theo yêu cầu",
+        "Bắt các con sâu bọ rơi vào thùng máy tính",
+        "Xóa toàn bộ chương trình đi viết lại",
+        "Nâng cấp bộ nhớ RAM"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 8 KNTT (Trang 82): Bug là lỗi chương trình; Debug là quá trình tìm và khắc phục lỗi.",
+      "hint": "Phát hiện, xác định nguyên nhân và sửa lỗi chương trình."
+    },
+    {
+      "id": "g8-b15-mcq-8",
+      "type": "multiple_choice",
+      "question": "Lỗi CÚ PHÁP (Syntax Error) là loại lỗi như thế nào?",
+      "options": [
+        "Lỗi do người lập trình viết sai quy tắc, ngữ pháp hoặc từ khóa của ngôn ngữ lập trình (như gõ sai chính tả, thiếu dấu ngoặc, thiếu dấu hai chấm)",
+        "Lỗi do máy tính mất kết nối Internet",
+        "Lỗi chương trình chạy ra kết quả sai",
+        "Lỗi máy in hết mực"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Syntax error vi phạm ngữ pháp của ngôn ngữ; trình biên dịch/thông dịch sẽ báo lỗi ngay và từ chối chạy.",
+      "hint": "Viết sai ngữ pháp, quy tắc chính tả của ngôn ngữ lập trình."
+    },
+    {
+      "id": "g8-b15-mcq-9",
+      "type": "multiple_choice",
+      "question": "Lỗi NGỮ NGHĨA / LỖI LOGIC (Logic Error) là loại lỗi như thế nào?",
+      "options": [
+        "Chương trình vẫn chạy bình thường không báo lỗi cú pháp nào, nhưng KẾT QUẢ ĐẦU RA BỊ SAI LỆCH so với mong đợi (do thuật toán hoặc công thức tính toán sai)",
+        "Lỗi máy tính phát ra tiếng còi hú",
+        "Lỗi phím bàn phím bị liệt",
+        "Lỗi màn hình bị đổi màu"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Lỗi logic là lỗi khó phát hiện nhất vì máy tính chạy êm xuôi nhưng phép tính thuật toán bị sai.",
+      "hint": "Chương trình chạy được nhưng kết quả tính toán bị sai."
+    },
+    {
+      "id": "g8-b15-mcq-10",
+      "type": "multiple_choice",
+      "question": "Lỗi KHI ĐANG CHẠY (Runtime Error) thường xảy ra trong trường hợp nào sau đây?",
+      "options": [
+        "Chương trình gặp tình huống bất thường trong lúc thi hành như: thực hiện phép chia cho số 0, hoặc truy cập chỉ số vượt quá giới hạn của mảng",
+        "Khi người dùng bấm nút mở máy tính",
+        "Khi người dùng lưu tệp",
+        "Khi máy tính cắm sạc pin"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Runtime error làm chương trình bị sụp đổ (crash) đột ngột lúc chạy vì lệnh bất hợp lệ (ví dụ: chia cho 0).",
+      "hint": "Lỗi bất thường lúc chạy như chia cho 0."
+    },
+    {
+      "id": "g8-b15-mcq-11",
+      "type": "multiple_choice",
+      "question": "Phương pháp 'Chạy thử từng bước' (Step-by-step execution / Tracing) có tác dụng gì trong gỡ lỗi?",
+      "options": [
+        "Cho chương trình chạy dừng lại ở từng dòng lệnh một để người lập trình theo dõi sự biến đổi giá trị của các biến trong từng thời điểm",
+        "Làm cho máy tính chạy chậm lại mãi mãi",
+        "Tự động sửa lỗi thay con người",
+        "Tắt màn hình"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Step by step giúp soi sáng diễn biến bên trong bộ nhớ qua từng chỉ lệnh.",
+      "hint": "Chạy dừng từng dòng lệnh để quan sát biến đổi giá trị của biến."
+    },
+    {
+      "id": "g8-b15-mcq-12",
+      "type": "multiple_choice",
+      "question": "Điểm dừng (Breakpoint) trong công cụ gỡ lỗi dùng để làm gì?",
+      "options": [
+        "Đánh dấu một dòng lệnh cụ thể để khi chạy thử, chương trình sẽ tạm dừng lại ngay tại dòng đó cho lập trình viên kiểm tra trạng thái",
+        "Dòng lệnh sẽ bị xóa đi",
+        "Dòng lệnh được in hoa",
+        "Máy tính sẽ tự động tắt nguồn"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Breakpoint là trạm dừng chân chiến lược để thám tử lập trình soi xét nội tình hệ thống.",
+      "hint": "Tạm dừng chương trình tại dòng lệnh chỉ định để kiểm tra."
+    },
+    {
+      "id": "g8-b15-mcq-13",
+      "type": "multiple_choice",
+      "question": "Việc sử dụng các bộ dữ liệu kiểm thử (Test Cases) đặc biệt (như số 0, số âm, số rất lớn, chuỗi rỗng) nhằm mục đích gì?",
+      "options": [
+        "Kiểm tra tính bền vững và khả năng xử lí các trường hợp biên/ngoại lệ của chương trình",
+        "Làm cho máy tính bị tràn bộ nhớ",
+        "Để phá hỏng bàn phím",
+        "Không có mục đích gì"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Test case biên (Edge cases) giúp chứng minh chương trình chạy đúng đắn trong mọi hoàn cảnh khắc nghiệt.",
+      "hint": "Kiểm tra các trường hợp biên và ngoại lệ đặc biệt."
+    },
+    {
+      "id": "g8-b15-mcq-14",
+      "type": "multiple_choice",
+      "question": "Cách gỡ lỗi đơn giản và thông dụng nhất mà học sinh thường dùng là chèn lệnh in (print) nhằm mục đích gì?",
+      "options": [
+        "In giá trị của các biến trung gian ra màn hình ở các vị trí nghi ngờ để kiểm tra xem giá trị biến có đúng như tính toán không",
+        "In văn bản ra máy in giấy",
+        "Tăng tốc độ cho chương trình",
+        "Đổi màu chữ hiển thị"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Print debugging là kỹ thuật phổ biến nhất để theo dõi vết đi của dữ liệu.",
+      "hint": "In giá trị biến ra màn hình để theo dõi biến đổi."
+    },
+    {
+      "id": "g8-b15-mcq-15",
+      "type": "multiple_choice",
+      "question": "Thái độ tâm lí tích cực và đúng đắn của người học lập trình khi gặp lỗi (Bug) là gì?",
+      "options": [
+        "Bình tĩnh đọc kĩ thông báo lỗi, kiên nhẫn truy tìm nguyên nhân và xem việc sửa lỗi là cơ hội tuyệt vời để hiểu sâu sắc hơn về lập trình",
+        "Tức giận đập phá bàn phím máy tính",
+        "Lập tức bỏ cuộc không bao giờ học nữa",
+        "Đổ lỗi cho thầy cô giáo"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Bình tĩnh, đọc thông báo lỗi và kiên trì là phẩm chất quý giá nhất của một kỹ sư công nghệ.",
+      "hint": "Bình tĩnh, đọc thông báo lỗi và kiên nhẫn tìm nguyên nhân."
+    },
+    {
+      "id": "g8-b15-mcq-16",
+      "type": "multiple_choice",
+      "question": "Tại sao người lập trình nên viết các chú thích (Comment) giải thích ý nghĩa trong đoạn mã nguồn chương trình?",
+      "options": [
+        "Giúp người khác và chính bản thân mình dễ dàng đọc hiểu, bảo trì và gỡ lỗi chương trình sau này",
+        "Để chương trình chạy nhanh hơn gấp đôi",
+        "Để tăng điểm thi",
+        "Bắt buộc máy tính mới chạy được"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Chú thích (Comment) làm rõ ý đồ logic thuật toán, hỗ trợ đắc lực cho việc gỡ lỗi và nâng cấp.",
+      "hint": "Giúp người đọc dễ hiểu, dễ bảo trì và gỡ lỗi."
     }
   ],
   "tin8-bai-16": [
@@ -4146,6 +6561,156 @@ export const QUESTIONS_GRADE_8: Record<string, Question[]> = {
       "difficulty": "trung_binh",
       "explanation": "SGK Tin học 8 KNTT (Trang 92): IC3 và MOS là các chứng chỉ tin học quốc tế uy tín dành cho học sinh, sinh viên.",
       "hint": "IC3 là chứng chỉ tin học quốc tế quen thuộc cho học sinh."
+    },
+    {
+      "id": "g8-b16-mcq-7",
+      "type": "multiple_choice",
+      "question": "Sự phát triển mạnh mẽ của Tin học và Công nghệ thông tin có tác động như thế nào đến thị trường lao động và nghề nghiệp?",
+      "options": [
+        "Tạo ra nhiều ngành nghề mới hiện đại, thay đổi phương thức làm việc hiệu quả hơn và đòi hỏi người lao động phải có năng lực số",
+        "Làm cho tất cả các ngành nghề biến mất hoàn toàn",
+        "Không có bất kì tác động nào",
+        "Làm cho con người không cần phải làm việc nữa"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 8 KNTT (Trang 86): Tin học chuyển đổi số mọi lĩnh vực, mở ra vô số cơ hội nghề nghiệp tương lai.",
+      "hint": "Tạo nhiều ngành nghề mới và nâng cao hiệu quả làm việc."
+    },
+    {
+      "id": "g8-b16-mcq-8",
+      "type": "multiple_choice",
+      "question": "Nghề 'Kĩ sư phát triển phần mềm' (Software Developer / Coder) có nhiệm vụ công việc chính là gì?",
+      "options": [
+        "Thiết kế, viết mã lập trình, kiểm thử và bảo trì các phần mềm ứng dụng, hệ thống hoặc trò chơi máy tính",
+        "Lắp ráp bàn ghế học sinh",
+        "Sửa chữa đường ống nước",
+        "Lái xe tải chở hàng"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Kĩ sư phần mềm tạo ra các ứng dụng số phục vụ cho đời sống xã hội.",
+      "hint": "Viết mã lập trình, kiểm thử và phát triển phần mềm."
+    },
+    {
+      "id": "g8-b16-mcq-9",
+      "type": "multiple_choice",
+      "question": "Chuyên gia về 'An toàn thông tin / An ninh mạng' (Cybersecurity Specialist) làm những công việc gì?",
+      "options": [
+        "Bảo vệ hệ thống mạng, máy chủ và dữ liệu của cơ quan khỏi sự xâm nhập, đánh cắp hoặc phá hoại của tin tặc (hacker)",
+        "Bán máy tính ở cửa hàng",
+        "Quét dọn phòng máy tính",
+        "Dạy học sinh gõ phím 10 ngón"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Chuyên gia an ninh mạng là lá chắn bảo vệ không gian mạng quốc gia và doanh nghiệp.",
+      "hint": "Bảo vệ mạng và dữ liệu khỏi các cuộc tấn công của tin tặc."
+    },
+    {
+      "id": "g8-b16-mcq-10",
+      "type": "multiple_choice",
+      "question": "Nghề 'Chuyên viên phân tích dữ liệu' (Data Analyst) có vai trò quan trọng gì trong các tổ chức doanh nghiệp?",
+      "options": [
+        "Thu thập, xử lí và phân tích các tập dữ liệu lớn để tìm ra các xu hướng, quy luật giúp ban giám đốc đưa ra các quyết định chiến lược đúng đắn",
+        "Gõ lại văn bản giấy thành tệp Word",
+        "Cài đặt phần mềm diệt virus",
+        "Lắp đặt dây mạng"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Dữ liệu được ví như 'dầu mỏ mới'; Data Analyst giúp khai phá giá trị từ kho dữ liệu số.",
+      "hint": "Phân tích dữ liệu lớn để hỗ trợ ra quyết định đúng đắn."
+    },
+    {
+      "id": "g8-b16-mcq-11",
+      "type": "multiple_choice",
+      "question": "Ứng dụng của Tin học trong ngành Y tế hiện đại thể hiện qua lĩnh vực nào?",
+      "options": [
+        "Hồ sơ bệnh án điện tử, máy chụp cắt lớp CT/MRI phân tích tự động bằng AI, và hệ thống khám chữa bệnh từ xa (Telemedicine)",
+        "Tự động chế tạo thuốc độc",
+        "Thay thế hoàn toàn bác sĩ phẫu thuật mà không cần người",
+        "Không có ứng dụng nào"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Y tế số giúp chẩn đoán bệnh chính xác, lưu trữ bệnh án khoa học và kết nối chuyên gia toàn cầu.",
+      "hint": "Bệnh án điện tử, chẩn đoán hình ảnh AI và y tế từ xa."
+    },
+    {
+      "id": "g8-b16-mcq-12",
+      "type": "multiple_choice",
+      "question": "Trong ngành Nông nghiệp công nghệ cao (Smart Agriculture), Tin học được ứng dụng như thế nào?",
+      "options": [
+        "Sử dụng cảm biến đo độ ẩm đất, thiết bị bay không người lái (Drone) giám sát sâu bệnh và hệ thống tưới nước tự động thông minh",
+        "Dùng máy vi tính để cuốc đất",
+        "Máy tính tự ăn các loại rau",
+        "Không có ứng dụng gì"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Nông nghiệp 4.0 dùng IoT và AI để tối ưu hóa năng suất mùa màng và tiết kiệm tài nguyên.",
+      "hint": "Cảm biến độ ẩm, máy bay drone và tưới nước tự động."
+    },
+    {
+      "id": "g8-b16-mcq-13",
+      "type": "multiple_choice",
+      "question": "Năng lực số (Digital Competence) mà một công dân thời đại 4.0 cần trang bị bao gồm những gì?",
+      "options": [
+        "Khả năng sử dụng thành thạo các thiết bị số, giao tiếp hợp tác trực tuyến, tư duy giải quyết vấn đề bằng công nghệ và ý thức an toàn thông tin",
+        "Chỉ cần biết chơi game trực tuyến",
+        "Chỉ cần biết mua hàng online",
+        "Không cần trang bị gì"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Năng lực số là chìa khóa hội nhập và phát triển sự nghiệp trong thế kỉ 21.",
+      "hint": "Sử dụng thiết bị số thành thạo, an toàn thông tin và giải quyết vấn đề."
+    },
+    {
+      "id": "g8-b16-mcq-14",
+      "type": "multiple_choice",
+      "question": "Hình thức 'Làm việc từ xa' (Teleworking / Work from Home) nhờ vào các công cụ tin học mang lại ưu điểm gì?",
+      "options": [
+        "Tiết kiệm thời gian và chi phí đi lại, làm việc linh hoạt ở mọi nơi và dễ dàng cộng tác với đồng nghiệp trên toàn cầu qua Internet",
+        "Làm cho người lao động không bao giờ cần ngủ",
+        "Giúp nhân viên không cần làm gì cũng có lương",
+        "Chỉ dành riêng cho phi hành gia"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Làm việc từ xa là xu hướng tất yếu của nền kinh tế tri thức số.",
+      "hint": "Tiết kiệm chi phí đi lại, làm việc linh hoạt mọi nơi qua Internet."
+    },
+    {
+      "id": "g8-b16-mcq-15",
+      "type": "multiple_choice",
+      "question": "Để chuẩn bị hành trang nghề nghiệp vững chắc trong kỷ nguyên Trí tuệ nhân tạo (AI), học sinh THCS nên rèn luyện điều gì từ sớm?",
+      "options": [
+        "Nắm vững kiến thức khoa học máy tính cơ bản, rèn luyện tư duy logic, năng lực tự học suốt đời và khả năng sáng tạo độc đáo của con người",
+        "Học vẹt thuộc lòng tất cả các cuốn sách",
+        "Chỉ tập trung chơi trò chơi điện tử",
+        "Không cần học hành gì vì đã có AI làm thay"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Tư duy sáng tạo, tự học và hiểu biết công nghệ là những thế mạnh bền vững trước làn sóng AI.",
+      "hint": "Tư duy logic, tự học suốt đời và khả năng sáng tạo độc đáo."
+    },
+    {
+      "id": "g8-b16-mcq-16",
+      "type": "multiple_choice",
+      "question": "Khái niệm 'Thành phố thông minh' (Smart City) ứng dụng công nghệ thông tin vào quản lí đô thị ở những mặt nào?",
+      "options": [
+        "Hệ thống điều khiển giao thông thông minh giảm ùn tắc, giám sát an ninh công cộng tự động, quản lí năng lượng và xử lí rác thải thông minh",
+        "Thành phố chỉ có robot sinh sống không có người",
+        "Thành phố có nhà làm bằng máy tính",
+        "Thành phố không có cây xanh"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Đô thị thông minh nâng cao chất lượng sống của cư dân thông qua dữ liệu và trí tuệ nhân tạo.",
+      "hint": "Giao thông thông minh, an ninh tự động và tiết kiệm năng lượng."
     }
   ]
 };

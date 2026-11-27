@@ -241,6 +241,126 @@ export const QUESTIONS_GRADE_9: Record<string, Question[]> = {
       "difficulty": "trung_binh",
       "explanation": "SGK Tin học 9 KNTT (Trang 6): Trợ lí ảo ứng dụng AI và công nghệ nhận dạng, xử lí ngôn ngữ tự nhiên để hiểu và trả lời giọng nói con người.",
       "hint": "Trí tuệ nhân tạo (AI) nhận diện giọng nói."
+    },
+    {
+      "id": "tin9-b1-mc8",
+      "type": "multiple_choice",
+      "question": "Thuật ngữ 'Thiết bị thông minh' (Smart Device) trong thế giới kĩ thuật số được định nghĩa như thế nào?",
+      "options": [
+        "Thiết bị điện tử được tích hợp bộ vi xử lí, có khả năng kết nối mạng, tương tác với môi trường qua cảm biến và tự động xử lí thông tin",
+        "Chỉ là các thiết bị có màn hình cảm ứng",
+        "Thiết bị có giá bán trên 20 triệu đồng",
+        "Thiết bị chỉ dùng bằng pin năng lượng mặt trời"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 9 KNTT (Trang 6): Thiết bị thông minh có vi xử lí, cảm biến, kết nối mạng và khả năng tự động xử lí dữ liệu.",
+      "hint": "Có bộ vi xử lí, cảm biến, kết nối mạng và khả năng tự động xử lí."
+    },
+    {
+      "id": "tin9-b1-mc9",
+      "type": "multiple_choice",
+      "question": "Khái niệm 'Internet vạn vật' (IoT - Internet of Things) đề cập đến điều gì?",
+      "options": [
+        "Mạng lưới kết nối hàng tỉ đồ vật vật lí (đèn đường, xe cộ, tủ lạnh, camera...) lại với nhau qua Internet để thu thập và trao đổi dữ liệu tự động",
+        "Một trang web bán hàng online toàn cầu",
+        "Hệ thống cáp ngầm dưới đáy biển",
+        "Một loại máy tính bảng đời mới"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 9 KNTT: IoT kết nối vạn vật trong đời sống vào không gian mạng số.",
+      "hint": "Mạng lưới kết nối mọi đồ vật vật lí qua Internet."
+    },
+    {
+      "id": "tin9-b1-mc10",
+      "type": "multiple_choice",
+      "question": "Ngôi nhà thông minh (Smart Home) đem lại những tiện ích công nghệ nổi bật nào cho người sử dụng?",
+      "options": [
+        "Tự động điều chỉnh nhiệt độ điều hòa, tự động tắt bật đèn theo sự hiện diện của con người, điều khiển thiết bị từ xa qua điện thoại hoặc giọng nói",
+        "Tự động xây thêm phòng ngủ mới",
+        "Làm cho tường nhà đổi màu mỗi phút",
+        "Tự động in tiền giấy"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Smart Home tối ưu hóa sự tiện nghi, an toàn và tiết kiệm năng lượng thông qua cảm biến tự động hóa.",
+      "hint": "Tự động hóa đèn, điều hòa và điều khiển qua điện thoại, giọng nói."
+    },
+    {
+      "id": "tin9-b1-mc11",
+      "type": "multiple_choice",
+      "question": "Đặc điểm cơ bản của cuộc Cách mạng công nghiệp lần thứ tư (Cách mạng công nghiệp 4.0) là gì?",
+      "options": [
+        "Sự hội tụ và xóa nhòa ranh giới giữa các thế giới vật lí, kĩ thuật số và sinh học, với cốt lõi là AI, IoT, Dữ liệu lớn (Big Data) và Điện toán đám mây",
+        "Sự ra đời của động cơ hơi nước",
+        "Sự xuất hiện của dây chuyền sản xuất chạy bằng điện năng",
+        "Sự phát minh ra bóng đèn dây tóc"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Công nghiệp 4.0 là cuộc cách mạng dựa trên nền tảng tích hợp số hóa sâu rộng với AI, IoT và Big Data.",
+      "hint": "Hội tụ thế giới số, vật lí và sinh học với AI, IoT, Big Data."
+    },
+    {
+      "id": "tin9-b1-mc12",
+      "type": "multiple_choice",
+      "question": "Ví dụ nào sau đây KHÔNG PHẢI là một thiết bị thông minh?",
+      "options": [
+        "Chiếc quạt máy cơ xoay tút năng bấm nút số cơ học",
+        "Đồng hồ thông minh theo dõi nhịp tim (Smartwatch)",
+        "Robot hút bụi tự động lập bản đồ phòng",
+        "Khóa cửa thông minh nhận diện khuôn mặt"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Quạt cơ học truyền thống không có chip vi xử lí hay cảm biến thông minh.",
+      "hint": "Quạt cơ bấm nút thông thường không có bộ vi xử lí."
+    },
+    {
+      "id": "tin9-b1-mc13",
+      "type": "multiple_choice",
+      "question": "Điện toán đám mây (Cloud Computing) cho phép người dùng làm gì?",
+      "options": [
+        "Truy cập, lưu trữ dữ liệu và sử dụng các phần mềm máy chủ từ xa thông qua mạng Internet mà không cần cài đặt nặng nề trên máy tính cá nhân",
+        "Dự báo chính xác 100% hình dạng đám mây trên trời",
+        "Ngăn chặn hoàn toàn hiện tượng mưa bão",
+        "Làm mát phần cứng máy tính bằng hơi nước"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Điện toán đám mây cung cấp tài nguyên tính toán và lưu trữ linh hoạt qua Internet (như Google Drive, OneDrive).",
+      "hint": "Lưu trữ và sử dụng phần mềm từ xa qua Internet."
+    },
+    {
+      "id": "tin9-b1-mc14",
+      "type": "multiple_choice",
+      "question": "Trợ lí ảo thông minh (như Siri, Google Assistant, Alexa) ứng dụng công nghệ đột phá nào?",
+      "options": [
+        "Trí tuệ nhân tạo (AI) và công nghệ xử lí ngôn ngữ tự nhiên (NLP) để hiểu và phản hồi giọng nói của người dùng",
+        "Công nghệ sóng siêu âm phá đá",
+        "Hệ thống định vị bánh răng cơ học",
+        "Chỉ là các đoạn băng ghi âm phát lại ngẫu nhiên"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Trợ lí ảo nhận diện giọng nói và suy luận câu trả lời nhờ mô hình AI học sâu và NLP.",
+      "hint": "Trí tuệ nhân tạo (AI) và xử lí ngôn ngữ tự nhiên (NLP)."
+    },
+    {
+      "id": "tin9-b1-mc15",
+      "type": "multiple_choice",
+      "question": "Thách thức lớn nhất đối với xã hội loài người khi bước vào thế giới kĩ thuật số là gì?",
+      "options": [
+        "Nguy cơ mất an toàn thông tin cá nhân, rò rỉ dữ liệu mật, tội phạm công nghệ cao và nguy cơ phụ thuộc quá mức vào thiết bị số",
+        "Máy tính tiêu tốn quá nhiều oxy trong không khí",
+        "Giá sách giấy ngày càng đắt đỏ",
+        "Không có bất kì thách thức nào"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "An ninh mạng, bảo vệ đời tư và văn hóa số là bài toán sống còn trong kỷ nguyên số.",
+      "hint": "An toàn thông tin, bảo mật dữ liệu và tội phạm mạng."
     }
   ],
   "tin9-bai-2": [
@@ -483,6 +603,126 @@ export const QUESTIONS_GRADE_9: Record<string, Question[]> = {
       "difficulty": "de",
       "explanation": "SGK Tin học 9 KNTT (Trang 13): Google Forms cho phép tạo bảng hỏi trực tuyến, gửi qua liên kết và tự động tổng hợp kết quả tức thì.",
       "hint": "Biểu mẫu khảo sát trực tuyến Google Forms."
+    },
+    {
+      "id": "tin9-b2-mc8",
+      "type": "multiple_choice",
+      "question": "Quy trình giải quyết vấn đề với sự trợ giúp của thông tin và máy tính gồm các bước cơ bản nào?",
+      "options": [
+        "Xác định vấn đề -> Thu thập & Tìm kiếm thông tin -> Xử lí & Phân tích thông tin -> Đưa ra giải pháp & Đánh giá kết quả",
+        "Bấm phím nguồn tắt máy tính",
+        "Chỉ cần đoán mò mà không cần tìm hiểu",
+        "Nhờ người khác làm hộ từ đầu đến cuối"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 9 KNTT (Trang 10): 4 bước khoa học: Xác định vấn đề, Thu thập thông tin, Xử lí phân tích và Đưa ra quyết định tối ưu.",
+      "hint": "Xác định, thu thập, phân tích và đưa ra giải pháp."
+    },
+    {
+      "id": "tin9-b2-mc9",
+      "type": "multiple_choice",
+      "question": "Tại sao việc xác định rõ ràng 'Mục tiêu thông tin cần tìm' là bước quan trọng đầu tiên khi giải quyết vấn đề?",
+      "options": [
+        "Giúp định hướng đúng trọng tâm tìm kiếm, tránh lan man, lãng phí thời gian và lạc vào biển thông tin rác trên mạng",
+        "Để làm cho bài văn dài hơn",
+        "Để tăng số trang in",
+        "Không có vai trò gì quan trọng"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Biết rõ mình cần thông tin gì giúp đặt từ khóa chính xác và chọn lọc dữ liệu hiệu quả.",
+      "hint": "Tránh lan man, tiết kiệm thời gian và định hướng đúng trọng tâm."
+    },
+    {
+      "id": "tin9-b2-mc10",
+      "type": "multiple_choice",
+      "question": "Tình huống: Em cần lựa chọn một chiếc máy tính xách tay phù hợp để học tập với ngân sách 12 triệu đồng. Thông tin nào sau đây là QUAN TRỌNG NHẤT cần thu thập?",
+      "options": [
+        "Cấu hình phần cứng (CPU, RAM, SSD), mức giá, độ bền pin và chính sách bảo hành của các dòng máy trong tầm giá",
+        "Màu sắc của vỏ hộp bìa carton",
+        "Tên của người giao hàng",
+        "Bài hát quảng cáo của hãng máy tính"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Cấu hình, giá bán thực tế và độ bền là tiêu chí kĩ thuật quyết định hiệu năng phục vụ học tập.",
+      "hint": "Cấu hình kĩ thuật (CPU, RAM, ổ cứng), giá thành và bảo hành."
+    },
+    {
+      "id": "tin9-b2-mc11",
+      "type": "multiple_choice",
+      "question": "Sử dụng bảng tính (Excel/Sheets) để hỗ trợ so sánh và đưa ra quyết định mua hàng giúp ích gì?",
+      "options": [
+        "Liệt kê các tiêu chí so sánh (giá, cấu hình, ưu nhược điểm) vào từng cột hàng một cách trực quan, khoa học để chấm điểm lựa chọn",
+        "Tự động thanh toán tiền mà không cần có tiền",
+        "Giao hàng tức thì trong 1 giây",
+        "Làm tăng giá tiền sản phẩm"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Bảng đối chiếu tiêu chí (Decision Matrix) là công cụ ra quyết định định lượng chuyên nghiệp.",
+      "hint": "Lập ma trận đối chiếu tiêu chuẩn rõ ràng và khoa học."
+    },
+    {
+      "id": "tin9-b2-mc12",
+      "type": "multiple_choice",
+      "question": "Khi thông tin thu thập được từ hai nguồn uy tín có sự MÂU THUẪN về số liệu, bước xử lí đúng đắn là gì?",
+      "options": [
+        "Tiếp tục tìm kiếm nguồn thứ ba độc lập có thẩm quyền cao hơn, kiểm tra thời điểm khảo sát và phương pháp thu thập số liệu của từng nguồn",
+        "Chọn bừa một nguồn mình thích",
+        "Cộng hai số liệu lại chia đôi",
+        "Bỏ cuộc không làm nữa"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Kiểm chứng phương pháp luận và tìm nguồn trọng tài uy tín cao hơn là phương pháp khoa học chuẩn mực.",
+      "hint": "Tìm nguồn độc lập thứ ba có thẩm quyền và kiểm tra thời điểm khảo sát."
+    },
+    {
+      "id": "tin9-b2-mc13",
+      "type": "multiple_choice",
+      "question": "Thế nào là 'Thông tin thứ cấp' (Secondary Information)?",
+      "options": [
+        "Thông tin được thu thập, tổng hợp và phân tích lại từ các tài liệu hoặc nghiên cứu sơ cấp đã công bố trước đó của người khác",
+        "Thông tin bị hỏng một nửa",
+        "Thông tin chỉ lưu trên USB cũ",
+        "Thông tin có độ phân giải thấp"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Thông tin sơ cấp là dữ liệu thu thập trực tiếp; thứ cấp là dữ liệu đã qua xử lí tổng hợp từ nguồn khác.",
+      "hint": "Thông tin tổng hợp, phân tích từ các nguồn đã công bố."
+    },
+    {
+      "id": "tin9-b2-mc14",
+      "type": "multiple_choice",
+      "question": "Công cụ lập biểu đồ tư duy (như XMind, MindMup) hỗ trợ đắc lực nhất cho giai đoạn nào khi giải quyết vấn đề?",
+      "options": [
+        "Giai đoạn phân tích, chia nhỏ vấn đề thành các nhánh khía cạnh và động não (Brainstorming) tìm kiếm ý tưởng giải pháp",
+        "Giai đoạn đóng gói sản phẩm gửi bưu điện",
+        "Giai đoạn thanh toán hóa đơn",
+        "Giai đoạn in báo cáo"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Sơ đồ tư duy mở rộng cấu trúc tư duy đa chiều và phân rã vấn đề phức tạp thành các bài toán nhỏ.",
+      "hint": "Phân tích, chia nhỏ vấn đề và động não tìm ý tưởng."
+    },
+    {
+      "id": "tin9-b2-mc15",
+      "type": "multiple_choice",
+      "question": "Sau khi thực hiện giải pháp, bước ĐÁNH GIÁ KẾT QUẢ có ý nghĩa gì?",
+      "options": [
+        "Kiểm tra xem giải pháp có đạt được mục tiêu ban đầu đặt ra hay không, rút ra bài học kinh nghiệm để hoàn thiện cho các lần sau",
+        "Chỉ để chấm điểm lấy thành tích",
+        "Xóa bỏ toàn bộ dữ liệu dự án",
+        "Không có tác dụng gì"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Đánh giá kết quả khép lại chu trình giải quyết vấn đề và tạo nền tảng cho sự cải tiến liên tục.",
+      "hint": "Kiểm tra mức độ đạt mục tiêu và rút kinh nghiệm cải tiến."
     }
   ],
   "tin9-bai-3": [
@@ -725,6 +965,126 @@ export const QUESTIONS_GRADE_9: Record<string, Question[]> = {
       "difficulty": "de",
       "explanation": "SGK Tin học 9 KNTT (Trang 15): Tên miền .edu.vn được cấp riêng cho các tổ chức giáo dục chính thống nên có độ chuẩn xác học thuật cao.",
       "hint": "Tên miền .edu.vn dành cho cơ sở giáo dục."
+    },
+    {
+      "id": "tin9-b3-mc8",
+      "type": "multiple_choice",
+      "question": "Tiêu chí 'Tính chính xác' (Accuracy) của thông tin số đòi hỏi điều gì?",
+      "options": [
+        "Dữ liệu phản ánh đúng sự thật khách quan, không có sai sót, được chứng minh bằng bằng chứng hoặc số liệu kiểm chứng đáng tin cậy",
+        "Bài viết phải có trên 10 bức ảnh",
+        "Phải được viết bằng tiếng nước ngoài",
+        "Thông tin phải nhận được 1 triệu lượt xem"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 9 KNTT (Trang 14): Tính chính xác là tiêu chuẩn cốt lõi đảm bảo sự thật khách quan của dữ liệu.",
+      "hint": "Phản ánh đúng sự thật khách quan và có số liệu kiểm chứng."
+    },
+    {
+      "id": "tin9-b3-mc9",
+      "type": "multiple_choice",
+      "question": "Tiêu chí 'Tính cập nhật / Thời sự' (Timeliness) có ý nghĩa như thế nào trong đánh giá thông tin?",
+      "options": [
+        "Thông tin phải mới nhất, phù hợp với thời điểm hiện tại và chưa bị lạc hậu bởi các phát hiện khoa học hay văn bản pháp luật mới",
+        "Thông tin được viết vào ban đêm",
+        "Thông tin đã tồn tại 100 năm",
+        "Thông tin được lưu trữ trên đĩa mềm"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Thông tin lạc hậu dù từng đúng trong quá khứ nhưng có thể hoàn toàn sai lệch ở thời điểm hiện tại.",
+      "hint": "Mới nhất, còn nguyên giá trị thời sự và không bị lạc hậu."
+    },
+    {
+      "id": "tin9-b3-mc10",
+      "type": "multiple_choice",
+      "question": "Tiêu chí 'Tính toàn vẹn / Đầy đủ' (Completeness) giúp người giải quyết vấn đề tránh được sai lầm gì?",
+      "options": [
+        "Tránh việc kết luận phiến diện, một chiều hoặc hiểu sai bản chất sự việc do thông tin bị cắt xén, thiếu sót các dữ kiện quan trọng",
+        "Tránh việc máy tính bị nóng",
+        "Tránh tốn giấy in",
+        "Tránh phải đọc văn bản"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Thông tin bị cắt xén một nửa sự thật còn nguy hiểm hơn cả lời nói dối hoàn toàn.",
+      "hint": "Tránh kết luận phiến diện do thông tin bị cắt xén thiếu sót."
+    },
+    {
+      "id": "tin9-b3-mc11",
+      "type": "multiple_choice",
+      "question": "Mô hình đánh giá nguồn tin CRAAP (Currency, Relevance, Authority, Accuracy, Purpose) chữ 'A' đầu tiên (Authority) kiểm tra điều gì?",
+      "options": [
+        "Thẩm quyền, trình độ chuyên môn và uy tín của tác giả hoặc tổ chức chịu trách nhiệm xuất bản bài viết",
+        "Tốc độ mạng Internet",
+        "Kích thước tệp tải về",
+        "Màu sắc của trang web"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Authority đánh giá tư cách chuyên môn và thẩm quyền khoa học của người phát ngôn.",
+      "hint": "Thẩm quyền và uy tín chuyên môn của tác giả/nhà xuất bản."
+    },
+    {
+      "id": "tin9-b3-mc12",
+      "type": "multiple_choice",
+      "question": "Dấu hiệu nào sau đây cho thấy một bài viết trên mạng có mục đích THIÊN VỊ hoặc THƯƠNG MẠI (Purpose)?",
+      "options": [
+        "Bài viết chỉ khen ngợi một sản phẩm duy nhất, che giấu các khuyết điểm và liên tục chèn các đường link mua hàng kèm mã giảm giá",
+        "Bài viết so sánh khách quan ưu và nhược điểm của nhiều sản phẩm",
+        "Bài báo khoa học có số liệu thực nghiệm rõ ràng",
+        "Báo cáo của cơ quan khí tượng thủy văn"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Bài viết mang động cơ quảng cáo hoặc thiên vị thường thiếu tính khách quan khoa học.",
+      "hint": "Chỉ khen một chiều và liên tục giục mua hàng."
+    },
+    {
+      "id": "tin9-b3-mc13",
+      "type": "multiple_choice",
+      "question": "Khi đọc một bài báo mạng có tiêu đề giật gân: 'Uống nước chanh nóng chữa khỏi 100% bệnh ung thư', kĩ năng đánh giá thông tin đúng là gì?",
+      "options": [
+        "Cảnh giác cao, không vội tin và đối chiếu ngay với khuyến cáo của Bộ Y tế hoặc Tổ chức Y tế Thế giới (WHO)",
+        "Lập tức chia sẻ cho tất cả người thân làm theo",
+        "Bình luận khen ngợi tác giả",
+        "Mua ngay 100 quả chanh"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Các bài thuốc dân gian giật gân chữa bách bệnh trên mạng xã hội tiềm ẩn rủi ro sinh mạng rất lớn nếu không kiểm chứng y khoa.",
+      "hint": "Cảnh giác và đối chiếu khuyến cáo chính thống của Bộ Y tế, WHO."
+    },
+    {
+      "id": "tin9-b3-mc14",
+      "type": "multiple_choice",
+      "question": "Tại sao các trang web có tên miền kết thúc bằng '.gov' (Chính phủ) hoặc '.edu' (Giáo dục) lại có điểm đánh giá chất lượng thông tin rất cao?",
+      "options": [
+        "Vì tên miền này được nhà nước quản lí nghiêm ngặt, thông tin đăng tải được kiểm duyệt bởi các cơ quan chuyên môn có trách nhiệm pháp lí",
+        "Vì những trang này có thiết kế hình ảnh đẹp nhất",
+        "Vì trang này tải về nhanh nhất",
+        "Vì ai cũng có thể tự do đăng kí tên miền này miễn phí"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Tên miền .gov và .edu đòi hỏi thủ tục định danh pháp nhân nhà nước khắt khe nên có độ tín nhiệm cao nhất.",
+      "hint": "Cơ quan chuyên môn kiểm duyệt và chịu trách nhiệm pháp lí nghiêm ngặt."
+    },
+    {
+      "id": "tin9-b3-mc15",
+      "type": "multiple_choice",
+      "question": "Một báo cáo khoa học không ghi ngày tháng xuất bản và không có tên tác giả thì mức độ tin cậy được xếp vào loại nào?",
+      "options": [
+        "Độ tin cậy thấp, cần hết sức thận trọng và tìm kiếm tài liệu khác có danh tính xác thực để thay thế",
+        "Độ tin cậy tuyệt đối 100%",
+        "Chắc chắn là tài liệu mật của chính phủ",
+        "Có thể sử dụng làm luận cứ chính mà không cần suy nghĩ"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Thông tin vô danh tính (Anonymous) thiếu trách nhiệm giải trình nên có độ tin cậy thấp.",
+      "hint": "Độ tin cậy thấp vì thiếu tác giả và thời gian công bố."
     }
   ],
   "tin9-bai-4": [
@@ -967,6 +1327,126 @@ export const QUESTIONS_GRADE_9: Record<string, Question[]> = {
       "difficulty": "de",
       "explanation": "SGK Tin học 9 KNTT (Trang 22): Đạo đức số đòi hỏi sự tôn trọng bảo mật của người khác, giúp bạn đăng xuất an toàn.",
       "hint": "Đăng xuất tài khoản giúp bạn để đảm bảo an toàn."
+    },
+    {
+      "id": "tin9-b4-mc8",
+      "type": "multiple_choice",
+      "question": "Hành vi nào sau đây vi phạm nghiêm trọng Luật An ninh mạng của nước Cộng hòa Xã hội Chủ nghĩa Việt Nam?",
+      "options": [
+        "Phát tán chương trình phần mềm độc hại, tấn công từ chối dịch vụ (DDoS) làm tê liệt hệ thống máy chủ hoặc chiếm đoạt tài khoản trái phép",
+        "Học sinh tự lập trình trò chơi giáo dục trên Scratch",
+        "Gửi email chúc mừng sinh nhật thầy cô",
+        "Tìm kiếm tài liệu học tập trên Google"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 9 KNTT (Trang 18): Luật An ninh mạng nghiêm cấm tấn công mạng, phát tán mã độc và phá hoại hệ thống thông tin.",
+      "hint": "Tấn công mạng, phát tán mã độc và chiếm đoạt tài khoản trái phép."
+    },
+    {
+      "id": "tin9-b4-mc9",
+      "type": "multiple_choice",
+      "question": "Tội phạm công nghệ cao sử dụng thủ đoạn tạo tài khoản Zalo, Facebook giả danh bạn bè, người thân để làm gì?",
+      "options": [
+        "Nhắn tin bịa ra lí do khẩn cấp (như tai nạn, kẹt tiền) để vay tiền hoặc nhờ chuyển tiền vào số tài khoản ngân hàng lạ nhằm chiếm đoạt tài sản",
+        "Nhờ làm bài tập về nhà",
+        "Rủ nhau đi đá bóng",
+        "Tặng quà miễn phí"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Thủ đoạn mạo danh người quen vay tiền khẩn cấp là chiêu trò lừa đảo tinh vi phổ biến hiện nay.",
+      "hint": "Giả danh người quen bị nạn để lừa chuyển tiền chiếm đoạt tài sản."
+    },
+    {
+      "id": "tin9-b4-mc10",
+      "type": "multiple_choice",
+      "question": "Khi nhận được tin nhắn từ tài khoản của người thân giục chuyển tiền gấp, phản xạ an toàn đầu tiên của em là gì?",
+      "options": [
+        "Gọi điện thoại trực tiếp hoặc gọi video call cho người thân đó để kiểm tra xác thực trước khi thực hiện bất kì giao dịch nào",
+        "Chuyển tiền ngay lập tức không chần chừ",
+        "Chuyển thêm gấp đôi số tiền họ xin",
+        "Gửi kèm mã OTP ngân hàng cho họ"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Xác minh trực tiếp bằng giọng nói hoặc hình ảnh là biện pháp hữu hiệu bẻ gãy bẫy mạo danh.",
+      "hint": "Gọi điện thoại trực tiếp kiểm chứng trước khi chuyển tiền."
+    },
+    {
+      "id": "tin9-b4-mc11",
+      "type": "multiple_choice",
+      "question": "Hành vi sử dụng công nghệ Deepfake (trí tuệ nhân tạo ghép khuôn mặt và giọng nói) để giả mạo người khác phạm tội gì?",
+      "options": [
+        "Tội lừa đảo chiếm đoạt tài sản hoặc làm nhục người khác, bị pháp luật xử phạt rất nặng",
+        "Chỉ là trò đùa nghệ thuật được tự do sáng tạo",
+        "Được tặng giấy khen vì ứng dụng AI giỏi",
+        "Không vi phạm pháp luật nếu không để lộ mặt thật"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Deepfake phục vụ mục đích lừa đảo hoặc xúc phạm danh dự là hành vi tội phạm công nghệ cao bị truy tố hình sự.",
+      "hint": "Tội lừa đảo hoặc làm nhục người khác bị truy cứu hình sự."
+    },
+    {
+      "id": "tin9-b4-mc12",
+      "type": "multiple_choice",
+      "question": "Hành vi 'Quấy rối và đe dọa trực tuyến' (Online Harassment) có thể dẫn đến hậu quả tâm lí nào cho nạn nhân?",
+      "options": [
+        "Gây hoảng loạn, trầm cảm, suy sụp tinh thần, sợ hãi giao tiếp xã hội và có thể dẫn đến hành vi tự hại",
+        "Giúp nạn nhân trở nên tự tin hơn",
+        "Làm tăng sức đề kháng của cơ thể",
+        "Không gây ra bất kì ảnh hưởng nào"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Bạo lực ngôn từ trên mạng có sức tàn phá tâm lí ghê gớm, đặc biệt đối với lứa tuổi thanh thiếu niên.",
+      "hint": "Trầm cảm, hoảng loạn tinh thần và sợ hãi giao tiếp."
+    },
+    {
+      "id": "tin9-b4-mc13",
+      "type": "multiple_choice",
+      "question": "Quyền sở hữu trí tuệ đối với tác phẩm phần mềm máy tính bảo vệ những quyền nào của tác giả?",
+      "options": [
+        "Quyền nhân thân (được đứng tên tác giả, bảo vệ sự toàn vẹn của tác phẩm) và Quyền tài sản (được hưởng lợi ích kinh tế khi phát hành)",
+        "Quyền sở hữu toàn bộ các máy tính cài phần mềm đó",
+        "Quyền tịch thu tài sản của người dùng",
+        "Chỉ có quyền đặt tên không có quyền bán"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Luật Sở hữu trí tuệ quy định rõ hai nhóm quyền: quyền nhân thân và quyền tài sản.",
+      "hint": "Quyền nhân thân và quyền tài sản của tác giả."
+    },
+    {
+      "id": "tin9-b4-mc14",
+      "type": "multiple_choice",
+      "question": "Khi tham gia thảo luận trên mạng, nguyên tắc 'Tôn trọng sự đa dạng và khác biệt' nhắc nhở học sinh điều gì?",
+      "options": [
+        "Mỗi người có quan điểm, văn hóa, hoàn cảnh khác nhau; cần lắng nghe, phản biện bằng lí lẽ hòa nhã, tuyệt đối không phân biệt vùng miền, giới tính hay kì thị cá nhân",
+        "Bắt buộc mọi người phải có cùng một suy nghĩ giống hệt mình",
+        "Ai có quan điểm khác là phải xúc phạm ngay",
+        "Chỉ nói chuyện với người giàu"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Tôn trọng sự khác biệt là nền tảng của một không gian mạng văn minh và tiến bộ.",
+      "hint": "Lắng nghe, tôn trọng và không kì thị hay xúc phạm cá nhân."
+    },
+    {
+      "id": "tin9-b4-mc15",
+      "type": "multiple_choice",
+      "question": "Đường dây nóng (Hotline) quốc gia bảo vệ trẻ em trên không gian mạng và đời thực ở Việt Nam có đầu số là bao nhiêu?",
+      "options": [
+        "Tổng đài 111",
+        "Tổng đài 113",
+        "Tổng đài 114",
+        "Tổng đài 115"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Đầu số 111 là Tổng đài Quốc gia Bảo vệ Trẻ em tiếp nhận tố giác xâm hại và tư vấn tâm lí 24/7 hoàn toàn miễn phí.",
+      "hint": "Tổng đài Quốc gia Bảo vệ Trẻ em số 111."
     }
   ],
   "tin9-bai-5": [
@@ -1194,6 +1674,126 @@ export const QUESTIONS_GRADE_9: Record<string, Question[]> = {
       "difficulty": "de",
       "explanation": "SGK Tin học 9 KNTT (Trang 25): Mô phỏng va chạm giúp kiểm tra khung xe, túi khí và hấp thụ lực va đập mà không cần phá hủy xe thật hàng trăm lần.",
       "hint": "Đánh giá an toàn và tiết kiệm chi phí thử nghiệm thực tế."
+    },
+    {
+      "id": "tin9-b5-mc8",
+      "type": "multiple_choice",
+      "question": "Phần mềm mô phỏng (Simulation Software) là gì?",
+      "options": [
+        "Phần mềm tái hiện lại các đối tượng, hiện tượng tự nhiên hoặc quá trình thực tế trong một môi trường ảo có kiểm soát",
+        "Một trò chơi bắn súng trên điện thoại",
+        "Một bộ phim tài liệu khoa học",
+        "Một cuốn từ điển tiếng Anh"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 9 KNTT (Trang 22): Phần mềm mô phỏng xây dựng mô hình toán học ảo mô phỏng thế giới thực.",
+      "hint": "Tái hiện đối tượng, hiện tượng hoặc quá trình thực tế trong môi trường ảo."
+    },
+    {
+      "id": "tin9-b5-mc9",
+      "type": "multiple_choice",
+      "question": "Ưu điểm vượt trội của việc sử dụng phần mềm mô phỏng trong dạy học các môn Khoa học tự nhiên (Lí, Hóa, Sinh) là gì?",
+      "options": [
+        "Cho phép thực hiện các thí nghiệm nguy hiểm (cháy nổ, hóa chất độc), thí nghiệm tốn kém kinh phí hoặc các hiện tượng mắt thường không thấy được (sự phân rã nguyên tử, cấu trúc DNA)",
+        "Thay thế hoàn toàn người thầy giáo",
+        "Giúp học sinh không cần làm bài tập",
+        "Làm cho máy tính tự phát sáng"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Mô phỏng an toàn tuyệt đối, tiết kiệm hóa chất đắt tiền và mở rộng trực quan các thế giới vi mô/vĩ mô.",
+      "hint": "An toàn với thí nghiệm nguy hiểm, tiết kiệm chi phí và quan sát thế giới vi mô."
+    },
+    {
+      "id": "tin9-b5-mc10",
+      "type": "multiple_choice",
+      "question": "Phần mềm mô phỏng PhET (Interactive Simulations) của Đại học Colorado rất nổi tiếng trong việc mô phỏng các lĩnh vực nào?",
+      "options": [
+        "Vật lí, Hóa học, Sinh học, Toán học và Khoa học Trái đất",
+        "Chỉ mô phỏng chơi game",
+        "Mô phỏng gõ văn bản",
+        "Mô phỏng gửi email"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "PhET là nền tảng mô phỏng tương tác giáo dục STEM mở hàng đầu thế giới.",
+      "hint": "Mô phỏng tương tác STEM: Vật lí, Hóa học, Sinh học, Toán học."
+    },
+    {
+      "id": "tin9-b5-mc11",
+      "type": "multiple_choice",
+      "question": "Phần mềm Geogebra là phần mềm mô phỏng và hỗ trợ học tập môn học nào?",
+      "options": [
+        "Môn Toán học (Hình học động, Đại số, Vẽ đồ thị hàm số và Thống kê)",
+        "Môn Lịch sử",
+        "Môn Âm nhạc",
+        "Môn Thể dục"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Geogebra kết hợp hình học động và đồ thị đại số rất trực quan cho giáo dục toán học.",
+      "hint": "Môn Toán học (Hình học động và đồ thị đại số)."
+    },
+    {
+      "id": "tin9-b5-mc12",
+      "type": "multiple_choice",
+      "question": "Trong ngành Hàng không vũ trụ, các phần mềm mô phỏng buồng lái máy bay (Flight Simulator) có vai trò sống còn là gì?",
+      "options": [
+        "Huấn luyện kĩ năng điều khiển cho phi công và rèn luyện phản xạ xử lí sự cố khẩn cấp (thời tiết bão tố, hỏng động cơ) an toàn trước khi bay thật",
+        "Để phi công chơi trò chơi điện tử xả stress",
+        "Để tiết kiệm tiền mua vé máy bay",
+        "Để chiếu phim cho hành khách xem"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Huấn luyện trên buồng lái mô phỏng giúp phi công đạt trình độ chuẩn xác cao mà không nguy hiểm tính mạng.",
+      "hint": "Huấn luyện phi công và diễn tập xử lí sự cố an toàn."
+    },
+    {
+      "id": "tin9-b5-mc13",
+      "type": "multiple_choice",
+      "question": "Điểm hạn chế cần lưu ý khi học tập bằng phần mềm mô phỏng là gì?",
+      "options": [
+        "Mô hình mô phỏng luôn có những giả định lí tưởng hóa, không thể phản ánh hoàn toàn 100% mọi yếu tố ngẫu nhiên và phức tạp của thực tế bên ngoài",
+        "Phần mềm mô phỏng luôn cho kết quả sai",
+        "Phần mềm mô phỏng làm hỏng màn hình",
+        "Không thể tương tác được"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Mô phỏng thường bỏ qua một số ma sát hoặc sai số môi trường ngoài đời thực.",
+      "hint": "Dựa trên mô hình lí tưởng hóa, không thay thế hoàn toàn thực nghiệm thực tế."
+    },
+    {
+      "id": "tin9-b5-mc14",
+      "type": "multiple_choice",
+      "question": "Phần mềm mô phỏng hệ mặt trời Solar System Scope giúp học sinh quan sát trực quan điều gì?",
+      "options": [
+        "Sự chuyển động quay của các hành tinh quanh Mặt Trời, quỹ đạo và vị trí tương đối giữa các thiên thể trong không gian 3D",
+        "Thời tiết hàng ngày tại trường học",
+        "Sơ đồ giao thông của thành phố",
+        "Cấu tạo của một chiếc xe máy"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Solar System Scope mô phỏng vũ trụ 3D trực quan, tái hiện chân thực quỹ đạo hành tinh.",
+      "hint": "Quỹ đạo chuyển động của các hành tinh trong Hệ Mặt Trời 3D."
+    },
+    {
+      "id": "tin9-b5-mc15",
+      "type": "multiple_choice",
+      "question": "Khả năng 'Tua nhanh / Làm chậm thời gian' trong các phần mềm mô phỏng mang lại lợi ích gì?",
+      "options": [
+        "Quan sát rõ các hiện tượng diễn ra quá nhanh (như phản ứng nổ) hoặc các hiện tượng diễn ra quá chậm kéo dài hàng triệu năm (sự trôi dạt lục địa, tiến hóa sinh học)",
+        "Làm cho giờ tan học đến nhanh hơn",
+        "Tăng tuổi thọ của học sinh",
+        "Tự động giải xong bài kiểm tra"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Điều khiển tốc độ thời gian giúp con người nắm bắt những quy luật vượt khỏi giới hạn quan sát tự nhiên.",
+      "hint": "Quan sát các hiện tượng cực nhanh hoặc cực chậm kéo dài."
     }
   ],
   "tin9-bai-6": [
@@ -1422,6 +2022,126 @@ export const QUESTIONS_GRADE_9: Record<string, Question[]> = {
       "difficulty": "de",
       "explanation": "SGK Tin học 9 KNTT (Trang 29): Nút Reset khôi phục toàn bộ các thông số về mặc định ban đầu để bắt đầu lượt thí nghiệm mới.",
       "hint": "Reset là đưa về trạng thái ban đầu."
+    },
+    {
+      "id": "tin9-b6-mc8",
+      "type": "multiple_choice",
+      "question": "Khi thực hành với phần mềm mô phỏng mạch điện trực tuyến (như Tinkercad Circuits hoặc PhET Circuit), thao tác đầu tiên là gì?",
+      "options": [
+        "Kéo thả các linh kiện cần thiết (nguồn pin, bóng đèn, công tắc, dây dẫn) từ thanh công cụ vào vùng làm việc",
+        "Bấm phím tắt máy tính",
+        "Đo nhiệt độ phòng học",
+        "Lấy kéo cắt dây điện thật"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 9 KNTT (Trang 26): Bắt đầu bằng việc chọn và bố trí các linh kiện ảo lên bảng mạch mô phỏng.",
+      "hint": "Kéo thả linh kiện từ thư viện vào vùng làm việc ảo."
+    },
+    {
+      "id": "tin9-b6-mc9",
+      "type": "multiple_choice",
+      "question": "Nếu trong mô phỏng mạch điện ảo, em vô tình đấu nối đoản mạch (chập cực dương và cực âm của pin), điều gì sẽ xảy ra?",
+      "options": [
+        "Phần mềm sẽ hiển thị cảnh báo (cháy bóng đèn, nổ pin ảo hoặc bốc khói ảo) giúp học sinh nhận biết lỗi nguy hiểm mà không gây chấn thương thực tế nào",
+        "Máy tính thật của học sinh sẽ bị nổ tung",
+        "Toàn bộ căn phòng học bị mất điện",
+        "Phần mềm sẽ tự động biến mất"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Mô phỏng tái hiện hậu quả trực quan để học sinh rút kinh nghiệm an toàn mà không hề nguy hiểm thân thể.",
+      "hint": "Cảnh báo chập cháy ảo trực quan, an toàn tuyệt đối cho người học."
+    },
+    {
+      "id": "tin9-b6-mc10",
+      "type": "multiple_choice",
+      "question": "Nút lệnh 'Start Simulation' (Bắt đầu mô phỏng) trong các phần mềm mô phỏng dùng để làm gì?",
+      "options": [
+        "Kích hoạt mô hình hoạt động theo các quy luật vật lí để người dùng quan sát diễn biến và đo đạc số liệu",
+        "In mạch điện ra giấy",
+        "Lưu dự án lên đám mây",
+        "Xóa toàn bộ linh kiện"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Start Simulation khởi động động cơ tính toán vật lí để mô hình vận hành chuyển động.",
+      "hint": "Kích hoạt mô hình vận hành và bắt đầu tính toán."
+    },
+    {
+      "id": "tin9-b6-mc11",
+      "type": "multiple_choice",
+      "question": "Thao tác thay đổi các tham số đầu vào (như tăng điện áp của nguồn, thay đổi điện trở của biến trở) nhằm mục đích gì?",
+      "options": [
+        "Quan sát và ghi nhận sự thay đổi tương ứng của các đại lượng đầu ra (như cường độ dòng điện, độ sáng của đèn) để kiểm chứng định luật Ôm",
+        "Để làm hỏng phần mềm",
+        "Để đổi màu giao diện máy tính",
+        "Không có mục đích gì"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Biến đổi tham số độc lập và quan sát biến phụ thuộc là phương pháp thực nghiệm khoa học cốt lõi.",
+      "hint": "Kiểm tra mối quan hệ giữa các đại lượng và kiểm chứng định luật."
+    },
+    {
+      "id": "tin9-b6-mc12",
+      "type": "multiple_choice",
+      "question": "Trong phần mềm mô phỏng giải phẫu cơ thể người hoặc động vật 3D, thao tác nào cho phép quan sát các cơ quan ẩn sâu bên trong?",
+      "options": [
+        "Ẩn bớt các lớp da, cơ bên ngoài hoặc điều chỉnh độ trong suốt của các bộ phận",
+        "Nhỏ cồn vào màn hình",
+        "Xoay ngược màn hình máy tính",
+        "Tắt loa máy tính"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Tính năng bóc tách từng lớp cơ quan 3D (Dissection) cho phép khám phá cấu trúc giải phẫu sinh học sâu sắc.",
+      "hint": "Ẩn bớt các lớp bên ngoài hoặc chỉnh độ trong suốt."
+    },
+    {
+      "id": "tin9-b6-mc13",
+      "type": "multiple_choice",
+      "question": "Để đo hiệu điện thế giữa hai đầu bóng đèn trong phần mềm mô phỏng, em sử dụng thiết bị đo ảo nào và mắc như thế nào?",
+      "options": [
+        "Dùng Vôn kế (Voltmeter) ảo và mắc SONG SONG với hai đầu bóng đèn",
+        "Dùng Ampe kế ảo và mắc song song",
+        "Dùng thước dây",
+        "Dùng nhiệt kế"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Quy tắc vật lí: Vôn kế luôn mắc song song để đo hiệu điện thế; Ampe kế mắc nối tiếp để đo cường độ dòng điện.",
+      "hint": "Vôn kế (Voltmeter) ảo mắc song song."
+    },
+    {
+      "id": "tin9-b6-mc14",
+      "type": "multiple_choice",
+      "question": "Sau khi kết thúc phiên thực hành trên phần mềm mô phỏng, học sinh cần làm gì để hoàn thiện bài học?",
+      "options": [
+        "Ghi chép số liệu đo đạc vào bảng báo cáo thực hành, so sánh với công thức lí thuyết và đưa ra nhận xét kết luận",
+        "Tắt máy tính bỏ về ngay",
+        "Xóa hết kết quả đo được",
+        "Chép nguyên bài của bạn khác"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Xử lí số liệu và đối chiếu lí thuyết là bước hoàn tất quy trình thực nghiệm khoa học.",
+      "hint": "Ghi chép số liệu, đối chiếu lí thuyết và rút ra kết luận."
+    },
+    {
+      "id": "tin9-b6-mc15",
+      "type": "multiple_choice",
+      "question": "Ưu điểm của việc chia sẻ tệp dự án mô phỏng cho các bạn trong nhóm học tập là gì?",
+      "options": [
+        "Các thành viên có thể cùng xem, cùng tương tác trên cùng một mô hình và thảo luận giải pháp từ xa",
+        "Giúp máy tính của các bạn bị quá tải",
+        "Để khoe khoang",
+        "Không có lợi ích gì"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Chia sẻ dự án mô phỏng hỗ trợ đắc lực cho hoạt động học tập hợp tác nhóm STEM.",
+      "hint": "Cùng tương tác, thảo luận trên cùng mô hình từ xa."
     }
   ],
   "tin9-bai-7": [
@@ -1650,6 +2370,126 @@ export const QUESTIONS_GRADE_9: Record<string, Question[]> = {
       "difficulty": "trung_binh",
       "explanation": "SGK Tin học 9 KNTT (Trang 35): Version History giúp kiểm soát lịch sử biên tập, xem đóng góp của từng cá nhân và khôi phục dữ liệu an toàn.",
       "hint": "Xem lịch sử chỉnh sửa và khôi phục lại phiên bản cũ."
+    },
+    {
+      "id": "tin9-b7-mc8",
+      "type": "multiple_choice",
+      "question": "Khi làm việc nhóm để tạo bài thuyết trình báo cáo dự án, việc 'Đồng tác giả' (Co-authoring) trực tuyến đem lại ưu điểm gì?",
+      "options": [
+        "Nhiều thành viên có thể cùng mở, cùng chỉnh sửa nội dung trên cùng một tệp trình chiếu cùng lúc theo thời gian thực",
+        "Chỉ một người làm việc còn những người khác bị khóa tài khoản",
+        "Tệp sẽ tự động chia làm 10 mảnh độc lập",
+        "Làm tăng giá tiền của phần mềm"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 9 KNTT (Trang 30): Co-authoring (như Google Slides, PowerPoint Online) giúp làm việc nhóm tức thì, không bị chồng chéo phiên bản.",
+      "hint": "Nhiều người cùng chỉnh sửa đồng thời theo thời gian thực."
+    },
+    {
+      "id": "tin9-b7-mc9",
+      "type": "multiple_choice",
+      "question": "Quyền truy cập chia sẻ tài liệu trực tuyến thường gồm những cấp độ phân quyền cơ bản nào?",
+      "options": [
+        "Người xem (Viewer - chỉ được xem), Người nhận xét (Commenter - được ghi chú góp ý) và Người chỉnh sửa (Editor - toàn quyền sửa)",
+        "Quyền xóa máy tính và quyền cài lại hệ điều hành",
+        "Chỉ có đúng một quyền duy nhất là xóa tệp",
+        "Không có cấp độ phân quyền nào"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Ba cấp độ chuẩn bảo mật chia sẻ: Viewer (Chỉ xem), Commenter (Bình luận), Editor (Chỉnh sửa).",
+      "hint": "Viewer (Xem), Commenter (Bình luận) và Editor (Chỉnh sửa)."
+    },
+    {
+      "id": "tin9-b7-mc10",
+      "type": "multiple_choice",
+      "question": "Tính năng Lịch sử phiên bản (Version History) trong các công cụ cộng tác trực tuyến có vai trò bảo vệ công việc nhóm như thế nào?",
+      "options": [
+        "Theo dõi ai đã sửa nội dung gì vào thời điểm nào và cho phép khôi phục lại bất kì phiên bản cũ nào nếu lỡ bị bạn khác xóa nhầm",
+        "Tự động xóa tệp sau 24 giờ",
+        "Khóa không cho ai xem bài",
+        "In bài tự động ra máy in"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Version History là chiếc phao cứu sinh ghi lại vết tích lịch sử đóng góp và phòng ngừa tai nạn mất dữ liệu.",
+      "hint": "Theo dõi người chỉnh sửa và khôi phục phiên bản cũ khi bị xóa nhầm."
+    },
+    {
+      "id": "tin9-b7-mc11",
+      "type": "multiple_choice",
+      "question": "Để trao đổi, góp ý về một đoạn văn cụ thể trong bài báo cáo chung mà không làm thay đổi trực tiếp nội dung gốc, em dùng tính năng nào?",
+      "options": [
+        "Tính năng Thêm nhận xét / Bình luận (Add Comment)",
+        "Tính năng Xóa đoạn văn (Delete)",
+        "Tính năng Cắt đoạn văn (Cut)",
+        "Tính năng Khởi động lại máy"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Add Comment tạo luồng trao đổi bên lề giúp nhóm thảo luận dân chủ trước khi duyệt chỉnh sửa.",
+      "hint": "Thêm nhận xét / Bình luận (Add Comment)."
+    },
+    {
+      "id": "tin9-b7-mc12",
+      "type": "multiple_choice",
+      "question": "Kĩ thuật @mention (Gắn thẻ tên người khác, ví dụ @NguyenVanA) trong bình luận có tác dụng gì?",
+      "options": [
+        "Gửi thông báo trực tiếp qua email hoặc ứng dụng cho người đó và giao nhiệm vụ xử lí cụ thể cho họ",
+        "Xóa bạn đó khỏi nhóm",
+        "Đổi mật khẩu tài khoản của bạn đó",
+        "Làm bạn đó bị ngắt kết nối mạng"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "@mention điều hướng sự chú ý và phân quyền trách nhiệm cụ thể cho thành viên trong dự án.",
+      "hint": "Gửi thông báo và điều hướng giao việc cho đúng thành viên."
+    },
+    {
+      "id": "tin9-b7-mc13",
+      "type": "multiple_choice",
+      "question": "Nguyên tắc thiết kế bài trình bày báo cáo dự án đảm bảo tính 'Chuyên nghiệp và Đồng bộ' đòi hỏi điều gì?",
+      "options": [
+        "Nhất quán về phông chữ, tông màu chủ đạo, kích thước tiêu đề và bố cục đồ họa xuyên suốt từ slide đầu đến slide cuối",
+        "Mỗi trang chiếu dùng một phông chữ và 10 màu sắc sặc sỡ khác nhau",
+        "Trang nào cũng phải chèn video ca nhạc dài 5 phút",
+        "Không ghi tên tác giả"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Tính đồng bộ thẩm mỹ khẳng định sự chuẩn mực và tôn trọng người tiếp nhận thông điệp.",
+      "hint": "Đồng bộ phông chữ, bảng màu và phong cách bố cục xuyên suốt."
+    },
+    {
+      "id": "tin9-b7-mc14",
+      "type": "multiple_choice",
+      "question": "Khi gửi liên kết chia sẻ tài liệu bài tập cho giáo viên chấm điểm, em nên phân quyền ở chế độ nào là phù hợp nhất?",
+      "options": [
+        "Người xem (Viewer) hoặc Người nhận xét (Commenter) để giáo viên xem và ghi chú nhận xét mà không bị xáo trộn bài",
+        "Bắt buộc đặt mật khẩu khóa không cho thầy cô xem",
+        "Chỉ gửi tệp rỗng",
+        "Xóa tệp trước khi gửi link"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Cấp quyền Viewer/Commenter vừa giúp thầy cô đọc và nhận xét thuận lợi, vừa giữ nguyên trạng bài làm của học sinh.",
+      "hint": "Quyền Viewer (Xem) hoặc Commenter (Nhận xét)."
+    },
+    {
+      "id": "tin9-b7-mc15",
+      "type": "multiple_choice",
+      "question": "Hành vi tự ý vào xóa bài của bạn khác trong tệp tài liệu cộng tác chung của nhóm thể hiện điều gì?",
+      "options": [
+        "Hành vi thiếu văn hóa hợp tác, vi phạm kỉ luật làm việc nhóm và thiếu tôn trọng công sức của bạn bè",
+        "Hành động dũng cảm",
+        "Giúp nhóm đạt điểm cao hơn",
+        "Không có vấn đề gì"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Làm việc cộng tác đòi hỏi tinh thần trách nhiệm, tôn trọng sản phẩm của đồng đội và thảo luận trước khi thay đổi.",
+      "hint": "Thiếu văn hóa hợp tác và không tôn trọng công sức tập thể."
     }
   ],
   "tin9-bai-8": [
@@ -1878,6 +2718,126 @@ export const QUESTIONS_GRADE_9: Record<string, Question[]> = {
       "difficulty": "trung_binh",
       "explanation": "SGK Tin học 9 KNTT (Trang 38): Chế độ Đề xuất (Suggesting) hiển thị phần sửa dưới dạng gợi ý để chủ tài liệu duyệt (Accept) hoặc từ chối (Reject).",
       "hint": "Chế độ Đề xuất (Suggesting) trong Google Docs."
+    },
+    {
+      "id": "tin9-b8-mc8",
+      "type": "multiple_choice",
+      "question": "Nền tảng lưu trữ và chia sẻ tệp trực tuyến Google Drive (hoặc OneDrive) có tính năng nào sau đây?",
+      "options": [
+        "Tải tệp lên, đồng bộ dữ liệu giữa các thiết bị, chia sẻ quyền truy cập qua đường link và sao lưu an toàn",
+        "Tự động in tất cả tài liệu ra giấy",
+        "Chỉ lưu được một tệp duy nhất",
+        "Không cho phép người khác xem tệp"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 9 KNTT (Trang 34): Đám mây lưu trữ dữ liệu an toàn, truy cập linh hoạt từ máy tính và điện thoại thông minh.",
+      "hint": "Lưu trữ, đồng bộ đa thiết bị, chia sẻ link và sao lưu đám mây."
+    },
+    {
+      "id": "tin9-b8-mc9",
+      "type": "multiple_choice",
+      "question": "Công cụ biểu mẫu trực tuyến (Google Forms / Microsoft Forms) rất hữu ích cho hoạt động nào của học sinh?",
+      "options": [
+        "Tạo bảng khảo sát ý kiến, thu thập thông tin đăng kí tham gia câu lạc bộ hoặc tạo bài kiểm tra trắc nghiệm chấm điểm tự động",
+        "Soạn thảo một cuốn tiểu thuyết dài",
+        "Vẽ tranh sơn dầu",
+        "Nghe nhạc trực tuyến"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Google Forms thu thập dữ liệu bảng hỏi và xuất kết quả khảo sát ra bảng tính tự động tức thì.",
+      "hint": "Tạo phiếu khảo sát ý kiến hoặc bài trắc nghiệm tự chấm điểm."
+    },
+    {
+      "id": "tin9-b8-mc10",
+      "type": "multiple_choice",
+      "question": "Để chia sẻ một tệp trên Google Drive cho một bạn cụ thể mà không công khai cho người khác xem, thao tác là gì?",
+      "options": [
+        "Nhập chính xác địa chỉ email của bạn đó vào ô 'Chia sẻ với mọi người và nhóm' và chọn cấp quyền tương ứng",
+        "Bật chế độ 'Bất kì ai có liên kết đều xem được'",
+        "Đăng đường link lên trang Facebook cá nhân",
+        "In tệp ra giấy"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Chia sẻ đích danh qua địa chỉ email đảm bảo chỉ tài khoản được chỉ định mới mở được tệp.",
+      "hint": "Nhập chính xác địa chỉ email của bạn đó vào ô chia sẻ."
+    },
+    {
+      "id": "tin9-b8-mc11",
+      "type": "multiple_choice",
+      "question": "Tùy chọn 'Bất kì ai có liên kết' (Anyone with the link) khi chia sẻ tệp có rủi ro bảo mật gì cần lưu ý?",
+      "options": [
+        "Bất kì người nào có được đường link đó (kể cả người lạ được chuyển tiếp) đều có thể mở xem hoặc tải tệp về",
+        "Máy tính của em sẽ bị xóa hết dữ liệu",
+        "Tệp sẽ bị đổi tên",
+        "Không có rủi ro nào"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Link mở công khai có thể bị rò rỉ hoặc chia sẻ tràn lan ngoài tầm kiểm soát.",
+      "hint": "Bất kì ai có đường link đều mở được tài liệu."
+    },
+    {
+      "id": "tin9-b8-mc12",
+      "type": "multiple_choice",
+      "question": "Khi kết quả phản hồi của biểu mẫu Google Forms gửi về, dữ liệu tổng hợp có thể được xuất tự động sang phần mềm nào?",
+      "options": [
+        "Bảng tính Google Sheets (hoặc Microsoft Excel)",
+        "Phần mềm Paint",
+        "Phần mềm Calculator",
+        "Hộp thư rác Spam"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Forms liên kết trực tiếp với Sheets để lưu trữ mỗi câu trả lời thành một hàng dữ liệu kèm dấu thời gian.",
+      "hint": "Xuất tự động sang bảng tính Google Sheets."
+    },
+    {
+      "id": "tin9-b8-mc13",
+      "type": "multiple_choice",
+      "question": "Tính năng đặt Hạn chót nộp bài (Deadline / Schedule) trong Google Classroom hỗ trợ quản lí học tập như thế nào?",
+      "options": [
+        "Nhắc nhở học sinh nộp bài đúng hạn và tự động đánh dấu 'Nộp muộn' (Turned in late) đối với các bài nộp sau thời gian quy định",
+        "Khóa máy tính của học sinh nếu nộp muộn",
+        "Tự động chấm 0 điểm",
+        "Xóa tài khoản của học sinh"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Classroom hỗ trợ rèn luyện kỉ luật thời gian và quản lí tiến độ nộp bài khoa học.",
+      "hint": "Nhắc hạn nộp và tự động ghi nhận nộp muộn."
+    },
+    {
+      "id": "tin9-b8-mc14",
+      "type": "multiple_choice",
+      "question": "Để bảo vệ an toàn cho các tệp dữ liệu lưu trên Google Drive khi dùng máy tính công cộng ở trường, điều bắt buộc phải làm trước khi ra về là gì?",
+      "options": [
+        "Đăng xuất (Sign out) hoàn toàn tài khoản Google và xóa lịch sử duyệt web",
+        "Chỉ cần tắt màn hình máy tính",
+        "Rút dây cắm chuột",
+        "Để nguyên tài khoản cho bạn sau vào dùng tiếp"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Không đăng xuất ở máy tính chung sẽ khiến người dùng sau dễ dàng xem, sửa hoặc xóa dữ liệu riêng tư của mình.",
+      "hint": "Đăng xuất tài khoản hoàn toàn trước khi rời máy tính công cộng."
+    },
+    {
+      "id": "tin9-b8-mc15",
+      "type": "multiple_choice",
+      "question": "Khái niệm 'Không gian làm việc số' (Digital Workspace) cho phép người học và người làm việc đạt được điều gì?",
+      "options": [
+        "Kết nối, trao đổi, quản lí dự án và tiếp cận kho học liệu ở bất kì đâu, bất kì lúc nào chỉ cần có thiết bị kết nối Internet",
+        "Không bao giờ phải thi cử",
+        "Học sinh không cần làm bài mà tự động lên lớp",
+        "Không cần giáo viên giảng dạy"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Không gian số xóa bỏ rào cản địa lí và thời gian, thúc đẩy học tập suốt đời linh hoạt.",
+      "hint": "Làm việc và học tập linh hoạt mọi lúc, mọi nơi có kết nối mạng."
     }
   ],
   "tin9-bai-9a": [
@@ -2120,6 +3080,126 @@ export const QUESTIONS_GRADE_9: Record<string, Question[]> = {
       "difficulty": "kho",
       "explanation": "SGK Tin học 9 KNTT (Trang 46): Lệnh Circle Invalid Data sẽ tự động khoanh tròn đỏ xung quanh các ô chứa dữ liệu sai quy tắc.",
       "hint": "Circle Invalid Data khoanh tròn các ô dữ liệu không hợp lệ."
+    },
+    {
+      "id": "tin9-b9a-mc8",
+      "type": "multiple_choice",
+      "question": "Công cụ XÁC THỰC DỮ LIỆU (Data Validation) trong phần mềm bảng tính Excel có chức năng chính là gì?",
+      "options": [
+        "Thiết lập các quy tắc ràng buộc để kiểm soát và chỉ cho phép người dùng nhập vào những dữ liệu hợp lệ trong một phạm vi hoặc danh sách định sẵn",
+        "Tự động dịch văn bản sang tiếng nước ngoài",
+        "Xóa bỏ các hàng bị trùng lặp",
+        "Đổi phông chữ của toàn bộ trang tính"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 9 KNTT (Trang 38): Data Validation ngăn chặn sai sót nhập liệu ngay từ lúc gõ dữ liệu vào ô tính.",
+      "hint": "Thiết lập quy tắc kiểm soát dữ liệu nhập vào hợp lệ."
+    },
+    {
+      "id": "tin9-b9a-mc9",
+      "type": "multiple_choice",
+      "question": "Để mở hộp thoại Data Validation, người dùng chọn vùng ô tính rồi vào thẻ lệnh nào?",
+      "options": [
+        "Thẻ Data -> Nhóm Data Tools -> Chọn Data Validation",
+        "Thẻ Home -> Nhóm Font",
+        "Thẻ Insert -> Nhóm Charts",
+        "Thẻ View -> Nhóm Zoom"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Data Validation nằm trong nhóm Data Tools trên thanh dải lệnh của thẻ Data.",
+      "hint": "Thẻ Data -> nhóm Data Tools -> Data Validation."
+    },
+    {
+      "id": "tin9-b9a-mc10",
+      "type": "multiple_choice",
+      "question": "Tính năng tạo 'Danh sách thả xuống' (Drop-down List) trong ô tính được thiết lập bằng lựa chọn nào trong thẻ Settings của Data Validation?",
+      "options": [
+        "Mục Allow chọn: List",
+        "Mục Allow chọn: Whole number",
+        "Mục Allow chọn: Date",
+        "Mục Allow chọn: Text length"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Tùy chọn List tạo menu thả xuống chứa danh mục cố định (ví dụ: Nam, Nữ; Giỏi, Khá, Trung bình).",
+      "hint": "Mục Allow -> chọn List."
+    },
+    {
+      "id": "tin9-b9a-mc11",
+      "type": "multiple_choice",
+      "question": "Nếu muốn giới hạn người dùng CHỈ ĐƯỢC NHẬP ĐIỂM SỐ từ 0 đến 10 vào ô Điểm kiểm tra, ta thiết lập điều kiện nào trong Data Validation?",
+      "options": [
+        "Allow: Decimal (hoặc Whole number), Data: between, Minimum: 0, Maximum: 10",
+        "Allow: Text length, Minimum: 1, Maximum: 2",
+        "Allow: Date, between: 2026",
+        "Allow: Any value"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Thiết lập số thập phân Decimal nằm trong khoảng Between từ 0 đến 10 ngăn chặn nhập điểm âm hoặc điểm > 10.",
+      "hint": "Allow: Decimal, Data: between từ 0 đến 10."
+    },
+    {
+      "id": "tin9-b9a-mc12",
+      "type": "multiple_choice",
+      "question": "Thẻ 'Input Message' (Thông báo nhập) trong Data Validation có tác dụng gì?",
+      "options": [
+        "Hiển thị một khung hướng dẫn nhỏ màu vàng ngay khi người dùng nhấp chuột chọn ô đó để nhắc nhở quy tắc nhập dữ liệu",
+        "Gửi tin nhắn SMS cho giáo viên",
+        "Phát âm thanh cảnh báo",
+        "Tự động nhập dữ liệu vào ô"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Input Message hiển thị tooltip hướng dẫn người nhập liệu biết định dạng dữ liệu được phép nhập.",
+      "hint": "Hiển thị khung hướng dẫn khi người dùng nhấp chọn ô."
+    },
+    {
+      "id": "tin9-b9a-mc13",
+      "type": "multiple_choice",
+      "question": "Thẻ 'Error Alert' (Cảnh báo lỗi) trong Data Validation hoạt động khi nào?",
+      "options": [
+        "Bật lên hộp thoại cảnh báo khi người dùng cố tình hoặc vô ý nhập vào giá trị SAI QUY TẮC đã được quy định",
+        "Khi máy tính bị mất điện",
+        "Khi ô tính có dữ liệu đúng",
+        "Khi in bảng tính ra giấy"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Error Alert từ chối dữ liệu không hợp lệ và hiển thị thông điệp giải thích lí do sai.",
+      "hint": "Hiển thị khi người dùng nhập dữ liệu sai quy tắc."
+    },
+    {
+      "id": "tin9-b9a-mc14",
+      "type": "multiple_choice",
+      "question": "Trong ba kiểu cảnh báo lỗi của Error Alert: Stop, Warning và Information, kiểu nào sẽ CHẶN TUYỆT ĐỐI không cho phép lưu giá trị sai vào ô?",
+      "options": [
+        "Kiểu Stop (biểu tượng dấu chéo trắng trong hình tròn đỏ)",
+        "Kiểu Warning (biểu tượng tam giác vàng)",
+        "Kiểu Information (biểu tượng chữ i xanh)",
+        "Cả ba kiểu đều cho phép lưu"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Stop khóa cứng hoàn toàn; Warning và Information chỉ nhắc nhở cảnh báo nhưng vẫn cho phép vượt qua.",
+      "hint": "Kiểu Stop (hình tròn đỏ có dấu chéo trắng)."
+    },
+    {
+      "id": "tin9-b9a-mc15",
+      "type": "multiple_choice",
+      "question": "Để xóa bỏ toàn bộ quy tắc xác thực dữ liệu Data Validation đã cài đặt trên một vùng ô tính, em bấm nút nào trong hộp thoại?",
+      "options": [
+        "Nút 'Clear All'",
+        "Nút 'OK'",
+        "Nút 'Apply'",
+        "Nút 'Cancel'"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Clear All đưa vùng ô tính trở lại trạng thái tự do mặc định (Allow: Any value).",
+      "hint": "Nút lệnh Clear All."
     }
   ],
   "tin9-bai-10a": [
@@ -2362,6 +3442,126 @@ export const QUESTIONS_GRADE_9: Record<string, Question[]> = {
       "difficulty": "de",
       "explanation": "SGK Tin học 9 KNTT (Trang 48): Không có phần tử thỏa mãn thì số lượng đếm được bằng 0.",
       "hint": "Không có phần tử nào thỏa mãn thì kết quả đếm là 0."
+    },
+    {
+      "id": "tin9-b10a-mc8",
+      "type": "multiple_choice",
+      "question": "Hàm COUNTIF trong phần mềm bảng tính Excel có chức năng chính là gì?",
+      "options": [
+        "Đếm số lượng các ô trong một phạm vi thỏa mãn một ĐIỀU KIỆN (tiêu chí) xác định",
+        "Tính tổng các số trong một phạm vi",
+        "Tìm giá trị lớn nhất trong bảng",
+        "Đếm tất cả các ô không cần điều kiện"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 9 KNTT (Trang 42): COUNT (đếm) kết hợp IF (nếu) tạo thành hàm đếm theo điều kiện.",
+      "hint": "Đếm số ô thỏa mãn một điều kiện xác định."
+    },
+    {
+      "id": "tin9-b10a-mc9",
+      "type": "multiple_choice",
+      "question": "Cú pháp chuẩn xác của hàm COUNTIF là gì?",
+      "options": [
+        "=COUNTIF(range, criteria)",
+        "=COUNTIF(criteria, range)",
+        "=COUNTIF(range1, range2, condition)",
+        "=COUNTIF(sum, count)"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "range là vùng dữ liệu cần đếm; criteria là điều kiện đếm (chuỗi văn bản, số, hoặc biểu thức so sánh).",
+      "hint": "=COUNTIF(vùng_đếm, điều_kiện)."
+    },
+    {
+      "id": "tin9-b10a-mc10",
+      "type": "multiple_choice",
+      "question": "Để đếm xem có bao nhiêu học sinh xếp loại 'Giỏi' trong cột Xếp loại từ ô D2 đến D30, công thức nào sau đây là ĐÚNG?",
+      "options": [
+        "=COUNTIF(D2:D30, \"Giỏi\")",
+        "=COUNTIF(D2:D30, Giỏi)",
+        "=COUNTIF(\"Giỏi\", D2:D30)",
+        "=COUNT(D2:D30, \"Giỏi\")"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Điều kiện là chuỗi văn bản 'Giỏi' bắt buộc phải được đặt trong cặp dấu ngoặc kép \"\".",
+      "hint": "=COUNTIF(D2:D30, \"Giỏi\")."
+    },
+    {
+      "id": "tin9-b10a-mc11",
+      "type": "multiple_choice",
+      "question": "Để đếm số lượng học sinh có điểm kiểm tra từ 8.0 trở lên trong vùng C2:C40, điều kiện so sánh được viết như thế nào?",
+      "options": [
+        "=COUNTIF(C2:C40, \">=8.0\")",
+        "=COUNTIF(C2:C40, >=8.0)",
+        "=COUNTIF(C2:C40, >8.0 or =8.0)",
+        "=COUNTIF(C2:C40; 8.0)"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Biểu thức so sánh toán học như >=8.0 phải đặt trong cặp dấu ngoặc kép \">=8.0\".",
+      "hint": "\">=8.0\" (đặt trong ngoặc kép)."
+    },
+    {
+      "id": "tin9-b10a-mc12",
+      "type": "multiple_choice",
+      "question": "Cho vùng dữ liệu A1:A5 gồm các số: 5, 8, 2, 8, 10. Kết quả của công thức =COUNTIF(A1:A5, 8) là bao nhiêu?",
+      "options": [
+        "2",
+        "1",
+        "3",
+        "8"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Số 8 xuất hiện đúng 2 lần trong vùng A1:A5 -> kết quả đếm là 2.",
+      "hint": "Số 8 xuất hiện 2 lần."
+    },
+    {
+      "id": "tin9-b10a-mc13",
+      "type": "multiple_choice",
+      "question": "Kí tự đại diện dấu sao (*) trong điều kiện của hàm COUNTIF (ví dụ: =COUNTIF(A2:A20, \"Trần*\")) có ý nghĩa gì?",
+      "options": [
+        "Đại diện cho một chuỗi kí tự bất kì (đếm tất cả những người có họ bắt đầu bằng chữ 'Trần')",
+        "Phép nhân với số 10",
+        "Đếm các ô có vẽ hình ngôi sao",
+        "Báo lỗi cú pháp"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Dấu sao (*) là ký tự wildcard đại diện cho một chuỗi ký tự tùy ý độ dài bất kì.",
+      "hint": "Kí tự đại diện (wildcard) cho chuỗi kí tự bất kì."
+    },
+    {
+      "id": "tin9-b10a-mc14",
+      "type": "multiple_choice",
+      "question": "Để đếm số lượng các ô KHÔNG TRỐNG (có chứa nội dung) trong vùng B2:B15, điều kiện nào có thể sử dụng trong COUNTIF?",
+      "options": [
+        "=COUNTIF(B2:B15, \"<>\")",
+        "=COUNTIF(B2:B15, \"=\")",
+        "=COUNTIF(B2:B15, 0)",
+        "=COUNTIF(B2:B15, \"blank\")"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Kí hiệu <> (khác rỗng) đếm tất cả các ô có chứa dữ liệu.",
+      "hint": "\"<>\" (khác rỗng)."
+    },
+    {
+      "id": "tin9-b10a-mc15",
+      "type": "multiple_choice",
+      "question": "Khi sao chép công thức chứa hàm COUNTIF sang các ô khác, điều quan trọng cần chú ý về vùng tham chiếu range là gì?",
+      "options": [
+        "Nên sử dụng ĐỊA CHỈ TUYỆT ĐỐI (như $D$2:$D$30 bằng cách nhấn phím F4) để vùng dữ liệu không bị trượt khi kéo sao chép công thức",
+        "Không bao giờ được bấm phím F4",
+        "Vùng dữ liệu sẽ tự động thu nhỏ lại",
+        "Luôn phải gõ lại từng công thức bằng tay"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Cố định vùng tham chiếu bằng dấu $ giữ nguyên bảng số liệu khi sao chép công thức thống kê.",
+      "hint": "Cố định địa chỉ tuyệt đối bằng phím F4 ($D$2:$D$30)."
     }
   ],
   "tin9-bai-11a": [
@@ -2604,6 +3804,126 @@ export const QUESTIONS_GRADE_9: Record<string, Question[]> = {
       "difficulty": "trung_binh",
       "explanation": "SGK Tin học 9 KNTT (Trang 53): Tương tự SUMIF, Excel cung cấp hàm AVERAGEIF có cấu trúc `=AVERAGEIF(range, criteria, [average_range])` để tính trung bình có điều kiện.",
       "hint": "AVERAGEIF tính trung bình cộng có điều kiện."
+    },
+    {
+      "id": "tin9-b11a-mc8",
+      "type": "multiple_choice",
+      "question": "Hàm SUMIF trong phần mềm bảng tính Excel có chức năng chính là gì?",
+      "options": [
+        "Tính TỔNG các giá trị trong một phạm vi thỏa mãn một ĐIỀU KIỆN (tiêu chí) xác định",
+        "Đếm số lượng học sinh",
+        "Tìm số nhỏ nhất",
+        "Tính trung bình cộng không điều kiện"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 9 KNTT (Trang 46): SUM (tổng) kết hợp IF (nếu) tạo thành hàm tính tổng theo điều kiện.",
+      "hint": "Tính tổng các giá trị thỏa mãn một điều kiện xác định."
+    },
+    {
+      "id": "tin9-b11a-mc9",
+      "type": "multiple_choice",
+      "question": "Cú pháp đầy đủ của hàm SUMIF gồm những đối số nào?",
+      "options": [
+        "=SUMIF(range, criteria, [sum_range])",
+        "=SUMIF(sum_range, criteria, range)",
+        "=SUMIF(criteria, sum_range)",
+        "=SUMIF(range, sum_range)"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "range: vùng kiểm tra điều kiện; criteria: điều kiện; sum_range: vùng thực tế cần tính tổng (nếu bỏ qua thì tính tổng trên range).",
+      "hint": "=SUMIF(vùng_điều_kiện, điều_kiện, [vùng_tính_tổng])."
+    },
+    {
+      "id": "tin9-b11a-mc10",
+      "type": "multiple_choice",
+      "question": "Nếu bỏ qua đối số thứ ba [sum_range] trong hàm =SUMIF(range, criteria), Excel sẽ tính tổng trên vùng nào?",
+      "options": [
+        "Tính tổng chính trên các ô của vùng thứ nhất (range) thỏa mãn điều kiện",
+        "Kết quả trả về số 0",
+        "Báo lỗi cú pháp",
+        "Tính tổng toàn bộ trang tính"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Mặc định nếu sum_range bị lược bỏ, Excel lấy luôn range làm vùng cộng tổng số liệu.",
+      "hint": "Tính tổng ngay trên chính vùng range."
+    },
+    {
+      "id": "tin9-b11a-mc11",
+      "type": "multiple_choice",
+      "question": "Cho cột B (tên môn thể thao) và cột C (số tiền đóng góp). Để tính tổng số tiền đóng góp riêng cho môn 'Bóng đá', công thức đúng là:",
+      "options": [
+        "=SUMIF(B2:B20, \"Bóng đá\", C2:C20)",
+        "=SUMIF(C2:C20, \"Bóng đá\", B2:B20)",
+        "=SUMIF(B2:B20, C2:C20, \"Bóng đá\")",
+        "=SUM(B2:B20, \"Bóng đá\")"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Vùng điều kiện là môn thể thao (B2:B20), điều kiện là \"Bóng đá\", vùng tính tổng là số tiền (C2:C20).",
+      "hint": "=SUMIF(B2:B20, \"Bóng đá\", C2:C20)."
+    },
+    {
+      "id": "tin9-b11a-mc12",
+      "type": "multiple_choice",
+      "question": "Để tính tổng số tiền của tất cả các khoản chi tiêu có giá trị LỚN HƠN 500.000 VNĐ trong vùng D2:D30, công thức viết là:",
+      "options": [
+        "=SUMIF(D2:D30, \">500000\")",
+        "=SUMIF(D2:D30, >500000)",
+        "=SUMIF(\">500000\", D2:D30)",
+        "=SUM(D2:D30, \">500000\")"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Khi vùng điều kiện và vùng tính tổng trùng nhau, lược bỏ sum_range: =SUMIF(D2:D30, \">500000\").",
+      "hint": "=SUMIF(D2:D30, \">500000\")."
+    },
+    {
+      "id": "tin9-b11a-mc13",
+      "type": "multiple_choice",
+      "question": "Sự khác biệt cơ bản giữa hàm COUNTIF và hàm SUMIF là gì?",
+      "options": [
+        "COUNTIF dùng để ĐẾM số lượng các ô thỏa mãn điều kiện; SUMIF dùng để CỘNG TỔNG giá trị các số trong các ô thỏa mãn điều kiện",
+        "COUNTIF chỉ dùng cho chữ cái, SUMIF chỉ dùng cho ngày tháng",
+        "Hai hàm này hoàn toàn giống hệt nhau không khác gì",
+        "SUMIF không bao giờ dùng được điều kiện"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "COUNTIF = Đếm số lần xuất hiện; SUMIF = Tính tổng giá trị số học.",
+      "hint": "COUNTIF là đếm số lượng, SUMIF là cộng tổng giá trị."
+    },
+    {
+      "id": "tin9-b11a-mc14",
+      "type": "multiple_choice",
+      "question": "Ứng dụng thực tế của hàm SUMIF trong quản lí quỹ lớp học sinh là gì?",
+      "options": [
+        "Tổng hợp nhanh tổng số tiền đã chi riêng cho từng mục (như tiền mua báo học tập, tiền photo tài liệu, tiền liên hoan) từ sổ thu chi chi tiết",
+        "Tự động in tiền cho quỹ lớp",
+        "Đổi mật khẩu tài khoản thủ quỹ",
+        "Xóa sổ các bạn chưa nộp tiền"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Phân loại và cộng tổng chi phí theo từng danh mục là nghiệp vụ kế toán kinh điển của hàm SUMIF.",
+      "hint": "Cộng tổng chi tiêu theo từng mục cụ thể của quỹ lớp."
+    },
+    {
+      "id": "tin9-b11a-mc15",
+      "type": "multiple_choice",
+      "question": "Cho vùng A1:A4 chứa: [\"Táo\", \"Lê\", \"Táo\", \"Cam\"], vùng B1:B4 chứa: [10, 20, 30, 40]. Kết quả của =SUMIF(A1:A4, \"Táo\", B1:B4) là bao nhiêu?",
+      "options": [
+        "40 (vì 10 + 30 = 40)",
+        "10",
+        "30",
+        "100"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Các ô có chữ 'Táo' là hàng 1 (10) và hàng 3 (30) -> Tổng = 10 + 30 = 40.",
+      "hint": "10 + 30 = 40."
     }
   ],
   "tin9-bai-12a": [
@@ -2846,6 +4166,126 @@ export const QUESTIONS_GRADE_9: Record<string, Question[]> = {
       "difficulty": "de",
       "explanation": "SGK Tin học 9 KNTT (Trang 56): Các hàm logic AND (đồng thời) và OR (hoặc) kết hợp chặt chẽ với hàm IF để tạo điều kiện phức hợp.",
       "hint": "Hàm AND và hàm OR là hai hàm logic kinh điển."
+    },
+    {
+      "id": "tin9-b12a-mc8",
+      "type": "multiple_choice",
+      "question": "Cú pháp chuẩn xác của hàm điều kiện IF trong phần mềm bảng tính Excel là gì?",
+      "options": [
+        "=IF(logical_test, value_if_true, value_if_false)",
+        "=IF(value_if_true, logical_test, value_if_false)",
+        "=IF(condition, result)",
+        "=IF(logical_test; value1; value2; value3)"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 9 KNTT (Trang 50): logical_test (điều kiện kiểm tra), value_if_true (giá trị trả về nếu điều kiện Đúng), value_if_false (giá trị nếu điều kiện Sai).",
+      "hint": "=IF(điều_kiện, giá_trị_nếu_đúng, giá_trị_nếu_sai)."
+    },
+    {
+      "id": "tin9-b12a-mc9",
+      "type": "multiple_choice",
+      "question": "Để xét kết quả học tập tại ô C2: nếu Điểm trung bình (ô B2) >= 5.0 thì ghi 'Đạt', ngược lại ghi 'Chưa đạt', công thức đúng là:",
+      "options": [
+        "=IF(B2>=5.0, \"Đạt\", \"Chưa đạt\")",
+        "=IF(B2>=5.0, Đạt, Chưa đạt)",
+        "=IF(B2<5.0, \"Đạt\", \"Chưa đạt\")",
+        "=IF(B2=5.0, \"Đạt\")"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Giá trị chuỗi trả về (\"Đạt\", \"Chưa đạt\") bắt buộc phải đặt trong dấu ngoặc kép.",
+      "hint": "=IF(B2>=5.0, \"Đạt\", \"Chưa đạt\")."
+    },
+    {
+      "id": "tin9-b12a-mc10",
+      "type": "multiple_choice",
+      "question": "Hàm IF lồng nhau (Nested IF) được sử dụng khi nào trong bảng tính?",
+      "options": [
+        "Khi bài toán cần kiểm tra nhiều hơn hai trường hợp điều kiện rẽ nhánh (Ví dụ: xếp loại Giỏi, Khá, Trung bình, Yếu)",
+        "Chỉ khi cần cộng 2 số",
+        "Khi máy tính bị lỗi phần cứng",
+        "Không bao giờ được lồng hàm IF"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Lồng hàm IF vào vị trí value_if_false giúp phân nhánh đa cấp cho 3, 4 hoặc nhiều mức phân loại.",
+      "hint": "Khi có từ 3 trường hợp điều kiện trở lên."
+    },
+    {
+      "id": "tin9-b12a-mc11",
+      "type": "multiple_choice",
+      "question": "Tại sao việc 'Quản lí tài chính cá nhân' từ lứa tuổi học sinh lại có ý nghĩa thiết thực?",
+      "options": [
+        "Giúp hình thành thói quen chi tiêu thông minh, biết tiết kiệm cho các mục tiêu tương lai và tránh lãng phí tiền bạc vào những thứ không cần thiết",
+        "Để học sinh trở thành tỉ phú ngay lập tức",
+        "Để không cần ăn uống gì cả",
+        "Để cho vay lấy lãi"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Tư duy tài chính thông minh giúp học sinh làm chủ cuộc sống, quý trọng giá trị sức lao động.",
+      "hint": "Chi tiêu thông minh, tiết kiệm cho tương lai và tránh lãng phí."
+    },
+    {
+      "id": "tin9-b12a-mc12",
+      "type": "multiple_choice",
+      "question": "Quy tắc quản lí tài chính theo mô hình 50/30/20 khuyên phân bổ thu nhập (tiền tiêu vặt) như thế nào?",
+      "options": [
+        "50% cho Nhu cầu thiết yếu (ăn uống, học tập), 30% cho Mong muốn giải trí cá nhân, và 20% cho Tiết kiệm tích lũy",
+        "100% dành cho chơi game",
+        "50% cho giải trí, 50% mua quà",
+        "Tiêu hết không cần giữ lại đồng nào"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Mô hình ngân sách 50/30/20 là chuẩn mực tài chính phổ biến nhất giúp cân bằng cuộc sống và tích lũy an toàn.",
+      "hint": "50% thiết yếu, 30% sở thích giải trí, 20% tiết kiệm tích lũy."
+    },
+    {
+      "id": "tin9-b12a-mc13",
+      "type": "multiple_choice",
+      "question": "Khi lập bảng theo dõi chi tiêu cá nhân trên Excel, công thức nào giúp tự động cảnh báo 'Vượt ngân sách' nếu số tiền đã chi (ô C10) lớn hơn hạn mức cho phép (ô B10)?",
+      "options": [
+        "=IF(C10>B10, \"Vượt ngân sách!\", \"An toàn\")",
+        "=IF(C10<B10, \"Vượt ngân sách!\", \"An toàn\")",
+        "=IF(C10=B10, \"Nguy hiểm\")",
+        "=SUM(B10, C10)"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Nếu chi > hạn mức (C10 > B10) thì cảnh báo \"Vượt ngân sách!\", ngược lại trả về \"An toàn\".",
+      "hint": "=IF(C10>B10, \"Vượt ngân sách!\", \"An toàn\")."
+    },
+    {
+      "id": "tin9-b12a-mc14",
+      "type": "multiple_choice",
+      "question": "Khoản chi nào sau đây thuộc nhóm 'Nhu cầu thiết yếu' (Needs) của một học sinh THCS?",
+      "options": [
+        "Mua sách vở, đồ dùng học tập, dụng cụ vẽ và bữa ăn trưa dinh dưỡng",
+        "Mua một chiếc điện thoại iPhone đời mới nhất",
+        "Nạp thẻ chơi game online",
+        "Đi xem phim rạp mỗi ngày"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Sách vở học tập và ăn uống là nhu cầu thiết yếu cơ bản, các thứ giải trí thuộc nhóm mong muốn (Wants).",
+      "hint": "Sách vở, dụng cụ học tập và ăn uống."
+    },
+    {
+      "id": "tin9-b12a-mc15",
+      "type": "multiple_choice",
+      "question": "Để làm nổi bật màu nền đỏ cho các ô có chữ 'Vượt ngân sách' tự động, ta kết hợp tính năng nào của Excel?",
+      "options": [
+        "Định dạng có điều kiện (Conditional Formatting)",
+        "Đổi phông chữ thủ công",
+        "Xóa cột đó đi",
+        "In trang tính"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Conditional Formatting tự động tô màu trực quan khi giá trị ô thỏa mãn điều kiện quy định.",
+      "hint": "Tính năng Conditional Formatting (Định dạng có điều kiện)."
     }
   ],
   "tin9-bai-13": [
@@ -3088,6 +4528,126 @@ export const QUESTIONS_GRADE_9: Record<string, Question[]> = {
       "difficulty": "kho",
       "explanation": "SGK Tin học 9 KNTT (Trang 62): Tấn công từ chối dịch vụ (DDoS) gây quá tải băng thông và bộ nhớ máy chủ, khiến người dùng chính thống không thể truy cập.",
       "hint": "Làm tê liệt máy chủ bằng lượng truy cập ảo khổng lồ."
+    },
+    {
+      "id": "tin9-b13-mc8",
+      "type": "multiple_choice",
+      "question": "Tấn công từ chối dịch vụ phân tán (DDoS - Distributed Denial of Service) có phương thức hoạt động nguy hiểm như thế nào?",
+      "options": [
+        "Huy động mạng lưới hàng ngàn máy tính 'ma' (Botnet) đồng loạt gửi lượng yêu cầu truy cập khổng lồ đến một máy chủ khiến máy chủ bị quá tải và tê liệt hoàn toàn",
+        "Gửi một con virus xóa tệp tin trên máy nạn nhân",
+        "Ăn trộm bàn phím của người khác",
+        "Rút dây điện nguồn máy tính"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "SGK Tin học 9 KNTT (Trang 54): DDoS làm nghẽn băng thông hệ thống máy chủ, ngăn chặn người dùng hợp pháp tiếp cận dịch vụ.",
+      "hint": "Làm tê liệt máy chủ bằng cách gửi lượng yêu cầu khổng lồ từ mạng Botnet."
+    },
+    {
+      "id": "tin9-b13-mc9",
+      "type": "multiple_choice",
+      "question": "Mã độc tống tiền (Ransomware) gây ra thiệt hại nghiêm trọng nào cho nạn nhân?",
+      "options": [
+        "Mã hóa toàn bộ các tệp tài liệu quan trọng trên máy tính của nạn nhân bằng mật mã phức tạp và đòi tiền chuộc để giải mã",
+        "Chỉ làm màn hình máy tính nhấp nháy",
+        "Tự động gửi lời chúc mừng sinh nhật",
+        "Làm tăng tốc độ quạt gió"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Ransomware biến dữ liệu thành con tin đòi tiền chuộc bằng tiền mã hóa; sao lưu định kì là giải pháp phòng vệ duy nhất.",
+      "hint": "Mã hóa khóa dữ liệu và đòi tiền chuộc."
+    },
+    {
+      "id": "tin9-b13-mc10",
+      "type": "multiple_choice",
+      "question": "Mạng riêng ảo (VPN - Virtual Private Network) cung cấp cơ chế bảo mật nào khi người dùng truy cập Internet ở quán cafe qua Wi-Fi công cộng?",
+      "options": [
+        "Mã hóa toàn bộ lưu lượng dữ liệu truyền qua một 'đường hầm' an toàn, ngăn chặn kẻ xấu nghe lén hoặc đánh cắp thông tin đăng nhập",
+        "Tăng dung lượng pin điện thoại",
+        "Chặn không cho màn hình sáng",
+        "Tự động thanh toán tiền cafe"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "VPN mã hóa đường truyền điểm-điểm (Tunneling), bảo vệ dữ liệu nhạy cảm trên sóng Wi-Fi không an toàn.",
+      "hint": "Tạo đường hầm mã hóa dữ liệu an toàn trên mạng công cộng."
+    },
+    {
+      "id": "tin9-b13-mc11",
+      "type": "multiple_choice",
+      "question": "Tường lửa (Firewall) trong hệ thống mạng máy tính đóng vai trò gì?",
+      "options": [
+        "Rào chắn bảo vệ kiểm soát toàn bộ lưu lượng ra vào mạng máy tính theo các quy tắc an ninh, ngăn chặn các truy cập trái phép từ bên ngoài",
+        "Bức tường gạch chống cháy nổ cho phòng máy tính",
+        "Dây cáp chống sét",
+        "Phần mềm nghe nhạc trực tuyến"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Firewall giám sát và sàng lọc các gói tin mạng, chặn đứng các mối nguy hại thâm nhập vào mạng nội bộ.",
+      "hint": "Rào chắn kiểm soát lưu lượng và ngăn chặn truy cập trái phép."
+    },
+    {
+      "id": "tin9-b13-mc12",
+      "type": "multiple_choice",
+      "question": "Biểu tượng ổ khóa màu xanh lá cây hoặc ổ khóa đóng cạnh đường link URL trên thanh địa chỉ của trình duyệt web biểu thị điều gì?",
+      "options": [
+        "Trang web đang sử dụng giao thức bảo mật HTTPS với chứng chỉ SSL/TLS, dữ liệu trao đổi giữa em và máy chủ được mã hóa an toàn",
+        "Trang web này đang bị khóa không cho vào",
+        "Máy tính của em đang bị nhiễm virus",
+        "Trang web yêu cầu người dùng phải trả tiền mặt"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Biểu tượng khóa chứng thực kênh truyền bảo mật HTTPS, bảo vệ mật khẩu và thẻ tín dụng không bị chặn bắt.",
+      "hint": "Giao thức HTTPS mã hóa dữ liệu an toàn (chứng chỉ SSL/TLS)."
+    },
+    {
+      "id": "tin9-b13-mc13",
+      "type": "multiple_choice",
+      "question": "Phương thức xác thực hai yếu tố (2FA / Two-Factor Authentication) bảo vệ tài khoản tốt hơn mật khẩu thông thường như thế nào?",
+      "options": [
+        "Đòi hỏi 2 lớp bảo vệ độc lập: mật khẩu và một mã xác nhận gửi về điện thoại (hoặc sinh trắc học vân tay); kẻ trộm có biết mật khẩu cũng không vào được",
+        "Bắt buộc người dùng phải gõ mật khẩu hai lần liên tiếp",
+        "Chỉ cho phép hai người cùng đăng nhập",
+        "Không có tác dụng gì"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "2FA kết hợp điều bạn biết (mật khẩu) và điều bạn sở hữu (điện thoại/OTP) tạo ra lớp bảo vệ kép kiên cố.",
+      "hint": "Kết hợp mật khẩu và mã OTP gửi qua điện thoại cá nhân."
+    },
+    {
+      "id": "tin9-b13-mc14",
+      "type": "multiple_choice",
+      "question": "Hành vi sử dụng mạng Wi-Fi công cộng mở (không có mật khẩu) ở sân bay hay bến xe để đăng nhập tài khoản ngân hàng tiềm ẩn nguy cơ gì?",
+      "options": [
+        "Bị tin tặc sử dụng kỹ thuật tấn công kẻ đứng giữa (Man-in-the-Middle) để chặn bắt tên đăng nhập, mật khẩu và dữ liệu tài chính",
+        "Điện thoại sẽ bị vỡ màn hình",
+        "Máy bay không thể cất cánh",
+        "Tài khoản sẽ được tặng thêm tiền"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Wi-Fi công cộng không mã hóa là mảnh đất màu mỡ cho các cuộc tấn công đánh cắp phiên làm việc.",
+      "hint": "Nguy cơ bị nghe lén và đánh cắp thông tin tài chính."
+    },
+    {
+      "id": "tin9-b13-mc15",
+      "type": "multiple_choice",
+      "question": "Lỗ hổng 'Zero-day' (Lỗ hổng ngày số không) trong an ninh thông tin là gì?",
+      "options": [
+        "Lỗ hổng bảo mật phần mềm mà nhà phát triển chưa hề biết đến và chưa có bản vá lỗi nào, có nguy cơ bị hacker khai thác tấn công tức thì",
+        "Lỗ hổng xảy ra vào ngày đầu tiên của năm mới",
+        "Một phần mềm hoàn toàn không có lỗi",
+        "Lỗi xảy ra lúc 0 giờ đêm"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Zero-day cực kì nguy hiểm vì nạn nhân và nhà sản xuất có '0 ngày' để phòng thủ trước khi bản vá kịp ra đời.",
+      "hint": "Lỗ hổng chưa được công bố và chưa có bản vá sửa chữa."
     }
   ],
   "tin9-bai-14": [
@@ -3316,6 +4876,126 @@ export const QUESTIONS_GRADE_9: Record<string, Question[]> = {
       "difficulty": "trung_binh",
       "explanation": "SGK Tin học 9 KNTT (Trang 68): Nhấn Delete chỉ chuyển tệp vào Recycle Bin. Cần xóa vĩnh viễn (Shift + Delete) và làm rỗng thùng rác (Empty Recycle Bin).",
       "hint": "Tệp vẫn còn trong thùng rác Recycle Bin nếu chỉ nhấn Delete."
+    },
+    {
+      "id": "tin9-b14-mc8",
+      "type": "multiple_choice",
+      "question": "Thao tác BẬT TÍNH NĂNG XÁC THỰC 2 BƯỚC (2-Step Verification) cho tài khoản Google / Gmail cá nhân được thực hiện ở đâu?",
+      "options": [
+        "Quản lí Tài khoản Google -> Thẻ Bảo mật (Security) -> Bật Xác minh 2 bước",
+        "Cài đặt hình nền điện thoại",
+        "Trong thư mục Spam",
+        "Trong ứng dụng Máy tính Calculator"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 9 KNTT (Trang 58): Thẻ Bảo mật trong trang quản trị tài khoản quản lí tất cả thiết bị và cơ chế bảo vệ.",
+      "hint": "Tài khoản Google -> Bảo mật (Security) -> Xác minh 2 bước."
+    },
+    {
+      "id": "tin9-b14-mc9",
+      "type": "multiple_choice",
+      "question": "Tại sao người dùng nên định kì 'Đăng xuất khỏi tất cả các thiết bị khác' (Sign out of all other sessions) trong cài đặt bảo mật tài khoản?",
+      "options": [
+        "Để đảm bảo tài khoản không còn bị đăng nhập trên các máy tính công cộng, quán net hoặc điện thoại cũ lỡ bị thất lạc",
+        "Để xóa vĩnh viễn tài khoản",
+        "Để giải phóng bộ nhớ RAM",
+        "Để máy tính tải nhanh hơn"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Ngắt các phiên đăng nhập lạ giúp cô lập tài khoản và chấm dứt các nguy cơ truy cập trái phép.",
+      "hint": "Chấm dứt các phiên đăng nhập cũ trên máy lạ hoặc máy công cộng."
+    },
+    {
+      "id": "tin9-b14-mc10",
+      "type": "multiple_choice",
+      "question": "Kĩ năng kiểm tra xem một đường link có phải là trang lừa đảo (Phishing) trước khi bấm vào trên máy tính là gì?",
+      "options": [
+        "Rê chuột (Hover) lên trên liên kết mà KHÔNG nhấp, quan sát địa chỉ URL thật hiển thị ở góc dưới màn hình xem có sai lệch tên miền không (ví dụ: g00gle.com thay vì google.com)",
+        "Bấm vào liên kết thật nhanh 10 lần",
+        "Tắt màn hình",
+        "Chụp ảnh màn hình"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Rê chuột soi địa chỉ URL đích (Preview URL) là phản xạ bảo mật kinh điển nhận diện website mạo danh.",
+      "hint": "Rê chuột quan sát đường link URL thật ở góc dưới màn hình."
+    },
+    {
+      "id": "tin9-b14-mc11",
+      "type": "multiple_choice",
+      "question": "Tính năng 'Quản lí mật khẩu' (Password Manager) của trình duyệt hoặc các ứng dụng chuyên dụng (Bitwarden, 1Password) mang lại lợi ích gì?",
+      "options": [
+        "Tạo mật khẩu cực mạnh ngẫu nhiên, lưu trữ mã hóa an toàn và tự động điền mật khẩu mà người dùng không cần phải ghi nhớ hàng chục mật khẩu phức tạp",
+        "Công khai mật khẩu lên mạng",
+        "Chia sẻ mật khẩu cho mọi người xem",
+        "Xóa toàn bộ mật khẩu sau 1 ngày"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Trình quản lí mật khẩu giải quyết bài toán đặt mật khẩu phức tạp duy nhất cho mỗi trang web mà không lo quên.",
+      "hint": "Tạo mật khẩu mạnh ngẫu nhiên và lưu trữ mã hóa an toàn."
+    },
+    {
+      "id": "tin9-b14-mc12",
+      "type": "multiple_choice",
+      "question": "Hành vi quét toàn bộ máy tính bằng phần mềm diệt virus định kì hàng tuần có tác dụng gì?",
+      "options": [
+        "Kịp thời phát hiện, cách li hoặc tiêu diệt các tệp tin chứa mã độc, sâu máy tính ẩn nấp trước khi chúng phát tán gây hại",
+        "Làm mát phần cứng máy tính",
+        "Tăng tốc độ gõ bàn phím",
+        "Đổi giao diện màn hình"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Quét virus định kì giúp thanh lọc hệ thống và bảo vệ toàn vẹn tài nguyên dữ liệu.",
+      "hint": "Kịp thời phát hiện và tiêu diệt mã độc ẩn nấp trong hệ thống."
+    },
+    {
+      "id": "tin9-b14-mc13",
+      "type": "multiple_choice",
+      "question": "Khi nhận được một thông báo: 'Điện thoại của bạn bị nhiễm 13 con virus! Bấm vào đây để tải phần mềm diệt ngay!', em nên làm gì?",
+      "options": [
+        "Đóng ngay tab trang web đó lại và tuyệt đối KHÔNG bấm vào đường link cảnh báo giả đó (đó là chiêu trò quảng cáo lừa đảo cài mã độc Scareware)",
+        "Lập tức bấm tải về ngay",
+        "Chuyển tiếp cho các bạn trong lớp",
+        "Ném điện thoại đi"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Đó là Scareware (phần mềm hù dọa); trình duyệt web không thể tự quét virus trên thiết bị.",
+      "hint": "Đóng tab trang web ngay, đó là quảng cáo lừa đảo Scareware."
+    },
+    {
+      "id": "tin9-b14-mc14",
+      "type": "multiple_choice",
+      "question": "Quy tắc sao lưu dữ liệu '3-2-1' khuyên người sử dụng thực hiện sao lưu như thế nào?",
+      "options": [
+        "Lưu ít nhất 3 bản sao dữ liệu, trên 2 loại phương tiện lưu trữ khác nhau, và có ít nhất 1 bản sao lưu ở nơi khác (như đám mây hoặc ổ cứng ngoài để nơi khác)",
+        "Sao lưu 3 lần trong 1 ngày",
+        "Chỉ giữ 1 bản sao duy nhất trong thùng rác",
+        "Sao lưu vào 3 chiếc đĩa mềm"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "Chiến lược 3-2-1 là tiêu chuẩn vàng sao lưu dữ liệu toàn cầu phòng ngừa mọi thảm họa ổ cứng.",
+      "hint": "3 bản sao, trên 2 loại thiết bị, 1 bản lưu trên đám mây hoặc nơi khác."
+    },
+    {
+      "id": "tin9-b14-mc15",
+      "type": "multiple_choice",
+      "question": "Tại sao việc 'Cập nhật hệ điều hành và ứng dụng lên phiên bản mới nhất' (Update) là biện pháp bảo mật cốt lõi?",
+      "options": [
+        "Vì các bản cập nhật mới liên tục vá các lỗ hổng bảo mật vừa được phát hiện, ngăn chặn hacker lợi dụng để xâm nhập",
+        "Để làm đầy bộ nhớ máy tính",
+        "Để đổi màu các biểu tượng ứng dụng",
+        "Chỉ để máy tính tốn thêm pin"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Phần mềm không update là miếng mồi ngon cho hacker khai thác các lỗ hổng đã được công bố.",
+      "hint": "Vá các lỗ hổng bảo mật và ngăn chặn nguy cơ xâm nhập."
     }
   ],
   "tin9-bai-15": [
@@ -3558,6 +5238,126 @@ export const QUESTIONS_GRADE_9: Record<string, Question[]> = {
       "difficulty": "trung_binh",
       "explanation": "SGK Tin học 9 KNTT (Trang 71): Tester là \"người gác cổng chất lượng\", kiểm thử tỉ mỉ nhằm phát hiện lỗi để lập trình viên sửa trước khi phát hành.",
       "hint": "Tìm lỗi (bug) để đảm bảo chất lượng phần mềm trước khi phát hành."
+    },
+    {
+      "id": "tin9-b15-mc8",
+      "type": "multiple_choice",
+      "question": "Trong bối cảnh Trí tuệ nhân tạo (AI) và tự động hóa phát triển thần tốc, xu hướng việc làm trong tương lai sẽ thay đổi như thế nào?",
+      "options": [
+        "Các công việc lặp đi lặp lại đơn giản sẽ dần được máy móc thay thế, trong khi nhu cầu về các vị trí đòi hỏi tư duy sáng tạo, năng lực công nghệ và kĩ năng xã hội sẽ tăng vọt",
+        "Tất cả mọi người sẽ thất nghiệp hoàn toàn",
+        "Không có bất kì sự thay đổi nào so với thế kỉ 19",
+        "Chỉ có các robot mới được phép đi làm"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 9 KNTT (Trang 62): AI định hình lại thị trường lao động, chuyển dịch mạnh mẽ sang nền kinh tế sáng tạo và công nghệ.",
+      "hint": "Máy móc thay thế việc lặp lại, gia tăng việc làm đòi hỏi sáng tạo và công nghệ."
+    },
+    {
+      "id": "tin9-b15-mc9",
+      "type": "multiple_choice",
+      "question": "Nghề 'Kĩ sư Trí tuệ nhân tạo' (AI Engineer / Machine Learning Specialist) làm công việc gì?",
+      "options": [
+        "Nghiên cứu, huấn luyện các mô hình học máy (Machine Learning) và phát triển các thuật toán giúp máy tính có khả năng tự học, suy luận và nhận thức thông minh",
+        "Lắp ráp vỏ máy vi tính ở nhà máy",
+        "Bán chuột máy tính trên mạng",
+        "Dọn vệ sinh phòng thí nghiệm"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Kĩ sư AI xây dựng các giải pháp thông minh tự động hóa phân tích dữ liệu, nhận diện hình ảnh và tiếng nói.",
+      "hint": "Huấn luyện mô hình học máy và phát triển thuật toán AI thông minh."
+    },
+    {
+      "id": "tin9-b15-mc10",
+      "type": "multiple_choice",
+      "question": "Nghề 'Thiết kế giao diện và trải nghiệm người dùng' (UI/UX Designer) phụ trách công việc gì?",
+      "options": [
+        "Thiết kế hình ảnh giao diện đẹp mắt (UI) và nghiên cứu hành vi để người dùng thao tác trên ứng dụng/website một cách thuận tiện, dễ chịu nhất (UX)",
+        "Sửa chữa đường dây điện",
+        "Lập bảng tính lương nhân viên",
+        "Gõ văn bản hành chính"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "UI (User Interface) tạo vẻ đẹp thẩm mỹ; UX (User Experience) tối ưu hóa sự mượt mà và cảm xúc người dùng.",
+      "hint": "Thiết kế giao diện đẹp (UI) và tối ưu trải nghiệm thuận tiện (UX)."
+    },
+    {
+      "id": "tin9-b15-mc11",
+      "type": "multiple_choice",
+      "question": "Khái niệm 'Kĩ năng mềm' (Soft Skills) bổ trợ cho dân công nghệ thông tin gồm những kĩ năng nào?",
+      "options": [
+        "Kĩ năng giao tiếp thuyết trình, kĩ năng làm việc nhóm (Teamwork), kĩ năng quản lí thời gian và giải quyết xung đột",
+        "Chỉ là khả năng gõ phím nhanh bằng 10 ngón",
+        "Khả năng nhịn ăn lâu",
+        "Khả năng thức đêm chơi game"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Chuyên môn kĩ thuật giỏi kết hợp kĩ năng mềm vượt trội tạo nên nhà lãnh đạo công nghệ thành công.",
+      "hint": "Giao tiếp, làm việc nhóm, quản lí thời gian và tư duy phản biện."
+    },
+    {
+      "id": "tin9-b15-mc12",
+      "type": "multiple_choice",
+      "question": "Khái niệm 'Học tập suốt đời' (Lifelong Learning) có ý nghĩa sống còn như thế nào đối với người làm trong ngành Công nghệ thông tin?",
+      "options": [
+        "Vì công nghệ số thay đổi và đào thải liên tục từng ngày; nếu không chủ động tự học và cập nhật kiến thức mới thì sẽ nhanh chóng bị tụt hậu",
+        "Để tích lũy càng nhiều bằng khen càng tốt",
+        "Để thi đỗ đại học một lần duy nhất",
+        "Không có ý nghĩa gì đặc biệt"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Chu kì công nghệ tính bằng tháng đòi hỏi tinh thần tự học bền bỉ suốt cả cuộc đời.",
+      "hint": "Công nghệ thay đổi liên tục, cần tự học thường xuyên để không bị tụt hậu."
+    },
+    {
+      "id": "tin9-b15-mc13",
+      "type": "multiple_choice",
+      "question": "Nghề 'Chuyên viên kiểm thử phần mềm' (Tester / QA Engineer) có nhiệm vụ gì trước khi phần mềm được bàn giao cho khách hàng?",
+      "options": [
+        "Chạy thử các kịch bản sử dụng để tìm kiếm tất cả các lỗi tiềm ẩn (bugs) và đảm bảo phần mềm hoạt động trơn tru, đúng thiết kế",
+        "Viết hợp đồng mua bán",
+        "Đóng gói đĩa cài đặt vào hộp",
+        "Tính toán tiền thuế thu nhập"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Tester là người gác cổng chất lượng sản phẩm công nghệ trước khi ra mắt thị trường.",
+      "hint": "Tìm kiếm các lỗi tiềm ẩn (bugs) và đảm bảo chất lượng phần mềm."
+    },
+    {
+      "id": "tin9-b15-mc14",
+      "type": "multiple_choice",
+      "question": "Lợi thế vượt trội của việc học giỏi ngoại ngữ (đặc biệt là Tiếng Anh) đối với học sinh yêu thích ngành Tin học là gì?",
+      "options": [
+        "Dễ dàng tiếp cận các tài liệu chuyên ngành mới nhất, học các khóa học quốc tế trực tuyến và tham gia cộng đồng lập trình viên toàn cầu",
+        "Để đi du lịch nước ngoài",
+        "Để xem phim không cần phụ đề",
+        "Chỉ để đạt điểm cao trên lớp"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Tiếng Anh là ngôn ngữ mẹ đẻ của khoa học máy tính; nắm vững tiếng Anh mở toang cánh cửa tri thức quốc tế.",
+      "hint": "Tiếp cận kho học liệu quốc tế và giao lưu cộng đồng công nghệ toàn cầu."
+    },
+    {
+      "id": "tin9-b15-mc15",
+      "type": "multiple_choice",
+      "question": "Hoạt động nào ngay từ cấp THCS giúp học sinh khám phá và nuôi dưỡng đam mê nghề nghiệp công nghệ?",
+      "options": [
+        "Tham gia các câu lạc bộ Tin học, Robotics, STEM, thử sức lập trình các dự án nhỏ có ích cho cuộc sống và tham dự các kì thi sáng tạo khoa học kĩ thuật",
+        "Chơi game thâu đêm suốt sáng",
+        "Ngồi xem video giải trí trên mạng cả ngày",
+        "Không làm gì cả đợi lớn lên tự biết"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Thực hành dự án STEM và sáng chế công nghệ từ sớm giúp định hình ước mơ và năng khiếu.",
+      "hint": "Tham gia CLB Tin học, Robotics, STEM và sáng tạo dự án công nghệ."
     }
   ],
   "tin9-bai-16": [
@@ -3786,6 +5586,126 @@ export const QUESTIONS_GRADE_9: Record<string, Question[]> = {
       "difficulty": "de",
       "explanation": "SGK Tin học 9 KNTT (Trang 78): Dự án bồi dưỡng phẩm chất và năng lực toàn diện của học sinh: tư duy sáng tạo, tự chủ, kĩ năng giải quyết vấn đề thực tiễn.",
       "hint": "Phát triển tư duy, kĩ năng hợp tác và năng lực số toàn diện."
+    },
+    {
+      "id": "tin9-b16-mc8",
+      "type": "multiple_choice",
+      "question": "Khái niệm 'Khởi nghiệp đổi mới sáng tạo' (Startup) trong lĩnh vực công nghệ số có đặc điểm gì?",
+      "options": [
+        "Doanh nghiệp mới thành lập dựa trên việc khai thác các công nghệ mới hoặc mô hình kinh doanh đột phá, có tiềm năng tăng trưởng quy mô cực nhanh",
+        "Mở một quán tạp hóa buôn bán truyền thống",
+        "Mua bán đất đai bất động sản",
+        "Một cơ quan hành chính nhà nước"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "SGK Tin học 9 KNTT (Trang 66): Startup công nghệ tạo đột phá bằng giải pháp số và có tính nhân rộng quy mô (scalability) cao.",
+      "hint": "Khai thác công nghệ mới đột phá với tiềm năng tăng trưởng quy mô nhanh."
+    },
+    {
+      "id": "tin9-b16-mc9",
+      "type": "multiple_choice",
+      "question": "Các bước cơ bản để triển khai một Dự án khởi nghiệp công nghệ học đường bao gồm quy trình nào?",
+      "options": [
+        "Tìm ý tưởng giải quyết 'nỗi đau' thực tế -> Nghiên cứu thị trường & người dùng -> Xây dựng sản phẩm mẫu thử nghiệm (MVP) -> Thử nghiệm phản hồi -> Hoàn thiện & Kêu gọi hỗ trợ",
+        "Đăng kí kinh doanh rồi đi vay tiền tỉ ngay",
+        "Sao chép nguyên bản của đối thủ",
+        "Làm sản phẩm xong mới đi tìm xem ai cần mua"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Quy trình Khởi nghiệp tinh gọn (Lean Startup): Ý tưởng -> Nghiên cứu -> MVP -> Thử nghiệm và cải tiến lặp.",
+      "hint": "Khảo sát nhu cầu thực tế, tạo sản phẩm mẫu MVP và cải tiến lặp."
+    },
+    {
+      "id": "tin9-b16-mc10",
+      "type": "multiple_choice",
+      "question": "Khái niệm 'Sản phẩm khả dụng tối thiểu' (MVP - Minimum Viable Product) là gì?",
+      "options": [
+        "Phiên bản sản phẩm đầu tiên chỉ chứa những tính năng cốt lõi nhất vừa đủ để đưa cho người dùng trải nghiệm và thu thập phản hồi hoàn thiện",
+        "Một sản phẩm bị lỗi hoàn toàn không dùng được",
+        "Một bản vẽ phác thảo trên giấy nháp",
+        "Sản phẩm đắt tiền nhất"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "trung_binh",
+      "explanation": "MVP giúp nhóm khởi nghiệp kiểm chứng giả thuyết thị trường nhanh nhất với chi phí và nguồn lực tối thiểu.",
+      "hint": "Phiên bản tối thiểu mang tính năng cốt lõi để thử nghiệm thị trường."
+    },
+    {
+      "id": "tin9-b16-mc11",
+      "type": "multiple_choice",
+      "question": "Ý tưởng dự án công nghệ nào sau đây mang tính ứng dụng thực tiễn và ý nghĩa xã hội cao đối với trường học?",
+      "options": [
+        "Ứng dụng 'Tủ sách số chia sẻ học liệu và trao đổi sách cũ' giữa các bạn học sinh trong trường",
+        "Ứng dụng chia sẻ bài giải để gian lận kiểm tra",
+        "Trang web nói xấu giáo viên và bạn bè",
+        "Trò chơi đánh bài ảo ăn tiền"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Dự án công nghệ có giá trị là dự án giải quyết bài toán thiết thực, lan tỏa tri thức và gắn kết cộng đồng.",
+      "hint": "Dự án chia sẻ học liệu và trao đổi sách cũ hữu ích cho học đường."
+    },
+    {
+      "id": "tin9-b16-mc12",
+      "type": "multiple_choice",
+      "question": "Kĩ năng 'Thuyết trình gọi vốn / Trình bày ý tưởng' (Pitching) đòi hỏi nhóm dự án phải thể hiện điều gì?",
+      "options": [
+        "Nêu rõ vấn đề đang tồn tại, giải pháp công nghệ độc đáo của nhóm, lợi ích mang lại cho người dùng và tính khả thi trong thời gian ngắn gọn (3-5 phút)",
+        "Đọc nguyên một cuốn sách dày 200 trang cho ban giám khảo nghe",
+        "Chỉ xin tiền mà không nói sẽ làm gì",
+        "Chiếu một bộ phim hoạt hình"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Pitching thuyết phục người nghe bằng sự cô đọng, sắc bén về giải pháp và tính khả thi của dự án.",
+      "hint": "Nêu rõ vấn đề, giải pháp độc đáo, lợi ích và tính khả thi trong 3-5 phút."
+    },
+    {
+      "id": "tin9-b16-mc13",
+      "type": "multiple_choice",
+      "question": "Công cụ tiếp thị kĩ thuật số (Digital Marketing) giúp dự án khởi nghiệp tiếp cận khách hàng tiềm năng qua các kênh nào?",
+      "options": [
+        "Mạng xã hội (Facebook, TikTok, Instagram), video ngắn giới thiệu sản phẩm trên YouTube và trang web dự án",
+        "Phát loa phóng thanh trên phố",
+        "Chờ đợi khách hàng tự tìm đến",
+        "Gửi thư tay qua bưu điện"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Truyền thông số lan tỏa thông điệp dự án với chi phí thấp và độ phủ sóng rộng khắp tới đối tượng mục tiêu.",
+      "hint": "Mạng xã hội, video ngắn và trang web dự án."
+    },
+    {
+      "id": "tin9-b16-mc14",
+      "type": "multiple_choice",
+      "question": "Thái độ quan trọng nhất của một người khởi nghiệp trẻ khi sản phẩm đầu tiên thất bại hoặc bị người dùng chê là gì?",
+      "options": [
+        "Lắng nghe phản hồi chân thành, kiên trì phân tích nguyên nhân sai lầm, điều chỉnh sản phẩm và không nản chí bỏ cuộc",
+        "Tức giận mắng chửi khách hàng",
+        "Từ bỏ hoàn toàn không bao giờ làm gì nữa",
+        "Đổ lỗi cho hoàn cảnh"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Thất bại là người thầy vĩ đại nhất của khởi nghiệp; tinh thần quật khởi và thích ứng làm nên thành công.",
+      "hint": "Lắng nghe phản hồi, kiên trì phân tích lỗi và hoàn thiện sản phẩm."
+    },
+    {
+      "id": "tin9-b16-mc15",
+      "type": "multiple_choice",
+      "question": "Ý nghĩa lớn nhất của việc trải nghiệm một dự án khởi nghiệp công nghệ ngay từ khi còn ngồi trên ghế nhà trường là gì?",
+      "options": [
+        "Rèn luyện tư duy dám nghĩ dám làm, tinh thần dấn thân giải quyết vấn đề xã hội và phát triển toàn diện các kĩ năng thế kỉ 21",
+        "Chỉ để kiếm thật nhiều tiền tiêu vặt",
+        "Để được miễn thi tất cả các môn học",
+        "Không có ý nghĩa gì"
+      ],
+      "correctAnswer": 0,
+      "difficulty": "de",
+      "explanation": "Trải nghiệm dự án khởi nghiệp trui rèn bản lĩnh, tư duy đổi mới và trách nhiệm phụng sự cộng đồng.",
+      "hint": "Rèn luyện tư duy dám nghĩ dám làm và giải quyết vấn đề cộng đồng."
     }
   ]
 };
