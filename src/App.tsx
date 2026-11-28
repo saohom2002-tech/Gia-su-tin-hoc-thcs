@@ -67,6 +67,7 @@ import {
   getStoredAdminSession,
   saveAdminSession,
   isAuthorizedAdmin,
+  syncAllExamsAndTopicsToGameBank,
   ADMIN_EMAIL,
   AdminSession,
 } from './services/firebase';
@@ -356,6 +357,13 @@ export default function App() {
     const unsubscribeExams = subscribeToCustomExams((remoteExams) => {
       if (Array.isArray(remoteExams)) {
         setCustomExams(remoteExams);
+        // Tự động kiểm tra và phục hồi đồng bộ câu hỏi sang Sân Chơi Game nếu là quản trị viên/giáo viên
+        const session = getStoredAdminSession();
+        if (session && isAuthorizedAdmin(session.email)) {
+          setTimeout(() => {
+            syncAllExamsAndTopicsToGameBank().catch(() => {});
+          }, 3000);
+        }
       }
     });
 

@@ -10,6 +10,7 @@ import {
 } from 'firebase/auth';
 import { StudentScoreRecord, CustomExam, Question } from '../types/quiz';
 import { DEFAULT_CUSTOM_EXAMS } from '../data/defaultCustomExams';
+import { CURRICULUM_LESSONS } from '../data/curriculum';
 import { BUILT_IN_QUESTIONS } from '../data/questionBank';
 
 export const firebaseConfig = {
@@ -1265,7 +1266,8 @@ export function convertPortalQuestionToGame(
     examId?: string;
   }
 ): GameQuestionPayload | null {
-  if (!q || !q.text) return null;
+  const qText = q ? (q.question || (q as any).text || (q as any).title || '') : '';
+  if (!q || !qText) return null;
 
   const rawType = (q.type || 'multiple-choice').toLowerCase();
   let type: 'MC' | 'TF' | 'SA' = 'MC';
@@ -1357,7 +1359,7 @@ export function convertPortalQuestionToGame(
     Subject: subject,
     Chapter: chapter,
     Topic: topic,
-    Question: q.text,
+    Question: qText,
     Explain: q.explanation || '',
     Options: optionsObj,
     CorrectAnswer: correctAnswerStr,
@@ -1424,12 +1426,16 @@ export async function syncSingleExamToGameBank(exam: CustomExam): Promise<boolea
     }
   });
 
+  const cleanTitle = (exam.title || '')
+    .replace(/(\s*\(Khối\s*\d+\s*·\s*\d+\s*câu\))|(\s*·\s*\d+\s*câu\)?)|(\s*\(\d+\s*câu\))/gi, '')
+    .replace(/^[Đđ]ề\:\s*/, '')
+    .trim();
   const setPayload: GameSetPayload = {
     id: setId,
-    name: `Đề: ${exam.title} (Khối ${exam.gradeNumber || 7} · ${qIds.length} câu)`,
+    name: `Đề: ${cleanTitle} (Khối ${exam.gradeNumber || 7} · ${qIds.length} câu)`,
     grade: String(exam.gradeNumber || 7),
     subject: 'Tin học',
-    desc: `Đề thi từ Kho Đề Chuẩn (${exam.title})`,
+    desc: `Đề thi từ Kho Đề Chuẩn (${cleanTitle})`,
     questionIds: qIds,
     updatedAt: Date.now(),
   };
@@ -1487,12 +1493,16 @@ export async function syncTopicQuestionsToGameBank(
     }
   });
 
+  const cleanLesson = (lessonTitle || '')
+    .replace(/(\s*\(Khối\s*\d+\s*·\s*\d+\s*câu\))|(\s*·\s*\d+\s*câu\)?)|(\s*\(\d+\s*câu\))/gi, '')
+    .replace(/^[Bb]ài\:\s*/, '')
+    .trim();
   const setPayload: GameSetPayload = {
     id: setId,
-    name: `Bài: ${lessonTitle} (${qIds.length} câu)`,
+    name: `Bài: ${cleanLesson} (Khối ${gradeNumber} · ${qIds.length} câu)`,
     grade: String(gradeNumber),
     subject: 'Tin học',
-    desc: `Ngân hàng câu hỏi SGK theo bài: ${lessonTitle}`,
+    desc: `Ngân hàng câu hỏi SGK theo bài: ${cleanLesson}`,
     questionIds: qIds,
     updatedAt: Date.now(),
   };
@@ -1533,9 +1543,11 @@ export async function syncAllExamsAndTopicsToGameBank(): Promise<{ questionCount
     }
   }
 
-  for (const [lessonId, qList] of Object.entries(topicOverrides)) {
+  // Đồng bộ tất cả các bài học trong chương trình SGK
+  for (const lesson of CURRICULUM_LESSONS) {
+    const qList = topicOverrides[lesson.id] || BUILT_IN_QUESTIONS[lesson.id] || [];
     if (Array.isArray(qList) && qList.length > 0) {
-      await syncTopicQuestionsToGameBank(lessonId, `Bài ${lessonId}`, 7, qList);
+      await syncTopicQuestionsToGameBank(lesson.id, lesson.title, lesson.gradeNumber || 7, qList);
       totalQuestions += qList.length;
       totalSets++;
     }

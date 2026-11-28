@@ -1073,21 +1073,42 @@
               <span class="muted">Bật/tắt game và chọn bộ đề mặc định (người chơi vẫn có thể đổi khi vào game).</span>
             </div>
             <span class="grow"></span>
-            <button class="btn btn-sm btn-fun" id="sAssignAll" style="font-weight:700" title="Phân bổ toàn bộ 1.089 câu hỏi Tin học cho toàn bộ các trò chơi">⚡ Phân bổ 1.089 câu cho tất cả game</button>
-          </div>
-          <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Trò chơi</th><th>Hiển thị</th><th>Bộ đề mặc định</th><th>Số câu dùng được</th></tr></thead><tbody>
-          ${Games.list.map((g) => { const c = DB.gameCfg(g.id); const n = Quiz.flatten(c.setId ? DB.resolveSet(DB.findSet(c.setId)) : DB.bank(), g.types).length;
-            return `<tr data-g="${g.id}"><td><b>${g.icon} ${esc(g.name)}</b><br><small class="muted">${g.types.join(" · ")}</small></td>
-            <td><label class="switch"><input type="checkbox" data-en ${c.enabled !== false ? "checked" : ""}></label></td>
-            <td><select class="select input-sm" data-set><option value="">📚 Toàn bộ ngân hàng</option>${DB.sets.map((s) => `<option value="${s.id}" ${c.setId === s.id ? "selected" : ""}>🧩 ${esc(s.name)}</option>`).join("")}</select></td>
-            <td><span class="chip ${n ? "green" : "red"}">${n} câu</span></td></tr>`; }).join("")}
-          </tbody></table></div></div>
-        <div class="card-h"><h3>📦 Danh sách bộ đề (${DB.sets.length})</h3><span class="grow"></span><button class="btn btn-primary" id="sAdd">➕ Tạo bộ đề</button></div>
-        <div class="sets-grid">${DB.sets.length ? DB.sets.map((s) => { const n = DB.resolveSet(s).length; const games = Games.list.filter((g) => DB.gameCfg(g.id).setId === s.id);
-          return `<div class="set-card" data-reveal data-s="${s.id}" style="--sc:${s.color || "#0d6efd"}"><div class="sc-top"><b>${esc(s.name)}</b><span class="chip violet">${n} câu</span></div>
-            <p class="muted">${esc(s.desc || (s.filter ? "Bộ đề động theo bộ lọc" : "Chọn câu thủ công"))}</p>
-            <div class="gc-tags">${games.map((g) => `<span class="chip">${g.icon} ${esc(g.name)}</span>`).join("") || '<span class="muted" style="font-size:12px">Chưa gán cho game nào</span>'}</div>
-            <div class="row" style="margin-top:10px"><button class="btn btn-sm btn-fun" data-a="prev" title="Xem trước câu hỏi trong bộ đề">👁️ Xem trước</button><button class="btn btn-sm btn-primary" data-a="edit">✏️ Sửa</button><button class="btn btn-sm btn-ghost" data-a="exp">⬇️ Xuất</button>${FB.isSuperAdmin ? '<button class="btn btn-sm btn-ghost" data-a="del">🗑</button>' : ''}</div></div>`; }).join("") : `<div class="empty"><span class="em-ic">🧩</span>Chưa có bộ đề nào</div>`}</div></div>`;
+          <button class="btn btn-sm btn-fun" id="sAssignAll" style="font-weight:700" title="Phân bổ toàn bộ ngân hàng câu hỏi Tin học cho toàn bộ các trò chơi">⚡ Phân bổ toàn bộ ngân hàng cho tất cả game</button>
+        </div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Trò chơi</th><th>Hiển thị</th><th>Bộ đề mặc định</th><th>Số câu dùng được</th></tr></thead><tbody>
+        ${Games.list.map((g) => { const c = DB.gameCfg(g.id); const n = Quiz.flatten(c.setId ? DB.resolveSet(DB.findSet(c.setId)) : DB.bank(), g.types).length;
+          return `<tr data-g="${g.id}"><td><b>${g.icon} ${esc(g.name)}</b><br><small class="muted">${g.types.join(" · ")}</small></td>
+          <td><label class="switch"><input type="checkbox" data-en ${c.enabled !== false ? "checked" : ""}></label></td>
+          <td><select class="select input-sm" data-set><option value="">📚 Toàn bộ ngân hàng</option>${DB.sets.map((s) => {
+            const resolved = DB.resolveSet(s);
+            const n = resolved.length;
+            const cleanTitle = (s.name || "Bộ đề")
+              .replace(/\s*\(Khối\s*\d+\s*·\s*\d+\s*câu\)/gi, "")
+              .replace(/\s*\(Khối\s*\d+\s*·\s*0\s*câu\)/gi, "")
+              .replace(/\s*·\s*\d+\s*câu\)?/gi, "")
+              .replace(/\s*\(\d+\s*câu\)/gi, "")
+              .trim();
+            const displayName = n > 0 ? `${cleanTitle} (Khối ${s.grade || 7} · ${n} câu)` : s.name;
+            return `<option value="${s.id}" ${c.setId === s.id ? "selected" : ""}>🧩 ${esc(displayName)}</option>`;
+          }).join("")}</select></td>
+          <td><span class="chip ${n ? "green" : "red"}">${n} câu</span></td></tr>`; }).join("")}
+        </tbody></table></div></div>
+      <div class="card-h"><h3>📦 Danh sách bộ đề (${DB.sets.length})</h3><span class="grow"></span><button class="btn btn-primary" id="sAdd">➕ Tạo bộ đề</button></div>
+      <div class="sets-grid">${DB.sets.length ? DB.sets.map((s) => {
+        const resolved = DB.resolveSet(s);
+        const n = resolved.length;
+        const games = Games.list.filter((g) => DB.gameCfg(g.id).setId === s.id);
+        const cleanTitle = (s.name || "Bộ đề")
+          .replace(/\s*\(Khối\s*\d+\s*·\s*\d+\s*câu\)/gi, "")
+          .replace(/\s*\(Khối\s*\d+\s*·\s*0\s*câu\)/gi, "")
+          .replace(/\s*·\s*\d+\s*câu\)?/gi, "")
+          .replace(/\s*\(\d+\s*câu\)/gi, "")
+          .trim();
+        const displayName = n > 0 ? `${cleanTitle} (Khối ${s.grade || 7} · ${n} câu)` : s.name;
+        return `<div class="set-card" data-reveal data-s="${s.id}" style="--sc:${s.color || "#0d6efd"}"><div class="sc-top"><b>${esc(displayName)}</b><span class="chip ${n ? "violet" : "red"}">${n} câu</span></div>
+          <p class="muted">${esc(s.desc || (s.filter ? "Bộ đề động theo bộ lọc" : "Chọn câu thủ công"))}</p>
+          <div class="gc-tags">${games.map((g) => `<span class="chip">${g.icon} ${esc(g.name)}</span>`).join("") || '<span class="muted" style="font-size:12px">Chưa gán cho game nào</span>'}</div>
+          <div class="row" style="margin-top:10px"><button class="btn btn-sm btn-fun" data-a="prev" title="Xem trước câu hỏi trong bộ đề">👁️ Xem trước</button><button class="btn btn-sm btn-primary" data-a="edit">✏️ Sửa</button><button class="btn btn-sm btn-ghost" data-a="exp">⬇️ Xuất</button>${FB.isSuperAdmin ? '<button class="btn btn-sm btn-ghost" data-a="del">🗑</button>' : ''}</div></div>`; }).join("") : `<div class="empty"><span class="em-ic">🧩</span>Chưa có bộ đề nào</div>`}</div></div>`;
       U.reveal(view);
       $$("tr[data-g]", view).forEach((tr) => {
         const gid = tr.dataset.g;
@@ -1102,7 +1123,7 @@
             for (const g of Games.list) {
               await DB.saveGameConfig(g.id, { enabled: true, setId: "set_tin_all" });
             }
-            U.toast("Đã phân bổ toàn bộ 1.089 câu Tin học cho tất cả game!", "ok", 4000);
+            U.toast(`Đã phân bổ toàn bộ ${DB.questions.length} câu Tin học cho tất cả game!`, "ok", 4000);
             draw();
           } catch (e) {
             fail(e);
@@ -1128,7 +1149,8 @@
 
   A.editSet = (set) => {
     set = U.plain(set || {}); const isNew = !set.id;
-    const sel = new Set(set.questionIds || []);
+    const resolvedQs = DB.resolveSet(set);
+    const sel = new Set(set.questionIds && set.questionIds.length ? set.questionIds : resolvedQs.map(q => q.Id));
     const f = DB.facets(DB.questions);
     const COLORS = ["#0d6efd", "#dc2626", "#16a34a", "#f59e0b", "#0284c7", "#ec4899", "#14b8a6"];
     const body = h(`<div>

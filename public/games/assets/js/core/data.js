@@ -153,7 +153,11 @@
         });
         DB.questions = Array.from(qMap.values()).sort(natural);
 
-        DB.sets = ss.docs.map((d) => Object.assign({ id: d.id }, d.data()));
+        const offSets = (window.OFFLINE_DATA && Array.isArray(window.OFFLINE_DATA.sets)) ? window.OFFLINE_DATA.sets : [];
+        const sMap = new Map();
+        offSets.forEach((s) => { if (s && s.id) sMap.set(s.id, s); });
+        ss.docs.forEach((d) => { sMap.set(d.id, Object.assign({ id: d.id }, d.data())); });
+        DB.sets = Array.from(sMap.values());
         DB.gameConfigs = {}; gc.docs.forEach((d) => (DB.gameConfigs[d.id] = d.data()));
         DB.settings = Object.assign({}, DEFAULT_SETTINGS, st.exists ? st.data() : {});
 
@@ -306,8 +310,9 @@
               if (!ex || ex.isTrashed || !Array.isArray(ex.questions)) return;
               const qIds = [];
               ex.questions.forEach((q) => {
-                if (!q || !q.text) return;
-                const qid = "q_" + (q.id || U.uid());
+                const qText = q ? (q.question || q.text || q.title || "") : "";
+                if (!q || !qText) return;
+                const qid = String(q.id || ("q_" + U.uid()));
                 qIds.push(qid);
                 const opts = {};
                 (q.options || []).forEach((opt, idx) => {
@@ -330,7 +335,7 @@
                   Subject: "Tin học",
                   Chapter: ex.title || "Kho Đề Chuẩn",
                   Topic: q.lessonTitle || ex.title || "Ôn tập",
-                  Question: q.text,
+                  Question: qText,
                   Options: opts,
                   CorrectAnswer: ans,
                   Explain: q.explanation || ""
@@ -338,12 +343,13 @@
                 qMap.set(qid, gq);
               });
 
+              const cleanTitle = (ex.title || "").replace(/\s*\(Khối\s*\d+\s*·\s*\d+\s*câu\)/gi, "").trim();
               setMap.set("set_exam_" + ex.id, {
                 id: "set_exam_" + ex.id,
-                name: "Đề: " + ex.title + " (Khối " + (ex.gradeNumber || 7) + " · " + qIds.length + " câu)",
+                name: "Đề: " + cleanTitle + " (Khối " + (ex.gradeNumber || 7) + " · " + qIds.length + " câu)",
                 grade: String(ex.gradeNumber || 7),
                 subject: "Tin học",
-                desc: "Đề thi chuẩn từ Cổng Gia Sư",
+                desc: ex.description || "Đề thi chuẩn từ Cổng Gia Sư",
                 questionIds: qIds
               });
             });
@@ -376,7 +382,110 @@
         } catch (re) {
           console.warn("Lỗi đọc custom_questions từ RTDB:", re.message);
         }
+
+        // 3b. Đọc trực tiếp từ admin_custom_exams trên RTDB (đề thi tạo từ Studio Quản trị của Giáo viên)
+        try {
+          const snapAdmin = await withTimeout(FB.rtdb.ref("admin_custom_exams").once("value"), 4000);
+          if (snapAdmin && snapAdmin.exists()) {
+            const adminExamsData = snapAdmin.val() || {};
+            const LET = ["A", "B", "C", "D", "E", "F"];
+            Object.values(adminExamsData).forEach((ex) => {
+              if (!ex || ex.isTrashed || !Array.isArray(ex.questions)) return;
+              const qIds = [];
+              ex.questions.forEach((q) => {
+                const qText = q ? (q.question || q.text || q.title || "") : "";
+                if (!q || !qText) return;
+                const qid = String(q.id || ("q_" + U.uid()));
+                qIds.push(qid);
+                const opts = {};
+                (q.options || []).forEach((opt, idx) => {
+                  if (idx < LET.length) {
+                    opts[LET[idx]] = String(opt || "").replace(/^[A-Fa-f][\.\)\:\s]\s*/, "").trim();
+                  }
+                });
+                let ans = "A";
+                if (typeof q.correctAnswer === "number") ans = LET[q.correctAnswer] || "A";
+                else if (typeof q.correctAnswer === "string") {
+                  const t = q.correctAnswer.trim().toUpperCase();
+                  ans = /^[0-5]$/.test(t) ? (LET[parseInt(t, 10)] || "A") : t.charAt(0);
+                }
+                const gq = {
+                  _doc: qid,
+                  Id: qid,
+                  Type: q.type === "true-false" || q.type === "true_false" ? "TF" : (q.type === "short-answer" || q.type === "short_answer" ? "SA" : "MC"),
+                  Level: q.difficulty === "de" ? "Nhận biết" : (q.difficulty === "kho" ? "Vận dụng" : "Thông hiểu"),
+                  Grade: String(ex.gradeNumber || q.grade || "7"),
+                  Subject: "Tin học",
+                  Chapter: ex.title || "Kho Đề Chuẩn",
+                  Topic: q.lessonTitle || ex.title || "Ôn tập",
+                  Question: qText,
+                  Options: opts,
+                  CorrectAnswer: ans,
+                  Explain: q.explanation || "",
+                  examId: ex.id,
+                  sourceExamTitle: ex.title
+                };
+                qMap.set(qid, gq);
+              });
+
+              const cleanTitle = (ex.title || "")
+                .replace(/(\s*\(Khối\s*\d+\s*·\s*\d+\s*câu\))|(\s*·\s*\d+\s*câu\)?)|(\s*\(\d+\s*câu\))/gi, "")
+                .replace(/^[Đđ]ề\:\s*/, "")
+                .trim();
+              setMap.set("set_exam_" + ex.id, {
+                id: "set_exam_" + ex.id,
+                name: "Đề: " + cleanTitle + " (Khối " + (ex.gradeNumber || 7) + " · " + qIds.length + " câu)",
+                grade: String(ex.gradeNumber || 7),
+                subject: "Tin học",
+                desc: ex.description || ("Đề thi từ Studio Quản trị (" + cleanTitle + ")"),
+                questionIds: qIds
+              });
+            });
+          }
+        } catch (ae) {
+          console.warn("Lỗi đọc admin_custom_exams từ RTDB:", ae.message);
+        }
       }
+
+      // Nạp các bộ đề mặc định từ OFFLINE_DATA nếu chưa có
+      if (window.OFFLINE_DATA && Array.isArray(window.OFFLINE_DATA.sets)) {
+        window.OFFLINE_DATA.sets.forEach((s) => {
+          if (s && s.id && !setMap.has(s.id)) {
+            setMap.set(s.id, s);
+          }
+        });
+      }
+
+      // Đảm bảo luôn có bộ đề "Toàn bộ Ngân hàng Tin học"
+      if (!setMap.has("set_tin_all")) {
+        setMap.set("set_tin_all", {
+          id: "set_tin_all",
+          name: `Toàn bộ Ngân hàng Tin học (${qMap.size} câu)`,
+          grade: "THCS",
+          subject: "Tin học",
+          desc: "Tất cả các câu hỏi trắc nghiệm Tin học chuẩn SGK Kết nối tri thức",
+          questionIds: Array.from(qMap.keys())
+        });
+      }
+
+      // Tự động giải quyết và liên kết câu hỏi cho toàn bộ các bộ đề
+      const allQsList = Array.from(qMap.values());
+      setMap.forEach((s) => {
+        if (!s) return;
+        const resolved = resolveSetQuestions(s, allQsList, qMap);
+        if (resolved.length > 0) {
+          s.questionIds = resolved.map(q => q.Id);
+          const rawTitle = (s.name || "Bộ đề")
+            .replace(/\s*\(Khối\s*\d+\s*·\s*\d+\s*câu\)/gi, "")
+            .replace(/\s*\(Khối\s*\d+\s*·\s*0\s*câu\)/gi, "")
+            .replace(/\s*·\s*\d+\s*câu\)?/gi, "")
+            .replace(/\s*\(\d+\s*câu\)/gi, "")
+            .trim();
+          const cleanTitle = rawTitle.startsWith("Đề:") ? rawTitle : ("Đề: " + rawTitle.replace(/^Đề\s*[-:]?\s*/i, ""));
+          const gradeStr = s.grade || (s.name.match(/Khối\s*([3-9])/i) || ["", "7"])[1];
+          s.name = `${cleanTitle} (Khối ${gradeStr} · ${resolved.length} câu)`;
+        }
+      });
 
       DB.questions = Array.from(qMap.values()).sort(natural);
       DB.sets = Array.from(setMap.values());
@@ -384,6 +493,115 @@
       console.warn("Lỗi DB.mergeSyncedQuestions:", err);
     }
   };
+
+  /* Helper thông minh giải quyết câu hỏi cho một bộ đề */
+  function resolveSetQuestions(set, allQuestions, qMap) {
+    if (!set) return [];
+    allQuestions = allQuestions || DB.bank();
+    if (!qMap) {
+      qMap = new Map();
+      allQuestions.forEach(q => {
+        if (q) {
+          if (q.Id) qMap.set(q.Id, q);
+          if (q._doc) qMap.set(q._doc, q);
+        }
+      });
+    }
+
+    // 1. Nếu questionIds có sẵn và tìm thấy câu hỏi trong ngân hàng
+    if (Array.isArray(set.questionIds) && set.questionIds.length) {
+      const found = set.questionIds.map(id => qMap.get(id) || allQuestions.find(q => q.Id === id || q._doc === id)).filter(Boolean);
+      if (found.length) return found;
+    }
+
+    // 2. Nếu có bộ lọc động (filter)
+    if (set.filter) {
+      return DB.filterQ(allQuestions, set.filter);
+    }
+
+    // 3. Khớp trực tiếp theo examId hoặc setId
+    const rawId = String(set.id || "").replace(/^set_exam_|^set_topic_/, "");
+    const byExam = allQuestions.filter(q => q.examId === rawId || q.examId === set.id || (q.sourceExamTitle && set.name && set.name.includes(q.sourceExamTitle)));
+    if (byExam.length) return byExam;
+
+    // 4. Nếu là bộ đề toàn bộ ngân hàng
+    if (set.id === "set_tin_all" || (set.name && set.name.toLowerCase().includes("toàn bộ ngân hàng"))) {
+      return allQuestions;
+    }
+
+    // 5. Trích xuất thông tin Khối lớp và Bài học từ tên bộ đề hoặc mô tả
+    const sName = String(set.name || "");
+    const sDesc = String(set.desc || "");
+    const fullText = (sName + " " + sDesc).toLowerCase();
+
+    // Tìm Khối lớp
+    let grade = String(set.grade || "");
+    if (!grade || grade === "undefined") {
+      const gMatch = fullText.match(/(?:khối|lớp|tin\s*(?:học\s*)?)\s*([3-9])/i);
+      if (gMatch) grade = gMatch[1];
+    }
+
+    // Tìm số Bài học (VD: Bài 5, Bài 12...)
+    const bMatch = fullText.match(/bài\s*(\d+)/i);
+    const lessonNum = bMatch ? bMatch[1] : null;
+
+    // 5a. Nếu xác định được cả Khối và Bài (VD: Khối 7, Bài 5)
+    if (grade && lessonNum) {
+      const targetTopic = `tin${grade}-bai-${lessonNum}`;
+      const matchedLesson = allQuestions.filter(q => {
+        if (String(q.Grade) !== String(grade)) return false;
+        const qTop = String(q.Topic || "").toLowerCase();
+        const qId = String(q.Id || "").toLowerCase();
+        if (qTop === targetTopic || qTop.includes(targetTopic)) return true;
+        if (qTop.includes(`bài ${lessonNum}:`) || qTop.includes(`bài ${lessonNum} -`) || qTop.startsWith(`bài ${lessonNum} `)) return true;
+        if (qId.startsWith(`g${grade}-b${lessonNum}-`) || qId.startsWith(`g${grade}-${lessonNum}-`) || qId.startsWith(`tin${grade}-b${lessonNum}-`)) return true;
+        return false;
+      });
+      if (matchedLesson.length) return matchedLesson;
+    }
+
+    // 5b. Nếu là đề ôn tập / thi thử Giữa kỳ 1
+    const isMidterm = fullText.includes("giữa k") || fullText.includes("giữa kì") || fullText.includes("gk1") || fullText.includes("đề cương");
+    if (isMidterm && grade) {
+      const midtermQs = allQuestions.filter(q => {
+        if (String(q.Grade) !== String(grade)) return false;
+        const qId = String(q.Id || "").toLowerCase();
+        const qTop = String(q.Topic || "").toLowerCase();
+        if (qId.includes("gk1") || qId.includes("gk") || qTop.includes("giua-ki-1") || qTop.includes("giữa k")) return true;
+        for (let b = 1; b <= 5; b++) {
+          if (qTop === `tin${grade}-bai-${b}` || qTop.includes(`bài ${b}:`) || qId.startsWith(`g${grade}-b${b}-`)) return true;
+        }
+        return false;
+      });
+      if (midtermQs.length) return midtermQs;
+    }
+
+    // 5c. Khớp theo Khối lớp
+    if (grade) {
+      const gradeQs = allQuestions.filter(q => String(q.Grade) === String(grade));
+      if (gradeQs.length) return gradeQs;
+    }
+
+    // 5d. Khớp theo từ khóa đặc biệt trong tên bài
+    const cleanWords = sName
+      .replace(/^đề\:\s*/i, "")
+      .replace(/\(khối.*?\)/gi, "")
+      .replace(/·.*$/gi, "")
+      .replace(/chủ đề\s*\d+\s*[-:]?\s*/gi, "")
+      .replace(/bài\s*\d+\s*[-:]?\s*/gi, "")
+      .trim()
+      .toLowerCase();
+    if (cleanWords.length > 4) {
+      const matchedByText = allQuestions.filter(q => {
+        const top = String(q.Topic || "").toLowerCase();
+        const qText = String(q.Question || "").toLowerCase();
+        return (top && top.includes(cleanWords)) || (qText && qText.includes(cleanWords));
+      });
+      if (matchedByText.length) return matchedByText;
+    }
+
+    return [];
+  }
 
   /* Câu hỏi dùng để chơi (nếu ngân hàng trống => câu mẫu) */
   DB.bank = () => DB.questions.length ? DB.questions : (window.DEMO_QUESTIONS || []);
@@ -419,9 +637,7 @@
   };
   DB.resolveSet = (set) => {
     if (!set) return [];
-    if (set.questionIds && set.questionIds.length) return set.questionIds.map(DB.findQ).filter(Boolean);
-    if (set.filter) return DB.filterQ(DB.bank(), set.filter);
-    return [];
+    return resolveSetQuestions(set, DB.bank());
   };
   /* Lấy câu hỏi cho một game theo nguồn đã chọn: {kind:'set'|'filter'|'all', setId, filter} */
   DB.questionsFor = (src) => {

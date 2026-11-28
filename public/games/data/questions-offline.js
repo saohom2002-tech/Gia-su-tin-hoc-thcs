@@ -26879,5 +26879,87 @@ window.OFFLINE_DATA = {
         "D": "Không có ý nghĩa gì"
       }
     }
+  ],
+  "sets": [
+    {
+      "id": "set_tin_all",
+      "name": "Toàn bộ Ngân hàng Tin học (1.537 câu)",
+      "grade": "THCS",
+      "subject": "Tin học",
+      "desc": "Tất cả các câu hỏi trắc nghiệm Tin học chuẩn SGK Kết nối tri thức",
+      "questionIds": []
+    },
+    {
+      "id": "set_tin_g6",
+      "name": "Tin học Lớp 6 - Toàn bộ SGK Kết nối tri thức (320 câu)",
+      "grade": "6",
+      "subject": "Tin học",
+      "desc": "Ngân hàng 320 câu hỏi Tin học 6 chuẩn SGK",
+      "questionIds": []
+    },
+    {
+      "id": "set_tin_g7",
+      "name": "Tin học Lớp 7 - Toàn bộ SGK Kết nối tri thức (320 câu)",
+      "grade": "7",
+      "subject": "Tin học",
+      "desc": "Ngân hàng 320 câu hỏi Tin học 7 chuẩn SGK",
+      "questionIds": []
+    },
+    {
+      "id": "set_tin_g8",
+      "name": "Tin học Lớp 8 - Toàn bộ SGK Kết nối tri thức (396 câu)",
+      "grade": "8",
+      "subject": "Tin học",
+      "desc": "Ngân hàng 396 câu hỏi Tin học 8 chuẩn SGK",
+      "questionIds": []
+    },
+    {
+      "id": "set_tin_g9",
+      "name": "Tin học Lớp 9 - Toàn bộ SGK Kết nối tri thức (330 câu)",
+      "grade": "9",
+      "subject": "Tin học",
+      "desc": "Ngân hàng 330 câu hỏi Tin học 9 chuẩn SGK",
+      "questionIds": []
+    },
+    {
+      "id": "set_exam_tin9_gk1",
+      "name": "Đề: 🎯 Đề thi thử Tin học 9 - Giữa kỳ 1 (Khối 9 · 78 câu)",
+      "grade": "9",
+      "subject": "Tin học",
+      "desc": "Đề thi thử tính giờ 45 phút môn Tin học 9 Giữa kỳ 1 chuẩn GDPT 2018",
+      "questionIds": []
+    },
+    {
+      "id": "set_exam_tin8_gk1",
+      "name": "Đề: 🎯 Đề kiểm tra thử giữa kỳ 1 Tin học 8 (Khối 8 · 60 câu)",
+      "grade": "8",
+      "subject": "Tin học",
+      "desc": "Đề kiểm tra thử giữa kỳ 1 Tin học 8 gồm 60 câu trắc nghiệm chuẩn",
+      "questionIds": []
+    },
+    {
+      "id": "set_exam_tin7_gk1",
+      "name": "Đề: Ôn tập Giữa kỳ 1 Tin học 7 (Khối 7 · 85 câu)",
+      "grade": "7",
+      "subject": "Tin học",
+      "desc": "Đề ôn tập Giữa kỳ 1 Tin học 7 gồm các bài 1, 2, 3, 4, 5 SGK Kết Nối Tri Thức",
+      "questionIds": []
+    },
+    {
+      "id": "set_exam_tin6_gk1",
+      "name": "Đề: Ôn tập Tin học 6 - Giữa kỳ 1 (Khối 6 · 85 câu)",
+      "grade": "6",
+      "subject": "Tin học",
+      "desc": "Đề ôn tập Giữa kỳ 1 Tin học 6 chuẩn SGK Kết Nối Tri Thức",
+      "questionIds": []
+    },
+    {
+      "id": "set_topic_tin7-bai-5",
+      "name": "Đề: Chủ đề 3 - Bài 5: Ứng xử trên mạng (Khối 7 · 20 câu)",
+      "grade": "7",
+      "subject": "Tin học",
+      "desc": "Chủ đề 3 - Bài 5: Ứng xử trên mạng - SGK Tin học 7 Kết Nối Tri Thức",
+      "questionIds": []
+    }
   ]
 };

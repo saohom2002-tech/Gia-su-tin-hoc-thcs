@@ -1190,8 +1190,14 @@ Yêu cầu chất lượng:
                 for (const ex of activeExams) {
                   await saveCustomExamToFirebase(ex);
                 }
+                // Đồng bộ cập nhật đồng thời sang Game Bank (16 trò chơi)
+                try {
+                  await syncAllExamsAndTopicsToGameBank();
+                } catch (ge) {
+                  console.warn('Lỗi đồng bộ Game Bank:', ge);
+                }
                 flashMessage(
-                  `☁️ Đã đồng bộ an toàn toàn bộ ${activeExams.length} đề thi & đề ôn tập lên Firebase (gstinhoc)!`
+                  `☁️ Đã đồng bộ an toàn toàn bộ ${activeExams.length} đề thi & cập nhật 16 Game thành công!`
                 );
               }}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 text-xs font-bold text-emerald-200 transition-colors cursor-pointer"

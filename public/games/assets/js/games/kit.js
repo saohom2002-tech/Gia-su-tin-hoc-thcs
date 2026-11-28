@@ -137,7 +137,17 @@
           <span class="lbl">Nguồn câu hỏi</span>
           <select class="select" id="srcSel">
             <option value="all">📚 Toàn bộ ngân hàng câu hỏi</option>
-            ${DB.sets.map((s) => `<option value="set:${s.id}">🧩 ${esc(s.name)}${DB.gameCfg(game.id).setId === s.id ? " (được phân bổ)" : ""}</option>`).join("")}
+            ${DB.sets.map((s) => {
+              const resolved = DB.resolveSet(s);
+              const n = resolved.length;
+              const cleanTitle = (s.name || "Bộ đề")
+                .replace(/(\s*\(Khối\s*\d+\s*·\s*\d+\s*câu\))|(\s*·\s*\d+\s*câu\)?)|(\s*\(\d+\s*câu\))/gi, "")
+                .replace(/\s*\(Khối\s*\d+\s*·\s*0\s*câu\)/gi, "")
+                .trim();
+              const gradeStr = s.grade || (s.name && s.name.match(/Khối\s*([3-9])/i) ? s.name.match(/Khối\s*([3-9])/i)[1] : "7");
+              const displayName = n > 0 ? `${cleanTitle} (Khối ${gradeStr} · ${n} câu)` : s.name;
+              return `<option value="set:${s.id}">🧩 ${esc(displayName)}${DB.gameCfg(game.id).setId === s.id ? " (được phân bổ)" : ""}</option>`;
+            }).join("")}
             <option value="filter">🔎 Lọc theo môn / lớp / chương…</option>
           </select>
           <div class="adm-filters" id="fltBox" style="margin:10px 0 0">
